@@ -35,10 +35,10 @@ class DitauMuonFiller : public NtupleFiller {
 		unsigned int			_NumTaus;
 		unsigned int			_NumMuons;
 		unsigned int			_NumCombos;
-		vector<unsigned int>	_ComboNumber;
+		vector<unsigned int>	_MomentumRank;
 
 		// === Tau1 === //
-		vector<unsigned int>	_Tau1Number;
+		vector<unsigned int>	_Tau1MomentumRank;
 		vector<float>			_Tau1Pt;
 		vector<float>			_Tau1Eta;
 		vector<float>			_Tau1Phi;
@@ -83,7 +83,7 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau1LTNormChiSqrd;
 
 		// === Tau2 === //
-		vector<unsigned int>	_Tau2Number;
+		vector<unsigned int>	_Tau2MomentumRank;
 		vector<float>			_Tau2Pt;
 		vector<float>			_Tau2Eta;
 		vector<float>			_Tau2Phi;
@@ -128,7 +128,7 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau2LTNormChiSqrd;
 
 		// === Muon === //
-		vector<unsigned int>	_MuonNumber;
+		vector<unsigned int>	_MuonMomentumRank;
 		vector<float>			_MuonPt;
 		vector<float>			_MuonEta;
 		vector<float>			_MuonPhi;

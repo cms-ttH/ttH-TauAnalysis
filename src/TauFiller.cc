@@ -28,7 +28,7 @@ void TauFiller::SetupBranches(){
 
 	// Set up tree branches
 	_Tree->Branch("T_NumTaus",&_NumTaus);
-	_Tree->Branch("T_Number",&_TauNumber);
+	_Tree->Branch("T_MomentumRank",&_MomentumRank);
 	_Tree->Branch("T_Pt",&_TauPt);
 	_Tree->Branch("T_Eta",&_TauEta);
 	_Tree->Branch("T_Phi",&_TauPhi);
@@ -38,7 +38,7 @@ void TauFiller::SetupBranches(){
 void TauFiller::ClearVectors(){
 
 	_NumTaus		=	0;	
-	_TauNumber		.clear();
+	_MomentumRank		.clear();
 	_TauPt	   		.clear();
 	_TauEta   		.clear();
 	_TauPhi   		.clear();
@@ -52,7 +52,7 @@ void TauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	_NumTaus = _patTaus->size();
 	for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
-		_TauNumber.push_back(_TauNumber.size());
+		_MomentumRank.push_back(_MomentumRank.size());
 		_TauPt.push_back(Tau->pt());
 		_TauEta.push_back(Tau->eta());
 		_TauPhi.push_back(Tau->phi());

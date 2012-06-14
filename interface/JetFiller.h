@@ -25,7 +25,7 @@ class JetFiller : public NtupleFiller {
 	// ----- Variables ----- //
 	private:
 		int					_NumJets;
-		vector<float>		_JetNumber;
+		vector<float>		_MomentumRank;
 		vector<float>		_JetPt;
 		vector<float>		_JetEta;
 		vector<float>		_JetPhi;

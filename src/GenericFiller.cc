@@ -28,14 +28,14 @@ void GenericFiller::SetupBranches(){
 
 	// Set up tree branches
 	_Tree->Branch("NumCombos",&_NumCombos);
-	_Tree->Branch("ComboNumber",&_ComboNumber);
+	_Tree->Branch("MomentumRank",&_MomentumRank);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
 void GenericFiller::ClearVectors(){
 
 	_NumCombos			=	0;	
-	_ComboNumber		.clear();
+	_MomentumRank		.clear();
 
 }
 

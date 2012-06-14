@@ -28,14 +28,14 @@ void DitauFiller::SetupBranches(){
 
 	// Set up tree branches
 	_Tree->Branch("TT_NumCombos",&_NumCombos);
-	_Tree->Branch("TT_ComboNumber",&_ComboNumber);
+	_Tree->Branch("TT_MomentumRank",&_MomentumRank);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
 void DitauFiller::ClearVectors(){
 
 	_NumCombos			=	0;	
-	_ComboNumber		.clear();
+	_MomentumRank		.clear();
 
 }
 

@@ -30,10 +30,10 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_NumTaus",&_NumTaus);
 	_Tree->Branch("TTM_NumMuons",&_NumMuons);
 	_Tree->Branch("TTM_NumCombos",&_NumCombos);
-	_Tree->Branch("TTM_ComboNumber",&_ComboNumber);
+	_Tree->Branch("TTM_MomentumRank",&_MomentumRank);
 
 	// === Tau1 === //
-	_Tree->Branch("TTM_Tau1Number", &_Tau1Number);
+	_Tree->Branch("TTM_Tau1MomentumRank", &_Tau1MomentumRank);
 	_Tree->Branch("TTM_Tau1Pt", &_Tau1Pt);
 	_Tree->Branch("TTM_Tau1Eta", &_Tau1Eta);
 	_Tree->Branch("TTM_Tau1Phi", &_Tau1Phi);
@@ -78,7 +78,7 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau1LTNormChiSqrd", &_Tau1LTNormChiSqrd);
 
 	// === Tau2 === //
-	_Tree->Branch("TTM_Tau2Number", &_Tau2Number);
+	_Tree->Branch("TTM_Tau2MomentumRank", &_Tau2MomentumRank);
 	_Tree->Branch("TTM_Tau2Pt", &_Tau2Pt);
 	_Tree->Branch("TTM_Tau2Eta", &_Tau2Eta);
 	_Tree->Branch("TTM_Tau2Phi", &_Tau2Phi);
@@ -123,7 +123,7 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
 
 	// === Muon === //
-	_Tree->Branch("TTM_MuonNumber", &_MuonNumber);
+	_Tree->Branch("TTM_MomentumRank", &_MomentumRank);
 	_Tree->Branch("TTM_MuonPt", &_MuonPt);
 	_Tree->Branch("TTM_MuonEta", &_MuonEta);
 	_Tree->Branch("TTM_MuonPhi", &_MuonPhi);
@@ -147,10 +147,10 @@ void DitauMuonFiller::ClearVectors(){
 	_NumTaus										= 0;
 	_NumMuons										= 0;
 	_NumCombos										= 0;	
-	_ComboNumber									.clear();
+	_MomentumRank									.clear();
 
 	// === Tau1 === //
-	_Tau1Number										.clear();
+	_Tau1MomentumRank										.clear();
 	_Tau1Pt											.clear();
 	_Tau1Eta										.clear();
 	_Tau1Phi										.clear();
@@ -195,7 +195,7 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau1LTNormChiSqrd								.clear();
 
 	// === Tau2 === //
-	_Tau2Number										.clear();
+	_Tau2MomentumRank										.clear();
 	_Tau2Pt											.clear();
 	_Tau2Eta										.clear();
 	_Tau2Phi										.clear();
@@ -240,7 +240,7 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau2LTNormChiSqrd								.clear();
 
 	// === Muon === //
-	_MuonNumber										.clear();
+	_MomentumRank										.clear();
 	_MuonPt											.clear();
 	_MuonEta										.clear();
 	_MuonPhi										.clear();
@@ -313,16 +313,16 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				// =========   NO VECTOR FILLING BEFORE THIS POINT   ========= //
 					
 				_NumCombos++;
-				_ComboNumber.push_back(_ComboNumber.size());
+				_MomentumRank.push_back(_MomentumRank.size());
 				FillDitauMuon(*Tau1, *Tau2, *Muon, primaryVertex);
 
-				_Tau1Number.push_back(theNumberOfTaus1-1);
+				_Tau1MomentumRank.push_back(theNumberOfTaus1-1);
 				FillTau1(*Tau1, primaryVertex);
 
-				_Tau2Number.push_back(theNumberOfTaus2-1);
+				_Tau2MomentumRank.push_back(theNumberOfTaus2-1);
 				FillTau2(*Tau2, primaryVertex);
 
-				_MuonNumber.push_back(theNumberOfMuons-1);
+				_MomentumRank.push_back(theNumberOfMuons-1);
 				FillMuon(*Muon, primaryVertex);
 
 			} // end of muon loop

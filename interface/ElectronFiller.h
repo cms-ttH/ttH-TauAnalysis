@@ -25,7 +25,7 @@ class ElectronFiller : public NtupleFiller {
 	// ----- Variables ----- //
 	private:
 		int					_NumElectrons;
-		vector<float>		_ElectronNumber;
+		vector<float>		_MomentumRank;
 		vector<float>		_ElectronPt;
 		vector<float>		_ElectronEta;
 		vector<float>		_ElectronPhi;

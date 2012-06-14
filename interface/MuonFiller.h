@@ -25,7 +25,7 @@ class MuonFiller : public NtupleFiller {
 	// ----- Variables ----- //
 	private:
 		int					_NumMuons;
-		vector<float>		_MuonNumber;
+		vector<float>		_MomentumRank;
 		vector<float>		_MuonPt;
 		vector<float>		_MuonEta;
 		vector<float>		_MuonPhi;
