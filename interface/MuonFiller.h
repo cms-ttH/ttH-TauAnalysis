@@ -3,7 +3,7 @@
 #ifndef _MuonFiller_h
 #define _MuonFiller_h
 
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
+#include "../interface/NtupleFiller.h"
 
 using namespace std;
 

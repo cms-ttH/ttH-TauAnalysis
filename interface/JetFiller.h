@@ -3,7 +3,7 @@
 #ifndef _JetFiller_h
 #define _JetFiller_h
 
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
+#include "../interface/NtupleFiller.h"
 
 using namespace std;
 

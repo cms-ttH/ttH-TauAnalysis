@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/GenericFiller.h"
+#include "../interface/GenericFiller.h"
 
 using namespace std;
 using namespace edm;

@@ -3,7 +3,7 @@
 #ifndef _DitauFiller_h
 #define _DitauFiller_h
 
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
+#include "../interface/NtupleFiller.h"
 
 using namespace std;
 

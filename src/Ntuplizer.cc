@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/Ntuplizer.h"
+#include "../interface/Ntuplizer.h"
 
 using namespace std;
 using namespace edm;

@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/TauFiller.h"
+#include "../interface/TauFiller.h"
 
 using namespace std;
 using namespace edm;

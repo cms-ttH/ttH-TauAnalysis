@@ -3,7 +3,7 @@
 #ifndef _ElectronFiller_h
 #define _ElectronFiller_h
 
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
+#include "../interface/NtupleFiller.h"
 
 using namespace std;
 

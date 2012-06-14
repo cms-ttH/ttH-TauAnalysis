@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/EventFiller.h"
+#include "../interface/EventFiller.h"
 
 using namespace std;
 using namespace edm;
