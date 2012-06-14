@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/MuonFiller.h"
+#include "../interface/MuonFiller.h"
 
 using namespace std;
 using namespace edm;

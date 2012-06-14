@@ -3,7 +3,7 @@
 #ifndef _GenericFiller_h
 #define _GenericFiller_h
 
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
+#include "../interface/NtupleFiller.h"
 
 using namespace std;
 

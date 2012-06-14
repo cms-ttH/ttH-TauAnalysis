@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/DitauFiller.h"
+#include "../interface/DitauFiller.h"
 
 using namespace std;
 using namespace edm;

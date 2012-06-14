@@ -1,10 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
-#include "FWCore/ServiceRegistry/interface/Service.h"
-#include "CommonTools/UtilAlgos/interface/TFileService.h"
-#include "SHarper/HEEPAnalyzer/interface/HEEPEle.h"
-#include "SHarper/HEEPAnalyzer/interface/HEEPCutCodes.h"
+#include "../interface/NtupleFiller.h"
 
 #include <TMath.h>
 #include <iostream>

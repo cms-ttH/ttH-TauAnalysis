@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/DitauMuonFiller.h"
+#include "../interface/DitauMuonFiller.h"
 
 using namespace std;
 using namespace edm;

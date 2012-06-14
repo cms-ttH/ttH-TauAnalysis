@@ -5,72 +5,42 @@
 
 // system include files
 #include <memory>
-
-// user include files
-#include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "FWCore/Framework/interface/Event.h"
-#include "FWCore/Framework/interface/MakerMacros.h"
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "DataFormats/PatCandidates/interface/Tau.h"
-#include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/PatCandidates/interface/Electron.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
-#include "DataFormats/PatCandidates/interface/MET.h"
-#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
-#include "DataFormats/Math/interface/LorentzVector.h"
-#include "DataFormats/Math/interface/LorentzVectorFwd.h"
-#include "DataFormats/JetReco/interface/GenJetCollection.h"
-#include "DataFormats/JetReco/interface/GenJet.h"
-#include "DataFormats/PatCandidates/interface/Isolation.h"
-#include "DataFormats/Math/interface/deltaR.h"
-#include "DataFormats/Math/interface/normalizedPhi.h"
-#include "DataFormats/TauReco/interface/PFTau.h"
-#include "DataFormats/MuonReco/interface/MuonSelectors.h"
-#include "DataFormats/Common/interface/RefVector.h"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/Candidate/interface/Candidate.h"
-#include "DataFormats/Common/interface/Ref.h"
-#include "DataFormats/Common/interface/ValueMap.h"
-#include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/VertexReco/interface/VertexFwd.h"
-#include "FWCore/Common/interface/TriggerNames.h"
-#include "DataFormats/Common/interface/TriggerResults.h"
-#include "CLHEP/Random/RandGauss.h"
-#include "CommonTools/CandUtils/interface/Booster.h"
-#include <Math/VectorUtil.h>
-
-#include "DataFormats/HLTReco/interface/TriggerObject.h"
-#include "DataFormats/HLTReco/interface/TriggerEvent.h"
-#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
-#include "FWCore/ServiceRegistry/interface/Service.h"
-#include "CommonTools/UtilAlgos/interface/TFileService.h"
-
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <stdio.h>
+#include <stdlib.h>
 #include <TMath.h>
 #include <iostream>
 #include <iomanip>
-#include "HighMassAnalysis/Analysis/interface/NtupleFiller.h"
-#include "HighMassAnalysis/Analysis/interface/EventFiller.h"
-#include "HighMassAnalysis/Analysis/interface/GenLevelFiller.h"
-#include "HighMassAnalysis/Analysis/interface/TauFiller.h"
-#include "HighMassAnalysis/Analysis/interface/ElectronFiller.h"
-#include "HighMassAnalysis/Analysis/interface/MuonFiller.h"
-#include "HighMassAnalysis/Analysis/interface/JetFiller.h"
-#include "HighMassAnalysis/Analysis/interface/DitauFiller.h"
-#include "HighMassAnalysis/Analysis/interface/DitauMuonFiller.h"
-#include "HighMassAnalysis/Analysis/interface/DitauElectronFiller.h"
-
 #include <TH1.h>
-#include <TH2.h>
 #include <TFile.h>
 #include <TTree.h>
-#include <string>
-#include <vector>
-#include <map>
-#include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <TRandom3.h>
+
+// user include files
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+//#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/Event.h"
+//#include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "FWCore/Common/interface/TriggerNames.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+
+#include "../interface/NtupleFiller.h"
+#include "../interface/EventFiller.h"
+#include "../interface/GenLevelFiller.h"
+#include "../interface/TauFiller.h"
+#include "../interface/ElectronFiller.h"
+#include "../interface/MuonFiller.h"
+#include "../interface/JetFiller.h"
+#include "../interface/DitauFiller.h"
+#include "../interface/DitauMuonFiller.h"
+#include "../interface/DitauElectronFiller.h"
 
 using namespace std;
 using namespace edm;

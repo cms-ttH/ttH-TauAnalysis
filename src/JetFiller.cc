@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "HighMassAnalysis/Analysis/interface/JetFiller.h"
+#include "../interface/JetFiller.h"
 
 using namespace std;
 using namespace edm;
