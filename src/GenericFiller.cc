@@ -24,6 +24,7 @@ void GenericFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void GenericFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("NumCombos",&_NumCombos);

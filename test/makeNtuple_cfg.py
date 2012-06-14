@@ -77,7 +77,8 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( maxEvents )
 process.source = cms.Source("PoolSource",
     skipEvents = cms.untracked.uint32(0),
     fileNames = cms.untracked.vstring(
-		'file:/afs/crc.nd.edu/user/j/jkolb/Public/ForNil/ttHiggsToDiTauSkim.root'
+		'file:/afs/crc.nd.edu/user/j/jkolb/Public/ForNil/ttHiggsToDiTauSkim_clean428p7.root'
+	#	'file:/afs/crc.nd.edu/user/j/jkolb/Public/ForNil/ttHiggsToDiTauSkim.root'
     )
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string("ttbarHTauTau_nTuple.root") )
@@ -95,11 +96,11 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     SkimTriggerSource					= cms.InputTag("TriggerResults","","skimTTHiggsToDiTau"),
     SkimTriggerRequirements				= cms.vstring(
 													#	'ttHiggsElectronSkim',
-													#	'ttHiggsMuonSkim',
+														'ttHiggsMuonSkim',
 													#	'ttElectronHiggsToElecTauSkim',
 													#	'ttMuonHiggsToElecTauSkim',
 													#	'ttElectronHiggsToMuTauSkim',
-														'ttMuonHiggsToMuTauSkim',
+													#	'ttMuonHiggsToMuTauSkim',
 													#	'ttElectronHiggsToTauTauSkim',
 													#	'ttMuonHiggsToTauTauSkim',
 														),
@@ -115,6 +116,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	NtupleFillers						= cms.untracked.vstring(
 																'Event',
 																'GenLevel',
+																'GenTau',
 																'Tau',
 																'Electron',
 																'Muon',
@@ -129,7 +131,8 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     RecoTauSource						= cms.InputTag('selectedPatTaus'),
     RecoMuonSource						= cms.InputTag('selectedPatMuons'),
     RecoElectronSource					= cms.InputTag('selectedPatElectrons'),
-    RecoJetSource                       = cms.InputTag('selectedPatJets::skimTTHiggsToDiTau'),
+    #RecoJetSource                       = cms.InputTag('selectedPatJets::skimTTHiggsToDiTau'),
+    RecoJetSource                       = cms.InputTag('cleanPatJets::skimTTHiggsToDiTau'),
     RecoVertexSource					= cms.InputTag('offlinePrimaryVertices'),
     RecoPATMetSource					= cms.InputTag('patMETs'),
     RecoPFMetSource						= cms.InputTag('patMETs'),

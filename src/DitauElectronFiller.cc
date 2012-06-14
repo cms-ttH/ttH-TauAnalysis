@@ -24,6 +24,7 @@ void DitauElectronFiller::analyze(const Event& iEvent, const EventSetup& iSetup)
 
 // === Setup branches going into the ntuple === //
 void DitauElectronFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("TTE_NumCombos",&_NumCombos);

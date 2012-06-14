@@ -24,6 +24,7 @@ void ElectronFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void ElectronFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("E_NumElectrons",&_NumElectrons);
