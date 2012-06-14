@@ -34,6 +34,7 @@
 #include "../interface/NtupleFiller.h"
 #include "../interface/EventFiller.h"
 #include "../interface/GenLevelFiller.h"
+#include "../interface/GenTauFiller.h"
 #include "../interface/TauFiller.h"
 #include "../interface/ElectronFiller.h"
 #include "../interface/MuonFiller.h"

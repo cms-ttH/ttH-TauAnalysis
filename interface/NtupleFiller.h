@@ -45,23 +45,16 @@ class NtupleFiller : public EDAnalyzer {
 		virtual void SetupBranches();
 		virtual void GetCollections(const Event&, const EventSetup&);
 
-
-
 		// === Helper functions === //
+		template <typename PatObject1, typename PatObject2> double GetComboMass(const PatObject1&, const PatObject2&);
+		template <typename PatObject1, typename PatObject2, typename MetObject> double GetComboMass(const PatObject1&, const PatObject2&, const MetObject&);
+		bool IsInTheCracks(float);
 /*		template <typename PatObject> pair<bool, reco::Candidate::LorentzVector> matchToGen(const PatObject&, int);
 		pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&);
 		double matchToGenParentMass(const pat::Tau&);
 		virtual pair<bool, reco::Candidate::LorentzVector> MatchesGenHadronicTau(const pat::Tau&, double);
-		virtual pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&, double, int, int iMotherPdgId=0, int iGrandMotherPdgId=0, bool iCheckNeutrinos=true);//*/
-		template <typename PatObject> double CalculateLeptonMetMt(const PatObject&);
-		template <typename PatObject1, typename PatObject2> double CalculatePZeta(const PatObject1&, const PatObject2&);
-		template <typename PatObject1, typename PatObject2> double CalculatePZetaVis(const PatObject1&, const PatObject2&);
-		template <typename PatObject1, typename PatObject2> double GetVisMass(const PatObject1&, const PatObject2&);
-		template <typename PatObject1, typename PatObject2> double GetVisPlusMETMass(const PatObject1&, const PatObject2&);
-		template <typename PatObject1, typename PatObject2, typename MetObject> double GetVisPlusMETMass(const PatObject1&, const PatObject2&, const MetObject&);
-		template <typename PatObject1, typename PatObject2> double GetCollinearApproxMass(const PatObject1&, const PatObject2&);
-		bool IsInTheCracks(float);
 		template <typename PatObject> std::pair<unsigned int, unsigned int> getMatchedPdgId(const PatObject&);
+		virtual pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&, double, int, int iMotherPdgId=0, int iGrandMotherPdgId=0, bool iCheckNeutrinos=true);//*/
 		
 	protected:
 		TTree* _Tree;
@@ -112,6 +105,24 @@ class NtupleFiller : public EDAnalyzer {
 	
 
 };
+
+
+// === Visible mass === //
+template <typename PatObject1, typename PatObject2> double NtupleFiller::GetComboMass(const PatObject1& patObject1, const PatObject2& patObject2){
+	reco::Candidate::LorentzVector The_LorentzVect = patObject1.p4() + patObject2.p4();
+	return The_LorentzVect.M();
+}
+
+// === Visible + MET mass === //
+template <typename PatObject1, typename PatObject2, typename MetObject> double NtupleFiller::GetComboMass(const PatObject1& patObject1, const PatObject2& patObject2, const MetObject& metObject){
+	double px = patObject1.px() + patObject2.px() + metObject.px();
+	double py = patObject1.py() + patObject2.py() + metObject.py();
+	double pz = patObject1.pz() + patObject2.pz();
+	double e = patObject1.energy() + patObject2.energy() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
+	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
+	return The_LorentzVect.M();
+}
+
 
 /*
 template <typename PatObject>

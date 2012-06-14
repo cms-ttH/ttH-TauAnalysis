@@ -70,7 +70,7 @@ void NtupleFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	ClearVectors();
 }
 
-// == Crack veto === //
+// === Crack veto === //
 bool NtupleFiller::IsInTheCracks(float etaValue){
 	return (fabs(etaValue) < 0.018 || 
 			(fabs(etaValue)>0.423 && fabs(etaValue)<0.461) ||

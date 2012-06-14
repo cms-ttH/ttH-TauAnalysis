@@ -24,6 +24,7 @@ void GenLevelFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void GenLevelFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 }

@@ -24,6 +24,7 @@ void EventFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void EventFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("Ev_runNumber", &_runNumber);

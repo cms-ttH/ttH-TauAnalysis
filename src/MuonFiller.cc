@@ -24,6 +24,7 @@ void MuonFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void MuonFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("M_NumMuons",&_NumMuons);

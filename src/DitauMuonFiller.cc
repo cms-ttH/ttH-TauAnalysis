@@ -24,6 +24,7 @@ void DitauMuonFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void DitauMuonFiller::SetupBranches(){
+	ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("TTM_NumTaus",&_NumTaus);
@@ -129,8 +130,8 @@ void DitauMuonFiller::SetupBranches(){
 
 	// === Combo === //
 	_Tree->Branch("TTM_DitauVisibleMass", &_DitauVisibleMass);
+	_Tree->Branch("TTM_DitauMETMass", &_DitauMETMass);
 	_Tree->Branch("TTM_DitauCosDeltaPhi", &_DitauCosDeltaPhi);
-	_Tree->Branch("TTM_ScalarSumET", &_ScalarSumET);
 	_Tree->Branch("TTM_HT", &_HT);
 	_Tree->Branch("TTM_NumCSVLbtags", &_NumCSVLbtags);
 	_Tree->Branch("TTM_NumCSVMbtags", &_NumCSVMbtags);
@@ -246,8 +247,8 @@ void DitauMuonFiller::ClearVectors(){
 
 	// === Combo === //
 	_DitauVisibleMass								.clear();
+	_DitauMETMass									.clear();
 	_DitauCosDeltaPhi								.clear();
-	_ScalarSumET									.clear();
 	_HT												.clear();
 	_NumCSVLbtags									.clear();
 	_NumCSVMbtags									.clear();
@@ -494,10 +495,10 @@ void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primar
 }
 
 void DitauMuonFiller::FillDitauMuon(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const reco::Vertex& primaryVertex){
-	_DitauVisibleMass	.push_back(0);
-	_DitauCosDeltaPhi	.push_back(0);
-	_ScalarSumET		.push_back(0);
-	_HT					.push_back(0);
+	_DitauVisibleMass	.push_back(GetComboMass(Tau1, Tau2));
+	_DitauMETMass		.push_back(GetComboMass(Tau1, Tau2, (*_patMETs->begin())));
+	_DitauCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - Tau2.phi()))));
+	_HT					.push_back(Tau1.pt() + Tau2.pt() + Muon.pt() + (_patMETs->begin()->pt()));
 	_NumCSVLbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "L"));
 	_NumCSVMbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "M"));
 	_NumCSVTbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "T"));
