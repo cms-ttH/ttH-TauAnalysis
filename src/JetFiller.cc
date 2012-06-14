@@ -28,7 +28,7 @@ void JetFiller::SetupBranches(){
 
 	// Set up tree branches
 	_Tree->Branch("J_NumJets", &_NumJets);
-	_Tree->Branch("J_Number", &_JetNumber);
+	_Tree->Branch("J_MomentumRank", &_MomentumRank);
 	_Tree->Branch("J_Pt", &_JetPt);
 	_Tree->Branch("J_Eta", &_JetEta);
 	_Tree->Branch("J_Phi", &_JetPhi);
@@ -42,7 +42,7 @@ void JetFiller::SetupBranches(){
 void JetFiller::ClearVectors(){
 
 	_NumJets				=	0;	
-	_JetNumber				.clear();
+	_MomentumRank				.clear();
 	_JetPt					.clear();
 	_JetEta					.clear();
 	_JetPhi					.clear();
@@ -67,7 +67,7 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 		// Consider only those jets passing the kinematic requirements
 		_NumJets++;
-		_JetNumber.push_back(_JetNumber.size());
+		_MomentumRank.push_back(_MomentumRank.size());
 		_JetPt.push_back(Jet->pt());
 		_JetEta.push_back(Jet->eta());
 		_JetPhi.push_back(Jet->phi());

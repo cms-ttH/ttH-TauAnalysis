@@ -25,7 +25,7 @@ class GenericFiller : public NtupleFiller {
 	// ----- Variables ----- //
 	private:
 		int					_NumCombos;
-		vector<float>		_ComboNumber;
+		vector<float>		_MomentumRank;
 		
 };
 

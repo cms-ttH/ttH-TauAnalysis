@@ -25,7 +25,7 @@ class TauFiller : public NtupleFiller {
 	// ----- Variables ----- //
 	private:
 		int					_NumTaus;
-		vector<float>		_TauNumber;
+		vector<float>		_MomentumRank;
 		vector<float>		_TauPt;
 		vector<float>		_TauEta;
 		vector<float>		_TauPhi;

@@ -28,7 +28,7 @@ void ElectronFiller::SetupBranches(){
 
 	// Set up tree branches
 	_Tree->Branch("E_NumElectrons",&_NumElectrons);
-	_Tree->Branch("E_Number",&_ElectronNumber);
+	_Tree->Branch("E_MomentumRank",&_MomentumRank);
 	_Tree->Branch("E_Pt",&_ElectronPt);
 	_Tree->Branch("E_Eta",&_ElectronEta);
 	_Tree->Branch("E_Phi",&_ElectronPhi);
@@ -38,7 +38,7 @@ void ElectronFiller::SetupBranches(){
 void ElectronFiller::ClearVectors(){
 
 	_NumElectrons		=	0;	
-	_ElectronNumber		.clear();
+	_MomentumRank		.clear();
 	_ElectronPt	   		.clear();
 	_ElectronEta   		.clear();
 	_ElectronPhi   		.clear();
@@ -52,7 +52,7 @@ void ElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	_NumElectrons = _patElectrons->size();
 	for ( pat::ElectronCollection::const_iterator Electron = _patElectrons->begin(); Electron != _patElectrons->end(); ++Electron ) {
-		_ElectronNumber.push_back(_ElectronNumber.size());
+		_MomentumRank.push_back(_MomentumRank.size());
 		_ElectronPt.push_back(Electron->pt());
 		_ElectronEta.push_back(Electron->eta());
 		_ElectronPhi.push_back(Electron->phi());

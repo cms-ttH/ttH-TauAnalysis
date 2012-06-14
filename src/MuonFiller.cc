@@ -28,7 +28,7 @@ void MuonFiller::SetupBranches(){
 
 	// Set up tree branches
 	_Tree->Branch("M_NumMuons",&_NumMuons);
-	_Tree->Branch("M_Number",&_MuonNumber);
+	_Tree->Branch("M_MomentumRank",&_MomentumRank);
 	_Tree->Branch("M_Pt",&_MuonPt);
 	_Tree->Branch("M_Eta",&_MuonEta);
 	_Tree->Branch("M_Phi",&_MuonPhi);
@@ -38,7 +38,7 @@ void MuonFiller::SetupBranches(){
 void MuonFiller::ClearVectors(){
 
 	_NumMuons		=	0;	
-	_MuonNumber		.clear();
+	_MomentumRank		.clear();
 	_MuonPt	   		.clear();
 	_MuonEta   		.clear();
 	_MuonPhi   		.clear();
@@ -52,7 +52,7 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	_NumMuons = _patMuons->size();
 	for ( pat::MuonCollection::const_iterator Muon = _patMuons->begin(); Muon != _patMuons->end(); ++Muon ) {
-		_MuonNumber.push_back(_MuonNumber.size());
+		_MomentumRank.push_back(_MomentumRank.size());
 		_MuonPt.push_back(Muon->pt());
 		_MuonEta.push_back(Muon->eta());
 		_MuonPhi.push_back(Muon->phi());
