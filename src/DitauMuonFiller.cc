@@ -123,7 +123,7 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
 
 	// === Muon === //
-	_Tree->Branch("TTM_MomentumRank", &_MomentumRank);
+	_Tree->Branch("TTM_MuonMomentumRank", &_MuonMomentumRank);
 	_Tree->Branch("TTM_MuonPt", &_MuonPt);
 	_Tree->Branch("TTM_MuonEta", &_MuonEta);
 	_Tree->Branch("TTM_MuonPhi", &_MuonPhi);
@@ -240,7 +240,7 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau2LTNormChiSqrd								.clear();
 
 	// === Muon === //
-	_MomentumRank										.clear();
+	_MuonMomentumRank								.clear();
 	_MuonPt											.clear();
 	_MuonEta										.clear();
 	_MuonPhi										.clear();
@@ -322,7 +322,7 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				_Tau2MomentumRank.push_back(theNumberOfTaus2-1);
 				FillTau2(*Tau2, primaryVertex);
 
-				_MomentumRank.push_back(theNumberOfMuons-1);
+				_MuonMomentumRank.push_back(theNumberOfMuons-1);
 				FillMuon(*Muon, primaryVertex);
 
 			} // end of muon loop
