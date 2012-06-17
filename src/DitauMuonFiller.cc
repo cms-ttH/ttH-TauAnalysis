@@ -132,6 +132,9 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_DitauVisibleMass", &_DitauVisibleMass);
 	_Tree->Branch("TTM_DitauMETMass", &_DitauMETMass);
 	_Tree->Branch("TTM_DitauCosDeltaPhi", &_DitauCosDeltaPhi);
+	_Tree->Branch("TTM_DitauDeltaR", 	&_DitauDeltaR);
+	_Tree->Branch("TTM_Tau1MuonDeltaR", &_Tau1MuonDeltaR);
+	_Tree->Branch("TTM_Tau2MuonDeltaR", &_Tau2MuonDeltaR);
 	_Tree->Branch("TTM_HT", &_HT);
 	_Tree->Branch("TTM_NumCSVLbtags", &_NumCSVLbtags);
 	_Tree->Branch("TTM_NumCSVMbtags", &_NumCSVMbtags);
@@ -249,6 +252,9 @@ void DitauMuonFiller::ClearVectors(){
 	_DitauVisibleMass								.clear();
 	_DitauMETMass									.clear();
 	_DitauCosDeltaPhi								.clear();
+	_DitauDeltaR									.clear();
+	_Tau1MuonDeltaR									.clear();
+	_Tau2MuonDeltaR									.clear();
 	_HT												.clear();
 	_NumCSVLbtags									.clear();
 	_NumCSVMbtags									.clear();
@@ -498,6 +504,9 @@ void DitauMuonFiller::FillDitauMuon(const pat::Tau& Tau1, const pat::Tau& Tau2, 
 	_DitauVisibleMass	.push_back(GetComboMass(Tau1, Tau2));
 	_DitauMETMass		.push_back(GetComboMass(Tau1, Tau2, (*_patMETs->begin())));
 	_DitauCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - Tau2.phi()))));
+	_DitauDeltaR		.push_back(reco::deltaR(Tau1.eta(), Tau1.phi(), Tau2.eta(), Tau2.phi()));
+	_Tau1MuonDeltaR		.push_back(reco::deltaR(Tau1.eta(), Tau1.phi(), Muon.eta(), Muon.phi()));
+	_Tau2MuonDeltaR		.push_back(reco::deltaR(Tau2.eta(), Tau2.phi(), Muon.eta(), Muon.phi()));
 	_HT					.push_back(Tau1.pt() + Tau2.pt() + Muon.pt() + (_patMETs->begin()->pt()));
 	_NumCSVLbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "L"));
 	_NumCSVMbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "M"));
