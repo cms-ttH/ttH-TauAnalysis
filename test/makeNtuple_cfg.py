@@ -5,7 +5,7 @@ import sys
 
 # === Give values to some basic parameters === #
 maxEvents	= 1000
-reportEvery	= 100
+reportEvery	= 1000
 #tauMaxEta	= 9
 #tauMinPt	= 0
 
@@ -42,9 +42,9 @@ print ''
 
 
 # === Set up genparticles collection based on analysis type === #
-if options.analysisType is "signal" or options.analysisType is "mc":
+if (options.analysisType == "signal") or (options.analysisType == "mc"):
     inputForGenParticles = 'genParticles'
-elif options.analysisType is "coll":
+elif (options.analysisType == "coll"):
     inputForGenParticles = ''
 else:
 	sys.exit("Analysis type not understood")	
@@ -145,7 +145,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 
 # === Run sequence === #
-if options.analysisType is "coll":
+if (options.analysisType == "coll"):
 	process.p = cms.Path( process.hltFilter + process.makeNtuple )
 else:
 	process.p = cms.Path( process.makeNtuple )
