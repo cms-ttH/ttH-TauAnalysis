@@ -21,11 +21,6 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	// Fillers to use
 	_enabledFillers					= iConfig.getUntrackedParameter<std::vector<std::string> >("NtupleFillers");
 
-	// Trigger 
-	_ApplyTriggerRequirements		= iConfig.getParameter<bool>("ApplyTriggerRequirements");
-	_TriggerSource					= iConfig.getParameter<InputTag>("TriggerSource");
-	_TriggerRequirements			= iConfig.getParameter<vector<string> >("TriggerRequirements");
-
 	// Skim trigger
 	_ApplySkimTriggerRequirements	= iConfig.getParameter<bool>("ApplySkimTriggerRequirements");
 	_SkimTriggerSource				= iConfig.getParameter<InputTag>("SkimTriggerSource");
@@ -87,11 +82,6 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
 		if(!MeetsTriggerRequirements(iEvent, _SkimTriggerSource, _SkimTriggerRequirements)){ return; }
 	}
 
-	// See if it meets trigger requirements (only for collision data)
-	if(_ApplyTriggerRequirements && (_AnalysisType.compare("coll") == 0)){
-		if(!MeetsTriggerRequirements(iEvent, _TriggerSource, _TriggerRequirements)){ return; }
-	}
-
 	// Analyze and fill ntuple
 	for(unsigned int n=0; n<ntupleFillers.size(); n++){ ntupleFillers.at(n)->FillNtuple(iEvent, iSetup); }
 
@@ -108,8 +98,6 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 	iEvent.getByLabel(iTriggerSource, _triggerResults);
 
 	const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*_triggerResults);
-	cout << "HOW MANY TRIGGER NAMES? " << TheTriggerNames.size() << endl;
-
 	for(vector<string>::const_iterator TheTriggerPath = iTriggerRequirements.begin(); TheTriggerPath != iTriggerRequirements.end(); ++TheTriggerPath ) {
 
 		unsigned int index = TheTriggerNames.triggerIndex(*TheTriggerPath);
