@@ -20,9 +20,7 @@
 
 // user include files
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-//#include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/Event.h"
-//#include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
@@ -75,11 +73,6 @@ class Ntuplizer : public EDAnalyzer {
 		string _AnalysisType;
 		TTree* _Tree;
 		string _TreeName;
-
-		// === Trigger Inputs === //
-		bool _ApplyTriggerRequirements;
-		InputTag _TriggerSource;
-		vector<std::string> _TriggerRequirements;
 
 		// === Trigger Inputs === //
 		bool _ApplySkimTriggerRequirements;

@@ -4,10 +4,10 @@ import sys
 
 
 # === Give values to some basic parameters === #
-maxEvents	= 100
+maxEvents	= 1000
 reportEvery	= 100
-tauMaxEta	= 9
-tauMinPt	= 0
+#tauMaxEta	= 9
+#tauMinPt	= 0
 
 
 # === Parse external arguments === #
@@ -15,27 +15,13 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 options.register("analysisType",
        #"coll",		# default value
-       #"mc",		# default value
-       "signal",	# default value
+       "mc",		# default value
+       #"signal",	# default value
        VarParsing.VarParsing.multiplicity.singleton, # singleton or list
        VarParsing.VarParsing.varType.string,         # string, int, or float
        "is MC or is Data?"
        )   
 options.parseArguments() # get and parse the command line arguments (or from Xcrab.cfg)
-if( options.analysisType == "signal" ):
-	isMC			= True
-	isSignal		= True
-	doMatching		= True
-elif( options.analysisType=="mc" ):
-	isMC			= True
-	isSignal		= False
-	doMatching		= False
-elif( options.analysisType=="coll" ):
-	isMC			= False
-	isSignal		= False
-	doMatching		= False
-else:
-	sys.exit("Analysis type not understood")	
 
 
 # === Print some basic info about the job setup === #
@@ -48,21 +34,20 @@ print '		Analysis type...%s' % options.analysisType
 print '		Max events......%d' % maxEvents
 print '		Report every....%d' % reportEvery
 print ''
-print '		Is MC...........%d' % isMC
-print '		Is signal.......%d' % isSignal
-print '		Max tau |eta|...%d' % tauMaxEta
-print '		Min tau pT......%d' % tauMinPt
-print ''
+#print '		Max tau |eta|...%d' % tauMaxEta
+#print '		Min tau pT......%d' % tauMinPt
+#print ''
 print '	========================================='
 print ''
 
 
 # === Set up genparticles collection based on analysis type === #
-if( isMC == 1 ): 
+if options.analysisType is "signal" or options.analysisType is "mc":
     inputForGenParticles = 'genParticles'
-else:
+elif options.analysisType is "coll":
     inputForGenParticles = ''
-
+else:
+	sys.exit("Analysis type not understood")	
 
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
@@ -77,12 +62,27 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( maxEvents )
 process.source = cms.Source("PoolSource",
     skipEvents = cms.untracked.uint32(0),
     fileNames = cms.untracked.vstring(
-		'file:/afs/crc.nd.edu/user/j/jkolb/Public/ForNil/ttHiggsToDiTauSkim_clean428p7.root'
+	#	'file:/afs/crc.nd.edu/user/j/jkolb/Public/ForNil/ttHiggsToDiTauSkim_clean428p7.root'
 	#	'file:/afs/crc.nd.edu/user/j/jkolb/Public/ForNil/ttHiggsToDiTauSkim.root'
+	#	'file:/afs/crc.nd.edu/group/NDCMS/data02/jkolb//TauResults/Run45/TTH_130.root'
+		'/store/user/jkolb/TTH_HtoAll_M_120_7TeV_pythia6/skimTTHiggsToDiTau_428_v1_TTH_120/caeda1e7a83d9500790ff98543baf1ee/ttHiggsToDiTauSkim_100_1_ebw.root'
+	#	'/store/user/jkolb/MuEG/skimTTHiggsToDiTau_428_v1_data_MuEG_05Aug/1864e59f9f4e630a3d3a21b2a6964121/ttHiggsToDiTauSkim_100_0_0xH.root'
+	#	'/store/user/jkolb/SingleMu/skimTTHiggsToDiTau_428_v2_data_SingleMu_05Aug/1864e59f9f4e630a3d3a21b2a6964121/ttHiggsToDiTauSkim_210_1_vcX.root'
+	#	'/store/user/jkolb/DoubleMu/skimMuTau_428_tauEmbedding_2011A_05Aug2011/d2e4f895abdda07997e5240170c9d789/muTauSkim_10_2_rfz.root'
     )
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string("ttbarHTauTau_nTuple.root") )
 
+# === Collision data trigger requirements === #
+import HLTrigger.HLTfilters.triggerResultsFilter_cfi as hlt
+process.hltFilter = hlt.triggerResultsFilter.clone(
+    hltResults = cms.InputTag('TriggerResults::HLT'),
+    triggerConditions = ( 
+							'HLT_IsoMu17_v*',
+    ),  
+    l1tResults = '', 
+    throw = False
+)
 
 # === Define and setup main module === #
 process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
@@ -93,7 +93,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Skim Trigger === #
     ApplySkimTriggerRequirements		= cms.bool(True),
-    SkimTriggerSource					= cms.InputTag("TriggerResults","","skimTTHiggsToDiTau"),
+    SkimTriggerSource					= cms.InputTag("TriggerResults::skimTTHiggsToDiTau"),
     SkimTriggerRequirements				= cms.vstring(
 													#	'ttHiggsElectronSkim',
 														'ttHiggsMuonSkim',
@@ -105,12 +105,6 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 													#	'ttMuonHiggsToTauTauSkim',
 														),
 
-	# === Trigger === #
-    ApplyTriggerRequirements			= cms.bool(True),
-    TriggerSource						= cms.InputTag("TriggerResults","","HLT"),
-    TriggerRequirements					= cms.vstring(
-														'HLT_IsoMu30_v1',
-														),
 
 	# === Which branches to fill? === #
 	NtupleFillers						= cms.untracked.vstring(
@@ -151,7 +145,10 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 
 # === Run sequence === #
-process.p = cms.Path( process.makeNtuple )
+if options.analysisType is "coll":
+	process.p = cms.Path( process.hltFilter + process.makeNtuple )
+else:
+	process.p = cms.Path( process.makeNtuple )
 
 
 # === Print-out all python configuration parameter information === #
@@ -159,6 +156,5 @@ process.p = cms.Path( process.makeNtuple )
 
 
 # === Write-out all python configuration parameter information === #
-#pythonDump = open("dumpedPython.py", "write")
-#print >> pythonDump,  process.dumpPython()
+#pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
 
