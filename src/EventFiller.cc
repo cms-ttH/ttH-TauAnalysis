@@ -33,6 +33,7 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_numInteractionsBXm1", &_numInteractionsBXm1);
 	_Tree->Branch("Ev_numInteractionsBX0", &_numInteractionsBX0);
 	_Tree->Branch("Ev_numInteractionsBXp1", &_numInteractionsBXp1);
+	_Tree->Branch("Ev_numPrimaryVertices", &_numPrimaryVertices);
 
 	_Tree->Branch("Ev_MET", &_MET);
 	_Tree->Branch("Ev_METphi", &_METphi);
@@ -47,6 +48,7 @@ void EventFiller::ClearVectors(){
 	_numInteractionsBXm1		= 0;
 	_numInteractionsBX0			= 0;
 	_numInteractionsBXp1		= 0;
+	_numPrimaryVertices			= 0;
 
 	_MET						= 0;
 	_METphi						= 0;
@@ -58,9 +60,9 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	_runNumber		= iEvent.id().run();
-	_eventNumber	= iEvent.id().event();
-	_lumiBlock		= iEvent.id().luminosityBlock();
+	_runNumber			= iEvent.id().run();
+	_eventNumber		= iEvent.id().event();
+	_lumiBlock			= iEvent.id().luminosityBlock();
 
 	if(_AnalysisType.compare("coll") != 0){
 		for(vector<PileupSummaryInfo>::const_iterator PVI = _puInfo->begin(); PVI != _puInfo->end(); ++PVI) {
@@ -73,8 +75,10 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		}
 	}
 
-	_MET			= _patMETs->begin()->pt();
-	_METphi			= _patMETs->begin()->phi();
+	_numPrimaryVertices	= _primaryVertices->size();
+
+	_MET				= _patMETs->begin()->pt();
+	_METphi				= _patMETs->begin()->phi();
 
 }
 
