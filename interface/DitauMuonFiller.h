@@ -137,6 +137,9 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_DitauVisibleMass;
 		vector<float>			_DitauMETMass;
 		vector<float>			_DitauCosDeltaPhi;
+		vector<float>			_DitauDeltaR;
+		vector<float>			_Tau1MuonDeltaR;
+		vector<float>			_Tau2MuonDeltaR;
 		vector<float>			_HT;
 		vector<unsigned int>	_NumCSVLbtags;
 		vector<unsigned int>	_NumCSVMbtags;
