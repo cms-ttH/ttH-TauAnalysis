@@ -108,6 +108,7 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 	iEvent.getByLabel(iTriggerSource, _triggerResults);
 
 	const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*_triggerResults);
+	cout << "HOW MANY TRIGGER NAMES? " << TheTriggerNames.size() << endl;
 
 	for(vector<string>::const_iterator TheTriggerPath = iTriggerRequirements.begin(); TheTriggerPath != iTriggerRequirements.end(); ++TheTriggerPath ) {
 
@@ -120,11 +121,11 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 			cerr << "Please use one of the following triggers:" << endl;
 
 			for(TriggerNames::Strings::const_iterator triggerName = TheTriggerNames.triggerNames().begin(); triggerName != TheTriggerNames.triggerNames().end(); ++triggerName ){
-				unsigned int index = TheTriggerNames.triggerIndex(*triggerName);
-				if(index < TheTriggerNames.size()){
-					string triggerDecision = (_triggerResults->accept(index)) ? "passed" : "failed";
-					cerr << " Trigger Name: " << (*triggerName) << string((40-(*triggerName).length()),'.') << triggerDecision << endl;
-				}
+					unsigned int index	= TheTriggerNames.triggerIndex(*triggerName);
+					string name			= (*triggerName);
+					//string decision		= (_triggerResults->accept(index)) ? "passed" : "failed";
+					//cerr 	<< "\t" << index << "\t'" << name << "'" << string((50-name.length()),'.') << decision << endl;
+					cerr 	<< " " << index << "\t" << name << endl;
 			}
 			cerr << "\n" << endl;
 			exit(1);
