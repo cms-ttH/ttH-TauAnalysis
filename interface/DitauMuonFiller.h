@@ -132,6 +132,9 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_MuonPt;
 		vector<float>			_MuonEta;
 		vector<float>			_MuonPhi;
+		vector<float>			_MuonPfIso;
+		vector<int> 			_MuonIsLooseMuon;
+		vector<int> 			_MuonIsTightMuon;
 
 		// === Combo === //
 		vector<float>			_DitauVisibleMass;
