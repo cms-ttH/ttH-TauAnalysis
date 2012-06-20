@@ -33,7 +33,7 @@ void MuonFiller::SetupBranches(){
 	_Tree->Branch("M_Pt",&_MuonPt);
 	_Tree->Branch("M_Eta",&_MuonEta);
 	_Tree->Branch("M_Phi",&_MuonPhi);
-	_Tree->Branch("M_pfRelIso",&_pfRelIso); // 0.4 cone size
+	_Tree->Branch("M_pfIso",&_pfIso); // 0.4 cone size
 	_Tree->Branch("M_isTightMuon",&_isTightMuon);
 	_Tree->Branch("M_isLooseMuon",&_isLooseMuon);
 }
@@ -46,7 +46,7 @@ void MuonFiller::ClearVectors(){
 	_MuonPt	   		.clear();
 	_MuonEta   		.clear();
 	_MuonPhi   		.clear();
-	_pfRelIso  		.clear();
+	_pfIso  		.clear();
 	_isTightMuon    .clear();
 	_isLooseMuon 	.clear();
 
@@ -88,35 +88,35 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     }
 
 	_NumMuons = _patMuons->size();
-	for ( pat::MuonCollection::const_iterator Muon = _patMuons->begin(); Muon != _patMuons->end(); ++Muon ) {
-		_MomentumRank.push_back(_MomentumRank.size());
-		_MuonPt.push_back(Muon->pt());
-		_MuonEta.push_back(Muon->eta());
-		_MuonPhi.push_back(Muon->phi());
-        _pfRelIso.push_back( getLeptonPfIso <pat::Muon> (*Muon, 1, 0) ); // subtract charged hadron PU, but no delta(B) corr.
-        bool isLooseMuon = -1;
-        bool isTightMuon = -1;
-        isLooseMuon = (
-            Muon->isGlobalMuon() 
-        );
-        isTightMuon = isLooseMuon;
+    for ( pat::MuonCollection::const_iterator Muon = _patMuons->begin(); Muon != _patMuons->end(); ++Muon ) {
+        _MomentumRank.push_back(_MomentumRank.size());
+        _MuonPt.push_back(Muon->pt());
+        _MuonEta.push_back(Muon->eta());
+        _MuonPhi.push_back(Muon->phi());
 
-        isTightMuon *= Muon->isTrackerMuon();
-        isTightMuon *= Muon->isGood("GlobalMuonPromptTight");
-        isTightMuon *= Muon->numberOfMatches() > 1;
-        
+        float pfIso = -1;
+        pfIso = getLeptonIso <pat::Muon> (*Muon, 0, 0, 0); // is reco::Muon, no charged hadron PU subtraction, and no delta(B) corr.
+        _pfIso.push_back( pfIso );
+
+        int isLooseMuon = -1;
+        int isTightMuon = -1;
+        isLooseMuon = Muon->isGlobalMuon();
+        isTightMuon = isLooseMuon;
+        if( !(Muon->isTrackerMuon()) ) isTightMuon = 0;
+        if( !(Muon->isGood("GlobalMuonPromptTight")) ) isTightMuon = 0;
+        if( !(Muon->numberOfMatches() > 1) ) isTightMuon = 0;
+        if( !(Muon->numberOfValidHits() > 10) ) isTightMuon = 0;
+        if( !(Muon->dB(pat::Muon::PV2D) < 0.02) ) isTightMuon = 0;
         if(Muon->innerTrack().isAvailable() ) { 
-            isTightMuon *= Muon->innerTrack()->numberOfValidHits() > 10;
-            isTightMuon *= Muon->innerTrack()->hitPattern().pixelLayersWithMeasurement() > 0;
-            isTightMuon *= Muon->innerTrack()->dxy(beamSpotPosition) < 0.02;
-            isTightMuon *= Muon->innerTrack()->dz(vertexPosition) < 1;
-        } else {
-            _isLooseMuon.push_back(-1);
-            _isTightMuon.push_back(-1);
-            continue;
+            if( !(Muon->innerTrack()->hitPattern().pixelLayersWithMeasurement() > 0) ) isTightMuon = 0;
+            if( !(Muon->innerTrack()->dz(vertexPosition) < 1) ) isTightMuon = 0;
+        } else {  // for now, keep muons without embedded track (skim v1)
+            //_MuonIsLooseMuon.push_back(-1);
+            //_MuonIsTightMuon.push_back(-1);
+            //return;
         }
-        _isLooseMuon.push_back((int)isLooseMuon);
-        _isTightMuon.push_back((int)isTightMuon);
+        _isLooseMuon.push_back(isLooseMuon);
+        _isTightMuon.push_back(isTightMuon);
 	}
 
 }
