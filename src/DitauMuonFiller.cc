@@ -1,6 +1,7 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
 #include "../interface/DitauMuonFiller.h"
+#include "fillerAuxFunctions.cc"
 
 using namespace std;
 using namespace edm;
@@ -127,6 +128,9 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_MuonPt", &_MuonPt);
 	_Tree->Branch("TTM_MuonEta", &_MuonEta);
 	_Tree->Branch("TTM_MuonPhi", &_MuonPhi);
+	_Tree->Branch("TTM_MuonPfRelIso", &_MuonPfIso);
+	_Tree->Branch("TTM_MuonIsLooseMuon", &_MuonIsLooseMuon);
+	_Tree->Branch("TTM_MuonIsTightMuon", &_MuonIsTightMuon);
 
 	// === Combo === //
 	_Tree->Branch("TTM_DitauVisibleMass", &_DitauVisibleMass);
@@ -247,6 +251,9 @@ void DitauMuonFiller::ClearVectors(){
 	_MuonPt											.clear();
 	_MuonEta										.clear();
 	_MuonPhi										.clear();
+    _MuonPfIso                                      .clear();
+    _MuonIsTightMuon                                .clear();
+    _MuonIsLooseMuon                                .clear();
 
 	// === Combo === //
 	_DitauVisibleMass								.clear();
@@ -495,9 +502,52 @@ void DitauMuonFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primary
 
 
 void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primaryVertex){
-	_MuonPt			.push_back(Muon.pt());
-	_MuonEta		.push_back(Muon.eta());
-	_MuonPhi		.push_back(Muon.phi());
+    
+    // get beamspot
+    math::XYZPoint beamSpotPosition;
+    beamSpotPosition.SetCoordinates(0,0,0);
+
+    //edm::Handle<reco::BeamSpot> bsHandle;
+    //iEvent.getByLabel("offlineBeamSpot",bsHandle);
+    //if( (bsHandle.isValid()) ){
+    //    beamSpotPosition = bsHandle->position();
+    //}
+    
+    // get vertex
+    math::XYZPoint vertexPosition;
+    vertexPosition.SetCoordinates(0,0,0);
+
+    vertexPosition = primaryVertex.position();
+
+    _MuonPt.push_back(Muon.pt());
+    _MuonEta.push_back(Muon.eta());
+    _MuonPhi.push_back(Muon.phi());
+    float pfIso = getLeptonPfIso <pat::Muon> (Muon, 0, 0); // no charged hadron PU subtraction, and no delta(B) corr.
+    _MuonPfIso.push_back( pfIso );
+    bool isLooseMuon = -1;
+    bool isTightMuon = -1;
+    isLooseMuon = (
+        Muon.isGlobalMuon() 
+    );
+    isTightMuon = isLooseMuon;
+
+    isTightMuon *= Muon.isTrackerMuon();
+    isTightMuon *= Muon.isGood("GlobalMuonPromptTight");
+    isTightMuon *= Muon.numberOfMatches() > 1;
+
+    if(Muon.innerTrack().isAvailable() ) { 
+        isTightMuon *= Muon.innerTrack()->numberOfValidHits() > 10;
+        isTightMuon *= Muon.innerTrack()->hitPattern().pixelLayersWithMeasurement() > 0;
+        isTightMuon *= Muon.innerTrack()->dxy(beamSpotPosition) < 0.02;
+        isTightMuon *= Muon.innerTrack()->dz(vertexPosition) < 1;
+    } else {
+        _MuonIsLooseMuon.push_back(-1);
+        _MuonIsTightMuon.push_back(-1);
+        return;
+    }
+    _MuonIsLooseMuon.push_back((int)isLooseMuon);
+    _MuonIsTightMuon.push_back((int)isTightMuon);
+	
 }
 
 void DitauMuonFiller::FillDitauMuon(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const reco::Vertex& primaryVertex){
