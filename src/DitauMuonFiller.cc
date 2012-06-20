@@ -202,7 +202,7 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau1LTNormChiSqrd								.clear();
 
 	// === Tau2 === //
-	_Tau2MomentumRank										.clear();
+	_Tau2MomentumRank								.clear();
 	_Tau2Pt											.clear();
 	_Tau2Eta										.clear();
 	_Tau2Phi										.clear();
@@ -522,31 +522,30 @@ void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primar
     _MuonPt.push_back(Muon.pt());
     _MuonEta.push_back(Muon.eta());
     _MuonPhi.push_back(Muon.phi());
-    float pfIso = getLeptonPfIso <pat::Muon> (Muon, 0, 0); // no charged hadron PU subtraction, and no delta(B) corr.
+    
+    float pfIso = -1;
+    pfIso = getLeptonIso <pat::Muon> (Muon, 0, 0, 0); // no charged hadron PU subtraction, and no delta(B) corr.
     _MuonPfIso.push_back( pfIso );
-    bool isLooseMuon = -1;
-    bool isTightMuon = -1;
-    isLooseMuon = (
-        Muon.isGlobalMuon() 
-    );
+    
+    int isLooseMuon = -1;
+    int isTightMuon = -1;
+    isLooseMuon = Muon.isGlobalMuon();
     isTightMuon = isLooseMuon;
-
-    isTightMuon *= Muon.isTrackerMuon();
-    isTightMuon *= Muon.isGood("GlobalMuonPromptTight");
-    isTightMuon *= Muon.numberOfMatches() > 1;
-
+    if( !(Muon.isTrackerMuon()) ) isTightMuon = 0;
+    if( !(Muon.isGood("GlobalMuonPromptTight")) ) isTightMuon = 0;
+    if( !(Muon.numberOfMatches() > 1) ) isTightMuon = 0;
+    if( !(Muon.numberOfValidHits() > 10) ) isTightMuon = 0;
+    if( !(Muon.dB(pat::Muon::PV2D) < 0.02) ) isTightMuon = 0;
     if(Muon.innerTrack().isAvailable() ) { 
-        isTightMuon *= Muon.innerTrack()->numberOfValidHits() > 10;
-        isTightMuon *= Muon.innerTrack()->hitPattern().pixelLayersWithMeasurement() > 0;
-        isTightMuon *= Muon.innerTrack()->dxy(beamSpotPosition) < 0.02;
-        isTightMuon *= Muon.innerTrack()->dz(vertexPosition) < 1;
-    } else {
-        _MuonIsLooseMuon.push_back(-1);
-        _MuonIsTightMuon.push_back(-1);
-        return;
+        if( !(Muon.innerTrack()->hitPattern().pixelLayersWithMeasurement() > 0) ) isTightMuon = 0;
+        if( !(Muon.innerTrack()->dz(vertexPosition) < 1) ) isTightMuon = 0;
+    } else {  // for now, keep muons without embedded track (skim v1)
+        //_MuonIsLooseMuon.push_back(-1);
+        //_MuonIsTightMuon.push_back(-1);
+        //return;
     }
-    _MuonIsLooseMuon.push_back((int)isLooseMuon);
-    _MuonIsTightMuon.push_back((int)isTightMuon);
+    _MuonIsLooseMuon.push_back(isLooseMuon);
+    _MuonIsTightMuon.push_back(isTightMuon);
 	
 }
 
