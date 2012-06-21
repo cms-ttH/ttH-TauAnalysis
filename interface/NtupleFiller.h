@@ -24,6 +24,8 @@
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
+#include "../src/fillerAuxFunctions.cc"
+
 #include <TTree.h>
 
 using namespace std;

@@ -4,6 +4,7 @@
 #define _DitauMuonFiller_h
 
 #include "../interface/NtupleFiller.h"
+#include "../src/fillerAuxFunctions.cc"
 
 using namespace std;
 

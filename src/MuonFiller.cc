@@ -1,7 +1,7 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
 #include "../interface/MuonFiller.h"
-#include "fillerAuxFunctions.cc"
+//#include "fillerAuxFunctions.cc"
 
 using namespace std;
 using namespace edm;
@@ -97,26 +97,11 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         float pfIso = -1;
         pfIso = getLeptonIso <pat::Muon> (*Muon, 0, 0, 0); // is reco::Muon, no charged hadron PU subtraction, and no delta(B) corr.
         _pfIso.push_back( pfIso );
-
-        int isLooseMuon = -1;
-        int isTightMuon = -1;
-        isLooseMuon = Muon->isGlobalMuon();
-        isTightMuon = isLooseMuon;
-        if( !(Muon->isTrackerMuon()) ) isTightMuon = 0;
-        if( !(Muon->isGood("GlobalMuonPromptTight")) ) isTightMuon = 0;
-        if( !(Muon->numberOfMatches() > 1) ) isTightMuon = 0;
-        if( !(Muon->numberOfValidHits() > 10) ) isTightMuon = 0;
-        if( !(Muon->dB(pat::Muon::PV2D) < 0.02) ) isTightMuon = 0;
-        if(Muon->innerTrack().isAvailable() ) { 
-            if( !(Muon->innerTrack()->hitPattern().pixelLayersWithMeasurement() > 0) ) isTightMuon = 0;
-            if( !(Muon->innerTrack()->dz(vertexPosition) < 1) ) isTightMuon = 0;
-        } else {  // for now, keep muons without embedded track (skim v1)
-            //_MuonIsLooseMuon.push_back(-1);
-            //_MuonIsTightMuon.push_back(-1);
-            //return;
-        }
-        _isLooseMuon.push_back(isLooseMuon);
-        _isTightMuon.push_back(isTightMuon);
+        
+        _isLooseMuon.push_back(getMuonID(*Muon,vertexPosition,
+                    1, // return loose ID
+                    1)); // require track info for ID
+        _isTightMuon.push_back(getMuonID(*Muon,vertexPosition,0,1));
 	}
 
 }
