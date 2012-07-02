@@ -79,6 +79,8 @@ class DitauFiller : public NtupleFiller {
 		vector<float>			_Tau1LTvz;
 		vector<unsigned int>	_Tau1LTValidHits;
 		vector<float>			_Tau1LTNormChiSqrd;
+		vector<float>			_Tau1METCosDeltaPhi;
+		vector<float>			_Tau1METMt;
 
 		// === Tau2 === //
 		vector<unsigned int>	_Tau2MomentumRank;
@@ -124,6 +126,8 @@ class DitauFiller : public NtupleFiller {
 		vector<float>			_Tau2LTvz;
 		vector<unsigned int>	_Tau2LTValidHits;
 		vector<float>			_Tau2LTNormChiSqrd;
+		vector<float>			_Tau2METCosDeltaPhi;
+		vector<float>			_Tau2METMt;
 
 		// === Combo === //
 		vector<float>			_DitauVisibleMass;
@@ -137,6 +141,8 @@ class DitauFiller : public NtupleFiller {
 		vector<unsigned int>	_NumCSVLextraJets;
 		vector<unsigned int>	_NumCSVMextraJets;
 		vector<unsigned int>	_NumCSVTextraJets;
+		vector<float>			_DitauMETpZeta;
+		vector<float>			_DitauMETpZetaVis;
 		
 };
 

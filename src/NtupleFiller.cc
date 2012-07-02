@@ -26,6 +26,10 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
 	_RecoPATMetSource				= iConfig.getParameter<InputTag>("RecoPATMetSource");
 	_RecoPFMetSource				= iConfig.getParameter<InputTag>("RecoPFMetSource");
 
+	_RecoTauMinPt					= iConfig.getParameter<double>("RecoTauMinPt");
+	_RecoTauMaxAbsEta				= iConfig.getParameter<double>("RecoTauMaxAbsEta");
+	_RecoTauRequireDMF				= iConfig.getParameter<bool>("RecoTauRequireDMF");
+
 	_RecoJetMinEt					= iConfig.getParameter<double>("RecoJetMinEt");
 	_RecoJetMinAbsEta				= iConfig.getParameter<double>("RecoJetMinAbsEta");
 	_RecoJetMaxAbsEta				= iConfig.getParameter<double>("RecoJetMaxAbsEta");

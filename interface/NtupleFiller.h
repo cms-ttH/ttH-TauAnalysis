@@ -50,6 +50,9 @@ class NtupleFiller : public EDAnalyzer {
 		// === Helper functions === //
 		template <typename PatObject1, typename PatObject2> double GetComboMass(const PatObject1&, const PatObject2&);
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetComboMass(const PatObject1&, const PatObject2&, const MetObject&);
+		template <typename PatObject, typename MetObject> double GetTransverseMass(const PatObject&, const MetObject&);
+		template <typename PatObject1, typename PatObject2, typename MetObject> double GetPZeta(const PatObject1&, const PatObject2&, const MetObject&);
+		template <typename PatObject1, typename PatObject2> double GetPZetaVis(const PatObject1&, const PatObject2&);
 		bool IsInTheCracks(float);
 /*		template <typename PatObject> pair<bool, reco::Candidate::LorentzVector> matchToGen(const PatObject&, int);
 		pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&);
@@ -72,6 +75,9 @@ class NtupleFiller : public EDAnalyzer {
 		InputTag _RecoElectronSource;
 		bool _UseHeepInfo;
 		InputTag _RecoParticleFlowSource;
+		double _RecoTauMinPt;
+		double _RecoTauMaxAbsEta;
+		bool _RecoTauRequireDMF;
 
 		// === Jet Inputs === //
 		InputTag _RecoJetSource;
@@ -123,6 +129,42 @@ template <typename PatObject1, typename PatObject2, typename MetObject> double N
 	double e = patObject1.energy() + patObject2.energy() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
 	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
 	return The_LorentzVect.M();
+}
+
+// === Lepton + MET mass === //
+template <typename PatObject, typename MetObject> double NtupleFiller::GetTransverseMass(const PatObject& patObject, const MetObject& metObject){
+	double px = patObject.px() + metObject.px();
+	double py = patObject.py() + metObject.py();
+	double et = patObject.et() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
+	double mt2 = et*et - (px*px + py*py);
+	if ( mt2 < 0 ) { return -1.; }
+	else { return sqrt(mt2); }
+}
+
+// === p zeta === //
+template <typename PatObject1, typename PatObject2, typename MetObject> double NtupleFiller::GetPZeta(const PatObject1& patObject1, const PatObject2& patObject2, const MetObject& metObject){
+	double zetaX = cos(patObject1.phi()) + cos(patObject2.phi());
+	double zetaY = sin(patObject1.phi()) + sin(patObject2.phi());
+	double zetaR = TMath::Sqrt(zetaX*zetaX + zetaY*zetaY);
+	if ( zetaR > 0. ) { zetaX /= zetaR; zetaY /= zetaR; }
+	double visPx = patObject1.px() + patObject2.px();
+	double visPy = patObject1.py() + patObject2.py();
+	double px = visPx + metObject.px();
+	double py = visPy + metObject.py();
+	double pZeta = px*zetaX + py*zetaY;
+	return pZeta;
+}
+
+// === p zeta vis === //
+template <typename PatObject1, typename PatObject2> double NtupleFiller::GetPZetaVis(const PatObject1& patObject1, const PatObject2& patObject2){
+	double zetaX = cos(patObject1.phi()) + cos(patObject2.phi());
+	double zetaY = sin(patObject1.phi()) + sin(patObject2.phi());
+	double zetaR = TMath::Sqrt(zetaX*zetaX + zetaY*zetaY);
+	if ( zetaR > 0. ) { zetaX /= zetaR; zetaY /= zetaR; }
+	double visPx = patObject1.px() + patObject2.px();
+	double visPy = patObject1.py() + patObject2.py();
+	double pZetaVis = visPx*zetaX + visPy*zetaY;
+	return pZetaVis;
 }
 
 
