@@ -75,6 +75,8 @@ void DitauFiller::SetupBranches(){
 	_Tree->Branch("TT_Tau1LTvz", &_Tau1LTvz);
 	_Tree->Branch("TT_Tau1LTValidHits", &_Tau1LTValidHits);
 	_Tree->Branch("TT_Tau1LTNormChiSqrd", &_Tau1LTNormChiSqrd);
+	_Tree->Branch("TT_Tau1METCosDeltaPhi", &_Tau1METCosDeltaPhi);
+	_Tree->Branch("TT_Tau1METMt", &_Tau1METMt);
 
 	// === Tau2 === //
 	_Tree->Branch("TT_Tau2MomentumRank", &_Tau2MomentumRank);
@@ -120,6 +122,8 @@ void DitauFiller::SetupBranches(){
 	_Tree->Branch("TT_Tau2LTvz", &_Tau2LTvz);
 	_Tree->Branch("TT_Tau2LTValidHits", &_Tau2LTValidHits);
 	_Tree->Branch("TT_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
+	_Tree->Branch("TT_Tau2METCosDeltaPhi", &_Tau2METCosDeltaPhi);
+	_Tree->Branch("TT_Tau2METMt", &_Tau2METMt);
 
 	// === Combo === //
 	_Tree->Branch("TT_DitauVisibleMass", &_DitauVisibleMass);
@@ -133,6 +137,8 @@ void DitauFiller::SetupBranches(){
 	_Tree->Branch("TT_NumCSVLextraJets", &_NumCSVLextraJets);
 	_Tree->Branch("TT_NumCSVMextraJets", &_NumCSVMextraJets);
 	_Tree->Branch("TT_NumCSVTextraJets", &_NumCSVTextraJets);
+	_Tree->Branch("TT_DitauMETpZeta", &_DitauMETpZeta);
+	_Tree->Branch("TT_DitauMETpZetaVis", &_DitauMETpZetaVis);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -143,7 +149,7 @@ void DitauFiller::ClearVectors(){
 	_MomentumRank									.clear();
 
 	// === Tau1 === //
-	_Tau1MomentumRank										.clear();
+	_Tau1MomentumRank								.clear();
 	_Tau1Pt											.clear();
 	_Tau1Eta										.clear();
 	_Tau1Phi										.clear();
@@ -186,9 +192,11 @@ void DitauFiller::ClearVectors(){
 	_Tau1LTvz										.clear();
 	_Tau1LTValidHits								.clear();
 	_Tau1LTNormChiSqrd								.clear();
+	_Tau1METCosDeltaPhi								.clear();
+	_Tau1METMt										.clear();
 
 	// === Tau2 === //
-	_Tau2MomentumRank										.clear();
+	_Tau2MomentumRank								.clear();
 	_Tau2Pt											.clear();
 	_Tau2Eta										.clear();
 	_Tau2Phi										.clear();
@@ -231,6 +239,8 @@ void DitauFiller::ClearVectors(){
 	_Tau2LTvz										.clear();
 	_Tau2LTValidHits								.clear();
 	_Tau2LTNormChiSqrd								.clear();
+	_Tau2METCosDeltaPhi								.clear();
+	_Tau2METMt										.clear();
 
 	// === Combo === //
 	_DitauVisibleMass								.clear();
@@ -244,6 +254,8 @@ void DitauFiller::ClearVectors(){
 	_NumCSVLextraJets								.clear();
 	_NumCSVMextraJets								.clear();
 	_NumCSVTextraJets								.clear();
+	_DitauMETpZeta									.clear();
+	_DitauMETpZetaVis								.clear();
 
 }
 
@@ -287,10 +299,12 @@ void DitauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				Tau2 = TauTemp;
 			}
 
-//			if(Tau1->pt() < _RecoTauPtMinCut){ continue; }
-//			if(Tau2->pt() < _RecoTauPtMinCut){ continue; }
-//			if(fabs(Tau1->eta()) > _RecoTauEtaCut ){ continue; }
-//			if(fabs(Tau2->eta()) > _RecoTauEtaCut ){ continue; }
+			if(Tau1->pt() < _RecoTauMinPt){ continue; }
+			if(Tau2->pt() < _RecoTauMinPt){ continue; }
+			if(fabs(Tau1->eta()) > _RecoTauMaxAbsEta ){ continue; }
+			if(fabs(Tau2->eta()) > _RecoTauMaxAbsEta ){ continue; }
+			if(_RecoTauRequireDMF && !(Tau1->tauID("decayModeFinding"))){ continue; }
+			if(_RecoTauRequireDMF && !(Tau2->tauID("decayModeFinding"))){ continue; }
 
 
 				// =========   NO VECTOR FILLING BEFORE THIS POINT   ========= //
@@ -388,6 +402,9 @@ void DitauFiller::FillTau1(const pat::Tau& Tau1, const reco::Vertex& primaryVert
 					_Tau1LTValidHits    .push_back(-1);
 					_Tau1LTNormChiSqrd  .push_back(-1);
 				}
+
+				_Tau1METCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - (*_patMETs->begin()).phi()))));
+				_Tau1METMt			.push_back(GetTransverseMass(Tau1, (*_patMETs->begin())));
 }
 
 void DitauFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primaryVertex){
@@ -464,6 +481,9 @@ void DitauFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primaryVert
 					_Tau2LTValidHits    .push_back(-1);
 					_Tau2LTNormChiSqrd  .push_back(-1);
 				}
+
+				_Tau2METCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau2.phi() - (*_patMETs->begin()).phi()))));
+				_Tau2METMt			.push_back(GetTransverseMass(Tau2, (*_patMETs->begin())));
 }
 
 
@@ -472,6 +492,10 @@ void DitauFiller::FillDitau(const pat::Tau& Tau1, const pat::Tau& Tau2, const re
 	_DitauMETMass		.push_back(GetComboMass(Tau1, Tau2, (*_patMETs->begin())));
 	_DitauCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - Tau2.phi()))));
 	_DitauDeltaR		.push_back(reco::deltaR(Tau1.eta(), Tau1.phi(), Tau2.eta(), Tau2.phi()));
+
+	_DitauMETpZeta		.push_back(GetPZeta(Tau1, Tau2, (*_patMETs->begin())));
+	_DitauMETpZetaVis	.push_back(GetPZetaVis(Tau1, Tau2));
+
 	_HT					.push_back(Tau1.pt() + Tau2.pt() + (_patMETs->begin()->pt()));
 	_NumCSVLbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, "L"));
 	_NumCSVMbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, "M"));
