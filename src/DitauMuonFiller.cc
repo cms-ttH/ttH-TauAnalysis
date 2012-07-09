@@ -501,7 +501,7 @@ void DitauMuonFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primary
 
 
 void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primaryVertex){
-    
+   
     // get beamspot
     math::XYZPoint beamSpotPosition;
     beamSpotPosition.SetCoordinates(0,0,0);
@@ -523,11 +523,11 @@ void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primar
     _MuonPhi.push_back(Muon.phi());
     
     float pfIso = -1;
-    pfIso = getLeptonIso <pat::Muon> (Muon, 
-            0, // not PF muons 
-            0, //no charged hadron PU subtraction
-            0); // no delta(B) corr.
-    _MuonPfIso.push_back( pfIso );
+    //pfIso = getLeptonIso <pat::Muon> (Muon, 
+    //        0, // not PF muons 
+    //        0, //no charged hadron PU subtraction
+    //        0); // no delta(B) corr.
+    //_MuonPfIso.push_back( pfIso );
    
     _MuonIsLooseMuon.push_back(getMuonID(Muon,vertexPosition,
                 1, // return loose ID
