@@ -1,10 +1,9 @@
-// Authors: Andres Florez, Alfredo Gurrola, Eduardo Luiggi, Chi Nhan Nguyen, Nitish Dhingra, Nil Valls
+// Authors: Nil Valls
 
 #ifndef _DitauMuonFiller_h
 #define _DitauMuonFiller_h
 
 #include "../interface/NtupleFiller.h"
-#include "../src/fillerAuxFunctions.cc"
 
 using namespace std;
 
