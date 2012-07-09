@@ -89,7 +89,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Analysis setup === #
 	AnalysisType						= cms.string(options.analysisType),					# Type of analysis, i.e. sample (coll, mc, signal)
-    TreeName							= cms.untracked.string('TTbarHTauTau'),
+    TreeName							= cms.untracked.string('tree'),
 
 	# === Skim Trigger === #
     ApplySkimTriggerRequirements		= cms.bool(True),
