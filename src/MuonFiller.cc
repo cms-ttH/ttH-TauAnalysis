@@ -33,7 +33,7 @@ void MuonFiller::SetupBranches(){
 	_Tree->Branch("M_Pt",&_MuonPt);
 	_Tree->Branch("M_Eta",&_MuonEta);
 	_Tree->Branch("M_Phi",&_MuonPhi);
-	_Tree->Branch("M_Iso",&_MuonIso); // 0.4 cone size
+	_Tree->Branch("M_RelIso",&_MuonRelIso); 
 	_Tree->Branch("M_isTightMuon",&_isTightMuon);
 	_Tree->Branch("M_isLooseMuon",&_isLooseMuon);
 }
@@ -46,7 +46,7 @@ void MuonFiller::ClearVectors(){
 	_MuonPt	   		.clear();
 	_MuonEta   		.clear();
 	_MuonPhi   		.clear();
-	_MuonIso  		.clear();
+	_MuonRelIso  		.clear();
 	_isTightMuon    .clear();
 	_isLooseMuon 	.clear();
 
@@ -101,7 +101,7 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         iso = getLeptonIso <pat::Muon> (*Muon, 0,  // is not PF muon
                                                0,  // no charged hadron PU subtraction
                                                0); // no delta(beta) correction
-        _MuonIso.push_back( iso );
+        _MuonRelIso.push_back( iso );
         
         _isLooseMuon.push_back(getMuonID(*Muon,vertexPosition,
                     1, // return loose ID

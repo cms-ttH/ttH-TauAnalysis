@@ -41,9 +41,9 @@ template <class T> float getLeptonIso(const pat::Lepton<T>& lepton, bool isPfMuo
     float sum = 0;
     if( lepton.pfCandidateRef().isNull() ) { // standard lepton
         //std::cout << "standard lepton" << std::endl;
-        sum += lepton.trackIso();
-        sum += lepton.ecalIso();
-        sum += lepton.hcalIso();
+        sum += lepton.isolationR03().sumPt;
+        sum += lepton.isolationR03().emEt;
+        sum += lepton.isolationR03().hadEt;
     }
     else { // PF lepton
         //std::cout << "PF lepton" << std::endl;
