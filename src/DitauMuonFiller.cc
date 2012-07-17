@@ -127,7 +127,7 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_MuonPt", &_MuonPt);
 	_Tree->Branch("TTM_MuonEta", &_MuonEta);
 	_Tree->Branch("TTM_MuonPhi", &_MuonPhi);
-	_Tree->Branch("TTM_MuonPfRelIso", &_MuonPfIso);
+	_Tree->Branch("TTM_MuonRelIso", &_MuonRelIso);
 	_Tree->Branch("TTM_MuonIsLooseMuon", &_MuonIsLooseMuon);
 	_Tree->Branch("TTM_MuonIsTightMuon", &_MuonIsTightMuon);
 
@@ -250,7 +250,7 @@ void DitauMuonFiller::ClearVectors(){
 	_MuonPt											.clear();
 	_MuonEta										.clear();
 	_MuonPhi										.clear();
-    _MuonPfIso                                      .clear();
+    _MuonRelIso                                     .clear();
     _MuonIsTightMuon                                .clear();
     _MuonIsLooseMuon                                .clear();
 
@@ -523,11 +523,11 @@ void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primar
     _MuonPhi.push_back(Muon.phi());
     
     float pfIso = -1;
-    //pfIso = getLeptonIso <pat::Muon> (Muon, 
-    //        0, // not PF muons 
-    //        0, //no charged hadron PU subtraction
-    //        0); // no delta(B) corr.
-    //_MuonPfIso.push_back( pfIso );
+    pfIso = getLeptonIso <pat::Muon> (Muon, 
+            0, // not PF muons 
+            0, //no charged hadron PU subtraction
+            0); // no delta(B) corr.
+    _MuonRelIso.push_back( pfIso/Muon.pt() );
    
     _MuonIsLooseMuon.push_back(getMuonID(Muon,vertexPosition,
                 1, // return loose ID
