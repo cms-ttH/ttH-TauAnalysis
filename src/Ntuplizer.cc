@@ -45,6 +45,7 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("GenLevel")){		ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("GenTau")){			ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree));			}
+	if(IsFillerEnabled("GenJet")){			ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("Tau")){				ntupleFillers.push_back(new TauFiller(*jobConfig, _Tree));				}
 	if(IsFillerEnabled("Electron")){		ntupleFillers.push_back(new ElectronFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("Muon")){			ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree));				}

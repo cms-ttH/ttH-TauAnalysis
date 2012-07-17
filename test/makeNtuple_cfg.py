@@ -5,7 +5,8 @@ import sys
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
-reportEvery	= 1000
+maxEvents	= 100
+reportEvery	= 10
 tauMaxEta	= 9
 tauMinPt	= 0
 
@@ -17,9 +18,9 @@ postfix = ''
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 options.register("analysisType",
-       "coll",		# default value
+       #"coll",		# default value
        #"mc",		# default value
-       #"signal",	# default value
+       "signal",	# default value
        VarParsing.VarParsing.multiplicity.singleton, # singleton or list
        VarParsing.VarParsing.varType.string,         # string, int, or float
        "is MC or is Data?"
@@ -47,9 +48,11 @@ print ''
 
 # === Set up genparticles collection based on analysis type === # 
 if (options.analysisType == "signal") or (options.analysisType == "mc"):
-    inputForGenParticles = 'genParticles'
+    inputForGenParticles	= 'genParticles'
+    inputForGenJets			= 'selectedPatJets:genJets:'
 elif (options.analysisType == "coll"):
-    inputForGenParticles = ''
+    inputForGenParticles	= ''
+    inputForGenJets			= ''
 else:
     sys.exit("Analysis type not understood")
 
@@ -116,6 +119,8 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	NtupleFillers						= cms.untracked.vstring(
 																'Event',
 																'GenLevel',
+																'GenTau',
+																'GenJet',
 																'Tau',
 																'Electron',
 																'Muon',
@@ -127,6 +132,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Input collections === #
     GenParticleSource					= cms.untracked.InputTag(inputForGenParticles),
+    GenJetSource						= cms.untracked.InputTag(inputForGenJets),
     RecoTauSource						= cms.InputTag('selectedPatTaus'+postfix),
     RecoMuonSource						= cms.InputTag('selectedPatMuons'+postfix),
     RecoElectronSource					= cms.InputTag('selectedPatElectrons'+postfix),
