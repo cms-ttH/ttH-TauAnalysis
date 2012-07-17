@@ -18,6 +18,7 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
 
 	_GenParticleSource				= iConfig.getUntrackedParameter<InputTag>("GenParticleSource");
+	_GenJetSource					= iConfig.getUntrackedParameter<InputTag>("GenJetSource");
 	_RecoTauSource					= iConfig.getParameter<InputTag>("RecoTauSource");
 	_RecoMuonSource					= iConfig.getParameter<InputTag>("RecoMuonSource");
 	_RecoElectronSource				= iConfig.getParameter<InputTag>("RecoElectronSource");
@@ -54,7 +55,8 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 
 	iEvent.getByLabel(_RecoTauSource, 		_patTaus);
 	iEvent.getByLabel(_RecoMuonSource, 		_patMuons);
-	if(_GenParticleSource.label() != "") { iEvent.getByLabel(_GenParticleSource, _genParticles); }
+	if(_GenParticleSource.label()	!= "") { iEvent.getByLabel(_GenParticleSource, _genParticles); }
+	if(_GenJetSource.label()		!= "") { iEvent.getByLabel(_GenJetSource, _genJets); }
 	iEvent.getByLabel(_RecoElectronSource,	_patElectrons);
 	iEvent.getByLabel(_RecoJetSource,		_patJets);
 	iEvent.getByLabel(_RecoPATMetSource,	_patMETs);

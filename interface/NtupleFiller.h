@@ -68,6 +68,7 @@ class NtupleFiller : public EDAnalyzer {
 
 		// === Generator level Inputs === //
 		InputTag _GenParticleSource;
+		InputTag _GenJetSource;
 
 		// === Tau and Leptons Inputs === //
 		InputTag _RecoTauSource;
@@ -102,6 +103,7 @@ class NtupleFiller : public EDAnalyzer {
 
 		// === Handles to collections === //
 		Handle< reco::GenParticleCollection >				_genParticles;
+		Handle< reco::GenJetCollection >					_genJets;
 		Handle< pat::TauCollection >						_patTaus;
 		Handle< pat::ElectronCollection >					_patElectrons;
 		Handle< pat::MuonCollection >						_patMuons;
