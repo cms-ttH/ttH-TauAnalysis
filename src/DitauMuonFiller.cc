@@ -309,7 +309,7 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	ClearVectors();
 
 	// Match Reco and GenHadTaus from H
-	MatchRecoAndGenHadTausFromH();
+	if(_AnalysisType.compare("signal") == 0){ MatchRecoAndGenHadTausFromH(); }
 	
 	// Require at least 2 taus and at least one muon
 	if(_patTaus->size() < 2 || _patMuons->size() < 1){ return; }
