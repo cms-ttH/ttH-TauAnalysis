@@ -29,9 +29,23 @@ class DitauMuonFiller : public NtupleFiller {
 		void FillDitauMuon(const pat::Tau&, const pat::Tau&, const pat::Muon&, const reco::Vertex&);
 		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string);
 		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string);
+		void MatchRecoAndGenHadTausFromH();
+		void FindGenTausFromHandW();
+		pat::Tau * FindClosestRecoTau(reco::Candidate::LorentzVector *);
 
 	// ----- Variables ----- //
 	private:
+		TH1F*				_Plot1;
+		TH1F*				_Plot2;
+		reco::Candidate::LorentzVector genHadTauFromH1;
+		reco::Candidate::LorentzVector genHadTauFromH2;
+		reco::Candidate::LorentzVector genHadTauFromW1;
+		reco::Candidate::LorentzVector genHadTauFromW2;
+		pat::Tau *				_recoTauMatchedToGenHadTauFromH1;
+		pat::Tau *				_recoTauMatchedToGenHadTauFromH2;
+		pat::Tau *				_recoTauMatchedToGenHadTauFromW1;
+		pat::Tau *				_recoTauMatchedToGenHadTauFromW2;
+
 		unsigned int			_NumTaus;
 		unsigned int			_NumMuons;
 		unsigned int			_NumCombos;
@@ -45,7 +59,6 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<unsigned int>	_Tau1NProngs;
 		vector<unsigned int>	_Tau1NSignalGammas;
 		vector<unsigned int>	_Tau1NSignalNeutrals;
-		vector<unsigned int>	_Tau1NSignalPiZeros;
 		vector<unsigned int>	_Tau1DecayMode;
 		vector<float>			_Tau1EmFraction;
 		vector<bool>			_Tau1IsInTheCracks;
@@ -81,6 +94,10 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau1LTvz;
 		vector<unsigned int>	_Tau1LTValidHits;
 		vector<float>			_Tau1LTNormChiSqrd;
+		vector<bool>			_Tau1MatchesGenHadTauFromH1;
+		vector<bool>			_Tau1MatchesGenHadTauFromH2;
+		vector<bool>			_Tau1MatchesGenHadTauFromW1;
+		vector<bool>			_Tau1MatchesGenHadTauFromW2;
 
 		// === Tau2 === //
 		vector<unsigned int>	_Tau2MomentumRank;
@@ -90,7 +107,6 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<unsigned int>	_Tau2NProngs;
 		vector<unsigned int>	_Tau2NSignalGammas;
 		vector<unsigned int>	_Tau2NSignalNeutrals;
-		vector<unsigned int>	_Tau2NSignalPiZeros;
 		vector<unsigned int>	_Tau2DecayMode;
 		vector<float>			_Tau2EmFraction;
 		vector<bool>			_Tau2IsInTheCracks;
@@ -126,6 +142,10 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau2LTvz;
 		vector<unsigned int>	_Tau2LTValidHits;
 		vector<float>			_Tau2LTNormChiSqrd;
+		vector<bool>			_Tau2MatchesGenHadTauFromH1;
+		vector<bool>			_Tau2MatchesGenHadTauFromH2;
+		vector<bool>			_Tau2MatchesGenHadTauFromW1;
+		vector<bool>			_Tau2MatchesGenHadTauFromW2;
 
 		// === Muon === //
 		vector<unsigned int>	_MuonMomentumRank;
