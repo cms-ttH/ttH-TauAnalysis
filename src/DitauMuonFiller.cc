@@ -14,6 +14,12 @@ DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig): NtupleFiller(iCon
 DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
 	_Tree = iTree;
 	SetupBranches();
+
+	_recoTauMatchedToGenHadTauFromH1 = NULL;
+	_recoTauMatchedToGenHadTauFromH2 = NULL;
+	_recoTauMatchedToGenHadTauFromW1 = NULL;
+	_recoTauMatchedToGenHadTauFromW2 = NULL;
+
 }
 
 // === Destructor === //
@@ -40,7 +46,6 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau1NProngs", &_Tau1NProngs);
 	_Tree->Branch("TTM_Tau1NSignalGammas", &_Tau1NSignalGammas);
 	_Tree->Branch("TTM_Tau1NSignalNeutrals", &_Tau1NSignalNeutrals);
-	_Tree->Branch("TTM_Tau1NSignalPiZeros", &_Tau1NSignalPiZeros);
 	_Tree->Branch("TTM_Tau1DecayMode", &_Tau1DecayMode);
 	_Tree->Branch("TTM_Tau1EmFraction", &_Tau1EmFraction);
 	_Tree->Branch("TTM_Tau1IsInTheCracks", &_Tau1IsInTheCracks);
@@ -76,6 +81,10 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau1LTvz", &_Tau1LTvz);
 	_Tree->Branch("TTM_Tau1LTValidHits", &_Tau1LTValidHits);
 	_Tree->Branch("TTM_Tau1LTNormChiSqrd", &_Tau1LTNormChiSqrd);
+	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromH1", &_Tau1MatchesGenHadTauFromH1);
+	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromH2", &_Tau1MatchesGenHadTauFromH2);
+	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromW1", &_Tau1MatchesGenHadTauFromW1);
+	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromW2", &_Tau1MatchesGenHadTauFromW2);
 
 	// === Tau2 === //
 	_Tree->Branch("TTM_Tau2MomentumRank", &_Tau2MomentumRank);
@@ -85,7 +94,6 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2NProngs", &_Tau2NProngs);
 	_Tree->Branch("TTM_Tau2NSignalGammas", &_Tau2NSignalGammas);
 	_Tree->Branch("TTM_Tau2NSignalNeutrals", &_Tau2NSignalNeutrals);
-	_Tree->Branch("TTM_Tau2NSignalPiZeros", &_Tau2NSignalPiZeros);
 	_Tree->Branch("TTM_Tau2DecayMode", &_Tau2DecayMode);
 	_Tree->Branch("TTM_Tau2EmFraction", &_Tau2EmFraction);
 	_Tree->Branch("TTM_Tau2IsInTheCracks", &_Tau2IsInTheCracks);
@@ -121,6 +129,10 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2LTvz", &_Tau2LTvz);
 	_Tree->Branch("TTM_Tau2LTValidHits", &_Tau2LTValidHits);
 	_Tree->Branch("TTM_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
+	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromH1", &_Tau2MatchesGenHadTauFromH1);
+	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromH2", &_Tau2MatchesGenHadTauFromH2);
+	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromW1", &_Tau2MatchesGenHadTauFromW1);
+	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromW2", &_Tau2MatchesGenHadTauFromW2);
 
 	// === Muon === //
 	_Tree->Branch("TTM_MuonMomentumRank", &_MuonMomentumRank);
@@ -149,6 +161,16 @@ void DitauMuonFiller::SetupBranches(){
 
 // === Clear vectors that will be used to fill ntuple === //
 void DitauMuonFiller::ClearVectors(){
+	genHadTauFromH1 = reco::Candidate::LorentzVector(0,0,0,0);
+	genHadTauFromH2 = reco::Candidate::LorentzVector(0,0,0,0);
+	genHadTauFromW1 = reco::Candidate::LorentzVector(0,0,0,0);
+	genHadTauFromW2 = reco::Candidate::LorentzVector(0,0,0,0);
+
+
+	_recoTauMatchedToGenHadTauFromH1 = NULL;
+	_recoTauMatchedToGenHadTauFromH2 = NULL;
+	_recoTauMatchedToGenHadTauFromW1 = NULL;
+	_recoTauMatchedToGenHadTauFromW2 = NULL;
 
 	_NumTaus										= 0;
 	_NumMuons										= 0;
@@ -163,7 +185,6 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau1NProngs									.clear();
 	_Tau1NSignalGammas								.clear();
 	_Tau1NSignalNeutrals							.clear();
-	_Tau1NSignalPiZeros								.clear();
 	_Tau1DecayMode									.clear();
 	_Tau1EmFraction									.clear();
 	_Tau1IsInTheCracks								.clear();
@@ -199,6 +220,10 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau1LTvz										.clear();
 	_Tau1LTValidHits								.clear();
 	_Tau1LTNormChiSqrd								.clear();
+	_Tau1MatchesGenHadTauFromH1						.clear();
+	_Tau1MatchesGenHadTauFromH2						.clear();
+	_Tau1MatchesGenHadTauFromW1						.clear();
+	_Tau1MatchesGenHadTauFromW2						.clear();
 
 	// === Tau2 === //
 	_Tau2MomentumRank								.clear();
@@ -208,7 +233,6 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau2NProngs									.clear();
 	_Tau2NSignalGammas								.clear();
 	_Tau2NSignalNeutrals							.clear();
-	_Tau2NSignalPiZeros								.clear();
 	_Tau2DecayMode									.clear();
 	_Tau2EmFraction									.clear();
 	_Tau2IsInTheCracks								.clear();
@@ -244,6 +268,10 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau2LTvz										.clear();
 	_Tau2LTValidHits								.clear();
 	_Tau2LTNormChiSqrd								.clear();
+	_Tau2MatchesGenHadTauFromH1						.clear();
+	_Tau2MatchesGenHadTauFromH2						.clear();
+	_Tau2MatchesGenHadTauFromW1						.clear();
+	_Tau2MatchesGenHadTauFromW2						.clear();
 
 	// === Muon === //
 	_MuonMomentumRank								.clear();
@@ -279,6 +307,9 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// Clear vectors
 	ClearVectors();
+
+	// Match Reco and GenHadTaus from H
+	MatchRecoAndGenHadTausFromH();
 	
 	// Require at least 2 taus and at least one muon
 	if(_patTaus->size() < 2 || _patMuons->size() < 1){ return; }
@@ -296,12 +327,10 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	theNumberOfTaus1 = 0;
 	for ( pat::TauCollection::const_iterator Tau1 = _patTaus->begin(); Tau1 != _patTaus->end(); ++Tau1 ) {
 		theNumberOfTaus1++;
-	//	if (Tau1->pt() < _RecoTauPtMinCut){ continue; }
 
 		theNumberOfTaus2 = theNumberOfTaus1 + 1;
 		for ( pat::TauCollection::const_iterator Tau2 = (Tau1 + 1); Tau2 != _patTaus->end(); ++Tau2 ) {
 			theNumberOfTaus2++;
-	//		if (Tau2->pt() < _RecoTau2PtMinCut){ continue; }
 
 			if( theNumberOfTaus2 <= theNumberOfTaus1 ){ continue; }// Make sure we don't double-count: only compare pairs in which the tau2 iterator is larger than the tau 1 iterator, else skip combo
 
@@ -312,10 +341,12 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				Tau2 = TauTemp;
 			}
 
-//			if(Tau1->pt() < _RecoTauPtMinCut){ continue; }
-//			if(Tau2->pt() < _RecoTauPtMinCut){ continue; }
-//			if(fabs(Tau1->eta()) > _RecoTauEtaCut ){ continue; }
-//			if(fabs(Tau2->eta()) > _RecoTauEtaCut ){ continue; }
+			if(Tau1->pt() < _RecoTauMinPt){ continue; }
+			if(Tau2->pt() < _RecoTauMinPt){ continue; }
+			if(fabs(Tau1->eta()) > _RecoTauMaxAbsEta ){ continue; }
+			if(fabs(Tau2->eta()) > _RecoTauMaxAbsEta ){ continue; }
+			if(_RecoTauRequireDMF && !(Tau1->tauID("decayModeFinding"))){ continue; }
+			if(_RecoTauRequireDMF && !(Tau2->tauID("decayModeFinding"))){ continue; }
 
 			_NumMuons = _patMuons->size();
 			theNumberOfMuons = 0;
@@ -341,9 +372,6 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		} // end of tau2 loop
 	} // end of tau1 loop
 
-	//*/
-
-
 }
 
 void DitauMuonFiller::FillTau1(const pat::Tau& Tau1, const reco::Vertex& primaryVertex){
@@ -353,8 +381,6 @@ void DitauMuonFiller::FillTau1(const pat::Tau& Tau1, const reco::Vertex& primary
 				_Tau1NProngs									.push_back(Tau1.signalPFChargedHadrCands().size());
 				_Tau1NSignalGammas								.push_back(Tau1.signalPFGammaCands().size());
 				_Tau1NSignalNeutrals							.push_back(Tau1.signalPFNeutrHadrCands().size());
-				//_Tau1NSignalPiZeros							.push_back(Tau1.signalPiZeroCandidates().size());
-				_Tau1NSignalPiZeros								.push_back(-1);
 				_Tau1DecayMode									.push_back(Tau1.decayMode());
 				_Tau1EmFraction									.push_back(Tau1.emFraction());
 				_Tau1IsInTheCracks								.push_back(IsInTheCracks(Tau1.eta()));
@@ -421,6 +447,14 @@ void DitauMuonFiller::FillTau1(const pat::Tau& Tau1, const reco::Vertex& primary
 					_Tau1LTValidHits    .push_back(-1);
 					_Tau1LTNormChiSqrd  .push_back(-1);
 				}
+
+				// Is this tau one of the two golden ones?
+				_Tau1MatchesGenHadTauFromH1.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromH1);
+				_Tau1MatchesGenHadTauFromH2.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromH2);
+				_Tau1MatchesGenHadTauFromW1.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromW1);
+				_Tau1MatchesGenHadTauFromW2.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromW2);
+
+
 }
 
 void DitauMuonFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primaryVertex){
@@ -430,8 +464,6 @@ void DitauMuonFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primary
 				_Tau2NProngs									.push_back(Tau2.signalPFChargedHadrCands().size());
 				_Tau2NSignalGammas								.push_back(Tau2.signalPFGammaCands().size());
 				_Tau2NSignalNeutrals							.push_back(Tau2.signalPFNeutrHadrCands().size());
-				//_Tau2NSignalPiZeros							.push_back(Tau2.signalPiZeroCandidates().size());
-				_Tau2NSignalPiZeros								.push_back(-1);
 				_Tau2DecayMode									.push_back(Tau2.decayMode());
 				_Tau2EmFraction									.push_back(Tau2.emFraction());
 				_Tau2IsInTheCracks								.push_back(IsInTheCracks(Tau2.eta()));
@@ -497,6 +529,12 @@ void DitauMuonFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primary
 					_Tau2LTValidHits    .push_back(-1);
 					_Tau2LTNormChiSqrd  .push_back(-1);
 				}
+
+				// Is this tau one of the two golden ones?
+				_Tau2MatchesGenHadTauFromH1.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromH1);
+				_Tau2MatchesGenHadTauFromH2.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromH2);
+				_Tau2MatchesGenHadTauFromW1.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromW1);
+				_Tau2MatchesGenHadTauFromW2.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromW2);
 }
 
 
@@ -612,6 +650,96 @@ unsigned int DitauMuonFiller::GetNumCSVextraJets(const pat::Tau& Tau1, const pat
 	}
 
 	return result;
+}
+
+void DitauMuonFiller::MatchRecoAndGenHadTausFromH(){
+	FindGenTausFromHandW();
+
+	_recoTauMatchedToGenHadTauFromH1 = FindClosestRecoTau(&genHadTauFromH1);
+	_recoTauMatchedToGenHadTauFromH2 = FindClosestRecoTau(&genHadTauFromH2);
+	_recoTauMatchedToGenHadTauFromW1 = FindClosestRecoTau(&genHadTauFromW1);
+	_recoTauMatchedToGenHadTauFromW2 = FindClosestRecoTau(&genHadTauFromW2);
+}
+
+pat::Tau * DitauMuonFiller::FindClosestRecoTau(reco::Candidate::LorentzVector * iParticle){
+
+	if(iParticle->mag2()==0){ return NULL; }
+
+	float minDeltaR = 999;
+	pat::TauCollection::const_iterator closestTau;
+	for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
+
+			float thisDeltaR = reco::deltaR(Tau->eta(), Tau->phi(), iParticle->eta(), iParticle->phi());
+			if(thisDeltaR < minDeltaR){
+				minDeltaR = thisDeltaR;	
+				closestTau = (Tau);
+			}
+	}
+
+	return const_cast<pat::Tau*>(&(*closestTau));
+}
+
+void DitauMuonFiller::FindGenTausFromHandW(){
+	genHadTauFromH1 = reco::Candidate::LorentzVector(0,0,0,0);
+	genHadTauFromH2 = reco::Candidate::LorentzVector(0,0,0,0);
+	genHadTauFromW1 = reco::Candidate::LorentzVector(0,0,0,0);
+	genHadTauFromW2 = reco::Candidate::LorentzVector(0,0,0,0);
+
+	// Loop over all gen particles looking for taus
+	unsigned int numGenHadTau		= 0;
+	unsigned int numGenHadTauFromH	= 0;
+	for(GenParticleCollection::const_iterator genParticle = _genParticles->begin(); genParticle != _genParticles->end(); ++genParticle){
+
+		// Only care for taus
+		if((abs(genParticle->pdgId()) != 15) || (genParticle->status() == 3)){ continue; }
+		reco::Candidate::LorentzVector visGenTau = genParticle->p4();
+
+		// Examine number of neutrinos
+		bool foundElectron	= false;
+		bool foundMuon		= false;
+		for( unsigned int i=0; i < (genParticle->numberOfDaughters()); i++) {
+			const reco::Candidate* daughterCand = genParticle->daughter(i);
+
+			// Figure out the decay mode
+			if( abs(daughterCand->pdgId()) == 12 ){ foundElectron	= true; }    
+			if( abs(daughterCand->pdgId()) == 14 ){ foundMuon		= true; }    
+
+			// Obtain visible momentum by subtracting the p4 of neutrinos
+			if( (abs(daughterCand->pdgId()) == 12) || (abs(daughterCand->pdgId()) == 14) || (abs(daughterCand->pdgId()) == 16) ) {
+				visGenTau = visGenTau - daughterCand->p4();
+			}    
+		}    
+		// Fill decay mode
+		if(foundElectron || foundMuon){ continue; }
+		numGenHadTau++;
+
+		const reco::Candidate* parent;
+		if(genParticle->mother(0)->pdgId() == genParticle->pdgId()){    parent = genParticle->mother(0)->mother(0); }
+		else{                                                           parent = genParticle->mother(0);            }  
+		if(parent->pdgId() == 25){
+
+			if(genHadTauFromH1.mag2() ==0){
+				genHadTauFromH1 = visGenTau;
+			}else if(genHadTauFromH1.pt() > visGenTau.pt()){
+				genHadTauFromH2 = visGenTau;
+			}else{
+				genHadTauFromH2 = genHadTauFromH1;
+				genHadTauFromH1 = visGenTau;
+			}
+		}else{
+			if(genHadTauFromW1.mag2() == 0){
+				genHadTauFromW1 = visGenTau;
+			}else if(genHadTauFromW1.pt() > visGenTau.pt()){
+				genHadTauFromW2 = visGenTau;
+			}else{
+				genHadTauFromW2 = genHadTauFromW1;
+				genHadTauFromW1 = visGenTau;
+			}
+		
+		}
+
+	}
+
 }
 
 //define this as a plug-in
