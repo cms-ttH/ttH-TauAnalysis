@@ -32,10 +32,14 @@ class GenTauFiller : public NtupleFiller {
 		vector<float>		_VisPt;
 		vector<float>		_VisEta;
 		vector<float>		_VisPhi;
-		vector<int>			_ParentId;
 		vector<bool>		_ToElectron;
 		vector<bool>		_ToMuon;
 		vector<bool>		_ToHadrons;
+		vector<int>			_ParentId;
+		vector<float>		_ParentP;
+		vector<float>		_ParentPt;
+		vector<float>		_ParentEta;
+		vector<float>		_ParentPhi;
 		
 };
 
