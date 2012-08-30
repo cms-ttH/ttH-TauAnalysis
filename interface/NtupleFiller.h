@@ -27,6 +27,8 @@
 #include "../src/fillerAuxFunctions.cc"
 
 #include <TTree.h>
+#include "TH1F.h"
+#include "TH2F.h"
 
 using namespace std;
 using namespace edm;
