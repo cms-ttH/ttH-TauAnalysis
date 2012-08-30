@@ -1,18 +1,21 @@
 import FWCore.ParameterSet.Config as cms
 import copy
 import sys
+import os
 
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
-maxEvents	= 100
-reportEvery	= 10
+#maxEvents	= 100
+reportEvery	= 1000
 tauMaxEta	= 9
 tauMinPt	= 0
 
-# collection postfix for running on PF2APT
-postfix = ''
-# postfix = 'PFlow'
+
+# === Collection postfix for running on PF2APT === #
+postfix		= ''
+#postfix		= 'PFlow'
+
 
 # === Parse external arguments === #
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -26,9 +29,11 @@ options.register("analysisType",
        "is MC or is Data?"
        )   
 options.maxEvents = maxEvents
-options.outputFile = 'ntuple.root'
-options.inputFiles = 'file:/afs/crc.nd.edu/group/NDCMS/data02/jkolb//TauResults/Run45/TTH_130_skim.root'
+options.outputFile = 'NUT.root'
+#options.inputFiles = 'file:/afs/crc.nd.edu/group/NDCMS/data02/jkolb//TauResults/Run45/TTH_130_skim.root'
+options.inputFiles = '/store/user/jkolb/TTH_HtoAll_M_125_7TeV_pythia6/skimTTHiggsToDiTau_428_v5_TTH_125_xrootd//457a50077bda71f732b6d36b2ce09e9b/ttHiggsToDiTauSkim_112_1_hir.root'
 options.parseArguments() # get and parse the command line arguments (or from Xcrab.cfg)
+
 
 # === Print some basic info about the job setup === #
 print ''
@@ -75,15 +80,23 @@ process.source = cms.Source("PoolSource",
 process.TFileService = cms.Service("TFileService", fileName = cms.string(options.outputFile) )
 
 
+# === Override input files with all the files in the following directory === #
+dir='/afs/crc.nd.edu/group/NDCMS/data02/jkolb/TauResults/TTHtoTauTau/ntuples/MuonPlusJets/skim_v8/'
+process.source.fileNames = cms.vstring()
+for file in os.listdir(dir):
+    process.source.fileNames.extend(cms.vstring(dir+file))
+
+
+
 # === Collision data trigger requirements === #
 import HLTrigger.HLTfilters.triggerResultsFilter_cfi as hlt
 process.hltFilter = hlt.triggerResultsFilter.clone(
     hltResults = cms.InputTag('TriggerResults::HLT'),
     triggerConditions = (
-                            'HLT_IsoMu17_v*',
+							'HLT_IsoMu24_eta2p1_v*',
     ),
     l1tResults = '',
-    throw = False
+    throw = True
 )
 
 
@@ -99,13 +112,14 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     SkimTriggerSource					= cms.InputTag("TriggerResults","","skimTTHiggsToDiTau"),
     SkimTriggerRequirements				= cms.vstring(
 													#	'ttHiggsElectronSkim',
-														'ttHiggsMuonSkim',
+													#	'ttHiggsMuonSkim',
 													#	'ttElectronHiggsToElecTauSkim',
 													#	'ttMuonHiggsToElecTauSkim',
 													#	'ttElectronHiggsToMuTauSkim',
                                                     #	'ttMuonHiggsToMuTauSkim',
 													#	'ttElectronHiggsToTauTauSkim',
 													#	'ttMuonHiggsToTauTauSkim',
+														'ttHiggsToTauTauSkim',
 														),
 
 	# === Trigger === #
@@ -118,16 +132,18 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	# === Which branches to fill? === #
 	NtupleFillers						= cms.untracked.vstring(
 																'Event',
-																'GenLevel',
-																'GenTau',
-																'GenJet',
-																'Tau',
-																'Electron',
-																'Muon',
-																'Jet',
-																'Ditau',
-																'DitauElectron',
+																#'GenLevel',
+																#'GenTau',
+																#'GenJet',
+																#'Tau',
+																#'Electron',
+																#'Muon',
+																#'Jet',
+																#'Ditau',
+																#'DitauElectron',
 																'DitauMuon',
+																#'DitauMuonCheck',
+																#'NilsGenMatcher',
 																),
 
 	# === Input collections === #
@@ -146,7 +162,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     RecoTauRequireDMF                   = cms.bool(False),
 
 	# === Jet stuff === #
-    RecoJetMinEt						= cms.double(10.0),
+    RecoJetMinEt						= cms.double(15.0),
     RecoJetMinAbsEta					= cms.double(0.0),
     RecoJetMaxAbsEta					= cms.double(2.5),
     JetAntiMatchingDeltaR               = cms.double(0.25),
@@ -164,11 +180,6 @@ else:
     process.p = cms.Path( process.makeNtuple )
 
 
-# === Print-out all python configuration parameter information === #
-#print process.dumpPython()
-
-
 # === Write-out all python configuration parameter information === #
-#pythonDump = open("dumpedPython.py", "write")
-#print >> pythonDump,  process.dumpPython()
+pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
 
