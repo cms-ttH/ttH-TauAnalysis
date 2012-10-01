@@ -6,6 +6,7 @@
 
 #include "DataFormats/Math/interface/Point3D.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
 
 
 inline int getMuonID(const pat::Muon& Muon, math::XYZPoint& vertexPosition, bool returnLooseID = 0, bool requireTrackInfo = 0) {
@@ -36,24 +37,55 @@ inline int getMuonID(const pat::Muon& Muon, math::XYZPoint& vertexPosition, bool
     }
     return isTightMuon;
 }
-template <class T> float getLeptonIso(const pat::Lepton<T>& lepton, bool isPfMuon = 0, bool subtractChargedPU = 0, bool doDeltaBeta = 0) {
+//template <class T> float getLeptonIso(const pat::Lepton<T>& lepton, bool subtractChargedPU = 0, bool doDeltaBeta = 0) {
+inline float getMuonIso(const pat::Muon& muon, bool subtractChargedPU = 0, bool doDeltaBeta = 0) {
 
     float sum = 0;
-    if( lepton.pfCandidateRef().isNull() ) { // standard lepton
-        //std::cout << "standard lepton" << std::endl;
-        sum += lepton.isolationR03().sumPt;
-        sum += lepton.isolationR03().emEt;
-        sum += lepton.isolationR03().hadEt;
+    if( muon.pfCandidateRef().isNull() ) { // standard muon
+        //std::cout << "standard muon" << std::endl;
+        sum += muon.isolationR03().sumPt;
+        sum += muon.isolationR03().emEt;
+        sum += muon.isolationR03().hadEt;
     }
-    else { // PF lepton
-        //std::cout << "PF lepton" << std::endl;
+    else { // PF muon
+        return -1;
+        //std::cout << "PF muon" << std::endl;
         
-        //float puChargedHadronIso = lepton.puChargedHadronIso(); not present until 4_4_X
+        //float puChargedHadronIso = muon.puChargedHadronIso(); not present until 4_4_X
         float puChargedHadronIso = 0;
 
-        float chargedHadronIso = lepton.chargedHadronIso();
-        float neutralHadronIso = lepton.neutralHadronIso();
-        float photonIso = lepton.photonIso();
+        float chargedHadronIso = muon.chargedHadronIso();
+        float neutralHadronIso = muon.neutralHadronIso();
+        float photonIso = muon.photonIso();
+
+        float sum = chargedHadronIso + neutralHadronIso + photonIso; 
+        if(subtractChargedPU) sum -= puChargedHadronIso; 
+
+        float deltaBetaCorr = 0; //to be implemented
+        if(doDeltaBeta) sum -= deltaBetaCorr;
+    }
+
+    return sum;
+}
+inline float getElectronIso(const pat::Electron& electron, bool subtractChargedPU = 0, bool doDeltaBeta = 0) {
+
+    float sum = 0;
+    if( electron.pfCandidateRef().isNull() ) { // standard electron
+        //std::cout << "standard electron" << std::endl;
+        sum += electron.trackIso();
+        sum += electron.ecalIso();
+        sum += electron.hcalIso();
+    }
+    else { // PF electron
+        return -1;
+        //std::cout << "PF electron" << std::endl;
+        
+        //float puChargedHadronIso = electron.puChargedHadronIso(); not present until 4_4_X
+        float puChargedHadronIso = 0;
+
+        float chargedHadronIso = electron.chargedHadronIso();
+        float neutralHadronIso = electron.neutralHadronIso();
+        float photonIso = electron.photonIso();
 
         float sum = chargedHadronIso + neutralHadronIso + photonIso; 
         if(subtractChargedPU) sum -= puChargedHadronIso; 
