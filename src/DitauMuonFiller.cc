@@ -561,8 +561,7 @@ void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primar
     _MuonPhi.push_back(Muon.phi());
     
     float pfIso = -1;
-    pfIso = getLeptonIso <pat::Muon> (Muon, 
-            0, // not PF muons 
+    pfIso = getMuonIso(Muon, 
             0, //no charged hadron PU subtraction
             0); // no delta(B) corr.
     _MuonRelIso.push_back( pfIso/Muon.pt() );
