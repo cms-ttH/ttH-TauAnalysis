@@ -385,8 +385,7 @@ void MuTauMuonFiller::FillMuon1(const pat::Muon& Muon, const reco::Vertex& prima
     _Muon1Phi.push_back(Muon.phi());
     
     float pfIso = -1;
-    pfIso = getLeptonIso <pat::Muon> (Muon, 
-            0, // not PF muons 
+    pfIso = getMuonIso(Muon, 
             0, //no charged hadron PU subtraction
             0); // no delta(B) corr.
     _Muon1PfIso.push_back( pfIso );
@@ -421,8 +420,7 @@ void MuTauMuonFiller::FillMuon2(const pat::Muon& Muon, const reco::Vertex& prima
     _Muon2Phi.push_back(Muon.phi());
     
     float pfIso = -1;
-    pfIso = getLeptonIso <pat::Muon> (Muon, 
-            0, // not PF muons 
+    pfIso = getMuonIso(Muon, 
             0, //no charged hadron PU subtraction
             0); // no delta(B) corr.
     _Muon2PfIso.push_back( pfIso );
