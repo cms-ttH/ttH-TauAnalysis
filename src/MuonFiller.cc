@@ -98,9 +98,9 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         _MuonPhi.push_back(Muon->phi());
 
         float iso = -1;
-        iso = getLeptonIso <pat::Muon> (*Muon, 0,  // is not PF muon
-                                               0,  // no charged hadron PU subtraction
-                                               0); // no delta(beta) correction
+        iso = getMuonIso(*Muon,
+                            0,  // no charged hadron PU subtraction
+                            0); // no delta(beta) correction
         _MuonRelIso.push_back( iso );
         
         _isLooseMuon.push_back(getMuonID(*Muon,vertexPosition,
