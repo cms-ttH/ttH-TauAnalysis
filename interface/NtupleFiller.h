@@ -24,6 +24,9 @@
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
+#include "FWCore/Common/interface/TriggerNames.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+
 #include "../src/fillerAuxFunctions.cc"
 
 #include <TTree.h>
@@ -98,6 +101,9 @@ class NtupleFiller : public EDAnalyzer {
 		double _RecoVertexTrackWeight;
 		int _RecoVertexMinTracks;
 
+        // === HLT input === //
+        InputTag _HLTriggerSource;
+
 		// === Topology Inputs
 		InputTag _RecoPATMetSource;
 		InputTag _RecoPFMetSource;
@@ -114,6 +120,7 @@ class NtupleFiller : public EDAnalyzer {
 		Handle< edm::View<pat::MET> >						_pfMETs;
 		Handle< reco::VertexCollection >					_primaryVertices;
 		Handle< std::vector< PileupSummaryInfo > >			_puInfo;
+        Handle< edm::TriggerResults >                       _triggerResults;
 	
 
 };

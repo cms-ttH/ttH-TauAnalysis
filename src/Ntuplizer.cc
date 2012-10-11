@@ -53,6 +53,7 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree));		}
 	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree));	}
+	if(IsFillerEnabled("Trigger")){	        ntupleFillers.push_back(new TriggerFiller(*jobConfig, _Tree));	        }
 	
 }
 

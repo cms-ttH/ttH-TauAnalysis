@@ -41,6 +41,7 @@
 #include "../interface/DitauFiller.h"
 #include "../interface/DitauMuonFiller.h"
 #include "../interface/DitauElectronFiller.h"
+#include "../interface/TriggerFiller.h"
 
 using namespace std;
 using namespace edm;
