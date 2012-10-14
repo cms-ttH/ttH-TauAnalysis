@@ -32,6 +32,8 @@ void ElectronFiller::SetupBranches(){
 	_Tree->Branch("E_Pt",&_ElectronPt);
 	_Tree->Branch("E_Eta",&_ElectronEta);
 	_Tree->Branch("E_Phi",&_ElectronPhi);
+	_Tree->Branch("E_IsTightElectron",&_IsTightElectron);
+	_Tree->Branch("E_IsLooseElectron",&_IsLooseElectron);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -42,6 +44,9 @@ void ElectronFiller::ClearVectors(){
 	_ElectronPt	   		.clear();
 	_ElectronEta   		.clear();
 	_ElectronPhi   		.clear();
+	_ElectronRelIso		.clear();
+	_IsTightElectron    .clear();
+	_IsLooseElectron 	.clear();
 
 }
 
@@ -50,14 +55,34 @@ void ElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	_NumElectrons = _patElectrons->size();
-	for ( pat::ElectronCollection::const_iterator Electron = _patElectrons->begin(); Electron != _patElectrons->end(); ++Electron ) {
-		_MomentumRank.push_back(_MomentumRank.size());
-		_ElectronPt.push_back(Electron->pt());
-		_ElectronEta.push_back(Electron->eta());
-		_ElectronPhi.push_back(Electron->phi());
-	}
+	if(_FromBEAN){
+		unsigned int theNumberOfElectrons = 0;
 
+		BNelectronCollection selectedElectrons = *(_BNelectrons.product());
+		
+		_NumElectrons = selectedElectrons.size();
+		theNumberOfElectrons = 0;
+		for ( BNelectronCollection::const_iterator Electron = selectedElectrons.begin(); Electron != selectedElectrons.end(); ++Electron ) {
+			theNumberOfElectrons++;
+
+			_NumElectrons++;
+			_MomentumRank.push_back(_MomentumRank.size());
+			_ElectronPt.push_back(Electron->pt);
+			_ElectronEta.push_back(Electron->eta);
+			_ElectronPhi.push_back(Electron->phi);
+			_ElectronRelIso.push_back(beanHelper.GetElectronRelIso(*Electron));
+			_IsLooseElectron.push_back(beanHelper.IsLooseElectron(*Electron));
+			_IsTightElectron.push_back(beanHelper.IsTightElectron(*Electron));
+		}
+	}else{
+		_NumElectrons = _patElectrons->size();
+		for ( pat::ElectronCollection::const_iterator Electron = _patElectrons->begin(); Electron != _patElectrons->end(); ++Electron ) {
+			_MomentumRank.push_back(_MomentumRank.size());
+			_ElectronPt.push_back(Electron->pt());
+			_ElectronEta.push_back(Electron->eta());
+			_ElectronPhi.push_back(Electron->phi());
+		}
+	}
 }
 
 

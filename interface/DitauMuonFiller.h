@@ -24,9 +24,13 @@ class DitauMuonFiller : public NtupleFiller {
 
 		// === Helper functions === //
 		void FillTau1(const pat::Tau&, const reco::Vertex&);
+		void FillTau1(const BNtau&, const BNprimaryvertex&);
 		void FillTau2(const pat::Tau&, const reco::Vertex&);
+		void FillTau2(const BNtau&, const BNprimaryvertex&);
 		void FillMuon(const pat::Muon&, const reco::Vertex&);
+		void FillMuon(const BNmuon&, const BNprimaryvertex&);
 		void FillDitauMuon(const pat::Tau&, const pat::Tau&, const pat::Muon&, const reco::Vertex&);
+		void FillDitauMuon(const BNtau&, const BNtau&, const BNmuon&, const BNprimaryvertex&);
 		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string);
 		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string);
 		void MatchRecoAndGenHadTausFromH();
@@ -164,12 +168,12 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau1MuonDeltaR;
 		vector<float>			_Tau2MuonDeltaR;
 		vector<float>			_HT;
-		vector<unsigned int>	_NumCSVLbtags;
-		vector<unsigned int>	_NumCSVMbtags;
-		vector<unsigned int>	_NumCSVTbtags;
-		vector<unsigned int>	_NumCSVLextraJets;
-		vector<unsigned int>	_NumCSVMextraJets;
-		vector<unsigned int>	_NumCSVTextraJets;
+		vector<unsigned int>	_NumCSVLbtagJets;
+		vector<unsigned int>	_NumCSVMbtagJets;
+		vector<unsigned int>	_NumCSVTbtagJets;
+		vector<unsigned int>	_NumNonCSVLbtagJets;
+		vector<unsigned int>	_NumNonCSVMbtagJets;
+		vector<unsigned int>	_NumNonCSVTbtagJets;
 		
 };
 

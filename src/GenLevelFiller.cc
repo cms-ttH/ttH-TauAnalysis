@@ -40,6 +40,12 @@ void GenLevelFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
+	if(_FromBEAN){
+	
+	}else{
+
+	}
+
 
 }
 

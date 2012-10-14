@@ -26,8 +26,6 @@ class DitauFiller : public NtupleFiller {
 		void FillTau1(const pat::Tau&, const reco::Vertex&);
 		void FillTau2(const pat::Tau&, const reco::Vertex&);
 		void FillDitau(const pat::Tau&, const pat::Tau&, const reco::Vertex&);
-		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const string);
-		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const string);
 
 	// ----- Variables ----- //
 	private:

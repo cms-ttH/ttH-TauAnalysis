@@ -30,8 +30,8 @@ class MuonFiller : public NtupleFiller {
 		vector<float>		_MuonEta;
 		vector<float>		_MuonPhi;
         vector<float>       _MuonRelIso;
-        vector<int>         _isLooseMuon;
-        vector<int>         _isTightMuon;
+        vector<bool>        _IsLooseMuon;
+        vector<bool>        _IsTightMuon;
 		
 };
 

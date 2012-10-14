@@ -14,6 +14,7 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 
 	// Analysis type
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
+	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
 
 	// Name of the ntuple tree
 	_TreeName						= iConfig.getUntrackedParameter<std::string>("TreeName");
@@ -53,7 +54,6 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree));		}
 	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree));	}
-	if(IsFillerEnabled("Trigger")){	        ntupleFillers.push_back(new TriggerFiller(*jobConfig, _Tree));	        }
 	
 }
 
@@ -80,7 +80,7 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
 	_EventsRead->Fill(0);
 
 	// See if event meets skim trigger requirements
-	if(_ApplySkimTriggerRequirements){
+	if((!_FromBEAN) && _ApplySkimTriggerRequirements){
 		if(!MeetsTriggerRequirements(iEvent, _SkimTriggerSource, _SkimTriggerRequirements)){ return; }
 	}
 

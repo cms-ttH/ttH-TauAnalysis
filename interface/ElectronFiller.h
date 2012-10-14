@@ -29,6 +29,9 @@ class ElectronFiller : public NtupleFiller {
 		vector<float>		_ElectronPt;
 		vector<float>		_ElectronEta;
 		vector<float>		_ElectronPhi;
+        vector<float>       _ElectronRelIso;
+        vector<bool>        _IsLooseElectron;
+        vector<bool>        _IsTightElectron;
 		
 };
 

@@ -16,30 +16,32 @@ postfix = ''
 # === Parse external arguments === #
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
-# analysisType parameter form: 
+# 'analysisType' parameter form: 
 # 
 # <era>_<type>_<lepton flavor>
 #
-# <era> = Fall11,Spring12,2011A,2011B,2012X
-# <type> = MC_sig, MC_bg, data_PR, data_RR
-# <lepton flaor> = muon, electron
+# <era>					= 2011, 2012
+# <subera> [N/A for MC]	= A, B, C...
+# <type>				= MC-sig, MC-bg, data-PR, data-RR
+# <lepton flavor>		= muon, electron
 #
 # Examples:
-# Fall11_MC_sig_muon
-# 2011B_data_PR_electron
-# Summer12_MC_bg_electron
-# 2012B_data_PR_muon
+# 2011_X_MC-sig_muon
+# 2011_B_data-PR_electron
+# 2012_X_MC-bg_electron
+# 2012_B_data-PR_muon
 options.register ('analysisType', # 
-                  'Fall11_MC_sig_muon', # default value
+                  '2011_X_MC-sig_muon', # default value
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string )
 options.maxEvents = maxEvents
-options.outputFile = 'ntuple.root'
-options.inputFiles = 'file:/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
+options.outputFile = 'NUT.root'
+#options.inputFiles = 'file:/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
+options.inputFiles = 'file:/afs/crc.nd.edu/user/n/nvallsve/CMSSW_5_2_5/src/NtupleMaker/BEANmaker/TTbar_summer12_BEAN.root'
 options.parseArguments() # get and parse the command line arguments 
 
 if options.analysisType.find('muon') == -1 and options.analysisType.find('electron') == -1:
-    print 'analysisType must contain "muon" or "electron"'
+    print 'ERROR: analysisType must contain "muon" or "electron"'
     exit(1)
 
 # === Print some basic info about the job setup === #
@@ -126,6 +128,7 @@ NtupleFillers = cms.untracked.vstring(
         #'Trigger' # not in use
 )
 
+
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
 
@@ -142,6 +145,7 @@ process.source = cms.Source("PoolSource",
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string(options.outputFile) )
 
+
 # === Collision data trigger requirements === #
 import HLTrigger.HLTfilters.triggerResultsFilter_cfi as hlt
 process.hltFilter = hlt.triggerResultsFilter.clone(
@@ -151,18 +155,13 @@ process.hltFilter = hlt.triggerResultsFilter.clone(
         throw = False
 )
 
-analysisTypeForNtuplizer = 'coll'
-if options.analysisType.find('sig') != -1 :
-    analysisTypeForNtuplizer = 'signal'
-if options.analysisType.find('bg') != -1 :
-    analysisTypeForNtuplizer = 'mc'
-
 
 # === Define and setup main module === #
 process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Analysis setup === #
-	AnalysisType						= cms.string(analysisTypeForNtuplizer),				
+	AnalysisType						= cms.string(options.analysisType),				
+	FromBEAN							= cms.bool(True),
     TreeName							= cms.untracked.string('TTbarHTauTau'),
 
 	# === HL Trigger === # (not in use)
@@ -176,23 +175,29 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	# === Which branches to fill? === #
 	NtupleFillers						= NtupleFillers,
 
-	# === Input collections === #
-    GenParticleSource					= cms.untracked.InputTag(inputForGenParticles),
+    # === Input collections === #
+    GenParticleSource                   = cms.untracked.InputTag(inputForGenParticles),
     GenJetSource                        = cms.untracked.InputTag(inputForGenJets),
-    RecoTauSource						= cms.InputTag('selectedPatTaus'+postfix),
-    RecoMuonSource						= cms.InputTag('selectedPatMuons'+postfix),
-    RecoElectronSource					= cms.InputTag('selectedPatElectrons'+postfix),
-    RecoJetSource                       = cms.InputTag('selectedPatJets'+postfix+'::skimTTHiggsToDiTau'),
-    RecoVertexSource					= cms.InputTag('offlinePrimaryVertices'),
-    RecoPATMetSource					= cms.InputTag('patMETs'+postfix),
-    RecoPFMetSource						= cms.InputTag('patMETs'+postfix),
+    #RecoVertexSource                   = cms.InputTag('offlinePrimaryVertices'),
+    RecoPATMetSource                    = cms.InputTag('patMETs'+postfix),
+    #RecoElectronSource                 = cms.InputTag('selectedPatElectrons'+postfix),
+    #RecoMuonSource                     = cms.InputTag('selectedPatMuons'+postfix),
+    #RecoTauSource                      = cms.InputTag('selectedPatTaus'+postfix),
+    #RecoJetSource                      = cms.InputTag('selectedPatJets'+postfix+'::skimTTHiggsToDiTau'),
+    #RecoPFMetSource                    = cms.InputTag('patMETs'+postfix),
+    RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices'),
+    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectronsPFlow'+postfix),
+    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuonsPFlow'+postfix),
+    RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus'+postfix),
+    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJetsPFlow'+postfix),
+    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETsPFlow'+postfix),
 
     RecoTauMinPt                        = cms.double(tauMinPt),
     RecoTauMaxAbsEta                    = cms.double(tauMaxEta),
-    RecoTauRequireDMF                   = cms.bool(False),
+    RecoTauRequireDMF                   = cms.bool(True),
 
 	# === Jet stuff === #
-    RecoJetMinEt						= cms.double(30.0),
+    RecoJetMinPt						= cms.double(30.0),
     RecoJetMinAbsEta					= cms.double(0.0),
     RecoJetMaxAbsEta					= cms.double(2.4),
     JetAntiMatchingDeltaR               = cms.double(0.25),
@@ -204,12 +209,11 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 )
 
 # === Run sequence === # 
-if options.analysisType.find('data') != -1:
+if (options.analysisType.find('data') != -1):
     process.p = cms.Path( process.hltFilter + process.makeNtuple )
 else:
     process.p = cms.Path( process.makeNtuple )
 
 # === Write-out all python configuration parameter information === #
-#pythonDump = open("dumpedPython.py", "write")
-#print >> pythonDump,  process.dumpPython()
+#pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
 

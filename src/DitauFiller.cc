@@ -505,65 +505,6 @@ void DitauFiller::FillDitau(const pat::Tau& Tau1, const pat::Tau& Tau2, const re
 	_NumCSVTextraJets	.push_back(GetNumCSVextraJets(Tau1, Tau2, "T"));
 }
 
-unsigned int DitauFiller::GetNumCSVbtags(const pat::Tau& Tau1, const pat::Tau& Tau2, const string iWP){ 
-	unsigned int result = 0;
-
-	// Define working points
-	float wp = 0;
-	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
-	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
-	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
-	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
-
-	// Loop over jets
-	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
-
-		// Antimatching to taus
-		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
-		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
-
-		// Kinematic requirements for jets
-		if(Jet->et() < _RecoJetMinEt){ continue; }
-		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
-		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
-
-		// Count jets passing the required b-tagging
-		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
-		if(combSecVtxBTag >= wp){ result++; } 
-	}
-
-	return result;
-}
-
-unsigned int DitauFiller::GetNumCSVextraJets(const pat::Tau& Tau1, const pat::Tau& Tau2, const string iWP){ 
-	unsigned int result = 0;
-
-	// Define working points
-	float wp = 0;
-	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
-	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
-	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
-	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
-
-	// Loop over jets
-	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
-
-		// Antimatching to taus
-		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
-		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
-
-		// Kinematic requirements for jets
-		if(Jet->et() < _RecoJetMinEt){ continue; }
-		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
-		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
-
-		// Count jets failing the required b-tagging
-		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
-		if(combSecVtxBTag < wp){ result++; } 
-	}
-
-	return result;
-}
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(DitauFiller);

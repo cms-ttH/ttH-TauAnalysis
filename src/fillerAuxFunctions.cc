@@ -1,12 +1,18 @@
 #ifndef _fillerAuxFunctions_cc
 #define _fillerAuxFunctions_cc
 
+#include <vector>
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/PatCandidates/interface/Lepton.h"
 
 #include "DataFormats/Math/interface/Point3D.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/PatCandidates/interface/Tau.h"
+
+#include "ProductArea/BNcollections/interface/BNmuon.h"
+
+using namespace std;
 
 
 inline int getMuonID(const pat::Muon& Muon, math::XYZPoint& vertexPosition, bool returnLooseID = 0, bool requireTrackInfo = 0) {
@@ -95,5 +101,10 @@ inline float getElectronIso(const pat::Electron& electron, bool subtractChargedP
     }
 
     return sum;
+}
+
+inline float GetTauHoverE(const pat::Tau& iTau){
+	float result = -1;
+	return result;
 }
 #endif
