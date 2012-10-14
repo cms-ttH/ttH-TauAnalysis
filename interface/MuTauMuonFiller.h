@@ -27,8 +27,8 @@ class MuTauMuonFiller : public NtupleFiller {
 		void FillMuon1(const pat::Muon&, const reco::Vertex&);
 		void FillMuon2(const pat::Muon&, const reco::Vertex&);
 		void FillMuTauMuon(const pat::Muon&, const pat::Muon&, const pat::Tau&, const reco::Vertex&);
-		unsigned int GetNumCSVbtags(const pat::Muon&, const pat::Muon&, const pat::Tau&, const string);
-		unsigned int GetNumCSVextraJets(const pat::Muon&, const pat::Muon&, const pat::Tau&, const string);
+		unsigned int GetNumCSVbtags(const pat::Muon&, const pat::Muon&, const pat::Tau&, std::string);
+		unsigned int GetNumCSVextraJets(const pat::Muon&, const pat::Muon&, const pat::Tau&, std::string);
 
 	// ----- Variables ----- //
 	private:

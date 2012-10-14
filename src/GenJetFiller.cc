@@ -52,36 +52,40 @@ void GenJetFiller::ClearVectors(){
 void GenJetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// Only run this on MC
-	if(_AnalysisType.compare("coll") == 0){ return; }
+	if(SampleTypeContains("data")){ return; }
 
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	// Loop over all gen Jets looking for taus
-	for(GenJetCollection::const_iterator genJet = _genJets->begin(); genJet != _genJets->end(); ++genJet){
+	if(_FromBEAN){
+	
+	}else{
+		// Loop over all gen Jets looking for taus
+		for(GenJetCollection::const_iterator genJet = _genJets->begin(); genJet != _genJets->end(); ++genJet){
 
-		_NumGenJets++;
-		_MomentumRank	.push_back(_NumGenJets-1);
+			_NumGenJets++;
+			_MomentumRank	.push_back(_NumGenJets-1);
 
-		// Fill visGenJet info
-		_Pt		.push_back(genJet->pt());
-		_Eta	.push_back(genJet->eta());
-		_Phi	.push_back(genJet->phi());
+			// Fill visGenJet info
+			_Pt		.push_back(genJet->pt());
+			_Eta	.push_back(genJet->eta());
+			_Phi	.push_back(genJet->phi());
 
-		 // Loop over all gen particles looking for b
-		bool foundBquark = false;
-		vector<const GenParticle*> genJetParticles = genJet->getGenConstituents();
-		for(vector<const GenParticle*>::const_iterator genJetParticle = genJetParticles.begin(); genJetParticle != genJetParticles.end(); ++genJetParticle){
-			const Candidate* mother = (*genJetParticle);
-			do{
-				if( abs(mother->pdgId()) == 5 ){ foundBquark = true; break; }
-				mother = mother->mother(0);
-			}while(mother != NULL);
-			if(foundBquark){ break; }
+			 // Loop over all gen particles looking for b
+			bool foundBquark = false;
+			vector<const GenParticle*> genJetParticles = genJet->getGenConstituents();
+			for(vector<const GenParticle*>::const_iterator genJetParticle = genJetParticles.begin(); genJetParticle != genJetParticles.end(); ++genJetParticle){
+				const Candidate* mother = (*genJetParticle);
+				do{
+					if( abs(mother->pdgId()) == 5 ){ foundBquark = true; break; }
+					mother = mother->mother(0);
+				}while(mother != NULL);
+				if(foundBquark){ break; }
+			}
+
+			_IsBjet	.push_back(foundBquark);
+
 		}
-
-		_IsBjet	.push_back(foundBquark);
-
 	}
 
 }

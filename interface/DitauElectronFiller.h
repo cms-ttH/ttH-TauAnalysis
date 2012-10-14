@@ -1,4 +1,4 @@
-// Authors: Andres Florez, Alfredo Gurrola, Eduardo Luiggi, Chi Nhan Nguyen, Nitish Dhingra, Nil Valls
+// Authors: Nil Valls
 
 #ifndef _DitauElectronFiller_h
 #define _DitauElectronFiller_h
@@ -24,16 +24,21 @@ class DitauElectronFiller : public NtupleFiller {
 
 		// === Helper functions === //
 		void FillTau1(const pat::Tau&, const reco::Vertex&);
+		void FillTau1(const BNtau&, const BNprimaryvertex&);
 		void FillTau2(const pat::Tau&, const reco::Vertex&);
+		void FillTau2(const BNtau&, const BNprimaryvertex&);
 		void FillElectron(const pat::Electron&, const reco::Vertex&);
+		void FillElectron(const BNelectron&, const BNprimaryvertex&);
 		void FillDitauElectron(const pat::Tau&, const pat::Tau&, const pat::Electron&, const reco::Vertex&);
+		void FillDitauElectron(const BNtau&, const BNtau&, const BNelectron&, const BNprimaryvertex&);
 		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string);
 		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string);
 		void MatchRecoAndGenHadTausFromH();
 		void FindGenTausFromHandW();
 		pat::Tau * FindClosestRecoTau(reco::Candidate::LorentzVector *);
-	
-        // ----- Variables ----- //
+
+	// ----- Variables ----- //
+	private:
 		TH1F*				_Plot1;
 		TH1F*				_Plot2;
 		reco::Candidate::LorentzVector genHadTauFromH1;
@@ -44,12 +49,11 @@ class DitauElectronFiller : public NtupleFiller {
 		pat::Tau *				_recoTauMatchedToGenHadTauFromH2;
 		pat::Tau *				_recoTauMatchedToGenHadTauFromW1;
 		pat::Tau *				_recoTauMatchedToGenHadTauFromW2;
-
 		unsigned int			_NumTaus;
 		unsigned int			_NumElectrons;
 		unsigned int			_NumCombos;
 		vector<unsigned int>	_MomentumRank;
-		
+
 		// === Tau1 === //
 		vector<unsigned int>	_Tau1MomentumRank;
 		vector<float>			_Tau1Pt;
@@ -163,12 +167,13 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<float>			_Tau1ElectronDeltaR;
 		vector<float>			_Tau2ElectronDeltaR;
 		vector<float>			_HT;
-		vector<unsigned int>	_NumCSVLbtags;
-		vector<unsigned int>	_NumCSVMbtags;
-		vector<unsigned int>	_NumCSVTbtags;
-		vector<unsigned int>	_NumCSVLextraJets;
-		vector<unsigned int>	_NumCSVMextraJets;
-		vector<unsigned int>	_NumCSVTextraJets;
+		vector<unsigned int>	_NumCSVLbtagJets;
+		vector<unsigned int>	_NumCSVMbtagJets;
+		vector<unsigned int>	_NumCSVTbtagJets;
+		vector<unsigned int>	_NumNonCSVLbtagJets;
+		vector<unsigned int>	_NumNonCSVMbtagJets;
+		vector<unsigned int>	_NumNonCSVTbtagJets;
+		
 };
 
 #endif

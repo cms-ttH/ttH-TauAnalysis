@@ -16,6 +16,7 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
 	_Tree							= NULL;
 
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
+	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
 
 	_GenParticleSource				= iConfig.getUntrackedParameter<InputTag>("GenParticleSource");
 	_GenJetSource					= iConfig.getUntrackedParameter<InputTag>("GenJetSource");
@@ -31,20 +32,48 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
 	_RecoTauMaxAbsEta				= iConfig.getParameter<double>("RecoTauMaxAbsEta");
 	_RecoTauRequireDMF				= iConfig.getParameter<bool>("RecoTauRequireDMF");
 
-	_RecoJetMinEt					= iConfig.getParameter<double>("RecoJetMinEt");
+	_RecoJetMinPt					= iConfig.getParameter<double>("RecoJetMinPt");
 	_RecoJetMinAbsEta				= iConfig.getParameter<double>("RecoJetMinAbsEta");
 	_RecoJetMaxAbsEta				= iConfig.getParameter<double>("RecoJetMaxAbsEta");
 	_JetAntiMatchingDeltaR			= iConfig.getParameter<double>("JetAntiMatchingDeltaR");
 	_CSVlooseWP						= iConfig.getParameter<double>("CSVlooseWP");
 	_CSVmediumWP					= iConfig.getParameter<double>("CSVmediumWP");
 	_CSVtightWP						= iConfig.getParameter<double>("CSVtightWP");
-	
+
     _HLTriggerSource				= iConfig.getParameter<InputTag>("HLTriggerSource");
+
+	// Setup BEANhelper
+	beanHelper.SetUp("Era", GetAnalysisTypeParameter(0));
+	beanHelper.SetUp("IsLJ","false");
 
 }
 
 // === Destructor === //
 NtupleFiller::~NtupleFiller(){}
+
+
+// === Check whether an analysis type is how we want === //
+string NtupleFiller::GetAnalysisTypeParameter(unsigned int iParam){
+	vector<string> vect;
+	std::stringstream ss(_AnalysisType);
+	string i;
+	while (ss >> i){
+		vect.push_back(i);
+		if (ss.peek() == '_'){ ss.ignore(); }
+	}
+
+	if(iParam > vect.size()){ return ""; }
+	return vect.at(iParam);
+}
+unsigned int NtupleFiller::GetEra(){ return abs(atoi(GetAnalysisTypeParameter(0).c_str())); }
+const char NtupleFiller::GetSubera(){ return *(GetAnalysisTypeParameter(1).c_str()); }
+string NtupleFiller::GetSampleType(){ return GetAnalysisTypeParameter(2); }
+string NtupleFiller::GetLeptonFlavor(){ return GetAnalysisTypeParameter(3); }
+bool NtupleFiller::EraIs(unsigned int iEra){ return (iEra==GetEra()); }
+bool NtupleFiller::SuberaIs(const char iSubera){ return (iSubera==GetSubera()); }
+bool NtupleFiller::SampleTypeIs(const string iSampleType){ return (iSampleType.compare(GetSampleType())==0); }
+bool NtupleFiller::SampleTypeContains(const string iSampleType){ return ((GetSampleType().compare(iSampleType)) != GetSampleType().length()); }
+bool NtupleFiller::LeptonFlavorIs(const string iLeptonFlavor){ return (iLeptonFlavor.compare(GetLeptonFlavor())==0); }
 
 // ------------ method called to for each event  ------------
 void NtupleFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
@@ -55,19 +84,31 @@ void NtupleFiller::SetupBranches(){}
 // === Get relevant collections === //
 void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup){
 
-	iEvent.getByLabel(_RecoTauSource, 		_patTaus);
-	iEvent.getByLabel(_RecoMuonSource, 		_patMuons);
-	if(_GenParticleSource.label()	!= "") { iEvent.getByLabel(_GenParticleSource, _genParticles); }
-	if(_GenJetSource.label()		!= "") { iEvent.getByLabel(_GenJetSource, _genJets); }
-	iEvent.getByLabel(_RecoElectronSource,	_patElectrons);
-	iEvent.getByLabel(_RecoJetSource,		_patJets);
-	iEvent.getByLabel(_RecoPATMetSource,	_patMETs);
-	iEvent.getByLabel(_RecoPFMetSource,		_pfMETs);
 
-	iEvent.getByLabel(_RecoVertexSource,	_primaryVertices);
-	if(_AnalysisType.compare("coll") != 0){ iEvent.getByLabel("addPileupInfo", _puInfo); }
-
-    iEvent.getByLabel(_HLTriggerSource,     _triggerResults);
+	if(_FromBEAN){
+		iEvent.getByLabel("BNproducer",			_BNevent);
+		iEvent.getByLabel(_RecoElectronSource,	_BNelectrons);
+		iEvent.getByLabel(_RecoMuonSource, 		_BNmuons);
+		iEvent.getByLabel(_RecoTauSource, 		_BNtaus);
+		iEvent.getByLabel(_RecoJetSource, 		_BNjets);
+		//iEvent.getByLabel(_RecoPATMetSource, 	_BNmet);
+		iEvent.getByLabel(_RecoPFMetSource,		_BNmet);
+		iEvent.getByLabel(_RecoVertexSource,	_BNprimaryVertices);
+		iEvent.getByLabel("BNproducer::HLT",	_BNtrigger);
+		iEvent.getByLabel(_HLTriggerSource,     _triggerResults);
+	}else{
+		iEvent.getByLabel(_RecoTauSource, 		_patTaus);
+		iEvent.getByLabel(_RecoMuonSource, 		_patMuons);
+		if(_GenParticleSource.label()	!= "") { iEvent.getByLabel(_GenParticleSource, _genParticles); }
+		if(_GenJetSource.label()		!= "") { iEvent.getByLabel(_GenJetSource, _genJets); }
+		iEvent.getByLabel(_RecoElectronSource,	_patElectrons);
+		iEvent.getByLabel(_RecoJetSource,		_patJets);
+		iEvent.getByLabel(_RecoPATMetSource,	_patMETs);
+		iEvent.getByLabel(_RecoPFMetSource,		_pfMETs);
+		iEvent.getByLabel(_RecoVertexSource,	_primaryVertices);
+		if(!SampleTypeContains("data")){ iEvent.getByLabel("addPileupInfo", _puInfo); }
+		iEvent.getByLabel(_HLTriggerSource,     _triggerResults);
+	}
 
 }
 
@@ -88,6 +129,572 @@ bool NtupleFiller::IsInTheCracks(float etaValue){
 			(fabs(etaValue)>1.127 && fabs(etaValue)<1.163) ||
 			(fabs(etaValue)>1.460 && fabs(etaValue)<1.558));
 }
+
+// Btagging with electrons
+unsigned int NtupleFiller::GetNumCSVbtags(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Electron& Electron, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Electron.eta(), Electron.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Electron& Electron, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Electron.eta(), Electron.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVbtags(const BNtau& Tau1, const BNtau& Tau2, const BNelectron& Electron, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta, Jet->phi, Tau1.eta, Tau1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau2.eta, Tau2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Electron.eta, Electron.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const BNtau& Tau1, const BNtau& Tau2, const BNelectron& Electron, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta, Jet->phi, Tau1.eta, Tau1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau2.eta, Tau2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Electron.eta, Electron.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const pat::Tau& Tau1, const pat::Tau& Tau2, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus
+		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVbtags(const pat::Electron& Electron1, const pat::Electron& Electron2, const pat::Tau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta(), Jet->phi(), Electron1.eta(), Electron1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Electron2.eta(), Electron2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau.eta(), Tau.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const pat::Electron& Electron1, const pat::Electron& Electron2, const pat::Tau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta(), Jet->phi(), Electron1.eta(), Electron1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Electron2.eta(), Electron2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau.eta(), Tau.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVbtags(const BNelectron& Electron1, const BNelectron& Electron2, const BNtau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta, Jet->phi, Electron1.eta, Electron1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Electron2.eta, Electron2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau.eta, Tau.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const BNelectron& Electron1, const BNelectron& Electron2, const BNtau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and Electron
+		if(deltaR(Jet->eta, Jet->phi, Electron1.eta, Electron1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Electron2.eta, Electron2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau.eta, Tau.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+
+
+
+
+// Btagging with muons
+
+unsigned int NtupleFiller::GetNumCSVbtags(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Muon.eta(), Muon.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Muon.eta(), Muon.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVbtags(const BNtau& Tau1, const BNtau& Tau2, const BNmuon& Muon, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta, Jet->phi, Tau1.eta, Tau1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau2.eta, Tau2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Muon.eta, Muon.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const BNtau& Tau1, const BNtau& Tau2, const BNmuon& Muon, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta, Jet->phi, Tau1.eta, Tau1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau2.eta, Tau2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Muon.eta, Muon.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVbtags(const pat::Tau& Tau1, const pat::Tau& Tau2, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus
+		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+
+unsigned int NtupleFiller::GetNumCSVbtags(const pat::Muon& Muon1, const pat::Muon& Muon2, const pat::Tau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta(), Jet->phi(), Muon1.eta(), Muon1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Muon2.eta(), Muon2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau.eta(), Tau.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const pat::Muon& Muon1, const pat::Muon& Muon2, const pat::Tau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta(), Jet->phi(), Muon1.eta(), Muon1.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Muon2.eta(), Muon2.phi()) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta(), Jet->phi(), Tau.eta(), Tau.phi()) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt() < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVbtags(const BNmuon& Muon1, const BNmuon& Muon2, const BNtau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta, Jet->phi, Muon1.eta, Muon1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Muon2.eta, Muon2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau.eta, Tau.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets passing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag >= wp){ result++; } 
+	}
+
+	return result;
+}
+
+unsigned int NtupleFiller::GetNumCSVextraJets(const BNmuon& Muon1, const BNmuon& Muon2, const BNtau& Tau, const string iWP){ 
+	unsigned int result = 0;
+
+	// Define working points
+	float wp = 0;
+	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
+	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
+	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
+	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
+
+	// Loop over jets
+	for ( BNjetCollection::const_iterator Jet = _BNjets->begin(); Jet != _BNjets->end(); ++Jet ) {
+
+		// Antimatching to taus and muon
+		if(deltaR(Jet->eta, Jet->phi, Muon1.eta, Muon1.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Muon2.eta, Muon2.phi) < _JetAntiMatchingDeltaR){ continue; }
+		if(deltaR(Jet->eta, Jet->phi, Tau.eta, Tau.phi) < _JetAntiMatchingDeltaR){ continue; }
+
+		// Kinematic requirements for jets
+		if(Jet->pt < _RecoJetMinPt){ continue; }
+		if(fabs(Jet->eta) <_RecoJetMinAbsEta){ continue; }
+		if(fabs(Jet->eta) >_RecoJetMaxAbsEta){ continue; }
+
+		// Count jets failing the required b-tagging
+		float combSecVtxBTag = Jet->btagCombinedSecVertex;
+		if(combSecVtxBTag < wp){ result++; } 
+	}
+
+	return result;
+}
+
 
 
 //define this as a plug-in

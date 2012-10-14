@@ -467,7 +467,7 @@ unsigned int MuTauMuonFiller::GetNumCSVbtags(const pat::Muon& Muon1, const pat::
 		if(deltaR(Jet->eta(), Jet->phi(), Tau.eta(), Tau.phi()) < _JetAntiMatchingDeltaR){ continue; }
 
 		// Kinematic requirements for jets
-		if(Jet->et() < _RecoJetMinEt){ continue; }
+		if(Jet->et() < _RecoJetMinPt){ continue; }
 		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
 		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
 
@@ -498,7 +498,7 @@ unsigned int MuTauMuonFiller::GetNumCSVextraJets(const pat::Muon& Muon1, const p
 		if(deltaR(Jet->eta(), Jet->phi(), Tau.eta(), Tau.phi()) < _JetAntiMatchingDeltaR){ continue; }
 
 		// Kinematic requirements for jets
-		if(Jet->et() < _RecoJetMinEt){ continue; }
+		if(Jet->et() < _RecoJetMinPt){ continue; }
 		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
 		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
 

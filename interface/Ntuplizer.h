@@ -1,4 +1,4 @@
-// Authors: Andres Florez, Alfredo Gurrola, Eduardo Luiggi, Chi Nhan Nguyen, Nitish Dhingra, Nil Valls
+// Authors: Nil Valls
 
 #ifndef _Ntuplizer_h
 #define _Ntuplizer_h
@@ -73,6 +73,7 @@ class Ntuplizer : public EDAnalyzer {
 		vector<string> _enabledFillers;
 		ParameterSet* jobConfig;
 		string _AnalysisType;
+		bool _FromBEAN;
 		TTree* _Tree;
 		string _TreeName;
 

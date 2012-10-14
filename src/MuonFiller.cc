@@ -34,8 +34,8 @@ void MuonFiller::SetupBranches(){
 	_Tree->Branch("M_Eta",&_MuonEta);
 	_Tree->Branch("M_Phi",&_MuonPhi);
 	_Tree->Branch("M_RelIso",&_MuonRelIso); 
-	_Tree->Branch("M_isTightMuon",&_isTightMuon);
-	_Tree->Branch("M_isLooseMuon",&_isLooseMuon);
+	_Tree->Branch("M_IsTightMuon",&_IsTightMuon);
+	_Tree->Branch("M_IsLooseMuon",&_IsLooseMuon);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -46,70 +46,90 @@ void MuonFiller::ClearVectors(){
 	_MuonPt	   		.clear();
 	_MuonEta   		.clear();
 	_MuonPhi   		.clear();
-	_MuonRelIso  		.clear();
-	_isTightMuon    .clear();
-	_isLooseMuon 	.clear();
+	_MuonRelIso		.clear();
+	_IsTightMuon    .clear();
+	_IsLooseMuon 	.clear();
 
 }
 
 // === Fill ntuple === //
 void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	
-    //std::cout << "entering MuonFiller::FillNtuple" << std::endl;
-    
     GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-    // get beamspot
-    math::XYZPoint beamSpotPosition;
-    beamSpotPosition.SetCoordinates(0,0,0);
+	if(_FromBEAN){
+		unsigned int theNumberOfMuons = 0;
 
-    edm::Handle<reco::BeamSpot> bsHandle;
-    iEvent.getByLabel("offlineBeamSpot",bsHandle);
+		//BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(*(_BNmuons->product()), BEANhelper::MuonID::looseTight);
+		BNmuonCollection selectedMuons = *(_BNmuons.product());
+		
+		_NumMuons = selectedMuons.size();
+		theNumberOfMuons = 0;
+		for ( BNmuonCollection::const_iterator Muon = selectedMuons.begin(); Muon != selectedMuons.end(); ++Muon ) {
+			theNumberOfMuons++;
 
-    if( (bsHandle.isValid()) ){
-        beamSpotPosition = bsHandle->position();
-    }
-    
-    // get vertex
-    math::XYZPoint vertexPosition;
-    vertexPosition.SetCoordinates(0,0,0);
+			_NumMuons++;
+			_MomentumRank.push_back(_MomentumRank.size());
+			_MuonPt.push_back(Muon->pt);
+			_MuonEta.push_back(Muon->eta);
+			_MuonPhi.push_back(Muon->phi);
+			_MuonRelIso.push_back(beanHelper.GetMuonRelIso(*Muon));
+			_IsLooseMuon.push_back(beanHelper.IsLooseMuon(*Muon));
+			_IsTightMuon.push_back(beanHelper.IsTightMuon(*Muon));
+		}
 
-    edm::Handle<reco::VertexCollection> vtxHandle;
-    iEvent.getByLabel("offlinePrimaryVerticesBS",vtxHandle);
-    
-    int numPVs = 0;
-    if( (vtxHandle.isValid()) ){
-        numPVs = vtxHandle->size();
-        
-        reco::VertexCollection vtxs = *vtxHandle;
-        if (numPVs > 0) {
-            vertexPosition = vtxs[0].position();
-        }
-        //bool firstPV = true;
-        //for( reco::VertexCollection::const_iterator vtx = vtxs.begin(); vtx!=vtxs.end(); ++vtx ){
-    }
+	}else{
+		// get beamspot
+		math::XYZPoint beamSpotPosition;
+		beamSpotPosition.SetCoordinates(0,0,0);
 
-	_NumMuons = _patMuons->size();
-    for ( pat::MuonCollection::const_iterator Muon = _patMuons->begin(); Muon != _patMuons->end(); ++Muon ) {
-        _MomentumRank.push_back(_MomentumRank.size());
-        _MuonPt.push_back(Muon->pt());
-        _MuonEta.push_back(Muon->eta());
-        _MuonPhi.push_back(Muon->phi());
+		edm::Handle<reco::BeamSpot> bsHandle;
+		iEvent.getByLabel("offlineBeamSpot",bsHandle);
 
-        float iso = -1;
-        iso = getMuonIso(*Muon,
-                            0,  // no charged hadron PU subtraction
-                            0); // no delta(beta) correction
-        _MuonRelIso.push_back( iso );
-        
-        _isLooseMuon.push_back(getMuonID(*Muon,vertexPosition,
-                    1, // return loose ID
-                    1)); // require track info for ID
-        _isTightMuon.push_back(getMuonID(*Muon,vertexPosition,0,1));
+		if( (bsHandle.isValid()) ){
+			beamSpotPosition = bsHandle->position();
+		}
+		
+		// get vertex
+		math::XYZPoint vertexPosition;
+		vertexPosition.SetCoordinates(0,0,0);
+
+		edm::Handle<reco::VertexCollection> vtxHandle;
+		iEvent.getByLabel("offlinePrimaryVerticesBS",vtxHandle);
+		
+		int numPVs = 0;
+		if( (vtxHandle.isValid()) ){
+			numPVs = vtxHandle->size();
+			
+			reco::VertexCollection vtxs = *vtxHandle;
+			if (numPVs > 0) {
+				vertexPosition = vtxs[0].position();
+			}
+			//bool firstPV = true;
+			//for( reco::VertexCollection::const_iterator vtx = vtxs.begin(); vtx!=vtxs.end(); ++vtx ){
+		}
+
+		_NumMuons = _patMuons->size();
+		for ( pat::MuonCollection::const_iterator Muon = _patMuons->begin(); Muon != _patMuons->end(); ++Muon ) {
+			_MomentumRank.push_back(_MomentumRank.size());
+			_MuonPt.push_back(Muon->pt());
+			_MuonEta.push_back(Muon->eta());
+			_MuonPhi.push_back(Muon->phi());
+
+			float iso = -1;
+			iso = getMuonIso(*Muon, 
+												   0,  // no charged hadron PU subtraction
+												   0); // no delta(beta) correction
+			_MuonRelIso.push_back( iso );
+			
+			_IsLooseMuon.push_back(getMuonID(*Muon,vertexPosition,
+						1, // return loose ID
+						1)); // require track info for ID
+			_IsTightMuon.push_back(getMuonID(*Muon,vertexPosition,0,1));
+		}
 	}
 
-    //std::cout << "leave MuonFiller::FillNtuple" << std::endl;
 }
 
 

@@ -3,6 +3,7 @@
 #ifndef _NtupleFiller_h
 #define _NtupleFiller_h
 
+#include <algorithm>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -28,10 +29,26 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 
 #include "../src/fillerAuxFunctions.cc"
+#include "NtupleMaker/BEANmaker/interface/BEANhelper.h"
+
+// Headers for the BEAN data items
+#include "ProductArea/BNcollections/interface/BNevent.h"
+#include "ProductArea/BNcollections/interface/BNjet.h"
+#include "ProductArea/BNcollections/interface/BNmcparticle.h"
+#include "ProductArea/BNcollections/interface/BNmet.h"
+#include "ProductArea/BNcollections/interface/BNelectron.h"
+#include "ProductArea/BNcollections/interface/BNmuon.h"
+#include "ProductArea/BNcollections/interface/BNtau.h"
+#include "ProductArea/BNcollections/interface/BNphoton.h"
+#include "ProductArea/BNcollections/interface/BNsupercluster.h"
+#include "ProductArea/BNcollections/interface/BNtrack.h"
+#include "ProductArea/BNcollections/interface/BNtrigger.h"
+#include "ProductArea/BNcollections/interface/BNskimbits.h"
+#include "ProductArea/BNcollections/interface/BNtrigobj.h"
+#include "ProductArea/BNcollections/interface/BNprimaryvertex.h"
+
 
 #include <TTree.h>
-#include "TH1F.h"
-#include "TH2F.h"
 
 using namespace std;
 using namespace edm;
@@ -41,6 +58,7 @@ typedef std::vector< reco::Candidate::LorentzVector > LVCollection;
 
 class NtupleFiller : public EDAnalyzer {
 	public:
+		BEANhelper beanHelper;
 		explicit NtupleFiller(const ParameterSet&);
 		~NtupleFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
@@ -51,14 +69,47 @@ class NtupleFiller : public EDAnalyzer {
 		virtual void analyze(const Event&, const EventSetup&);
 		virtual void SetupBranches();
 		virtual void GetCollections(const Event&, const EventSetup&);
+		string GetAnalysisTypeParameter(unsigned int);
+		unsigned int GetEra();
+		const char GetSubera();
+		string GetSampleType();
+		string GetLeptonFlavor();
+		bool EraIs(unsigned int);
+		bool SuberaIs(const char);
+		bool SampleTypeIs(const string);
+		bool SampleTypeContains(const string);
+		bool LeptonFlavorIs(const string);
 
 		// === Helper functions === //
 		template <typename PatObject1, typename PatObject2> double GetComboMass(const PatObject1&, const PatObject2&);
+		template <typename BNObject1, typename BNObject2> double GetComboMassBN(const BNObject1&, const BNObject2&);
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetComboMass(const PatObject1&, const PatObject2&, const MetObject&);
+		template <typename BNObject1, typename BNObject2, typename MetObject> double GetComboMassBN(const BNObject1&, const BNObject2&, const MetObject&);
 		template <typename PatObject, typename MetObject> double GetTransverseMass(const PatObject&, const MetObject&);
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetPZeta(const PatObject1&, const PatObject2&, const MetObject&);
 		template <typename PatObject1, typename PatObject2> double GetPZetaVis(const PatObject1&, const PatObject2&);
 		bool IsInTheCracks(float);
+
+		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const string); 
+		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const string); 
+
+		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string); 
+		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string); 
+		unsigned int GetNumCSVbtags(const BNtau&, const BNtau&, const BNelectron&, const string); 
+		unsigned int GetNumCSVextraJets(const BNtau&, const BNtau&, const BNelectron&, const string); 
+		unsigned int GetNumCSVbtags(const pat::Electron&, const pat::Electron&, const pat::Tau&, const string); 
+		unsigned int GetNumCSVextraJets(const pat::Electron&, const pat::Electron&, const pat::Tau&, const string); 
+		unsigned int GetNumCSVbtags(const BNelectron&, const BNelectron&, const BNtau&, const string); 
+		unsigned int GetNumCSVextraJets(const BNelectron&, const BNelectron&, const BNtau&, const string); 
+
+		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string); 
+		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string); 
+		unsigned int GetNumCSVbtags(const BNtau&, const BNtau&, const BNmuon&, const string); 
+		unsigned int GetNumCSVextraJets(const BNtau&, const BNtau&, const BNmuon&, const string); 
+		unsigned int GetNumCSVbtags(const pat::Muon&, const pat::Muon&, const pat::Tau&, const string); 
+		unsigned int GetNumCSVextraJets(const pat::Muon&, const pat::Muon&, const pat::Tau&, const string); 
+		unsigned int GetNumCSVbtags(const BNmuon&, const BNmuon&, const BNtau&, const string); 
+		unsigned int GetNumCSVextraJets(const BNmuon&, const BNmuon&, const BNtau&, const string); 
 /*		template <typename PatObject> pair<bool, reco::Candidate::LorentzVector> matchToGen(const PatObject&, int);
 		pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&);
 		double matchToGenParentMass(const pat::Tau&);
@@ -70,6 +121,9 @@ class NtupleFiller : public EDAnalyzer {
 		TTree* _Tree;
 
 		string _AnalysisType;
+		bool _FromBEAN;
+		string _Era;
+		//BEANhelper beanHelper;
 
 		// === Generator level Inputs === //
 		InputTag _GenParticleSource;
@@ -87,7 +141,7 @@ class NtupleFiller : public EDAnalyzer {
 
 		// === Jet Inputs === //
 		InputTag _RecoJetSource;
-		double _RecoJetMinEt;
+		double _RecoJetMinPt;
 		double _RecoJetMinAbsEta;
 		double _RecoJetMaxAbsEta;
 		double _JetAntiMatchingDeltaR;
@@ -110,6 +164,15 @@ class NtupleFiller : public EDAnalyzer {
 
 
 		// === Handles to collections === //
+		Handle<BNeventCollection>				_BNevent;
+		Handle<BNelectronCollection>			_BNelectrons;
+		Handle<BNmuonCollection>				_BNmuons;
+		Handle<BNtauCollection>					_BNtaus;
+		Handle<BNjetCollection>					_BNjets;
+		Handle<BNmetCollection>					_BNmet;
+		Handle<BNprimaryvertexCollection>		_BNprimaryVertices;
+		Handle<BNtriggerCollection>				_BNtrigger;
+
 		Handle< reco::GenParticleCollection >				_genParticles;
 		Handle< reco::GenJetCollection >					_genJets;
 		Handle< pat::TauCollection >						_patTaus;
@@ -121,6 +184,7 @@ class NtupleFiller : public EDAnalyzer {
 		Handle< reco::VertexCollection >					_primaryVertices;
 		Handle< std::vector< PileupSummaryInfo > >			_puInfo;
         Handle< edm::TriggerResults >                       _triggerResults;
+
 	
 
 };
@@ -131,6 +195,14 @@ template <typename PatObject1, typename PatObject2> double NtupleFiller::GetComb
 	reco::Candidate::LorentzVector The_LorentzVect = patObject1.p4() + patObject2.p4();
 	return The_LorentzVect.M();
 }
+template <typename BNObject1, typename BNObject2> double NtupleFiller::GetComboMassBN(const BNObject1& bnObject1, const BNObject2& bnObject2){
+	reco::Candidate::LorentzVector object1p4(bnObject1.px, bnObject1.py, bnObject1.pz, bnObject1.energy);
+	reco::Candidate::LorentzVector object2p4(bnObject2.px, bnObject2.py, bnObject2.pz, bnObject2.energy);
+	//reco::Candidate::LorentzVector object1p4(0,0,0,0);
+	//reco::Candidate::LorentzVector object2p4(0,0,0,0);
+	reco::Candidate::LorentzVector The_LorentzVect = object1p4 + object2p4;
+	return The_LorentzVect.M();
+}
 
 // === Visible + MET mass === //
 template <typename PatObject1, typename PatObject2, typename MetObject> double NtupleFiller::GetComboMass(const PatObject1& patObject1, const PatObject2& patObject2, const MetObject& metObject){
@@ -138,6 +210,20 @@ template <typename PatObject1, typename PatObject2, typename MetObject> double N
 	double py = patObject1.py() + patObject2.py() + metObject.py();
 	double pz = patObject1.pz() + patObject2.pz();
 	double e = patObject1.energy() + patObject2.energy() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
+	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
+	return The_LorentzVect.M();
+}
+
+template <typename BNObject1, typename BNObject2, typename MetObject> double NtupleFiller::GetComboMassBN(const BNObject1& bnObject1, const BNObject2& bnObject2, const MetObject& metObject){
+	reco::Candidate::LorentzVector object1p4(bnObject1.px, bnObject1.py, bnObject1.pz, bnObject1.energy);
+	reco::Candidate::LorentzVector object2p4(bnObject2.px, bnObject2.py, bnObject2.pz, bnObject2.energy);
+	//reco::Candidate::LorentzVector object1p4(0,0,0,0);
+	//reco::Candidate::LorentzVector object2p4(0,0,0,0);
+	double px = object1p4.px() + object2p4.px() + metObject.px;
+	double py = object1p4.py() + object2p4.py() + metObject.py;
+	double pz = object1p4.pz() + object2p4.pz();
+	double e = 0;
+//	double e = bnObject1.energy + bnObject2.energy + TMath::Sqrt((metObject.px * metObject.px) + (metObject.py * metObject.py));
 	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
 	return The_LorentzVect.M();
 }

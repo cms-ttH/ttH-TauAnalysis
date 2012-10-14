@@ -50,12 +50,16 @@ void TauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	_NumTaus = _patTaus->size();
-	for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
-		_MomentumRank.push_back(_MomentumRank.size());
-		_TauPt.push_back(Tau->pt());
-		_TauEta.push_back(Tau->eta());
-		_TauPhi.push_back(Tau->phi());
+	if(_FromBEAN){
+	
+	}else{
+		_NumTaus = _patTaus->size();
+		for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
+			_MomentumRank.push_back(_MomentumRank.size());
+			_TauPt.push_back(Tau->pt());
+			_TauEta.push_back(Tau->eta());
+			_TauPhi.push_back(Tau->phi());
+		}
 	}
 
 }
