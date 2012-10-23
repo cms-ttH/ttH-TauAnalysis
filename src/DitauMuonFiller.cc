@@ -374,7 +374,7 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 					
 					// Jets and MET and related quantities
 					// Correct for jet pT
-					BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(*(_BNjets.product()), BEANhelper::sysType::DATA);
+					BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(*(_BNjets.product()));
 
 					// Apply kinematic requirements on corrected jets
 					BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
@@ -387,7 +387,7 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 					BNjetCollection cleanSelCorrJets						= beanHelper.GetCleanJets(selCorrJets, tausAndMuon, 0.25);
 
 					// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
-					BNmet correctedMET  = beanHelper.GetCorrectedMET(*(_BNmet->begin()), beanHelper.GetUncorrectedJets(cleanSelCorrJets, *(_BNjets.product())), BEANhelper::sysType::DATA); 
+					BNmet correctedMET  = beanHelper.GetCorrectedMET(*(_BNmet->begin()), beanHelper.GetUncorrectedJets(cleanSelCorrJets, *(_BNjets.product())));
 
 					_HT					.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper.GetHT(cleanSelCorrJets));
 					_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));

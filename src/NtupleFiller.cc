@@ -43,8 +43,12 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
     _HLTriggerSource				= iConfig.getParameter<InputTag>("HLTriggerSource");
 
 	// Setup BEANhelper
-	beanHelper.SetUp("Era", GetAnalysisTypeParameter(0));
-	beanHelper.SetUp("IsLJ","false");
+	beanHelper.SetUp("Era",			 GetAnalysisTypeParameter(0));
+	beanHelper.SetUp("IsLJ",		 "false");
+	beanHelper.SetUp("ReshapeCSV",	 "true");
+	beanHelper.SetUp("IsData",		 SampleTypeContains("data") ? "true" : "false");
+	//beanHelper.SetUp("SampleNumber", GetAnalysisTypeParameter(4));
+	beanHelper.setMCsample(atoi(GetAnalysisTypeParameter(4).c_str()), (atoi(GetAnalysisTypeParameter(0).c_str()) == 2012), false, "SingleMu");
 
 }
 
@@ -54,17 +58,29 @@ NtupleFiller::~NtupleFiller(){}
 
 // === Check whether an analysis type is how we want === //
 string NtupleFiller::GetAnalysisTypeParameter(unsigned int iParam){
-	vector<string> vect;
-	std::stringstream ss(_AnalysisType);
-	string i;
-	while (ss >> i){
-		vect.push_back(i);
-		if (ss.peek() == '_'){ ss.ignore(); }
+
+	// Parse analysisType and store parts in the vector
+	if(_AnalysisTypeVector.size() == 0){	
+		if(_AnalysisType.length()==0){ cerr << "ERROR: 'AnalysisType' is empty." << endl; exit(1); }
+		char separator = '_';
+		string remainder = _AnalysisType;
+		while(remainder.length() > 0){
+			unsigned int pos = remainder.find(separator);
+			if(pos < remainder.size()){
+				_AnalysisTypeVector.push_back(remainder.substr(0, pos));
+				remainder = remainder.substr(pos+1);
+			}else{
+				_AnalysisTypeVector.push_back(remainder);
+				remainder = "";
+			}	
+		}
 	}
 
-	if(iParam > vect.size()){ return ""; }
-	return vect.at(iParam);
+	// Return the requested piece if it's there 
+	if(iParam >= _AnalysisTypeVector.size()){ cerr << "ERROR: Requesting AnalysisType parameter " << iParam << " but vector only has " << _AnalysisTypeVector.size() << " elements." << endl; exit(1); }
+	return _AnalysisTypeVector.at(iParam);
 }
+
 unsigned int NtupleFiller::GetEra(){ return abs(atoi(GetAnalysisTypeParameter(0).c_str())); }
 const char NtupleFiller::GetSubera(){ return *(GetAnalysisTypeParameter(1).c_str()); }
 string NtupleFiller::GetSampleType(){ return GetAnalysisTypeParameter(2); }
@@ -72,7 +88,7 @@ string NtupleFiller::GetLeptonFlavor(){ return GetAnalysisTypeParameter(3); }
 bool NtupleFiller::EraIs(unsigned int iEra){ return (iEra==GetEra()); }
 bool NtupleFiller::SuberaIs(const char iSubera){ return (iSubera==GetSubera()); }
 bool NtupleFiller::SampleTypeIs(const string iSampleType){ return (iSampleType.compare(GetSampleType())==0); }
-bool NtupleFiller::SampleTypeContains(const string iSampleType){ return ((GetSampleType().compare(iSampleType)) != GetSampleType().length()); }
+bool NtupleFiller::SampleTypeContains(const string iSampleType){ string sampleType = GetSampleType(); return (sampleType.find(iSampleType) < sampleType.length()); }
 bool NtupleFiller::LeptonFlavorIs(const string iLeptonFlavor){ return (iLeptonFlavor.compare(GetLeptonFlavor())==0); }
 
 // ------------ method called to for each event  ------------

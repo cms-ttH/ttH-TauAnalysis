@@ -43,6 +43,7 @@ void  Ntuplizer::beginJob() {
 	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
 
 	// Declare and store here NtupleFillers
+	cout << __LINE__ << " " << __FILE__ << endl;
 	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("GenLevel")){		ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("GenTau")){			ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree));			}
@@ -54,6 +55,7 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree));		}
 	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree));	}
+	cout << __LINE__ << " " << __FILE__ << endl;
 	
 }
 
@@ -84,8 +86,10 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
 		if(!MeetsTriggerRequirements(iEvent, _SkimTriggerSource, _SkimTriggerRequirements)){ return; }
 	}
 
+	cout << __LINE__ << " " << __FILE__ << endl;
 	// Analyze and fill ntuple
 	for(unsigned int n=0; n<ntupleFillers.size(); n++){ ntupleFillers.at(n)->FillNtuple(iEvent, iSetup); }
+	cout << __LINE__ << " " << __FILE__ << endl;
 
 	// Write to tree
 	_Tree->Fill();
