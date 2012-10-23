@@ -62,7 +62,7 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		const BNprimaryvertex& primaryVertex = (*(_BNprimaryVertices)->begin());
 		unsigned int theNumberOfJets = 0;
 
-		BNjetCollection correctedJets	= beanHelper.GetCorrectedJets(*(_BNjets.product()),  BEANhelper::sysType::DATA);
+		BNjetCollection correctedJets	= beanHelper.GetCorrectedJets(*(_BNjets.product()));
 		BNjetCollection selCorrJets		= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose,'-');
 		
 		_NumJets = selCorrJets.size();
@@ -76,7 +76,7 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 			_JetEta.push_back(Jet->eta);
 			_JetPhi.push_back(Jet->phi);
 
-			_combSecVtxBTag			.push_back(Jet->btagCombinedSecVertex);
+			_combSecVtxBTag			.push_back(beanHelper.GetCSVvalue(*Jet));
 			_combSecVtxLooseBTag	.push_back(beanHelper.PassesCSV(*Jet, 'L'));
 			_combSecVtxMediumBTag	.push_back(beanHelper.PassesCSV(*Jet, 'M'));
 			_combSecVtxTightBTag	.push_back(beanHelper.PassesCSV(*Jet, 'T'));

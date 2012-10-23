@@ -121,6 +121,7 @@ class NtupleFiller : public EDAnalyzer {
 		TTree* _Tree;
 
 		string _AnalysisType;
+		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		string _Era;
 		//BEANhelper beanHelper;
@@ -198,8 +199,6 @@ template <typename PatObject1, typename PatObject2> double NtupleFiller::GetComb
 template <typename BNObject1, typename BNObject2> double NtupleFiller::GetComboMassBN(const BNObject1& bnObject1, const BNObject2& bnObject2){
 	reco::Candidate::LorentzVector object1p4(bnObject1.px, bnObject1.py, bnObject1.pz, bnObject1.energy);
 	reco::Candidate::LorentzVector object2p4(bnObject2.px, bnObject2.py, bnObject2.pz, bnObject2.energy);
-	//reco::Candidate::LorentzVector object1p4(0,0,0,0);
-	//reco::Candidate::LorentzVector object2p4(0,0,0,0);
 	reco::Candidate::LorentzVector The_LorentzVect = object1p4 + object2p4;
 	return The_LorentzVect.M();
 }
