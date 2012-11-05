@@ -12,6 +12,7 @@ TriggerFiller::TriggerFiller(const ParameterSet& iConfig): NtupleFiller(iConfig)
 }
 
 TriggerFiller::TriggerFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -51,7 +52,7 @@ void TriggerFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	ClearVectors();
 
     // just give me a friggin dictionary! This is a mess...
-    const edm::TriggerNames & triggerNames = iEvent.triggerNames(*_triggerResults);
+//    const edm::TriggerNames & triggerNames = iEvent.triggerNames(*_triggerResults);
 
     /*
     std::vector<string> pathNames;
@@ -104,7 +105,3 @@ void TriggerFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     std::cout << _HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30 << std::endl;
      */
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(TriggerFiller);

@@ -3,25 +3,9 @@
 #ifndef _Ntuplizer_h
 #define _Ntuplizer_h
 
-// system include files
-#include <memory>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <map>
-#include <stdio.h>
-#include <stdlib.h>
-#include <TMath.h>
-#include <iostream>
-#include <iomanip>
-#include <TH1.h>
-#include <TFile.h>
-#include <TTree.h>
-
-// user include files
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "FWCore/Framework/interface/Event.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
@@ -29,19 +13,19 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
-#include "../interface/NtupleFiller.h"
-#include "../interface/EventFiller.h"
-#include "../interface/GenLevelFiller.h"
-#include "../interface/GenTauFiller.h"
-#include "../interface/GenJetFiller.h"
-#include "../interface/TauFiller.h"
-#include "../interface/ElectronFiller.h"
-#include "../interface/MuonFiller.h"
-#include "../interface/JetFiller.h"
-#include "../interface/DitauFiller.h"
-#include "../interface/DitauMuonFiller.h"
-#include "../interface/DitauElectronFiller.h"
-#include "../interface/TriggerFiller.h"
+#include "NtupleFiller.h"
+#include "EventFiller.h"
+#include "GenLevelFiller.h"
+#include "GenTauFiller.h"
+#include "GenJetFiller.h"
+#include "TauFiller.h"
+#include "ElectronFiller.h"
+#include "MuonFiller.h"
+#include "JetFiller.h"
+#include "DitauFiller.h"
+#include "DitauMuonFiller.h"
+#include "DitauElectronFiller.h"
+#include "TriggerFiller.h"
 
 using namespace std;
 using namespace edm;
@@ -69,6 +53,7 @@ class Ntuplizer : public EDAnalyzer {
 	// ----- Variables ----- //
 	private:
 		// === Misc variables === //
+		unsigned int _DebugLevel;
 		vector<NtupleFiller*> ntupleFillers;
 		vector<string> _enabledFillers;
 		ParameterSet* jobConfig;

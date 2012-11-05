@@ -12,6 +12,7 @@ GenericFiller::GenericFiller(const ParameterSet& iConfig): NtupleFiller(iConfig)
 }
 
 GenericFiller::GenericFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -46,7 +47,3 @@ void GenericFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(GenericFiller);

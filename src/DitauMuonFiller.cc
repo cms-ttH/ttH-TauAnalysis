@@ -12,14 +12,9 @@ DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig): NtupleFiller(iCon
 }
 
 DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
-
-	_recoTauMatchedToGenHadTauFromH1 = NULL;
-	_recoTauMatchedToGenHadTauFromH2 = NULL;
-	_recoTauMatchedToGenHadTauFromW1 = NULL;
-	_recoTauMatchedToGenHadTauFromW2 = NULL;
-
 }
 
 // === Destructor === //
@@ -57,17 +52,9 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau1HPSagainstMuonMedium", &_Tau1HPSagainstMuonMedium);
 	_Tree->Branch("TTM_Tau1HPSagainstMuonTight", &_Tau1HPSagainstMuonTight);
 	_Tree->Branch("TTM_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau1HPSbyLooseIsolation", &_Tau1HPSbyLooseIsolation);
-	_Tree->Branch("TTM_Tau1HPSbyLooseIsolationDeltaBetaCorr", &_Tau1HPSbyLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau1HPSbyMediumIsolation", &_Tau1HPSbyMediumIsolation);
-	_Tree->Branch("TTM_Tau1HPSbyMediumIsolationDeltaBetaCorr", &_Tau1HPSbyMediumIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau1HPSbyTightIsolation", &_Tau1HPSbyTightIsolation);
-	_Tree->Branch("TTM_Tau1HPSbyTightIsolationDeltaBetaCorr", &_Tau1HPSbyTightIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau1HPSbyVLooseIsolation", &_Tau1HPSbyVLooseIsolation);
-	_Tree->Branch("TTM_Tau1HPSbyVLooseIsolationDeltaBetaCorr", &_Tau1HPSbyVLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau1HPSdecayModeFinding", &_Tau1HPSdecayModeFinding);
 	_Tree->Branch("TTM_Tau1LTPt", &_Tau1LTPt);
 	_Tree->Branch("TTM_Tau1Charge", &_Tau1Charge);
@@ -105,17 +92,9 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2HPSagainstMuonMedium", &_Tau2HPSagainstMuonMedium);
 	_Tree->Branch("TTM_Tau2HPSagainstMuonTight", &_Tau2HPSagainstMuonTight);
 	_Tree->Branch("TTM_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau2HPSbyLooseIsolation", &_Tau2HPSbyLooseIsolation);
-	_Tree->Branch("TTM_Tau2HPSbyLooseIsolationDeltaBetaCorr", &_Tau2HPSbyLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau2HPSbyMediumIsolation", &_Tau2HPSbyMediumIsolation);
-	_Tree->Branch("TTM_Tau2HPSbyMediumIsolationDeltaBetaCorr", &_Tau2HPSbyMediumIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau2HPSbyTightIsolation", &_Tau2HPSbyTightIsolation);
-	_Tree->Branch("TTM_Tau2HPSbyTightIsolationDeltaBetaCorr", &_Tau2HPSbyTightIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTM_Tau2HPSbyVLooseIsolation", &_Tau2HPSbyVLooseIsolation);
-	_Tree->Branch("TTM_Tau2HPSbyVLooseIsolationDeltaBetaCorr", &_Tau2HPSbyVLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TTM_Tau2HPSdecayModeFinding", &_Tau2HPSdecayModeFinding);
 	_Tree->Branch("TTM_Tau2LTPt", &_Tau2LTPt);
 	_Tree->Branch("TTM_Tau2Charge", &_Tau2Charge);
@@ -161,16 +140,6 @@ void DitauMuonFiller::SetupBranches(){
 
 // === Clear vectors that will be used to fill ntuple === //
 void DitauMuonFiller::ClearVectors(){
-	genHadTauFromH1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromH2 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW2 = reco::Candidate::LorentzVector(0,0,0,0);
-
-
-	_recoTauMatchedToGenHadTauFromH1 = NULL;
-	_recoTauMatchedToGenHadTauFromH2 = NULL;
-	_recoTauMatchedToGenHadTauFromW1 = NULL;
-	_recoTauMatchedToGenHadTauFromW2 = NULL;
 
 	_NumTaus										= 0;
 	_NumMuons										= 0;
@@ -196,17 +165,9 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau1HPSagainstMuonMedium						.clear();
 	_Tau1HPSagainstMuonTight						.clear();
 	_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyLooseIsolation						.clear();
-	_Tau1HPSbyLooseIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyMediumIsolation						.clear();
-	_Tau1HPSbyMediumIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyTightIsolation						.clear();
-	_Tau1HPSbyTightIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyVLooseIsolation						.clear();
-	_Tau1HPSbyVLooseIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSdecayModeFinding						.clear();
 	_Tau1LTPt										.clear();
 	_Tau1Charge										.clear();
@@ -244,17 +205,9 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau2HPSagainstMuonMedium						.clear();
 	_Tau2HPSagainstMuonTight						.clear();
 	_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyLooseIsolation						.clear();
-	_Tau2HPSbyLooseIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyMediumIsolation						.clear();
-	_Tau2HPSbyMediumIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyTightIsolation						.clear();
-	_Tau2HPSbyTightIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyVLooseIsolation						.clear();
-	_Tau2HPSbyVLooseIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSdecayModeFinding						.clear();
 	_Tau2LTPt										.clear();
 	_Tau2Charge										.clear();
@@ -308,257 +261,103 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	// Clear vectors
 	ClearVectors();
 
-	if(_FromBEAN){
+	// Select muons (tight)
+	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, BEANhelper::muonID::muonTight);
 
-		// Select muons (tight)
-		BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(*(_BNmuons.product()), BEANhelper::muonID::muonTight);
+	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
 
-		if(_BNtaus->size() < 2 || selectedMuons.size() < 1){ return; }
+	// Get primary vertex
+	//const BNprimaryvertex& primaryVertex = *(_BNprimaryVertices.begin());
 
-		// Get primary vertex
-		const BNprimaryvertex& primaryVertex = (*(_BNprimaryVertices)->begin());
+	// Tau loops: Tau1 is always leads in pT
+	unsigned int theNumberOfTaus1 = 0;
+	unsigned int theNumberOfTaus2 = 0;
+	unsigned int theNumberOfMuons = 0;
 
-		// Tau loops: Tau1 is always leads in pT
-		unsigned int theNumberOfTaus1 = 0;
-		unsigned int theNumberOfTaus2 = 0;
-		unsigned int theNumberOfMuons = 0;
+	// Start loop over Taus so select two (if applicable) that form a good (and heaviest) pair
+	_NumTaus = _BNtaus.size();
+	theNumberOfTaus1 = 0;
+	for ( BNtauCollection::const_iterator Tau1 = _BNtaus.begin(); Tau1 != _BNtaus.end(); ++Tau1 ) {
+		theNumberOfTaus1++;
 
-		// Start loop over Taus so select two (if applicable) that form a good (and heaviest) pair
-		_NumTaus = _BNtaus->size();
-		theNumberOfTaus1 = 0;
-		for ( BNtauCollection::const_iterator Tau1 = _BNtaus->begin(); Tau1 != _BNtaus->end(); ++Tau1 ) {
-			theNumberOfTaus1++;
+		theNumberOfTaus2 = theNumberOfTaus1 + 1;
+		for ( BNtauCollection::const_iterator Tau2 = (Tau1 + 1); Tau2 != _BNtaus.end(); ++Tau2 ) {
+			theNumberOfTaus2++;
 
-			theNumberOfTaus2 = theNumberOfTaus1 + 1;
-			for ( BNtauCollection::const_iterator Tau2 = (Tau1 + 1); Tau2 != _BNtaus->end(); ++Tau2 ) {
-				theNumberOfTaus2++;
-
-				if( theNumberOfTaus2 <= theNumberOfTaus1 ){ continue; }// Make sure we don't double-count: only compare pairs in which the tau2 iterator is larger than the tau 1 iterator, else skip combo
+			if( theNumberOfTaus2 <= theNumberOfTaus1 ){ continue; }// Make sure we don't double-count: only compare pairs in which the tau2 iterator is larger than the tau 1 iterator, else skip combo
 
 
-				// BNtauCollection should be sorted by pT in descending order, but let's make sure, and if not, flip them so Tau1 has the largest pT
-				if (Tau1->pt < Tau2->pt){
-					BNtauCollection::const_iterator TauTemp = Tau1;
-					Tau1 = Tau2;
-					Tau2 = TauTemp;
-				}
+			// BNtauCollection should be sorted by pT in descending order, but let's make sure, and if not, flip them so Tau1 has the largest pT
+			if (Tau1->pt < Tau2->pt){
+				BNtauCollection::const_iterator TauTemp = Tau1;
+				Tau1 = Tau2;
+				Tau2 = TauTemp;
+			}
 
-				if(Tau1->pt < _RecoTauMinPt){ continue; }
-				if(Tau2->pt < _RecoTauMinPt){ continue; }
-				if(fabs(Tau1->eta) > _RecoTauMaxAbsEta ){ continue; }
-				if(fabs(Tau2->eta) > _RecoTauMaxAbsEta ){ continue; }
-				if(_RecoTauRequireDMF && !(Tau1->HPSdecayModeFinding)){ continue; }
-				if(_RecoTauRequireDMF && !(Tau2->HPSdecayModeFinding)){ continue; }
+			if(Tau1->pt < _RecoTauMinPt){ continue; }
+			if(Tau2->pt < _RecoTauMinPt){ continue; }
+			if(fabs(Tau1->eta) > _RecoTauMaxAbsEta ){ continue; }
+			if(fabs(Tau2->eta) > _RecoTauMaxAbsEta ){ continue; }
+			if(_RecoTauRequireDMF && !(Tau1->HPSdecayModeFinding)){ continue; }
+			if(_RecoTauRequireDMF && !(Tau2->HPSdecayModeFinding)){ continue; }
 
-				_NumMuons = selectedMuons.size();
-				theNumberOfMuons = 0;
-				for ( BNmuonCollection::const_iterator Muon = selectedMuons.begin(); Muon != selectedMuons.end(); ++Muon ) {
-					theNumberOfMuons++;
+			_NumMuons = selectedMuons.size();
+			theNumberOfMuons = 0;
+			for ( BNmuonCollection::const_iterator Muon = selectedMuons.begin(); Muon != selectedMuons.end(); ++Muon ) {
+				theNumberOfMuons++;
 
-					// =========   NO VECTOR FILLING BEFORE THIS POINT   ========= //
+				// =========   NO VECTOR FILLING BEFORE THIS POINT   ========= //
 
-					_NumCombos++;
-					_MomentumRank.push_back(_MomentumRank.size());
+				_NumCombos++;
+				_MomentumRank.push_back(_MomentumRank.size());
 
-					FillDitauMuon(*Tau1, *Tau2, *Muon, primaryVertex);
+				FillDitauMuon(*Tau1, *Tau2, *Muon);
 
-					_Tau1MomentumRank.push_back(theNumberOfTaus1-1);
-					FillTau1(*Tau1, primaryVertex);
+				_Tau1MomentumRank.push_back(theNumberOfTaus1-1);
+				FillTau1(*Tau1);
 
-					_Tau2MomentumRank.push_back(theNumberOfTaus2-1);
-					FillTau2(*Tau2, primaryVertex);
+				_Tau2MomentumRank.push_back(theNumberOfTaus2-1);
+				FillTau2(*Tau2);
 
-					_MuonMomentumRank.push_back(theNumberOfMuons-1);
-					FillMuon(*Muon, primaryVertex);
+				_MuonMomentumRank.push_back(theNumberOfMuons-1);
+				FillMuon(*Muon);
 
-					
-					// Jets and MET and related quantities
-					// Correct for jet pT
-					BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(*(_BNjets.product()));
+				
+				// Jets and MET and related quantities
+				// Correct for jet pT
+				BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(_BNjets);
 
-					// Apply kinematic requirements on corrected jets
-					BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
+				// Apply kinematic requirements on corrected jets
+				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
 
-					// Clean jets from taus and muon
-					vector<TLorentzVector> tausAndMuon;
-					tausAndMuon.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
-					tausAndMuon.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
-					tausAndMuon.push_back(TLorentzVector(Muon->px, Muon->py, Muon->pz, Muon->energy));
-					BNjetCollection cleanSelCorrJets						= beanHelper.GetCleanJets(selCorrJets, tausAndMuon, 0.25);
+				// Clean jets from taus and muon
+				vector<TLorentzVector> tausAndMuon;
+				tausAndMuon.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
+				tausAndMuon.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
+				tausAndMuon.push_back(TLorentzVector(Muon->px, Muon->py, Muon->pz, Muon->energy));
+				BNjetCollection cleanSelCorrJets						= beanHelper.GetCleanJets(selCorrJets, tausAndMuon, 0.25);
 
-					// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
-					BNmet correctedMET  = beanHelper.GetCorrectedMET(*(_BNmet->begin()), beanHelper.GetUncorrectedJets(cleanSelCorrJets, *(_BNjets.product())));
+				// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
+				BNmet correctedMET  = beanHelper.GetCorrectedMET(*(_BNmets.begin()), beanHelper.GetUncorrectedJets(cleanSelCorrJets, _BNjets));
 
-					_HT					.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper.GetHT(cleanSelCorrJets));
-					_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
+				_HT					.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper.GetHT(cleanSelCorrJets));
+				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
 
-					_NumCSVLbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'L'));
-					_NumCSVMbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'M'));
-					_NumCSVTbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'T'));
-					_NumNonCSVLbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
-					_NumNonCSVMbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
-					_NumNonCSVTbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+				_NumCSVLbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'L'));
+				_NumCSVMbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCSVTbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'T'));
+				_NumNonCSVLbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
+				_NumNonCSVMbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
+				_NumNonCSVTbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
-				} // end of muon loop
-			} // end of tau2 loop
-		} // end of tau1 loop
+			} // end of muon loop
+		} // end of tau2 loop
+	} // end of tau1 loop
 		
-	}else{
-
-		// Require at least 2 taus and at least one muon
-		if(_patTaus->size() < 2 || _patMuons->size() < 1){ return; }
-
-		// Match Reco and GenHadTaus from H
-		if(_AnalysisType.compare("signal") == 0){ MatchRecoAndGenHadTausFromH(); }
-
-
-		// Get primary vertex
-		const reco::Vertex& primaryVertex = (*(_primaryVertices)->begin());
-
-		// Tau loops: Tau1 is always leads in pT
-		unsigned int theNumberOfTaus1 = 0;
-		unsigned int theNumberOfTaus2 = 0;
-		unsigned int theNumberOfMuons = 0;
-
-		// Start loop over patTaus so select two (if applicable) that form a good (and heaviest) pair
-		_NumTaus = _patTaus->size();
-		theNumberOfTaus1 = 0;
-		for ( pat::TauCollection::const_iterator Tau1 = _patTaus->begin(); Tau1 != _patTaus->end(); ++Tau1 ) {
-			theNumberOfTaus1++;
-			//	if (Tau1->pt() < _RecoTauPtMinCut){ continue; }
-
-			theNumberOfTaus2 = theNumberOfTaus1 + 1;
-			for ( pat::TauCollection::const_iterator Tau2 = (Tau1 + 1); Tau2 != _patTaus->end(); ++Tau2 ) {
-				theNumberOfTaus2++;
-				//		if (Tau2->pt() < _RecoTau2PtMinCut){ continue; }
-
-				if( theNumberOfTaus2 <= theNumberOfTaus1 ){ continue; }// Make sure we don't double-count: only compare pairs in which the tau2 iterator is larger than the tau 1 iterator, else skip combo
-
-				// pat::TauCollection should be sorted by pT in descending order, but let's make sure, and if not, flip them so Tau1 has the largest pT
-				if (Tau1->pt() < Tau2->pt()){
-					pat::TauCollection::const_iterator TauTemp = Tau1;
-					Tau1 = Tau2;
-					Tau2 = TauTemp;
-				}
-
-				if(Tau1->pt() < _RecoTauMinPt){ continue; }
-				if(Tau2->pt() < _RecoTauMinPt){ continue; }
-				if(fabs(Tau1->eta()) > _RecoTauMaxAbsEta){ continue; }
-				if(fabs(Tau2->eta()) > _RecoTauMaxAbsEta){ continue; }
-				if(_RecoTauRequireDMF && !(Tau1->tauID("decayModeFinding"))){ continue; }
-				if(_RecoTauRequireDMF && !(Tau2->tauID("decayModeFinding"))){ continue; }
-
-				_NumMuons = _patMuons->size();
-				theNumberOfMuons = 0;
-				for ( pat::MuonCollection::const_iterator Muon = _patMuons->begin(); Muon != _patMuons->end(); ++Muon ) {
-					theNumberOfMuons++;
-
-					// =========   NO VECTOR FILLING BEFORE THIS POINT   ========= //
-
-					_NumCombos++;
-					_MomentumRank.push_back(_MomentumRank.size());
-					FillDitauMuon(*Tau1, *Tau2, *Muon, primaryVertex);
-
-					_Tau1MomentumRank.push_back(theNumberOfTaus1-1);
-					FillTau1(*Tau1, primaryVertex);
-
-					_Tau2MomentumRank.push_back(theNumberOfTaus2-1);
-					FillTau2(*Tau2, primaryVertex);
-
-					_MuonMomentumRank.push_back(theNumberOfMuons-1);
-					FillMuon(*Muon, primaryVertex);
-
-				} // end of muon loop
-			} // end of tau2 loop
-		} // end of tau1 loop
-		//*/
-	}
-
-
 }
 
-void DitauMuonFiller::FillTau1(const pat::Tau& Tau1, const reco::Vertex& primaryVertex){
-				_Tau1Pt											.push_back(Tau1.pt());
-				_Tau1Eta										.push_back(Tau1.eta());
-				_Tau1Phi										.push_back(Tau1.phi());
-				_Tau1NProngs									.push_back(Tau1.signalPFChargedHadrCands().size());
-				_Tau1NSignalGammas								.push_back(Tau1.signalPFGammaCands().size());
-				_Tau1NSignalNeutrals							.push_back(Tau1.signalPFNeutrHadrCands().size());
-				_Tau1DecayMode									.push_back(Tau1.decayMode());
-				_Tau1EmFraction									.push_back(Tau1.emFraction());
-				_Tau1IsInTheCracks								.push_back(IsInTheCracks(Tau1.eta()));
-				_Tau1HPSagainstElectronLoose					.push_back(Tau1.tauID("againstElectronLoose") );
-				_Tau1HPSagainstElectronMVA						.push_back(Tau1.tauID("againstElectronMVA") );
-				_Tau1HPSagainstElectronMedium					.push_back(Tau1.tauID("againstElectronMedium") );
-				_Tau1HPSagainstElectronTight					.push_back(Tau1.tauID("againstElectronTight") );
-				_Tau1HPSagainstMuonLoose						.push_back(Tau1.tauID("againstMuonLoose") );
-				_Tau1HPSagainstMuonMedium						.push_back(Tau1.tauID("againstMuonMedium") );
-				_Tau1HPSagainstMuonTight						.push_back(Tau1.tauID("againstMuonTight") );
-				_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyLooseIsolation						.push_back(Tau1.tauID("byLooseIsolation") );
-				_Tau1HPSbyLooseIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byLooseIsolationDeltaBetaCorr") );
-				_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byMediumCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyMediumIsolation						.push_back(Tau1.tauID("byMediumIsolation") );
-				_Tau1HPSbyMediumIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byMediumIsolationDeltaBetaCorr") );
-				_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byTightCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyTightIsolation						.push_back(Tau1.tauID("byTightIsolation") );
-				_Tau1HPSbyTightIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byTightIsolationDeltaBetaCorr") );
-				_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byVLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyVLooseIsolation						.push_back(Tau1.tauID("byVLooseIsolation") );
-				_Tau1HPSbyVLooseIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byVLooseIsolationDeltaBetaCorr") );
-				_Tau1HPSdecayModeFinding						.push_back(Tau1.tauID("decayModeFinding") );
-			
-				// Leading track variables
-				if(Tau1.leadPFChargedHadrCand().isNonnull()){
-					_Tau1LTPt       .push_back(Tau1.leadPFChargedHadrCand()->pt());
-					_Tau1Charge     .push_back(Tau1.leadPFChargedHadrCand()->charge());
 
-					if(false&& Tau1.leadPFChargedHadrCand()->trackRef().isNonnull()){
-						_Tau1LTvalid        .push_back(true);
-						_Tau1LTIpVtdxy      .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dxy(primaryVertex.position()));
-						_Tau1LTIpVtdz       .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dz(primaryVertex.position()));
-						_Tau1LTIpVtdxyError .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dxyError());
-						_Tau1LTIpVtdzError  .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dzError());
-						_Tau1LTvx           .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->vx());
-						_Tau1LTvy           .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->vy());
-						_Tau1LTvz           .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->vz());
-						_Tau1LTValidHits    .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->numberOfValidHits());
-						_Tau1LTNormChiSqrd  .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->normalizedChi2());
-					}else{
-						_Tau1LTvalid        .push_back(false);
-						_Tau1LTIpVtdxy      .push_back(-1);
-						_Tau1LTIpVtdz       .push_back(-1);
-						_Tau1LTIpVtdxyError .push_back(-1);
-						_Tau1LTIpVtdzError  .push_back(-1);
-						_Tau1LTvx           .push_back(-1);
-						_Tau1LTvy           .push_back(-1);
-						_Tau1LTvz           .push_back(-1);
-						_Tau1LTValidHits    .push_back(-1);
-						_Tau1LTNormChiSqrd  .push_back(-1);
-					}
-				}else{
-					_Tau1LTvalid        .push_back(false);
-					_Tau1LTPt           .push_back(-1);
-					_Tau1Charge         .push_back(0);
-					_Tau1LTIpVtdxy      .push_back(-1);
-					_Tau1LTIpVtdz       .push_back(-1);
-					_Tau1LTIpVtdxyError .push_back(-1);
-					_Tau1LTIpVtdzError  .push_back(-1);
-					_Tau1LTvx           .push_back(-1);
-					_Tau1LTvy           .push_back(-1);
-					_Tau1LTvz           .push_back(-1);
-					_Tau1LTValidHits    .push_back(-1);
-					_Tau1LTNormChiSqrd  .push_back(-1);
-				}
-
-				// Is this tau one of the two golden ones?
-				_Tau1MatchesGenHadTauFromH1.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromH1);
-				_Tau1MatchesGenHadTauFromH2.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromH2);
-				_Tau1MatchesGenHadTauFromW1.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromW1);
-				_Tau1MatchesGenHadTauFromW2.push_back(&Tau1 == _recoTauMatchedToGenHadTauFromW2);
-}
-
-void DitauMuonFiller::FillTau1(const BNtau& Tau, const BNprimaryvertex& primaryVertex){
+void DitauMuonFiller::FillTau1(const BNtau& Tau){
 				_Tau1Pt											.push_back(Tau.pt);
 				_Tau1Eta										.push_back(Tau.eta);
 				_Tau1Phi										.push_back(Tau.phi);
@@ -576,17 +375,9 @@ void DitauMuonFiller::FillTau1(const BNtau& Tau, const BNprimaryvertex& primaryV
 				_Tau1HPSagainstMuonMedium						.push_back(Tau.HPSagainstMuonMedium);
 				_Tau1HPSagainstMuonTight						.push_back(Tau.HPSagainstMuonTight);
 				_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-				_Tau1HPSbyVLooseIsolation						.push_back(Tau.HPSbyVLooseIsolation);
-				_Tau1HPSbyVLooseIsolationDeltaBetaCorr			.push_back(Tau.HPSbyVLooseIsolationDeltaBetaCorr);
 				_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr);
-				_Tau1HPSbyLooseIsolation						.push_back(Tau.HPSbyLooseIsolation);
-				_Tau1HPSbyLooseIsolationDeltaBetaCorr			.push_back(Tau.HPSbyLooseIsolationDeltaBetaCorr);
 				_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr);
-				_Tau1HPSbyMediumIsolation						.push_back(Tau.HPSbyMediumIsolation);
-				_Tau1HPSbyMediumIsolationDeltaBetaCorr			.push_back(Tau.HPSbyMediumIsolationDeltaBetaCorr);
 				_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr);
-				_Tau1HPSbyTightIsolation						.push_back(Tau.HPSbyTightIsolation);
-				_Tau1HPSbyTightIsolationDeltaBetaCorr			.push_back(Tau.HPSbyTightIsolationDeltaBetaCorr);
 				_Tau1HPSdecayModeFinding						.push_back(Tau.HPSdecayModeFinding);
 			
 				// Leading track variables
@@ -604,87 +395,8 @@ void DitauMuonFiller::FillTau1(const BNtau& Tau, const BNprimaryvertex& primaryV
 				_Tau1LTNormChiSqrd	.push_back(Tau.leadingTrackNormChiSqrd);
 }
 
-void DitauMuonFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primaryVertex){
-				_Tau2Pt											.push_back(Tau2.pt());
-				_Tau2Eta										.push_back(Tau2.eta());
-				_Tau2Phi										.push_back(Tau2.phi());
-				_Tau2NProngs									.push_back(Tau2.signalPFChargedHadrCands().size());
-				_Tau2NSignalGammas								.push_back(Tau2.signalPFGammaCands().size());
-				_Tau2NSignalNeutrals							.push_back(Tau2.signalPFNeutrHadrCands().size());
-				_Tau2DecayMode									.push_back(Tau2.decayMode());
-				_Tau2EmFraction									.push_back(Tau2.emFraction());
-				_Tau2IsInTheCracks								.push_back(IsInTheCracks(Tau2.eta()));
-				_Tau2HPSagainstElectronLoose					.push_back(Tau2.tauID("againstElectronLoose") );
-				_Tau2HPSagainstElectronMVA						.push_back(Tau2.tauID("againstElectronMVA") );
-				_Tau2HPSagainstElectronMedium					.push_back(Tau2.tauID("againstElectronMedium") );
-				_Tau2HPSagainstElectronTight					.push_back(Tau2.tauID("againstElectronTight") );
-				_Tau2HPSagainstMuonLoose						.push_back(Tau2.tauID("againstMuonLoose") );
-				_Tau2HPSagainstMuonMedium						.push_back(Tau2.tauID("againstMuonMedium") );
-				_Tau2HPSagainstMuonTight						.push_back(Tau2.tauID("againstMuonTight") );
-				_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyLooseIsolation						.push_back(Tau2.tauID("byLooseIsolation") );
-				_Tau2HPSbyLooseIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byLooseIsolationDeltaBetaCorr") );
-				_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byMediumCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyMediumIsolation						.push_back(Tau2.tauID("byMediumIsolation") );
-				_Tau2HPSbyMediumIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byMediumIsolationDeltaBetaCorr") );
-				_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byTightCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyTightIsolation						.push_back(Tau2.tauID("byTightIsolation") );
-				_Tau2HPSbyTightIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byTightIsolationDeltaBetaCorr") );
-				_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byVLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyVLooseIsolation						.push_back(Tau2.tauID("byVLooseIsolation") );
-				_Tau2HPSbyVLooseIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byVLooseIsolationDeltaBetaCorr") );
-				_Tau2HPSdecayModeFinding						.push_back(Tau2.tauID("decayModeFinding") );
-				// Leading track variables
-				if(Tau2.leadPFChargedHadrCand().isNonnull()){
-					_Tau2LTPt       .push_back(Tau2.leadPFChargedHadrCand()->pt());
-					_Tau2Charge     .push_back(Tau2.leadPFChargedHadrCand()->charge());
 
-					if(false&& Tau2.leadPFChargedHadrCand()->trackRef().isNonnull()){
-						_Tau2LTvalid        .push_back(true);
-						_Tau2LTIpVtdxy      .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dxy(primaryVertex.position()));
-						_Tau2LTIpVtdz       .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dz(primaryVertex.position()));
-						_Tau2LTIpVtdxyError .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dxyError());
-						_Tau2LTIpVtdzError  .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dzError());
-						_Tau2LTvx           .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->vx());
-						_Tau2LTvy           .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->vy());
-						_Tau2LTvz           .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->vz());
-						_Tau2LTValidHits    .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->numberOfValidHits());
-						_Tau2LTNormChiSqrd  .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->normalizedChi2());
-					}else{
-						_Tau2LTvalid        .push_back(false);
-						_Tau2LTIpVtdxy      .push_back(-1);
-						_Tau2LTIpVtdz       .push_back(-1);
-						_Tau2LTIpVtdxyError .push_back(-1);
-						_Tau2LTIpVtdzError  .push_back(-1);
-						_Tau2LTvx           .push_back(-1);
-						_Tau2LTvy           .push_back(-1);
-						_Tau2LTvz           .push_back(-1);
-						_Tau2LTValidHits    .push_back(-1);
-						_Tau2LTNormChiSqrd  .push_back(-1);
-					}
-				}else{
-					_Tau2LTvalid        .push_back(false);
-					_Tau2LTPt           .push_back(-1);
-					_Tau2Charge         .push_back(0);
-					_Tau2LTIpVtdxy      .push_back(-1);
-					_Tau2LTIpVtdz       .push_back(-1);
-					_Tau2LTIpVtdxyError .push_back(-1);
-					_Tau2LTIpVtdzError  .push_back(-1);
-					_Tau2LTvx           .push_back(-1);
-					_Tau2LTvy           .push_back(-1);
-					_Tau2LTvz           .push_back(-1);
-					_Tau2LTValidHits    .push_back(-1);
-					_Tau2LTNormChiSqrd  .push_back(-1);
-				}
-
-				// Is this tau one of the two golden ones?
-				_Tau2MatchesGenHadTauFromH1.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromH1);
-				_Tau2MatchesGenHadTauFromH2.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromH2);
-				_Tau2MatchesGenHadTauFromW1.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromW1);
-				_Tau2MatchesGenHadTauFromW2.push_back(&Tau2 == _recoTauMatchedToGenHadTauFromW2);
-}
-
-void DitauMuonFiller::FillTau2(const BNtau& Tau, const BNprimaryvertex& primaryVertex){
+void DitauMuonFiller::FillTau2(const BNtau& Tau){
 				_Tau2Pt											.push_back(Tau.pt);
 				_Tau2Eta										.push_back(Tau.eta);
 				_Tau2Phi										.push_back(Tau.phi);
@@ -702,17 +414,9 @@ void DitauMuonFiller::FillTau2(const BNtau& Tau, const BNprimaryvertex& primaryV
 				_Tau2HPSagainstMuonMedium						.push_back(Tau.HPSagainstMuonMedium);
 				_Tau2HPSagainstMuonTight						.push_back(Tau.HPSagainstMuonTight);
 				_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-				_Tau2HPSbyVLooseIsolation						.push_back(Tau.HPSbyVLooseIsolation);
-				_Tau2HPSbyVLooseIsolationDeltaBetaCorr			.push_back(Tau.HPSbyVLooseIsolationDeltaBetaCorr);
 				_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr);
-				_Tau2HPSbyLooseIsolation						.push_back(Tau.HPSbyLooseIsolation);
-				_Tau2HPSbyLooseIsolationDeltaBetaCorr			.push_back(Tau.HPSbyLooseIsolationDeltaBetaCorr);
 				_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr);
-				_Tau2HPSbyMediumIsolation						.push_back(Tau.HPSbyMediumIsolation);
-				_Tau2HPSbyMediumIsolationDeltaBetaCorr			.push_back(Tau.HPSbyMediumIsolationDeltaBetaCorr);
 				_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr);
-				_Tau2HPSbyTightIsolation						.push_back(Tau.HPSbyTightIsolation);
-				_Tau2HPSbyTightIsolationDeltaBetaCorr			.push_back(Tau.HPSbyTightIsolationDeltaBetaCorr);
 				_Tau2HPSdecayModeFinding						.push_back(Tau.HPSdecayModeFinding);
 			
 				// Leading track variables
@@ -730,228 +434,20 @@ void DitauMuonFiller::FillTau2(const BNtau& Tau, const BNprimaryvertex& primaryV
 				_Tau2LTNormChiSqrd								.push_back(Tau.leadingTrackNormChiSqrd);
 }
 
+void DitauMuonFiller::FillMuon(const BNmuon& Muon){
+	_MuonPt.push_back(Muon.pt);
+	_MuonEta.push_back(Muon.eta);
+	_MuonPhi.push_back(Muon.phi);
+	_MuonRelIso.push_back(beanHelper.GetMuonRelIso(Muon));
+	_MuonIsLooseMuon.push_back(beanHelper.IsLooseMuon(Muon));
+	_MuonIsTightMuon.push_back(beanHelper.IsTightMuon(Muon));
 
-void DitauMuonFiller::FillMuon(const pat::Muon& Muon, const reco::Vertex& primaryVertex){
-   
-    // get beamspot
-    math::XYZPoint beamSpotPosition;
-    beamSpotPosition.SetCoordinates(0,0,0);
-
-    //edm::Handle<reco::BeamSpot> bsHandle;
-    //iEvent.getByLabel("offlineBeamSpot",bsHandle);
-    //if( (bsHandle.isValid()) ){
-    //    beamSpotPosition = bsHandle->position();
-    //}
-    
-    // get vertex
-    math::XYZPoint vertexPosition;
-    vertexPosition.SetCoordinates(0,0,0);
-
-    vertexPosition = primaryVertex.position();
-
-    _MuonPt.push_back(Muon.pt());
-    _MuonEta.push_back(Muon.eta());
-    _MuonPhi.push_back(Muon.phi());
-    
-    float pfIso = -1;
-    pfIso = getMuonIso(Muon, 
-            0, //no charged hadron PU subtraction
-            0); // no delta(B) corr.
-    _MuonRelIso.push_back( pfIso/Muon.pt() );
-   
-    _MuonIsLooseMuon.push_back(getMuonID(Muon,vertexPosition,
-                1, // return loose ID
-                1)); // require muon track info
-    _MuonIsTightMuon.push_back(getMuonID(Muon,vertexPosition,0,1));
-	
 }
 
-void DitauMuonFiller::FillMuon(const BNmuon& Muon, const BNprimaryvertex& primaryVertex){
-    _MuonPt.push_back(Muon.pt);
-    _MuonEta.push_back(Muon.eta);
-    _MuonPhi.push_back(Muon.phi);
-    _MuonRelIso.push_back(beanHelper.GetMuonRelIso(Muon));
-    _MuonIsLooseMuon.push_back(beanHelper.IsLooseMuon(Muon));
-    _MuonIsTightMuon.push_back(beanHelper.IsTightMuon(Muon));
-   
-}
-
-void DitauMuonFiller::FillDitauMuon(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const reco::Vertex& primaryVertex){
-	_DitauVisibleMass	.push_back(GetComboMass(Tau1, Tau2));
-	_DitauMETMass		.push_back(GetComboMass(Tau1, Tau2, (*_patMETs->begin())));
-	_DitauCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - Tau2.phi()))));
-	_DitauDeltaR		.push_back(reco::deltaR(Tau1.eta(), Tau1.phi(), Tau2.eta(), Tau2.phi()));
-	_Tau1MuonDeltaR		.push_back(reco::deltaR(Tau1.eta(), Tau1.phi(), Muon.eta(), Muon.phi()));
-	_Tau2MuonDeltaR		.push_back(reco::deltaR(Tau2.eta(), Tau2.phi(), Muon.eta(), Muon.phi()));
-	_HT					.push_back(Tau1.pt() + Tau2.pt() + Muon.pt() + (_patMETs->begin()->pt()));
-	_NumCSVLbtagJets	.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "L"));
-	_NumCSVMbtagJets	.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "M"));
-	_NumCSVTbtagJets	.push_back(GetNumCSVbtags(Tau1, Tau2, Muon, "T"));
-	_NumNonCSVLbtagJets .push_back(GetNumCSVextraJets(Tau1, Tau2, Muon, "L"));
-	_NumNonCSVMbtagJets .push_back(GetNumCSVextraJets(Tau1, Tau2, Muon, "M"));
-	_NumNonCSVTbtagJets .push_back(GetNumCSVextraJets(Tau1, Tau2, Muon, "T"));
-}
-
-void DitauMuonFiller::FillDitauMuon(const BNtau& Tau1, const BNtau& Tau2, const BNmuon& Muon, const BNprimaryvertex& primaryVertex){
+void DitauMuonFiller::FillDitauMuon(const BNtau& Tau1, const BNtau& Tau2, const BNmuon& Muon){
 	_DitauVisibleMass	.push_back(GetComboMassBN(Tau1, Tau2));
 	_DitauCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi - Tau2.phi))));
 	_DitauDeltaR		.push_back(reco::deltaR(Tau1.eta, Tau1.phi, Tau2.eta, Tau2.phi));
 	_Tau1MuonDeltaR		.push_back(reco::deltaR(Tau1.eta, Tau1.phi, Muon.eta, Muon.phi));
 	_Tau2MuonDeltaR		.push_back(reco::deltaR(Tau2.eta, Tau2.phi, Muon.eta, Muon.phi));
 }
-
-
-unsigned int DitauMuonFiller::GetNumCSVbtags(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const string iWP){ 
-	unsigned int result = 0;
-
-	// Define working points
-	float wp = 0;
-	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
-	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
-	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
-	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
-
-	// Loop over jets
-	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
-
-		// Antimatching to taus and muon
-		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
-		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
-		if(deltaR(Jet->eta(), Jet->phi(), Muon.eta(), Muon.phi()) < _JetAntiMatchingDeltaR){ continue; }
-
-		// Kinematic requirements for jets
-		if(Jet->et() < _RecoJetMinPt){ continue; }
-		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
-		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
-
-		// Count jets passing the required b-tagging
-		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
-		if(combSecVtxBTag >= wp){ result++; } 
-	}
-
-	return result;
-}
-
-unsigned int DitauMuonFiller::GetNumCSVextraJets(const pat::Tau& Tau1, const pat::Tau& Tau2, const pat::Muon& Muon, const string iWP){ 
-	unsigned int result = 0;
-
-	// Define working points
-	float wp = 0;
-	if(iWP.compare("L")==0){		wp = _CSVlooseWP;	}	
-	else if(iWP.compare("M")==0){	wp = _CSVmediumWP;	}	
-	else if(iWP.compare("T")==0){	wp = _CSVtightWP;	}	
-	else{ cerr << "ERROR in " << __FILE__ << "\tb-Tagging working point '" << iWP << "' not understood. Choose 'L' or 'M' or 'T'." << endl; exit(1); }
-
-	// Loop over jets
-	for(pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet){
-
-		// Antimatching to taus and muon
-		if(deltaR(Jet->eta(), Jet->phi(), Tau1.eta(), Tau1.phi()) < _JetAntiMatchingDeltaR){ continue; }
-		if(deltaR(Jet->eta(), Jet->phi(), Tau2.eta(), Tau2.phi()) < _JetAntiMatchingDeltaR){ continue; }
-		if(deltaR(Jet->eta(), Jet->phi(), Muon.eta(), Muon.phi()) < _JetAntiMatchingDeltaR){ continue; }
-
-		// Kinematic requirements for jets
-		if(Jet->et() < _RecoJetMinPt){ continue; }
-		if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
-		if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
-
-		// Count jets failing the required b-tagging
-		float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
-		if(combSecVtxBTag < wp){ result++; } 
-	}
-
-	return result;
-}
-
-void DitauMuonFiller::MatchRecoAndGenHadTausFromH(){
-	FindGenTausFromHandW();
-
-	_recoTauMatchedToGenHadTauFromH1 = FindClosestRecoTau(&genHadTauFromH1);
-	_recoTauMatchedToGenHadTauFromH2 = FindClosestRecoTau(&genHadTauFromH2);
-	_recoTauMatchedToGenHadTauFromW1 = FindClosestRecoTau(&genHadTauFromW1);
-	_recoTauMatchedToGenHadTauFromW2 = FindClosestRecoTau(&genHadTauFromW2);
-}
-
-pat::Tau * DitauMuonFiller::FindClosestRecoTau(reco::Candidate::LorentzVector * iParticle){
-
-	if(iParticle->mag2()==0){ return NULL; }
-
-	float minDeltaR = 999;
-	pat::TauCollection::const_iterator closestTau;
-	for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
-
-			float thisDeltaR = reco::deltaR(Tau->eta(), Tau->phi(), iParticle->eta(), iParticle->phi());
-			if(thisDeltaR < minDeltaR){
-				minDeltaR = thisDeltaR;	
-				closestTau = (Tau);
-			}
-	}
-
-	return const_cast<pat::Tau*>(&(*closestTau));
-}
-
-void DitauMuonFiller::FindGenTausFromHandW(){
-	genHadTauFromH1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromH2 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW2 = reco::Candidate::LorentzVector(0,0,0,0);
-
-	// Loop over all gen particles looking for taus
-	unsigned int numGenHadTau		= 0;
-	unsigned int numGenHadTauFromH	= 0;
-	for(GenParticleCollection::const_iterator genParticle = _genParticles->begin(); genParticle != _genParticles->end(); ++genParticle){
-
-		// Only care for taus
-		if((abs(genParticle->pdgId()) != 15) || (genParticle->status() == 3)){ continue; }
-		reco::Candidate::LorentzVector visGenTau = genParticle->p4();
-
-		// Examine number of neutrinos
-		bool foundElectron	= false;
-		bool foundMuon		= false;
-		for( unsigned int i=0; i < (genParticle->numberOfDaughters()); i++) {
-			const reco::Candidate* daughterCand = genParticle->daughter(i);
-
-			// Figure out the decay mode
-			if( abs(daughterCand->pdgId()) == 12 ){ foundElectron	= true; }    
-			if( abs(daughterCand->pdgId()) == 14 ){ foundMuon		= true; }    
-
-			// Obtain visible momentum by subtracting the p4 of neutrinos
-			if( (abs(daughterCand->pdgId()) == 12) || (abs(daughterCand->pdgId()) == 14) || (abs(daughterCand->pdgId()) == 16) ) {
-				visGenTau = visGenTau - daughterCand->p4();
-			}    
-		}    
-		// Fill decay mode
-		if(foundElectron || foundMuon){ continue; }
-		numGenHadTau++;
-
-		const reco::Candidate* parent;
-		if(genParticle->mother(0)->pdgId() == genParticle->pdgId()){    parent = genParticle->mother(0)->mother(0); }
-		else{                                                           parent = genParticle->mother(0);            }  
-		if(parent->pdgId() == 25){
-
-			if(genHadTauFromH1.mag2() ==0){
-				genHadTauFromH1 = visGenTau;
-			}else if(genHadTauFromH1.pt() > visGenTau.pt()){
-				genHadTauFromH2 = visGenTau;
-			}else{
-				genHadTauFromH2 = genHadTauFromH1;
-				genHadTauFromH1 = visGenTau;
-			}
-		}else{
-			if(genHadTauFromW1.mag2() == 0){
-				genHadTauFromW1 = visGenTau;
-			}else if(genHadTauFromW1.pt() > visGenTau.pt()){
-				genHadTauFromW2 = visGenTau;
-			}else{
-				genHadTauFromW2 = genHadTauFromW1;
-				genHadTauFromW1 = visGenTau;
-			}
-		
-		}
-
-	}
-
-}
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(DitauMuonFiller);

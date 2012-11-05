@@ -12,6 +12,7 @@ GenJetFiller::GenJetFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
 }
 
 GenJetFiller::GenJetFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -57,39 +58,33 @@ void GenJetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	if(_FromBEAN){
-	
-	}else{
-		// Loop over all gen Jets looking for taus
-		for(GenJetCollection::const_iterator genJet = _genJets->begin(); genJet != _genJets->end(); ++genJet){
+	// Loop over all gen Jets looking for taus
+	for(BNgenjetCollection::const_iterator genjet = _BNgenjets.begin(); genjet != _BNgenjets.end(); ++genjet){
 
-			_NumGenJets++;
-			_MomentumRank	.push_back(_NumGenJets-1);
+		_NumGenJets++;
+		_MomentumRank	.push_back(_NumGenJets-1);
 
-			// Fill visGenJet info
-			_Pt		.push_back(genJet->pt());
-			_Eta	.push_back(genJet->eta());
-			_Phi	.push_back(genJet->phi());
+		// Fill visGenJet info
+		_Pt		.push_back(genjet->pt);
+		_Eta	.push_back(genjet->eta);
+		_Phi	.push_back(genjet->phi);
 
-			 // Loop over all gen particles looking for b
-			bool foundBquark = false;
-			vector<const GenParticle*> genJetParticles = genJet->getGenConstituents();
-			for(vector<const GenParticle*>::const_iterator genJetParticle = genJetParticles.begin(); genJetParticle != genJetParticles.end(); ++genJetParticle){
-				const Candidate* mother = (*genJetParticle);
-				do{
-					if( abs(mother->pdgId()) == 5 ){ foundBquark = true; break; }
-					mother = mother->mother(0);
-				}while(mother != NULL);
-				if(foundBquark){ break; }
-			}
-
-			_IsBjet	.push_back(foundBquark);
-
+		/*
+		 // Loop over all gen particles looking for b
+		bool foundBquark = false;
+		vector<const GenParticle*> genJetParticles = genJet->getGenConstituents();
+		for(vector<const GenParticle*>::const_iterator genJetParticle = genJetParticles.begin(); genJetParticle != genJetParticles.end(); ++genJetParticle){
+			const Candidate* mother = (*genJetParticle);
+			do{
+				if( abs(mother->pdgId()) == 5 ){ foundBquark = true; break; }
+				mother = mother->mother(0);
+			}while(mother != NULL);
+			if(foundBquark){ break; }
 		}
+
+		_IsBjet	.push_back(foundBquark);
+		//*/
+
 	}
 
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(GenJetFiller);

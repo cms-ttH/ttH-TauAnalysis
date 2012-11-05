@@ -12,6 +12,7 @@ GenLevelFiller::GenLevelFiller(const ParameterSet& iConfig): NtupleFiller(iConfi
 }
 
 GenLevelFiller::GenLevelFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -48,7 +49,3 @@ void GenLevelFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(GenLevelFiller);

@@ -12,6 +12,7 @@ JetFiller::JetFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
 }
 
 JetFiller::JetFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -58,55 +59,25 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	if(_FromBEAN){
-		const BNprimaryvertex& primaryVertex = (*(_BNprimaryVertices)->begin());
-		unsigned int theNumberOfJets = 0;
+	unsigned int theNumberOfJets = 0;
 
-		BNjetCollection correctedJets	= beanHelper.GetCorrectedJets(*(_BNjets.product()));
-		BNjetCollection selCorrJets		= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose,'-');
-		
-		_NumJets = selCorrJets.size();
-		theNumberOfJets = 0;
-		for ( BNjetCollection::const_iterator Jet = selCorrJets.begin(); Jet != selCorrJets.end(); ++Jet ) {
-			theNumberOfJets++;
+	BNjetCollection correctedJets	= beanHelper.GetCorrectedJets(_BNjets);
+	BNjetCollection selCorrJets		= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose,'-');
 
-			_NumJets++;
-			_MomentumRank.push_back(_MomentumRank.size());
-			_JetPt.push_back(Jet->pt);
-			_JetEta.push_back(Jet->eta);
-			_JetPhi.push_back(Jet->phi);
+	_NumJets = selCorrJets.size();
+	theNumberOfJets = 0;
+	for ( BNjetCollection::const_iterator Jet = selCorrJets.begin(); Jet != selCorrJets.end(); ++Jet ) {
+		theNumberOfJets++;
 
-			_combSecVtxBTag			.push_back(beanHelper.GetCSVvalue(*Jet));
-			_combSecVtxLooseBTag	.push_back(beanHelper.PassesCSV(*Jet, 'L'));
-			_combSecVtxMediumBTag	.push_back(beanHelper.PassesCSV(*Jet, 'M'));
-			_combSecVtxTightBTag	.push_back(beanHelper.PassesCSV(*Jet, 'T'));
-		}
-	}else{
-		for ( pat::JetCollection::const_iterator Jet = _patJets->begin(); Jet != _patJets->end(); ++Jet ) {
+		_NumJets++;
+		_MomentumRank.push_back(_MomentumRank.size());
+		_JetPt.push_back(Jet->pt);
+		_JetEta.push_back(Jet->eta);
+		_JetPhi.push_back(Jet->phi);
 
-			// Kinematic requirements for jets
-			if(Jet->et() < _RecoJetMinPt){ continue; }
-			if(fabs(Jet->eta()) <_RecoJetMinAbsEta){ continue; }
-			if(fabs(Jet->eta()) >_RecoJetMaxAbsEta){ continue; }
-
-			// Consider only those jets passing the kinematic requirements
-			_NumJets++;
-			_MomentumRank.push_back(_MomentumRank.size());
-			_JetPt.push_back(Jet->pt());
-			_JetEta.push_back(Jet->eta());
-			_JetPhi.push_back(Jet->phi());
-
-			float combSecVtxBTag = Jet->bDiscriminator("combinedSecondaryVertexBJetTags");
-			_combSecVtxBTag.push_back(combSecVtxBTag);
-			_combSecVtxLooseBTag	.push_back(combSecVtxBTag >= _CSVlooseWP);
-			_combSecVtxMediumBTag	.push_back(combSecVtxBTag >= _CSVmediumWP);
-			_combSecVtxTightBTag	.push_back(combSecVtxBTag >= _CSVtightWP);
-
-		}
+		_combSecVtxBTag			.push_back(beanHelper.GetCSVvalue(*Jet));
+		_combSecVtxLooseBTag	.push_back(beanHelper.PassesCSV(*Jet, 'L'));
+		_combSecVtxMediumBTag	.push_back(beanHelper.PassesCSV(*Jet, 'M'));
+		_combSecVtxTightBTag	.push_back(beanHelper.PassesCSV(*Jet, 'T'));
 	}
-
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(JetFiller);

@@ -12,15 +12,13 @@ TauFiller::TauFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
 }
 
 TauFiller::TauFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
 
 // === Destructor === //
 TauFiller::~TauFiller(){}
-
-// ------------ method called to for each event  ------------
-void TauFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void TauFiller::SetupBranches(){
@@ -32,16 +30,76 @@ void TauFiller::SetupBranches(){
 	_Tree->Branch("T_Pt",&_TauPt);
 	_Tree->Branch("T_Eta",&_TauEta);
 	_Tree->Branch("T_Phi",&_TauPhi);
+	_Tree->Branch("T_NProngs", &_TauNProngs);
+	_Tree->Branch("T_NSignalGammas", &_TauNSignalGammas);
+	_Tree->Branch("T_NSignalNeutrals", &_TauNSignalNeutrals);
+	_Tree->Branch("T_DecayMode", &_TauDecayMode);
+	_Tree->Branch("T_EmFraction", &_TauEmFraction);
+	_Tree->Branch("T_IsInTheCracks", &_TauIsInTheCracks);
+	_Tree->Branch("T_HPSagainstElectronLoose", &_TauHPSagainstElectronLoose);
+	_Tree->Branch("T_HPSagainstElectronMVA", &_TauHPSagainstElectronMVA);
+	_Tree->Branch("T_HPSagainstElectronMedium", &_TauHPSagainstElectronMedium);
+	_Tree->Branch("T_HPSagainstElectronTight", &_TauHPSagainstElectronTight);
+	_Tree->Branch("T_HPSagainstMuonLoose", &_TauHPSagainstMuonLoose);
+	_Tree->Branch("T_HPSagainstMuonMedium", &_TauHPSagainstMuonMedium);
+	_Tree->Branch("T_HPSagainstMuonTight", &_TauHPSagainstMuonTight);
+	_Tree->Branch("T_HPSbyLooseCombinedIsolationDeltaBetaCorr", &_TauHPSbyLooseCombinedIsolationDeltaBetaCorr);
+	_Tree->Branch("T_HPSbyMediumCombinedIsolationDeltaBetaCorr", &_TauHPSbyMediumCombinedIsolationDeltaBetaCorr);
+	_Tree->Branch("T_HPSbyTightCombinedIsolationDeltaBetaCorr", &_TauHPSbyTightCombinedIsolationDeltaBetaCorr);
+	_Tree->Branch("T_HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_TauHPSbyVLooseCombinedIsolationDeltaBetaCorr);
+	_Tree->Branch("T_HPSdecayModeFinding", &_TauHPSdecayModeFinding);
+	_Tree->Branch("T_LTPt", &_TauLTPt);
+	_Tree->Branch("T_Charge", &_TauCharge);
+	_Tree->Branch("T_LTvalid", &_TauLTvalid);
+	_Tree->Branch("T_LTIpVtdxy", &_TauLTIpVtdxy);
+	_Tree->Branch("T_LTIpVtdz", &_TauLTIpVtdz);
+	_Tree->Branch("T_LTIpVtdxyError", &_TauLTIpVtdxyError);
+	_Tree->Branch("T_LTIpVtdzError", &_TauLTIpVtdzError);
+	_Tree->Branch("T_LTvx", &_TauLTvx);
+	_Tree->Branch("T_LTvy", &_TauLTvy);
+	_Tree->Branch("T_LTvz", &_TauLTvz);
+	_Tree->Branch("T_LTValidHits", &_TauLTValidHits);
+	_Tree->Branch("T_LTNormChiSqrd", &_TauLTNormChiSqrd);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
 void TauFiller::ClearVectors(){
 
-	_NumTaus		=	0;	
-	_MomentumRank		.clear();
-	_TauPt	   		.clear();
-	_TauEta   		.clear();
-	_TauPhi   		.clear();
+	_NumTaus										=	0;	
+	_MomentumRank									.clear();
+	_TauPt											.clear();
+	_TauEta											.clear();
+	_TauPhi											.clear();
+	_TauNProngs										.clear();
+	_TauNSignalGammas								.clear();
+	_TauNSignalNeutrals								.clear();
+	_TauDecayMode									.clear();
+	_TauEmFraction									.clear();
+	_TauIsInTheCracks								.clear();
+	_TauHPSagainstElectronLoose						.clear();
+	_TauHPSagainstElectronMVA						.clear();
+	_TauHPSagainstElectronMedium					.clear();
+	_TauHPSagainstElectronTight						.clear();
+	_TauHPSagainstMuonLoose							.clear();
+	_TauHPSagainstMuonMedium						.clear();
+	_TauHPSagainstMuonTight							.clear();
+	_TauHPSbyLooseCombinedIsolationDeltaBetaCorr	.clear();
+	_TauHPSbyMediumCombinedIsolationDeltaBetaCorr	.clear();
+	_TauHPSbyTightCombinedIsolationDeltaBetaCorr	.clear();
+	_TauHPSbyVLooseCombinedIsolationDeltaBetaCorr	.clear();
+	_TauHPSdecayModeFinding							.clear();
+	_TauLTPt										.clear();
+	_TauCharge										.clear();
+	_TauLTvalid										.clear();
+	_TauLTIpVtdxy									.clear();
+	_TauLTIpVtdz									.clear();
+	_TauLTIpVtdxyError								.clear();
+	_TauLTIpVtdzError								.clear();
+	_TauLTvx										.clear();
+	_TauLTvy										.clear();
+	_TauLTvz										.clear();
+	_TauLTValidHits									.clear();
+	_TauLTNormChiSqrd								.clear();
 
 }
 
@@ -50,20 +108,51 @@ void TauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	if(_FromBEAN){
-	
-	}else{
-		_NumTaus = _patTaus->size();
-		for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
-			_MomentumRank.push_back(_MomentumRank.size());
-			_TauPt.push_back(Tau->pt());
-			_TauEta.push_back(Tau->eta());
-			_TauPhi.push_back(Tau->phi());
-		}
+	unsigned int theNumberOfTaus = 0;
+
+	BNtauCollection selectedTaus = _BNtaus;
+
+	_NumTaus = selectedTaus.size();
+	theNumberOfTaus = 0;
+	for ( BNtauCollection::const_iterator Tau = selectedTaus.begin(); Tau != selectedTaus.end(); ++Tau ) {
+		theNumberOfTaus++;
+
+		_NumTaus++;
+		_MomentumRank.push_back(_MomentumRank.size());
+		_TauPt											.push_back(Tau->pt);
+		_TauEta											.push_back(Tau->eta);
+		_TauPhi											.push_back(Tau->phi);
+		_TauNProngs										.push_back(Tau->numProngs);
+		_TauNSignalGammas								.push_back(Tau->numSignalGammas);
+		_TauNSignalNeutrals								.push_back(Tau->numSignalNeutrals);
+		_TauDecayMode									.push_back(Tau->decayMode);
+		_TauEmFraction									.push_back(Tau->emFraction);
+		_TauIsInTheCracks								.push_back(Tau->inTheCracks);
+		_TauHPSagainstElectronMVA						.push_back(Tau->HPSagainstElectronMVA);
+		_TauHPSagainstElectronLoose						.push_back(Tau->HPSagainstElectronLoose);
+		_TauHPSagainstElectronMedium					.push_back(Tau->HPSagainstElectronMedium);
+		_TauHPSagainstElectronTight						.push_back(Tau->HPSagainstElectronTight);
+		_TauHPSagainstMuonLoose							.push_back(Tau->HPSagainstMuonLoose);
+		_TauHPSagainstMuonMedium						.push_back(Tau->HPSagainstMuonMedium);
+		_TauHPSagainstMuonTight							.push_back(Tau->HPSagainstMuonTight);
+		_TauHPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau->HPSbyVLooseCombinedIsolationDeltaBetaCorr);
+		_TauHPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau->HPSbyLooseCombinedIsolationDeltaBetaCorr);
+		_TauHPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau->HPSbyMediumCombinedIsolationDeltaBetaCorr);
+		_TauHPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau->HPSbyTightCombinedIsolationDeltaBetaCorr);
+		_TauHPSdecayModeFinding							.push_back(Tau->HPSdecayModeFinding);
+
+		// Leading track variables
+		_TauLTPt			.push_back(Tau->leadingTrackPt);
+		_TauCharge			.push_back(Tau->charge);
+		_TauLTvalid			.push_back(Tau->leadingTrackValid);
+		_TauLTIpVtdxy		.push_back(Tau->leadingTrackIpVtdxy);
+		_TauLTIpVtdz		.push_back(Tau->leadingTrackIpVtdz);
+		_TauLTIpVtdxyError	.push_back(Tau->leadingTrackIpVtdxyError);
+		_TauLTIpVtdzError	.push_back(Tau->leadingTrackIpVtdzError);
+		_TauLTvx			.push_back(Tau->leadingTrackVx);
+		_TauLTvy			.push_back(Tau->leadingTrackVy);
+		_TauLTvz			.push_back(Tau->leadingTrackVz);
+		_TauLTValidHits		.push_back(Tau->leadingTrackValidHits);
+		_TauLTNormChiSqrd	.push_back(Tau->leadingTrackNormChiSqrd);
 	}
-
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(TauFiller);
