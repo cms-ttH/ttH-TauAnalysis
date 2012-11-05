@@ -23,19 +23,13 @@ class DitauElectronFiller : public NtupleFiller {
 		void ClearVectors();
 
 		// === Helper functions === //
-		void FillTau1(const pat::Tau&, const reco::Vertex&);
-		void FillTau1(const BNtau&, const BNprimaryvertex&);
-		void FillTau2(const pat::Tau&, const reco::Vertex&);
-		void FillTau2(const BNtau&, const BNprimaryvertex&);
-		void FillElectron(const pat::Electron&, const reco::Vertex&);
-		void FillElectron(const BNelectron&, const BNprimaryvertex&);
-		void FillDitauElectron(const pat::Tau&, const pat::Tau&, const pat::Electron&, const reco::Vertex&);
-		void FillDitauElectron(const BNtau&, const BNtau&, const BNelectron&, const BNprimaryvertex&);
-		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string);
-		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string);
+		void FillTau1(const BNtau&);
+		void FillTau2(const BNtau&);
+		void FillElectron(const BNelectron&);
+		void FillDitauElectron(const BNtau&, const BNtau&, const BNelectron&);
 		void MatchRecoAndGenHadTausFromH();
 		void FindGenTausFromHandW();
-		pat::Tau * FindClosestRecoTau(reco::Candidate::LorentzVector *);
+		//pat::Tau * FindClosestRecoTau(reco::Candidate::LorentzVector *);
 
 	// ----- Variables ----- //
 	private:
@@ -45,10 +39,10 @@ class DitauElectronFiller : public NtupleFiller {
 		reco::Candidate::LorentzVector genHadTauFromH2;
 		reco::Candidate::LorentzVector genHadTauFromW1;
 		reco::Candidate::LorentzVector genHadTauFromW2;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromH1;
+		/*pat::Tau *				_recoTauMatchedToGenHadTauFromH1;
 		pat::Tau *				_recoTauMatchedToGenHadTauFromH2;
 		pat::Tau *				_recoTauMatchedToGenHadTauFromW1;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromW2;
+		pat::Tau *				_recoTauMatchedToGenHadTauFromW2;//*/
 		unsigned int			_NumTaus;
 		unsigned int			_NumElectrons;
 		unsigned int			_NumCombos;
@@ -73,17 +67,9 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<bool>			_Tau1HPSagainstMuonMedium;
 		vector<bool>			_Tau1HPSagainstMuonTight;
 		vector<bool>			_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau1HPSbyLooseIsolation;
-		vector<bool>			_Tau1HPSbyLooseIsolationDeltaBetaCorr;
 		vector<bool>			_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau1HPSbyMediumIsolation;
-		vector<bool>			_Tau1HPSbyMediumIsolationDeltaBetaCorr;
 		vector<bool>			_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau1HPSbyTightIsolation;
-		vector<bool>			_Tau1HPSbyTightIsolationDeltaBetaCorr;
 		vector<bool>			_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau1HPSbyVLooseIsolation;
-		vector<bool>			_Tau1HPSbyVLooseIsolationDeltaBetaCorr;
 		vector<bool>			_Tau1HPSdecayModeFinding;
 		vector<float>			_Tau1LTPt;
 		vector<float>			_Tau1Charge;
@@ -121,17 +107,9 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<bool>			_Tau2HPSagainstMuonMedium;
 		vector<bool>			_Tau2HPSagainstMuonTight;
 		vector<bool>			_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau2HPSbyLooseIsolation;
-		vector<bool>			_Tau2HPSbyLooseIsolationDeltaBetaCorr;
 		vector<bool>			_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau2HPSbyMediumIsolation;
-		vector<bool>			_Tau2HPSbyMediumIsolationDeltaBetaCorr;
 		vector<bool>			_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau2HPSbyTightIsolation;
-		vector<bool>			_Tau2HPSbyTightIsolationDeltaBetaCorr;
 		vector<bool>			_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_Tau2HPSbyVLooseIsolation;
-		vector<bool>			_Tau2HPSbyVLooseIsolationDeltaBetaCorr;
 		vector<bool>			_Tau2HPSdecayModeFinding;
 		vector<float>			_Tau2LTPt;
 		vector<float>			_Tau2Charge;

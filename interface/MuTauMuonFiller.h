@@ -23,12 +23,6 @@ class MuTauMuonFiller : public NtupleFiller {
 		void ClearVectors();
 
 		// === Helper functions === //
-		void FillTau(const pat::Tau&, const reco::Vertex&);
-		void FillMuon1(const pat::Muon&, const reco::Vertex&);
-		void FillMuon2(const pat::Muon&, const reco::Vertex&);
-		void FillMuTauMuon(const pat::Muon&, const pat::Muon&, const pat::Tau&, const reco::Vertex&);
-		unsigned int GetNumCSVbtags(const pat::Muon&, const pat::Muon&, const pat::Tau&, std::string);
-		unsigned int GetNumCSVextraJets(const pat::Muon&, const pat::Muon&, const pat::Tau&, std::string);
 
 	// ----- Variables ----- //
 	private:
@@ -57,17 +51,9 @@ class MuTauMuonFiller : public NtupleFiller {
 		vector<bool>			_TauHPSagainstMuonMedium;
 		vector<bool>			_TauHPSagainstMuonTight;
 		vector<bool>			_TauHPSbyLooseCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_TauHPSbyLooseIsolation;
-		vector<bool>			_TauHPSbyLooseIsolationDeltaBetaCorr;
 		vector<bool>			_TauHPSbyMediumCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_TauHPSbyMediumIsolation;
-		vector<bool>			_TauHPSbyMediumIsolationDeltaBetaCorr;
 		vector<bool>			_TauHPSbyTightCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_TauHPSbyTightIsolation;
-		vector<bool>			_TauHPSbyTightIsolationDeltaBetaCorr;
 		vector<bool>			_TauHPSbyVLooseCombinedIsolationDeltaBetaCorr;
-		vector<bool>			_TauHPSbyVLooseIsolation;
-		vector<bool>			_TauHPSbyVLooseIsolationDeltaBetaCorr;
 		vector<bool>			_TauHPSdecayModeFinding;
 		vector<float>			_TauLTPt;
 		vector<float>			_TauCharge;

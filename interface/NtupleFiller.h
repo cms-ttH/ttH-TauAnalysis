@@ -30,10 +30,12 @@
 
 #include "../src/fillerAuxFunctions.cc"
 #include "NtupleMaker/BEANmaker/interface/BEANhelper.h"
+#include "PATupleToBEANtranslator.h"
 
 // Headers for the BEAN data items
 #include "ProductArea/BNcollections/interface/BNevent.h"
 #include "ProductArea/BNcollections/interface/BNjet.h"
+#include "ProductArea/BNcollections/interface/BNgenjet.h"
 #include "ProductArea/BNcollections/interface/BNmcparticle.h"
 #include "ProductArea/BNcollections/interface/BNmet.h"
 #include "ProductArea/BNcollections/interface/BNelectron.h"
@@ -59,8 +61,10 @@ typedef std::vector< reco::Candidate::LorentzVector > LVCollection;
 class NtupleFiller : public EDAnalyzer {
 	public:
 		BEANhelper beanHelper;
+		PATupleToBEANtranslator patTupleToBEANtranslator;
 		explicit NtupleFiller(const ParameterSet&);
 		~NtupleFiller();
+		string GetName();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 		virtual void ClearVectors();
 
@@ -89,27 +93,6 @@ class NtupleFiller : public EDAnalyzer {
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetPZeta(const PatObject1&, const PatObject2&, const MetObject&);
 		template <typename PatObject1, typename PatObject2> double GetPZetaVis(const PatObject1&, const PatObject2&);
 		bool IsInTheCracks(float);
-
-		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const string); 
-		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const string); 
-
-		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string); 
-		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Electron&, const string); 
-		unsigned int GetNumCSVbtags(const BNtau&, const BNtau&, const BNelectron&, const string); 
-		unsigned int GetNumCSVextraJets(const BNtau&, const BNtau&, const BNelectron&, const string); 
-		unsigned int GetNumCSVbtags(const pat::Electron&, const pat::Electron&, const pat::Tau&, const string); 
-		unsigned int GetNumCSVextraJets(const pat::Electron&, const pat::Electron&, const pat::Tau&, const string); 
-		unsigned int GetNumCSVbtags(const BNelectron&, const BNelectron&, const BNtau&, const string); 
-		unsigned int GetNumCSVextraJets(const BNelectron&, const BNelectron&, const BNtau&, const string); 
-
-		unsigned int GetNumCSVbtags(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string); 
-		unsigned int GetNumCSVextraJets(const pat::Tau&, const pat::Tau&, const pat::Muon&, const string); 
-		unsigned int GetNumCSVbtags(const BNtau&, const BNtau&, const BNmuon&, const string); 
-		unsigned int GetNumCSVextraJets(const BNtau&, const BNtau&, const BNmuon&, const string); 
-		unsigned int GetNumCSVbtags(const pat::Muon&, const pat::Muon&, const pat::Tau&, const string); 
-		unsigned int GetNumCSVextraJets(const pat::Muon&, const pat::Muon&, const pat::Tau&, const string); 
-		unsigned int GetNumCSVbtags(const BNmuon&, const BNmuon&, const BNtau&, const string); 
-		unsigned int GetNumCSVextraJets(const BNmuon&, const BNmuon&, const BNtau&, const string); 
 /*		template <typename PatObject> pair<bool, reco::Candidate::LorentzVector> matchToGen(const PatObject&, int);
 		pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&);
 		double matchToGenParentMass(const pat::Tau&);
@@ -118,6 +101,8 @@ class NtupleFiller : public EDAnalyzer {
 		virtual pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&, double, int, int iMotherPdgId=0, int iGrandMotherPdgId=0, bool iCheckNeutrinos=true);//*/
 		
 	protected:
+		unsigned int _DebugLevel;
+		string _FillerName;
 		TTree* _Tree;
 
 		string _AnalysisType;
@@ -164,13 +149,24 @@ class NtupleFiller : public EDAnalyzer {
 		InputTag _RecoPFMetSource;
 
 
+		// === Collections === //
+		BNeventCollection				_BNevent;
+		BNmcparticleCollection			_BNmcparticles;
+		BNgenjetCollection				_BNgenjets;
+		BNelectronCollection			_BNelectrons;
+		BNmuonCollection				_BNmuons;
+		BNtauCollection					_BNtaus;
+		BNjetCollection					_BNjets;
+		BNmetCollection					_BNmets;
+		BNprimaryvertexCollection		_BNprimaryVertices;
+		BNtriggerCollection				_BNtrigger;
 		// === Handles to collections === //
-		Handle<BNeventCollection>				_BNevent;
+/*		Handle<BNeventCollection>				_BNevent;
 		Handle<BNelectronCollection>			_BNelectrons;
 		Handle<BNmuonCollection>				_BNmuons;
 		Handle<BNtauCollection>					_BNtaus;
 		Handle<BNjetCollection>					_BNjets;
-		Handle<BNmetCollection>					_BNmet;
+		Handle<BNmetCollection>					_BNmets;
 		Handle<BNprimaryvertexCollection>		_BNprimaryVertices;
 		Handle<BNtriggerCollection>				_BNtrigger;
 
@@ -185,6 +181,7 @@ class NtupleFiller : public EDAnalyzer {
 		Handle< reco::VertexCollection >					_primaryVertices;
 		Handle< std::vector< PileupSummaryInfo > >			_puInfo;
         Handle< edm::TriggerResults >                       _triggerResults;
+//*/
 
 	
 

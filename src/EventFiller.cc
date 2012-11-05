@@ -12,6 +12,7 @@ EventFiller::EventFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
 }
 
 EventFiller::EventFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -64,43 +65,28 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_eventNumber		= iEvent.id().event();
 	_lumiBlock			= iEvent.id().luminosityBlock();
 
-	if(_FromBEAN){
-		// ****** //
 
-		// Pileup info (number of BX) here
+	_numPrimaryVertices	= _BNprimaryVertices.size();
+	BNjetCollection correctedJets							= beanHelper.GetCorrectedJets(_BNjets);
+	BNjetCollection selCorrJets								= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
+	BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper.GetUncorrectedJets(selCorrJets, _BNjets);
 
-		// ****** //
+	BNmet correctedMET	= beanHelper.GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection);
+	_MET				= correctedMET.pt;
+	_METphi				= correctedMET.phi;
 
-		_numPrimaryVertices	= _BNprimaryVertices->size();
-		
-		BNjetCollection correctedJets							= beanHelper.GetCorrectedJets(*(_BNjets.product()));
-		BNjetCollection selCorrJets								= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
-		BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper.GetUncorrectedJets(selCorrJets, *(_BNjets.product()));
 
-		BNmet correctedMET	= beanHelper.GetCorrectedMET(*(_BNmet->begin()), uncorrectedJetsFromCorrectedSelection);
-		_MET				= correctedMET.pt;
-		_METphi				= correctedMET.phi;
-	
-	}else{
-		if(!SampleTypeContains("data")){
-			for(vector<PileupSummaryInfo>::const_iterator PVI = _puInfo->begin(); PVI != _puInfo->end(); ++PVI) {
-				int bunchCrossing = PVI->getBunchCrossing();
-				int numInteractions = PVI->getPU_NumInteractions();
+/*	if(!SampleTypeContains("data")){
+		for(vector<PileupSummaryInfo>::const_iterator PVI = _puInfo->begin(); PVI != _puInfo->end(); ++PVI) {
+			int bunchCrossing = PVI->getBunchCrossing();
+			int numInteractions = PVI->getPU_NumInteractions();
 
-				if( bunchCrossing == -1 ){		_numInteractionsBXm1    = numInteractions; }
-				else if( bunchCrossing ==  0 ){	_numInteractionsBX0     = numInteractions; }
-				else if( bunchCrossing ==  1 ){	_numInteractionsBXp1    = numInteractions; }
-			}
+			if( bunchCrossing == -1 ){		_numInteractionsBXm1    = numInteractions; }
+			else if( bunchCrossing ==  0 ){	_numInteractionsBX0     = numInteractions; }
+			else if( bunchCrossing ==  1 ){	_numInteractionsBXp1    = numInteractions; }
 		}
+	}//*/
 
-		_numPrimaryVertices	= _primaryVertices->size();
-
-		_MET				= _patMETs->begin()->pt();
-		_METphi				= _patMETs->begin()->phi();
-	}
+	_numPrimaryVertices	= _BNprimaryVertices.size();
 
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(EventFiller);

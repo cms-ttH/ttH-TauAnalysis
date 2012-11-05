@@ -12,6 +12,7 @@ ElectronFiller::ElectronFiller(const ParameterSet& iConfig): NtupleFiller(iConfi
 }
 
 ElectronFiller::ElectronFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -55,36 +56,22 @@ void ElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	if(_FromBEAN){
-		unsigned int theNumberOfElectrons = 0;
+	unsigned int theNumberOfElectrons = 0;
 
-		BNelectronCollection selectedElectrons = *(_BNelectrons.product());
-		
-		_NumElectrons = selectedElectrons.size();
-		theNumberOfElectrons = 0;
-		for ( BNelectronCollection::const_iterator Electron = selectedElectrons.begin(); Electron != selectedElectrons.end(); ++Electron ) {
-			theNumberOfElectrons++;
+	BNelectronCollection selectedElectrons = _BNelectrons;
 
-			_NumElectrons++;
-			_MomentumRank.push_back(_MomentumRank.size());
-			_ElectronPt.push_back(Electron->pt);
-			_ElectronEta.push_back(Electron->eta);
-			_ElectronPhi.push_back(Electron->phi);
-			_ElectronRelIso.push_back(beanHelper.GetElectronRelIso(*Electron));
-			_IsLooseElectron.push_back(beanHelper.IsLooseElectron(*Electron));
-			_IsTightElectron.push_back(beanHelper.IsTightElectron(*Electron));
-		}
-	}else{
-		_NumElectrons = _patElectrons->size();
-		for ( pat::ElectronCollection::const_iterator Electron = _patElectrons->begin(); Electron != _patElectrons->end(); ++Electron ) {
-			_MomentumRank.push_back(_MomentumRank.size());
-			_ElectronPt.push_back(Electron->pt());
-			_ElectronEta.push_back(Electron->eta());
-			_ElectronPhi.push_back(Electron->phi());
-		}
+	_NumElectrons = selectedElectrons.size();
+	theNumberOfElectrons = 0;
+	for ( BNelectronCollection::const_iterator Electron = selectedElectrons.begin(); Electron != selectedElectrons.end(); ++Electron ) {
+		theNumberOfElectrons++;
+
+		_NumElectrons++;
+		_MomentumRank.push_back(_MomentumRank.size());
+		_ElectronPt.push_back(Electron->pt);
+		_ElectronEta.push_back(Electron->eta);
+		_ElectronPhi.push_back(Electron->phi);
+		_ElectronRelIso.push_back(beanHelper.GetElectronRelIso(*Electron));
+		_IsLooseElectron.push_back(beanHelper.IsLooseElectron(*Electron));
+		_IsTightElectron.push_back(beanHelper.IsTightElectron(*Electron));
 	}
 }
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(ElectronFiller);

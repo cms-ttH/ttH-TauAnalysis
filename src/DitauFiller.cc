@@ -12,6 +12,7 @@ DitauFiller::DitauFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
 }
 
 DitauFiller::DitauFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
 }
@@ -51,17 +52,9 @@ void DitauFiller::SetupBranches(){
 	_Tree->Branch("TT_Tau1HPSagainstMuonMedium", &_Tau1HPSagainstMuonMedium);
 	_Tree->Branch("TT_Tau1HPSagainstMuonTight", &_Tau1HPSagainstMuonTight);
 	_Tree->Branch("TT_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau1HPSbyLooseIsolation", &_Tau1HPSbyLooseIsolation);
-	_Tree->Branch("TT_Tau1HPSbyLooseIsolationDeltaBetaCorr", &_Tau1HPSbyLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau1HPSbyMediumIsolation", &_Tau1HPSbyMediumIsolation);
-	_Tree->Branch("TT_Tau1HPSbyMediumIsolationDeltaBetaCorr", &_Tau1HPSbyMediumIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau1HPSbyTightIsolation", &_Tau1HPSbyTightIsolation);
-	_Tree->Branch("TT_Tau1HPSbyTightIsolationDeltaBetaCorr", &_Tau1HPSbyTightIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau1HPSbyVLooseIsolation", &_Tau1HPSbyVLooseIsolation);
-	_Tree->Branch("TT_Tau1HPSbyVLooseIsolationDeltaBetaCorr", &_Tau1HPSbyVLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau1HPSdecayModeFinding", &_Tau1HPSdecayModeFinding);
 	_Tree->Branch("TT_Tau1LTPt", &_Tau1LTPt);
 	_Tree->Branch("TT_Tau1Charge", &_Tau1Charge);
@@ -98,17 +91,9 @@ void DitauFiller::SetupBranches(){
 	_Tree->Branch("TT_Tau2HPSagainstMuonMedium", &_Tau2HPSagainstMuonMedium);
 	_Tree->Branch("TT_Tau2HPSagainstMuonTight", &_Tau2HPSagainstMuonTight);
 	_Tree->Branch("TT_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau2HPSbyLooseIsolation", &_Tau2HPSbyLooseIsolation);
-	_Tree->Branch("TT_Tau2HPSbyLooseIsolationDeltaBetaCorr", &_Tau2HPSbyLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau2HPSbyMediumIsolation", &_Tau2HPSbyMediumIsolation);
-	_Tree->Branch("TT_Tau2HPSbyMediumIsolationDeltaBetaCorr", &_Tau2HPSbyMediumIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau2HPSbyTightIsolation", &_Tau2HPSbyTightIsolation);
-	_Tree->Branch("TT_Tau2HPSbyTightIsolationDeltaBetaCorr", &_Tau2HPSbyTightIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TT_Tau2HPSbyVLooseIsolation", &_Tau2HPSbyVLooseIsolation);
-	_Tree->Branch("TT_Tau2HPSbyVLooseIsolationDeltaBetaCorr", &_Tau2HPSbyVLooseIsolationDeltaBetaCorr);
 	_Tree->Branch("TT_Tau2HPSdecayModeFinding", &_Tau2HPSdecayModeFinding);
 	_Tree->Branch("TT_Tau2LTPt", &_Tau2LTPt);
 	_Tree->Branch("TT_Tau2Charge", &_Tau2Charge);
@@ -168,17 +153,9 @@ void DitauFiller::ClearVectors(){
 	_Tau1HPSagainstMuonMedium						.clear();
 	_Tau1HPSagainstMuonTight						.clear();
 	_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyLooseIsolation						.clear();
-	_Tau1HPSbyLooseIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyMediumIsolation						.clear();
-	_Tau1HPSbyMediumIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyTightIsolation						.clear();
-	_Tau1HPSbyTightIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyVLooseIsolation						.clear();
-	_Tau1HPSbyVLooseIsolationDeltaBetaCorr			.clear();
 	_Tau1HPSdecayModeFinding						.clear();
 	_Tau1LTPt										.clear();
 	_Tau1Charge										.clear();
@@ -215,17 +192,9 @@ void DitauFiller::ClearVectors(){
 	_Tau2HPSagainstMuonMedium						.clear();
 	_Tau2HPSagainstMuonTight						.clear();
 	_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyLooseIsolation						.clear();
-	_Tau2HPSbyLooseIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyMediumIsolation						.clear();
-	_Tau2HPSbyMediumIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyTightIsolation						.clear();
-	_Tau2HPSbyTightIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau2HPSbyVLooseIsolation						.clear();
-	_Tau2HPSbyVLooseIsolationDeltaBetaCorr			.clear();
 	_Tau2HPSdecayModeFinding						.clear();
 	_Tau2LTPt										.clear();
 	_Tau2Charge										.clear();
@@ -267,7 +236,7 @@ void DitauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// Clear vectors
 	ClearVectors();
-	
+/*	
 	// Require at least 2 taus
 	if(_patTaus->size() < 2){ return; }
 
@@ -326,185 +295,3 @@ void DitauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 
 }
-
-void DitauFiller::FillTau1(const pat::Tau& Tau1, const reco::Vertex& primaryVertex){
-				_Tau1Pt											.push_back(Tau1.pt());
-				_Tau1Eta										.push_back(Tau1.eta());
-				_Tau1Phi										.push_back(Tau1.phi());
-				_Tau1NProngs									.push_back(Tau1.signalPFChargedHadrCands().size());
-				_Tau1NSignalGammas								.push_back(Tau1.signalPFGammaCands().size());
-				_Tau1NSignalNeutrals							.push_back(Tau1.signalPFNeutrHadrCands().size());
-				//_Tau1NSignalPiZeros							.push_back(Tau1.signalPiZeroCandidates().size());
-				_Tau1NSignalPiZeros								.push_back(-1);
-				_Tau1DecayMode									.push_back(Tau1.decayMode());
-				_Tau1EmFraction									.push_back(Tau1.emFraction());
-				_Tau1IsInTheCracks								.push_back(IsInTheCracks(Tau1.eta()));
-				_Tau1HPSagainstElectronLoose					.push_back(Tau1.tauID("againstElectronLoose") );
-				_Tau1HPSagainstElectronMVA						.push_back(Tau1.tauID("againstElectronMVA") );
-				_Tau1HPSagainstElectronMedium					.push_back(Tau1.tauID("againstElectronMedium") );
-				_Tau1HPSagainstElectronTight					.push_back(Tau1.tauID("againstElectronTight") );
-				_Tau1HPSagainstMuonLoose						.push_back(Tau1.tauID("againstMuonLoose") );
-				_Tau1HPSagainstMuonMedium						.push_back(Tau1.tauID("againstMuonMedium") );
-				_Tau1HPSagainstMuonTight						.push_back(Tau1.tauID("againstMuonTight") );
-				_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyLooseIsolation						.push_back(Tau1.tauID("byLooseIsolation") );
-				_Tau1HPSbyLooseIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byLooseIsolationDeltaBetaCorr") );
-				_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byMediumCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyMediumIsolation						.push_back(Tau1.tauID("byMediumIsolation") );
-				_Tau1HPSbyMediumIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byMediumIsolationDeltaBetaCorr") );
-				_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byTightCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyTightIsolation						.push_back(Tau1.tauID("byTightIsolation") );
-				_Tau1HPSbyTightIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byTightIsolationDeltaBetaCorr") );
-				_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau1.tauID("byVLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau1HPSbyVLooseIsolation						.push_back(Tau1.tauID("byVLooseIsolation") );
-				_Tau1HPSbyVLooseIsolationDeltaBetaCorr			.push_back(Tau1.tauID("byVLooseIsolationDeltaBetaCorr") );
-				_Tau1HPSdecayModeFinding						.push_back(Tau1.tauID("decayModeFinding") );
-			
-				// Leading track variables
-				if(Tau1.leadPFChargedHadrCand().isNonnull()){
-					_Tau1LTPt       .push_back(Tau1.leadPFChargedHadrCand()->pt());
-					_Tau1Charge     .push_back(Tau1.leadPFChargedHadrCand()->charge());
-
-					if(false&& Tau1.leadPFChargedHadrCand()->trackRef().isNonnull()){
-						_Tau1LTvalid        .push_back(true);
-						_Tau1LTIpVtdxy      .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dxy(primaryVertex.position()));
-						_Tau1LTIpVtdz       .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dz(primaryVertex.position()));
-						_Tau1LTIpVtdxyError .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dxyError());
-						_Tau1LTIpVtdzError  .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->dzError());
-						_Tau1LTvx           .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->vx());
-						_Tau1LTvy           .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->vy());
-						_Tau1LTvz           .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->vz());
-						_Tau1LTValidHits    .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->numberOfValidHits());
-						_Tau1LTNormChiSqrd  .push_back(Tau1.leadPFChargedHadrCand()->trackRef()->normalizedChi2());
-					}else{
-						_Tau1LTvalid        .push_back(false);
-						_Tau1LTIpVtdxy      .push_back(-1);
-						_Tau1LTIpVtdz       .push_back(-1);
-						_Tau1LTIpVtdxyError .push_back(-1);
-						_Tau1LTIpVtdzError  .push_back(-1);
-						_Tau1LTvx           .push_back(-1);
-						_Tau1LTvy           .push_back(-1);
-						_Tau1LTvz           .push_back(-1);
-						_Tau1LTValidHits    .push_back(-1);
-						_Tau1LTNormChiSqrd  .push_back(-1);
-					}
-				}else{
-					_Tau1LTvalid        .push_back(false);
-					_Tau1LTPt           .push_back(-1);
-					_Tau1Charge         .push_back(0);
-					_Tau1LTIpVtdxy      .push_back(-1);
-					_Tau1LTIpVtdz       .push_back(-1);
-					_Tau1LTIpVtdxyError .push_back(-1);
-					_Tau1LTIpVtdzError  .push_back(-1);
-					_Tau1LTvx           .push_back(-1);
-					_Tau1LTvy           .push_back(-1);
-					_Tau1LTvz           .push_back(-1);
-					_Tau1LTValidHits    .push_back(-1);
-					_Tau1LTNormChiSqrd  .push_back(-1);
-				}
-
-				_Tau1METCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - (*_patMETs->begin()).phi()))));
-				_Tau1METMt			.push_back(GetTransverseMass(Tau1, (*_patMETs->begin())));
-}
-
-void DitauFiller::FillTau2(const pat::Tau& Tau2, const reco::Vertex& primaryVertex){
-				_Tau2Pt											.push_back(Tau2.pt());
-				_Tau2Eta										.push_back(Tau2.eta());
-				_Tau2Phi										.push_back(Tau2.phi());
-				_Tau2NProngs									.push_back(Tau2.signalPFChargedHadrCands().size());
-				_Tau2NSignalGammas								.push_back(Tau2.signalPFGammaCands().size());
-				_Tau2NSignalNeutrals							.push_back(Tau2.signalPFNeutrHadrCands().size());
-				//_Tau2NSignalPiZeros							.push_back(Tau2.signalPiZeroCandidates().size());
-				_Tau2NSignalPiZeros								.push_back(-1);
-				_Tau2DecayMode									.push_back(Tau2.decayMode());
-				_Tau2EmFraction									.push_back(Tau2.emFraction());
-				_Tau2IsInTheCracks								.push_back(IsInTheCracks(Tau2.eta()));
-				_Tau2HPSagainstElectronLoose					.push_back(Tau2.tauID("againstElectronLoose") );
-				_Tau2HPSagainstElectronMVA						.push_back(Tau2.tauID("againstElectronMVA") );
-				_Tau2HPSagainstElectronMedium					.push_back(Tau2.tauID("againstElectronMedium") );
-				_Tau2HPSagainstElectronTight					.push_back(Tau2.tauID("againstElectronTight") );
-				_Tau2HPSagainstMuonLoose						.push_back(Tau2.tauID("againstMuonLoose") );
-				_Tau2HPSagainstMuonMedium						.push_back(Tau2.tauID("againstMuonMedium") );
-				_Tau2HPSagainstMuonTight						.push_back(Tau2.tauID("againstMuonTight") );
-				_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyLooseIsolation						.push_back(Tau2.tauID("byLooseIsolation") );
-				_Tau2HPSbyLooseIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byLooseIsolationDeltaBetaCorr") );
-				_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byMediumCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyMediumIsolation						.push_back(Tau2.tauID("byMediumIsolation") );
-				_Tau2HPSbyMediumIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byMediumIsolationDeltaBetaCorr") );
-				_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byTightCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyTightIsolation						.push_back(Tau2.tauID("byTightIsolation") );
-				_Tau2HPSbyTightIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byTightIsolationDeltaBetaCorr") );
-				_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau2.tauID("byVLooseCombinedIsolationDeltaBetaCorr") );
-				_Tau2HPSbyVLooseIsolation						.push_back(Tau2.tauID("byVLooseIsolation") );
-				_Tau2HPSbyVLooseIsolationDeltaBetaCorr			.push_back(Tau2.tauID("byVLooseIsolationDeltaBetaCorr") );
-				_Tau2HPSdecayModeFinding						.push_back(Tau2.tauID("decayModeFinding") );
-				// Leading track variables
-				if(Tau2.leadPFChargedHadrCand().isNonnull()){
-					_Tau2LTPt       .push_back(Tau2.leadPFChargedHadrCand()->pt());
-					_Tau2Charge     .push_back(Tau2.leadPFChargedHadrCand()->charge());
-
-					if(false&& Tau2.leadPFChargedHadrCand()->trackRef().isNonnull()){
-						_Tau2LTvalid        .push_back(true);
-						_Tau2LTIpVtdxy      .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dxy(primaryVertex.position()));
-						_Tau2LTIpVtdz       .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dz(primaryVertex.position()));
-						_Tau2LTIpVtdxyError .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dxyError());
-						_Tau2LTIpVtdzError  .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->dzError());
-						_Tau2LTvx           .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->vx());
-						_Tau2LTvy           .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->vy());
-						_Tau2LTvz           .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->vz());
-						_Tau2LTValidHits    .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->numberOfValidHits());
-						_Tau2LTNormChiSqrd  .push_back(Tau2.leadPFChargedHadrCand()->trackRef()->normalizedChi2());
-					}else{
-						_Tau2LTvalid        .push_back(false);
-						_Tau2LTIpVtdxy      .push_back(-1);
-						_Tau2LTIpVtdz       .push_back(-1);
-						_Tau2LTIpVtdxyError .push_back(-1);
-						_Tau2LTIpVtdzError  .push_back(-1);
-						_Tau2LTvx           .push_back(-1);
-						_Tau2LTvy           .push_back(-1);
-						_Tau2LTvz           .push_back(-1);
-						_Tau2LTValidHits    .push_back(-1);
-						_Tau2LTNormChiSqrd  .push_back(-1);
-					}
-				}else{
-					_Tau2LTvalid        .push_back(false);
-					_Tau2LTPt           .push_back(-1);
-					_Tau2Charge         .push_back(0);
-					_Tau2LTIpVtdxy      .push_back(-1);
-					_Tau2LTIpVtdz       .push_back(-1);
-					_Tau2LTIpVtdxyError .push_back(-1);
-					_Tau2LTIpVtdzError  .push_back(-1);
-					_Tau2LTvx           .push_back(-1);
-					_Tau2LTvy           .push_back(-1);
-					_Tau2LTvz           .push_back(-1);
-					_Tau2LTValidHits    .push_back(-1);
-					_Tau2LTNormChiSqrd  .push_back(-1);
-				}
-
-				_Tau2METCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau2.phi() - (*_patMETs->begin()).phi()))));
-				_Tau2METMt			.push_back(GetTransverseMass(Tau2, (*_patMETs->begin())));
-}
-
-
-void DitauFiller::FillDitau(const pat::Tau& Tau1, const pat::Tau& Tau2, const reco::Vertex& primaryVertex){
-	_DitauVisibleMass	.push_back(GetComboMass(Tau1, Tau2));
-	_DitauMETMass		.push_back(GetComboMass(Tau1, Tau2, (*_patMETs->begin())));
-	_DitauCosDeltaPhi	.push_back(cos(TMath::Abs(normalizedPhi(Tau1.phi() - Tau2.phi()))));
-	_DitauDeltaR		.push_back(reco::deltaR(Tau1.eta(), Tau1.phi(), Tau2.eta(), Tau2.phi()));
-
-	_DitauMETpZeta		.push_back(GetPZeta(Tau1, Tau2, (*_patMETs->begin())));
-	_DitauMETpZetaVis	.push_back(GetPZetaVis(Tau1, Tau2));
-
-	_HT					.push_back(Tau1.pt() + Tau2.pt() + (_patMETs->begin()->pt()));
-	_NumCSVLbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, "L"));
-	_NumCSVMbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, "M"));
-	_NumCSVTbtags		.push_back(GetNumCSVbtags(Tau1, Tau2, "T"));
-	_NumCSVLextraJets	.push_back(GetNumCSVextraJets(Tau1, Tau2, "L"));
-	_NumCSVMextraJets	.push_back(GetNumCSVextraJets(Tau1, Tau2, "M"));
-	_NumCSVTextraJets	.push_back(GetNumCSVextraJets(Tau1, Tau2, "T"));
-}
-
-
-//define this as a plug-in
-DEFINE_FWK_MODULE(DitauFiller);
