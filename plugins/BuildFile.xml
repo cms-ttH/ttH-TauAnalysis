@@ -1,0 +1,7 @@
+<export>
+</export>
+<flags   EDM_PLUGIN="1"/>
+<library name="1" file="*.cc">
+<!--library name="TTHTauTauAnalysisplugins" file="*.cc"-->
+	<use   name="root"/>
+</library>
