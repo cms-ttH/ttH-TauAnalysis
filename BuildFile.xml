@@ -5,6 +5,9 @@
 <use   name="FWCore/ParameterSet"/>
 <use   name="NtupleMaker/BEANmaker"/>
 <use   name="ProductArea/BNcollections"/>
+<use   name="CondFormats/JetMETObjects"/>
+<use   name="JetMETCorrections/Objects"/>
+<use   name="HLTrigger/HLTcore"/>
 <use   name="root"/>
 <export>
 </export>
