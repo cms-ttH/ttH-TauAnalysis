@@ -17,6 +17,11 @@ PATupleToBEANtranslator::PATupleToBEANtranslator(){
 // === Destructor === //
 PATupleToBEANtranslator::~PATupleToBEANtranslator(){}
 
+BNeventCollection PATupleToBEANtranslator::EDMtoBN(Event const* iEvent){
+	BNeventCollection result;
+	return result;
+}
+
 BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollection const* iCollection){
     BNmcparticleCollection result;
 
