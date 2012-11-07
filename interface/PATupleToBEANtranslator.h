@@ -49,6 +49,7 @@ class PATupleToBEANtranslator{
 		explicit PATupleToBEANtranslator();
 		~PATupleToBEANtranslator();
 
+		BNeventCollection			EDMtoBN(Event const*);
 		BNmcparticleCollection		RECOtoBN(reco::GenParticleCollection const*);
 		BNgenjetCollection			RECOtoBN(reco::GenJetCollection const*);
 		BNtauCollection				PATtoBN(pat::TauCollection const*, reco::Vertex const*);
