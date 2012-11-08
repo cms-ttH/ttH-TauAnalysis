@@ -61,7 +61,7 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	unsigned int theNumberOfMuons = 0;
 
-	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, BEANhelper::muonID::muonTight);
+	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, muonID::muonTight);
 	//BNmuonCollection selectedMuons = _BNmuons;
 	
 	_NumMuons = selectedMuons.size();

@@ -58,7 +58,7 @@ void ElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	unsigned int theNumberOfElectrons = 0;
 
-	BNelectronCollection selectedElectrons = beanHelper.GetSelectedElectrons(_BNelectrons, BEANhelper::electronID::electronLoose);
+	BNelectronCollection selectedElectrons = beanHelper.GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
 	//BNelectronCollection selectedElectrons = _BNelectrons;
 
 	_NumElectrons = selectedElectrons.size();

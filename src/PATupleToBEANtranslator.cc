@@ -328,7 +328,7 @@ BNtauCollection			PATupleToBEANtranslator::PATtoBN(
         MyTau.numProngs										= tau->signalPFChargedHadrCands().size();
         MyTau.numSignalGammas								= tau->signalPFGammaCands().size();
         MyTau.numSignalNeutrals								= tau->signalPFNeutrHadrCands().size();
-        MyTau.numSignalPiZeros								= tau->signalPiZeroCandidates().size();
+        //MyTau.numSignalPiZeros								= tau->signalPiZeroCandidates().size();
         MyTau.decayMode										= tau->decayMode();
         MyTau.emFraction									= tau->emFraction();
         MyTau.inTheCracks									= tauIsInTheCracks(tau->eta());
