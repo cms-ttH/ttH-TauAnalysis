@@ -281,7 +281,7 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 	if(_AnalysisType.compare("signal") == 0 ){ MatchRecoAndGenHadTausFromH(); } 
 
 	// Select muons (tight)
-	BNelectronCollection selectedElectrons = beanHelper.GetSelectedElectrons(_BNelectrons, BEANhelper::electronID::electronTight);
+	BNelectronCollection selectedElectrons = beanHelper.GetSelectedElectrons(_BNelectrons, electronID::electronTight);
 
 	if(_BNtaus.size() < 2 || selectedElectrons.size() < 1){ return; }
 
@@ -344,7 +344,7 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 				BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(_BNjets);
 
 				// Apply kinematic requirements on corrected jets
-				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
+				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
 
 				// Clean jets from taus and electron
 				vector<TLorentzVector> tausAndElectron;

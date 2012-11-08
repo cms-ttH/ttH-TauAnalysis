@@ -67,7 +67,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// MET
 	BNjetCollection correctedJets							= beanHelper.GetCorrectedJets(_BNjets);
-	BNjetCollection selCorrJets								= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
+	BNjetCollection selCorrJets								= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
 	BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper.GetUncorrectedJets(selCorrJets, _BNjets);
 	BNmet correctedMET	= beanHelper.GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection);
 	_MET				= correctedMET.pt;

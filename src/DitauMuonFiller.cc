@@ -262,7 +262,7 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	ClearVectors();
 
 	// Select muons (tight)
-	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, BEANhelper::muonID::muonTight);
+	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, muonID::muonTight);
 
 	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
 
@@ -349,7 +349,7 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(_BNjets);
 
 				// Apply kinematic requirements on corrected jets
-				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
+				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
 
 				// Clean jets from taus and muon
 				vector<TLorentzVector> tausAndMuon;

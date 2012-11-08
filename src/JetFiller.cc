@@ -62,7 +62,7 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	unsigned int theNumberOfJets = 0;
 
 	BNjetCollection correctedJets	= beanHelper.GetCorrectedJets(_BNjets);
-	BNjetCollection selCorrJets		= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose,'-');
+	BNjetCollection selCorrJets		= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose,'-');
 
 	_NumJets = selCorrJets.size();
 	theNumberOfJets = 0;
