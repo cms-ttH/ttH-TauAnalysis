@@ -65,28 +65,16 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_eventNumber		= iEvent.id().event();
 	_lumiBlock			= iEvent.id().luminosityBlock();
 
-
-	_numPrimaryVertices	= _BNprimaryVertices.size();
+	// MET
 	BNjetCollection correctedJets							= beanHelper.GetCorrectedJets(_BNjets);
 	BNjetCollection selCorrJets								= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, BEANhelper::jetID::jetLoose, '-');
 	BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper.GetUncorrectedJets(selCorrJets, _BNjets);
-
 	BNmet correctedMET	= beanHelper.GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection);
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
 
-
-/*	if(!SampleTypeContains("data")){
-		for(vector<PileupSummaryInfo>::const_iterator PVI = _puInfo->begin(); PVI != _puInfo->end(); ++PVI) {
-			int bunchCrossing = PVI->getBunchCrossing();
-			int numInteractions = PVI->getPU_NumInteractions();
-
-			if( bunchCrossing == -1 ){		_numInteractionsBXm1    = numInteractions; }
-			else if( bunchCrossing ==  0 ){	_numInteractionsBX0     = numInteractions; }
-			else if( bunchCrossing ==  1 ){	_numInteractionsBXp1    = numInteractions; }
-		}
-	}//*/
-
+	// Pileup
+	_PUweight			= beanHelper.GetPUweight(_BNevents.begin()->numTruePV);
 	_numPrimaryVertices	= _BNprimaryVertices.size();
 
 }

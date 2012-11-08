@@ -266,8 +266,29 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
 
-	// Get primary vertex
-	//const BNprimaryvertex& primaryVertex = *(_BNprimaryVertices.begin());
+	// Tau provenance
+	BNmcparticleCollection genTaus	= beanHelper.GetGenTaus(_BNmcparticles);
+	BNmcparticle			genTau1FromH, genTau2FromH, genTau1FromW, genTau2FromW;
+	// From H
+	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
+		if(genTau->motherId==25){
+			if(genTau->pt > genTau1FromH.pt){ 
+				genTau2FromH = genTau1FromH;
+				genTau1FromH = *genTau;
+			}
+			if(genTau2FromH.pt > 0){ break; }
+		}
+	}
+	// From ttbar system
+	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
+		if((abs(genTau->motherId)==24) && (abs(genTau->grandMotherId)==6)){
+			if(genTau->pt > genTau1FromW.pt){ 
+				genTau2FromW = genTau1FromW;
+				genTau1FromW = *genTau;
+			}
+			if(genTau2FromW.pt > 0){ break; }
+		}
+	}
 
 	// Tau loops: Tau1 is always leads in pT
 	unsigned int theNumberOfTaus1 = 0;
@@ -349,6 +370,16 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				_NumNonCSVLbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
 				_NumNonCSVMbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
 				_NumNonCSVTbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+
+				// Provenance
+				_Tau1MatchesGenHadTauFromH1.push_back( (genTau1FromH.pt>0) && (deltaR(genTau1FromH.eta, genTau1FromH.phi, Tau1->eta, Tau1->phi) < 0.25) );
+				_Tau2MatchesGenHadTauFromH1.push_back( (genTau1FromH.pt>0) && (deltaR(genTau1FromH.eta, genTau1FromH.phi, Tau2->eta, Tau2->phi) < 0.25) );
+				_Tau1MatchesGenHadTauFromH2.push_back( (genTau2FromH.pt>0) && (deltaR(genTau2FromH.eta, genTau2FromH.phi, Tau1->eta, Tau1->phi) < 0.25) );
+				_Tau2MatchesGenHadTauFromH2.push_back( (genTau2FromH.pt>0) && (deltaR(genTau2FromH.eta, genTau2FromH.phi, Tau2->eta, Tau2->phi) < 0.25) );
+				_Tau1MatchesGenHadTauFromW1.push_back( (genTau1FromW.pt>0) && (deltaR(genTau1FromW.eta, genTau1FromW.phi, Tau1->eta, Tau1->phi) < 0.25) );
+				_Tau2MatchesGenHadTauFromW1.push_back( (genTau1FromW.pt>0) && (deltaR(genTau1FromW.eta, genTau1FromW.phi, Tau2->eta, Tau2->phi) < 0.25) );
+				_Tau1MatchesGenHadTauFromW2.push_back( (genTau2FromW.pt>0) && (deltaR(genTau2FromW.eta, genTau2FromW.phi, Tau1->eta, Tau1->phi) < 0.25) );
+				_Tau2MatchesGenHadTauFromW2.push_back( (genTau2FromW.pt>0) && (deltaR(genTau2FromW.eta, genTau2FromW.phi, Tau2->eta, Tau2->phi) < 0.25) );
 
 			} // end of muon loop
 		} // end of tau2 loop

@@ -101,9 +101,9 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 
 
 	if(_FromBEAN){
-		Handle<BNeventCollection>				hBNevent;
-		iEvent.getByLabel("BNproducer",			hBNevent);
-		_BNevent			= *(hBNevent.product());
+		Handle<BNeventCollection>				hBNevents;
+		iEvent.getByLabel("BNproducer",			hBNevents);
+		_BNevents			= *(hBNevents.product());
 
 		Handle<BNmcparticleCollection>			hBNmcparticles;
 		iEvent.getByLabel("",	hBNmcparticles);
@@ -143,6 +143,7 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		_BNtrigger			= *(hBNtrigger.product());
 
 	}else{
+		_BNevents			= patTupleToBEANtranslator.EDMtoBN(&iEvent);
         
         // get vertex collection first, so we can identify PV
 		Handle< reco::VertexCollection >					hPrimaryVertices;
@@ -184,10 +185,6 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		iEvent.getByLabel(_RecoPATMetSource,	hPatMETs);
 		_BNmets				= patTupleToBEANtranslator.PATtoBN(hPatMETs.product());
 		
-//		Handle< std::vector< PileupSummaryInfo > >			hPuInfo;
-//		if(!SampleTypeContains("data")){ iEvent.getByLabel("addPileupInfo", _puInfo); }
-//		_BNtaus				= patTupleToBEANtranslator.PATtoBN(hPatTaus.product());
-        
 		Handle< edm::TriggerResults >                       hTriggerResults;
 		iEvent.getByLabel(_HLTriggerSource,     hTriggerResults);
 		//_BNtrigger				= patTupleToBEANtranslator.EDMtoBN(hTriggerResults.product(), iEvent, iSetup, iEvent.id().run());
