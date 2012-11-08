@@ -150,7 +150,7 @@ class NtupleFiller : public EDAnalyzer {
 
 
 		// === Collections === //
-		BNeventCollection				_BNevent;
+		BNeventCollection				_BNevents;
 		BNmcparticleCollection			_BNmcparticles;
 		BNgenjetCollection				_BNgenjets;
 		BNelectronCollection			_BNelectrons;
