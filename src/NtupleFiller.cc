@@ -106,7 +106,7 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		_BNevents			= *(hBNevents.product());
 
 		Handle<BNmcparticleCollection>			hBNmcparticles;
-		iEvent.getByLabel("",	hBNmcparticles);
+		iEvent.getByLabel(_GenParticleSource,	hBNmcparticles);
 		_BNmcparticles		= *(hBNmcparticles.product());
 
 		Handle<BNgenjetCollection>				hBNgenjets;
@@ -139,7 +139,7 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 
 		Handle<BNtriggerCollection>				hBNtrigger;
 		//if(!SampleTypeContains("data")){ iEvent.getByLabel("BNproducer::HLT",	hBNtrigger); }
-		iEvent.getByLabel("BNproducer::HLT",	hBNtrigger);
+		iEvent.getByLabel(_HLTriggerSource,		hBNtrigger);
 		_BNtrigger			= *(hBNtrigger.product());
 
 	}else{

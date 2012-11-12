@@ -1,7 +1,12 @@
 <export>
 </export>
-<flags   EDM_PLUGIN="1"/>
-<library name="1" file="*.cc">
-<!--library name="TTHTauTauAnalysisplugins" file="*.cc"-->
+<library name="TTHTauTauAnalysis_plugins" file="*.cc">
+    <use   name="FWCore/Framework"/>
+    <use   name="FWCore/ParameterSet"/>
+    <use   name="FWCore/Common"/>
+    <use   name="DataFormats/Common"/>
+    <use   name="CommonTools/UtilAlgos"/>
+    <use   name="TTHTauTau/Analysis"/>
 	<use   name="root"/>
+	<use   name="clhep"/>
 </library>
