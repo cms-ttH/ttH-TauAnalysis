@@ -9,6 +9,9 @@ reportEvery	= 100
 tauMaxEta	= 9
 tauMinPt	= 0
 
+# == are we running on PAT or BEAN == #
+runOnPAT = True
+
 # collection postfix for running on PF2APT
 postfix = ''
 # postfix = 'PFlow'
@@ -68,15 +71,16 @@ if options.analysisType.find('muon') == -1 and options.analysisType.find('electr
 
 # === Print some basic info about the job setup === #
 print ''
-print '	========================================='
+print '	===================================================='
 print '		Ntuple Making Job'
-print '	========================================='
+print '	===================================================='
 print ''
-print '		Analysis type..%s' % options.analysisType
-print '		Max events.....%d' % options.maxEvents
-print '		Report every...%d' % reportEvery
+print '		Analysis type....%s' % options.analysisType
+print '		Running on PAT?..%s' % runOnPAT
+print '		Max events.......%d' % options.maxEvents
+print '		Report every.....%d' % reportEvery
 print ''
-print '	========================================='
+print '	===================================================='
 print ''
 
 # === Set up triggers and GEN collections based on analysis type === # 
@@ -108,6 +112,27 @@ if options.analysisType.find('data') != -1:
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
         )
 
+# === define Ntuplizer input collections === # 
+GenParticleSource                   = cms.untracked.InputTag(inputForGenParticles)
+GenJetSource                        = cms.untracked.InputTag(inputForGenJets)
+RecoVertexSource                    = cms.InputTag('offlinePrimaryVertices')
+RecoPATMetSource                    = cms.InputTag('patMETs'+postfix)
+RecoPFMetSource                     = cms.InputTag('patMETs'+postfix)
+RecoElectronSource                  = cms.InputTag('selectedPatElectrons'+postfix)
+RecoMuonSource                      = cms.InputTag('selectedPatMuons'+postfix)
+RecoTauSource                       = cms.InputTag('selectedPatTaus'+postfix)
+RecoJetSource                       = cms.InputTag('selectedPatJets'+postfix+'::skimTTHiggsToDiTau')
+UsePfLeptons                        = cms.bool(False)
+
+if( runOnPAT is not True ):
+    UsePfLeptons                        = cms.bool(True)
+    RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices')
+    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectronsPFlow'+postfix)
+    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuonsPFlow'+postfix)
+    RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus'+postfix)
+    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJetsPFlow'+postfix)
+    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETsPFlow'+postfix)
+
 
 # === make analysis-specific selections for skims, fillers, etc. === #
 SkimTriggerRequirements	= cms.vstring()
@@ -138,9 +163,9 @@ if (options.analysisType.find('data') != -1 ) and (options.analysisType.find('el
 
 NtupleFillers = cms.untracked.vstring(
         #'Event',
-        'GenLevel',
-        'GenTau',
-        'GenJet',
+        #'GenLevel',
+        #'GenTau',
+        #'GenJet',
         'Tau',
         'Electron',
         'Muon',
@@ -149,9 +174,9 @@ NtupleFillers = cms.untracked.vstring(
         #'DitauElectron',
         #'Trigger' # not in use
 )
-if( options.analysisType.find('muon')):
+if( options.analysisType.find('muon') != -1):
         NtupleFillers.append('DitauMuon')
-if( options.analysisType.find('electron')):
+if( options.analysisType.find('electron') != -1):
         NtupleFillers.append('DitauElectron')
 
 
@@ -174,9 +199,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 from TTHTauTau.Skimming.globalTagMap_cfi import globalTagMap
-#print options.analysisType.rsplit('_',2)[0]
 process.GlobalTag.globaltag = cms.string(globalTagMap[options.analysisType.rsplit('_',2)[0]] + '::All')
-#process.GlobalTag.globaltag = cms.string('START42_V14B::All')
 
 
 # === Collision data trigger requirements === #
@@ -197,7 +220,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	FromBEAN							= cms.bool(False),
     TreeName							= cms.untracked.string('TTbarHTauTau'),
     DebugLevel                          = cms.uint32(0),
-    UsePfLeptons                        = cms.bool(False),
+    UsePfLeptons                        = UsePfLeptons,
 
 	# === HL Trigger === # (not in use)
     HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),
@@ -211,15 +234,15 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	NtupleFillers						= NtupleFillers,
 
     # === Input collections === #
-    GenParticleSource                   = cms.untracked.InputTag(inputForGenParticles),
-    GenJetSource                        = cms.untracked.InputTag(inputForGenJets),
-    RecoVertexSource                    = cms.InputTag('offlinePrimaryVertices'),
-    RecoPATMetSource                    = cms.InputTag('patMETs'+postfix),
-    RecoPFMetSource                    = cms.InputTag('patMETs'+postfix),
-    RecoElectronSource                  = cms.InputTag('selectedPatElectrons'+postfix),
-    RecoMuonSource                      = cms.InputTag('selectedPatMuons'+postfix),
-    RecoTauSource                       = cms.InputTag('selectedPatTaus'+postfix),
-    RecoJetSource                       = cms.InputTag('selectedPatJets'+postfix+'::skimTTHiggsToDiTau'),
+    GenParticleSource                   = GenParticleSource,
+    GenJetSource                        = GenJetSource,
+    RecoVertexSource                    = RecoVertexSource,
+    RecoPATMetSource                    = RecoPATMetSource,
+    RecoPFMetSource                     = RecoPFMetSource,
+    RecoElectronSource                  = RecoElectronSource,
+    RecoMuonSource                      = RecoMuonSource,
+    RecoTauSource                       = RecoTauSource,
+    RecoJetSource                       = RecoJetSource,
 
     RecoTauMinPt                        = cms.double(tauMinPt),
     RecoTauMaxAbsEta                    = cms.double(tauMaxEta),
@@ -232,7 +255,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     JetAntiMatchingDeltaR               = cms.double(0.25),
     CSVlooseWP							= cms.double(0.244),
 	CSVmediumWP							= cms.double(0.679),
-	CSVtightWP							= cms.double(0.898),
+	CSVtightWP							= cms.double(0.898)
 
 	# === === #
 )
