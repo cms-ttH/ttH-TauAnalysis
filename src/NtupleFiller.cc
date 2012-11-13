@@ -16,9 +16,10 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
 	_FillerName						= "NtupleFiller";
 	_Tree							= NULL;
 
-	_DebugLevel						= iConfig.getParameter<unsigned int>("DebugLevel");
+	_DebugLevel						= ( iConfig.exists("DebugLevel") ) ? iConfig.getParameter<unsigned int>("DebugLevel") : 0;
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
 	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
+    _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
 
 	_GenParticleSource				= iConfig.getUntrackedParameter<InputTag>("GenParticleSource");
 	_GenJetSource					= iConfig.getUntrackedParameter<InputTag>("GenJetSource");
@@ -45,7 +46,7 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
     _HLTriggerSource				= iConfig.getParameter<InputTag>("HLTriggerSource");
 
 	// Setup BEANhelper
-	beanHelper.SetUp(atoi(GetAnalysisTypeParameter(0).c_str()), atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), "SingleMu", true);
+	beanHelper.SetUp(atoi(GetAnalysisTypeParameter(0).c_str()), atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), "SingleMu", true, _UsePfLeptons);
 
 }
 
@@ -99,19 +100,21 @@ void NtupleFiller::SetupBranches(){}
 // === Get relevant collections === //
 void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup){
 
-
+    //std::cout << "<NtupleFiller::GetCollections>: enter function" << std::endl;
 	if(_FromBEAN){
 		Handle<BNeventCollection>				hBNevents;
 		iEvent.getByLabel("BNproducer",			hBNevents);
 		_BNevents			= *(hBNevents.product());
 
-		Handle<BNmcparticleCollection>			hBNmcparticles;
-		iEvent.getByLabel(_GenParticleSource,	hBNmcparticles);
-		_BNmcparticles		= *(hBNmcparticles.product());
+        if( !SampleTypeContains("data") ) {
+            Handle<BNmcparticleCollection>			hBNmcparticles;
+            iEvent.getByLabel(_GenParticleSource,	hBNmcparticles);
+            _BNmcparticles		= *(hBNmcparticles.product());
 
-		Handle<BNgenjetCollection>				hBNgenjets;
-		iEvent.getByLabel(_GenJetSource, 	hBNgenjets);
-		_BNgenjets			= *(hBNgenjets.product());
+            Handle<BNgenjetCollection>				hBNgenjets;
+            iEvent.getByLabel(_GenJetSource, 	hBNgenjets);
+            _BNgenjets			= *(hBNgenjets.product());
+        }
 
 		Handle<BNelectronCollection>			hBNelectrons;
 		iEvent.getByLabel(_RecoElectronSource,	hBNelectrons);
@@ -146,49 +149,60 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		_BNevents			= patTupleToBEANtranslator.EDMtoBN(&iEvent);
         
         // get vertex collection first, so we can identify PV
+        //std::cout << " --> Getting PV " << std::endl;
 		Handle< reco::VertexCollection >					hPrimaryVertices;
 		iEvent.getByLabel(_RecoVertexSource,	hPrimaryVertices);
 		_BNprimaryVertices	= patTupleToBEANtranslator.RECOtoBN(hPrimaryVertices.product());
 	
         const reco::Vertex* primaryVertex = patTupleToBEANtranslator.getPrimaryVertex(hPrimaryVertices.product());
 
-        // get beam spot
-        edm::Handle<reco::BeamSpot> bsHandle;
-        iEvent.getByLabel("offlineBeamSpot",bsHandle);
-        const reco::BeamSpot* beamSpot = bsHandle.product();
+        // get beam spot   BeamSpot collection not in current 7TeV PAT-tuples
+        //edm::Handle<reco::BeamSpot> bsHandle;
+        //iEvent.getByLabel("offlineBeamSpot",bsHandle);
+        //const reco::BeamSpot* beamSpot = bsHandle.product();
+        const reco::BeamSpot* beamSpot = 0;
 
-		Handle< reco::GenParticleCollection >				hGenParticles;
-		if(_GenParticleSource.label()	!= "") { iEvent.getByLabel(_GenParticleSource, hGenParticles); }
-		_BNmcparticles		= patTupleToBEANtranslator.RECOtoBN(hGenParticles.product());
+        //std::cout << " --> Getting genParticles " << std::endl;
+        if( !SampleTypeContains("data") ) {
+            Handle< reco::GenParticleCollection >				hGenParticles;
+            if(_GenParticleSource.label()	!= "") { iEvent.getByLabel(_GenParticleSource, hGenParticles); }
+            _BNmcparticles		= patTupleToBEANtranslator.RECOtoBN(hGenParticles.product());
 
-		Handle< reco::GenJetCollection >					hGenJets;
-		if(_GenJetSource.label()		!= "") { iEvent.getByLabel(_GenJetSource, hGenJets); }
-		_BNgenjets			= patTupleToBEANtranslator.RECOtoBN(hGenJets.product());
+            std::cout << " --> Getting genJets " << std::endl;
+            Handle< reco::GenJetCollection >					hGenJets;
+            if(_GenJetSource.label()		!= "") { iEvent.getByLabel(_GenJetSource, hGenJets); }
+            _BNgenjets			= patTupleToBEANtranslator.RECOtoBN(hGenJets.product());
+        }
 
+        //std::cout << " --> Getting patTaus " << std::endl;
 		Handle< pat::TauCollection >						hPatTaus;
 		iEvent.getByLabel(_RecoTauSource, 		hPatTaus);
 		_BNtaus				= patTupleToBEANtranslator.PATtoBN(hPatTaus.product(), primaryVertex);
 		
+        //std::cout << " --> Getting electrons " << std::endl;
 		Handle< pat::ElectronCollection >					hPatElectrons;
 		iEvent.getByLabel(_RecoElectronSource,	hPatElectrons);
 		_BNelectrons		= patTupleToBEANtranslator.PATtoBN(hPatElectrons.product(), primaryVertex, beamSpot);
 		
+        //std::cout << " --> Getting muons " << std::endl;
 		Handle< pat::MuonCollection >						hPatMuons;
 		iEvent.getByLabel(_RecoMuonSource, 		hPatMuons);
 		_BNmuons			= patTupleToBEANtranslator.PATtoBN(hPatMuons.product(), primaryVertex, beamSpot);
 		
+        //std::cout << " --> Getting jets " << std::endl;
 		Handle< pat::JetCollection >						hPatJets;
 		iEvent.getByLabel(_RecoJetSource,		hPatJets);
 		_BNjets				= patTupleToBEANtranslator.PATtoBN(hPatJets.product(), primaryVertex, iEvent, iSetup);
 	
+        //std::cout << " --> Getting MET " << std::endl;
 		Handle< pat::METCollection >						hPatMETs;
 		iEvent.getByLabel(_RecoPATMetSource,	hPatMETs);
 		_BNmets				= patTupleToBEANtranslator.PATtoBN(hPatMETs.product());
 		
-		Handle< edm::TriggerResults >                       hTriggerResults;
-		iEvent.getByLabel(_HLTriggerSource,     hTriggerResults);
+		//Handle< edm::TriggerResults >                       hTriggerResults;
+		//iEvent.getByLabel(_HLTriggerSource,     hTriggerResults);
 		//_BNtrigger				= patTupleToBEANtranslator.EDMtoBN(hTriggerResults.product(), iEvent, iSetup, iEvent.id().run());
-		_BNtrigger				= patTupleToBEANtranslator.EDMtoBN(hTriggerResults.product(), iEvent, iSetup);
+		//_BNtrigger				= patTupleToBEANtranslator.EDMtoBN(hTriggerResults.product(), iEvent, iSetup);
 	}
 
 }

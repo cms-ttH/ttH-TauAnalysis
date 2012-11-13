@@ -30,7 +30,7 @@ BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollec
 
         int status = mcParticle.status();
         int pdgId  = mcParticle.pdgId();
-        int numdgt = mcParticle.numberOfDaughters();
+        //int numdgt = mcParticle.numberOfDaughters();
 
         int aId = abs(pdgId);
         bool keep = false;
@@ -279,7 +279,10 @@ BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollec
 
 
 BNgenjetCollection		PATupleToBEANtranslator::RECOtoBN(reco::GenJetCollection const* iCollection){
+    
+    //std::cout << "<PATupleToBEANtranslator::RECOtoBN(reco::GenJetCollection const*)>: enter function" << std::endl;
     BNgenjetCollection result;
+
     for(reco::GenJetCollection::const_iterator genjet = iCollection->begin(); genjet!=iCollection->end(); ++genjet ){
 
         if( !(genjet->pt()>10. && fabs(genjet->eta())<3.5) ) continue;
@@ -303,6 +306,7 @@ BNgenjetCollection		PATupleToBEANtranslator::RECOtoBN(reco::GenJetCollection con
 
         result.push_back(MyGenjet);
     }
+    //std::cout << "<PATupleToBEANtranslator::RECOtoBN(reco::GenJetCollection const*)>: leave function" << std::endl;
     return result;
 }
 
@@ -344,12 +348,11 @@ BNtauCollection			PATupleToBEANtranslator::PATtoBN(
         MyTau.HPSbyTightCombinedIsolationDeltaBetaCorr		= tau->tauID("byTightCombinedIsolationDeltaBetaCorr");
         MyTau.HPSbyVLooseCombinedIsolationDeltaBetaCorr		= tau->tauID("byVLooseCombinedIsolationDeltaBetaCorr");
         MyTau.HPSdecayModeFinding							= tau->tauID("decayModeFinding");
-
         if(tau->leadPFChargedHadrCand().isNonnull()){
             MyTau.leadingTrackPt				= tau->leadPFChargedHadrCand()->pt();
             MyTau.charge						= tau->leadPFChargedHadrCand()->charge();
 
-            if(tau->leadPFChargedHadrCand()->trackRef().isNonnull()){
+            if(false && tau->leadPFChargedHadrCand()->trackRef().isNonnull()){
                 MyTau.leadingTrackValid				= 1;
                 MyTau.leadingTrackIpVtdxy			= tau->leadPFChargedHadrCand()->trackRef()->dxy(vertexPosition);
                 MyTau.leadingTrackIpVtdz			= tau->leadPFChargedHadrCand()->trackRef()->dz(vertexPosition);
@@ -397,23 +400,20 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
         reco::BeamSpot const* beamSpot
 ) {
 
-    math::XYZPoint beamSpotPosition = beamSpot->position();
-    float BSx = beamSpot->x0();
-    float BSy = beamSpot->y0();
-    float BSz = beamSpot->z0();
-    
+    //math::XYZPoint beamSpotPosition = beamSpot->position();
+    //float BSx = beamSpot->x0();
+    //float BSy = beamSpot->y0();
+    //float BSz = beamSpot->z0();
+   
     math::XYZPoint vertexPosition = primaryVertex->position();
     
     BNelectronCollection result;
     for( pat::ElectronCollection::const_iterator ele = iCollection->begin(); ele!=iCollection->end(); ++ele ){
-
-        double elePin = ele->trackMomentumAtVtx().R();
-        double elePout = ele->trackMomentumOut().R();
-
+        
         BNelectron MyElectron;
-
         // general kinematic variables
         MyElectron.energy = ele->energy();
+
         MyElectron.gsfEt = ele->et();
         MyElectron.pt = ele->pt();
         MyElectron.px = ele->px();
@@ -429,16 +429,12 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
         MyElectron.vy = ele->vy();
         MyElectron.vz = ele->vz();
 
-        MyElectron.pIn = elePin;
-        MyElectron.pOut = elePout;
         MyElectron.EscOverPin = ele->eSuperClusterOverP();
         MyElectron.EseedOverPout = ele->eSeedClusterOverPout();
         MyElectron.hadOverEm = ele->hadronicOverEm();
-        MyElectron.fbrem = fabs(elePin-elePout)/elePin;
         MyElectron.absInvEMinusInvPin = fabs( 1/ele->ecalEnergy()-(ele->eSuperClusterOverP()/ele->ecalEnergy()) );
-        MyElectron.delPhiIn = ele->deltaPhiSuperClusterTrackAtVtx();
-        MyElectron.delEtaIn = ele->deltaEtaSuperClusterTrackAtVtx();
 
+        //std::cout << "did some electron inner track stuff" << std::endl;
         MyElectron.trackIso = ele->trackIso();
         MyElectron.ecalIso = ele->ecalIso();
         MyElectron.hcalIso = ele->hcalIso();
@@ -458,15 +454,29 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
         MyElectron.hcalIsoDR04depth2 = ele->dr04HcalDepth2TowerSumEt();
         MyElectron.caloIsoDR04 = ele->dr04EcalRecHitSumEt()+ele->dr04HcalTowerSumEt();
 
+        //std::cout << "now gsf tracks" << std::endl;
         MyElectron.mva = ele->mva();
-        MyElectron.mvaTrigV0 = ele->electronID("mvaTrigV0");
-        MyElectron.mvaNonTrigV0 = ele->electronID("mvaNonTrigV0");
-        MyElectron.numberOfLostHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfLostHits();
-        MyElectron.numberOfExpectedInnerHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfHits();
-        MyElectron.numberOfValidPixelHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfValidPixelHits();
-        MyElectron.numberOfValidPixelBarrelHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfValidPixelBarrelHits();
-        MyElectron.numberOfValidPixelEndcapHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfValidPixelEndcapHits();
+        //MyElectron.mvaTrigV0 = ele->electronID("mvaTrigV0");
+        //MyElectron.mvaNonTrigV0 = ele->electronID("mvaNonTrigV0");
+        if( (ele->gsfTrack().isAvailable()) ){
+            //std::cout << "gsf track available" << std::endl;
+            MyElectron.numberOfLostHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfLostHits();
+            MyElectron.numberOfExpectedInnerHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfHits();
+            MyElectron.numberOfValidPixelHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfValidPixelHits();
+            MyElectron.numberOfValidPixelBarrelHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfValidPixelBarrelHits();
+            MyElectron.numberOfValidPixelEndcapHits = ele->gsfTrack()->trackerExpectedHitsInner().numberOfValidPixelEndcapHits();
 
+            double elePin = ele->trackMomentumAtVtx().R();
+            double elePout = ele->trackMomentumOut().R();
+
+            MyElectron.pIn = elePin;
+            MyElectron.pOut = elePout;
+            MyElectron.fbrem = fabs(elePin-elePout)/elePin;
+            MyElectron.delPhiIn = ele->deltaPhiSuperClusterTrackAtVtx();
+            MyElectron.delEtaIn = ele->deltaEtaSuperClusterTrackAtVtx();
+        }
+
+        //std::cout << "did gsf tracks" << std::endl;
         MyElectron.scEnergy = ele->caloEnergy();
         MyElectron.scSigmaEtaEta = ele->scSigmaEtaEta();
         MyElectron.scSigmaIEtaIEta = ele->scSigmaIEtaIEta();
@@ -481,25 +491,25 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
         double caloenergy = -1;
 
         if( (ele->superCluster().isAvailable()) ){
-            /* don't have easy access to Event 
-            double eMax    = lazyTools.eMax(    *(ele->superCluster()) );
-            double eLeft   = lazyTools.eLeft(   *(ele->superCluster()) );
-            double eRight  = lazyTools.eRight(  *(ele->superCluster()) );
-            double eTop    = lazyTools.eTop(    *(ele->superCluster()) );
-            double eBottom = lazyTools.eBottom( *(ele->superCluster()) );
-            double e3x3    = lazyTools.e3x3(    *(ele->superCluster()) );
-            double swissCross = -99;
+            // don't have easy access to Event 
+            //double eMax    = lazyTools.eMax(    *(ele->superCluster()) );
+            //double eLeft   = lazyTools.eLeft(   *(ele->superCluster()) );
+            //double eRight  = lazyTools.eRight(  *(ele->superCluster()) );
+            //double eTop    = lazyTools.eTop(    *(ele->superCluster()) );
+            //double eBottom = lazyTools.eBottom( *(ele->superCluster()) );
+            //double e3x3    = lazyTools.e3x3(    *(ele->superCluster()) );
+            //double swissCross = -99;
 
-            if( eMax>0.000001 ) swissCross = 1 - (eLeft+eRight+eTop+eBottom)/eMax;
+            //if( eMax>0.000001 ) swissCross = 1 - (eLeft+eRight+eTop+eBottom)/eMax;
 
-            MyElectron.eMax = eMax;
-            MyElectron.eLeft = eLeft;
-            MyElectron.eRight = eRight;
-            MyElectron.eTop = eTop;
-            MyElectron.eBottom = eBottom;
-            MyElectron.e3x3 = e3x3;
-            MyElectron.swissCross = swissCross;
-            */
+            //MyElectron.eMax = eMax;
+            //MyElectron.eLeft = eLeft;
+            //MyElectron.eRight = eRight;
+            //MyElectron.eTop = eTop;
+            //MyElectron.eBottom = eBottom;
+            //MyElectron.e3x3 = e3x3;
+            //MyElectron.swissCross = swissCross;
+            
             caloenergy = ele->caloEnergy();
 
             MyElectron.scEt = ele->caloEnergy() * sin( ele->superCluster()->position().theta() );
@@ -510,24 +520,24 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
 
             double seedE = -999, seedTime = -999;
             int seedRecoFlag = -999;
-            /* don't have the neccesary collections
-            if( (ele->isEB()) ){
-                DetId idEB = EcalClusterTools::getMaximum( ele->superCluster()->hitsAndFractions(), &(*barrelRecHits) ).first;
-                EcalRecHitCollection::const_iterator thisHitEB = barrelRecHits->find(idEB);
+            // don't have the neccesary collections
+            //if( (ele->isEB()) ){
+            //    DetId idEB = EcalClusterTools::getMaximum( ele->superCluster()->hitsAndFractions(), &(*barrelRecHits) ).first;
+            //    EcalRecHitCollection::const_iterator thisHitEB = barrelRecHits->find(idEB);
 
-                seedE = thisHitEB->energy();
-                seedTime = thisHitEB->time();
-                seedRecoFlag = thisHitEB->recoFlag();
-            }
-            else if( (ele->isEE()) ){
-                DetId idEE = EcalClusterTools::getMaximum( ele->superCluster()->hitsAndFractions(), &(*endcapRecHits) ).first;
-                EcalRecHitCollection::const_iterator thisHitEE = endcapRecHits->find(idEE);
+            //    seedE = thisHitEB->energy();
+            //    seedTime = thisHitEB->time();
+            //    seedRecoFlag = thisHitEB->recoFlag();
+            //}
+            //else if( (ele->isEE()) ){
+            //    DetId idEE = EcalClusterTools::getMaximum( ele->superCluster()->hitsAndFractions(), &(*endcapRecHits) ).first;
+            //    EcalRecHitCollection::const_iterator thisHitEE = endcapRecHits->find(idEE);
 
-                seedE = thisHitEE->energy();
-                seedTime = thisHitEE->time();
-                seedRecoFlag = thisHitEE->recoFlag();
-            }
-            */
+            //    seedE = thisHitEE->energy();
+            //    seedTime = thisHitEE->time();
+            //    seedRecoFlag = thisHitEE->recoFlag();
+            //}
+            
             MyElectron.seedEnergy   = seedE;
             MyElectron.seedTime     = seedTime;
             MyElectron.seedRecoFlag = seedRecoFlag;
@@ -538,11 +548,12 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
 
         if( (ele->closestCtfTrackRef().isAvailable()) ) MyElectron.tkCharge = ele->closestCtfTrackRef()->charge();
         if( (ele->gsfTrack().isAvailable()) ){
-            double tkvx = ele->gsfTrack()->vx();
-            double tkvy = ele->gsfTrack()->vy();
-            double tkpx = ele->gsfTrack()->px();
-            double tkpy = ele->gsfTrack()->py();
-            double tkpt = ele->gsfTrack()->pt();
+            // don't need these without BS
+            //double tkvx = ele->gsfTrack()->vx();
+            //double tkvy = ele->gsfTrack()->vy();
+            //double tkpx = ele->gsfTrack()->px();
+            //double tkpy = ele->gsfTrack()->py();
+            //double tkpt = ele->gsfTrack()->pt();
 
             double ndof = ele->gsfTrack()->ndof();
             if( (ndof!=0) ) MyElectron.tkNormChi2 = ele->gsfTrack()->chi2()/ndof;
@@ -551,14 +562,14 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
             MyElectron.tkPhi = ele->gsfTrack()->phi();
             MyElectron.tkDZ = ele->gsfTrack()->dz();
             MyElectron.tkD0 = ele->gsfTrack()->d0();
-            MyElectron.tkD0bs = (tkvx-BSx)*tkpy/tkpt-(tkvy-BSy)*tkpx/tkpt;
+            //MyElectron.tkD0bs = (tkvx-BSx)*tkpy/tkpt-(tkvy-BSy)*tkpx/tkpt;
             MyElectron.tkD0err = ele->gsfTrack()->d0Error();
             MyElectron.tkNumValidHits = ele->gsfTrack()->numberOfValidHits();
             MyElectron.gsfCharge = ele->gsfTrack()->charge();
 
-            MyElectron.correctedD0 = ele->gsfTrack()->dxy(beamSpotPosition);
-            MyElectron.correctedD0Vertex = ele->gsfTrack()->dxy(vertexPosition);
-            MyElectron.correctedDZ = ele->gsfTrack()->dz(vertexPosition);
+            MyElectron.correctedD0 = ele->dB(pat::Electron::BS2D);
+            MyElectron.correctedD0Vertex = ele->dB(pat::Electron::PV2D);
+            MyElectron.correctedDZ = sqrt( (ele->dB(pat::Electron::PV3D)*ele->dB(pat::Electron::PV3D)) - (ele->dB(pat::Electron::PV2D)*ele->dB(pat::Electron::PV2D)) );
         }
 
         MyElectron.isEB = ele->isEB();
@@ -571,6 +582,7 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
         MyElectron.isTrackerDriven = ele->trackerDrivenSeed();
 
         if( (ele->genLepton()) ){
+            //std::cout << "starting gen electron" << std::endl;
             int genId = ele->genLepton()->pdgId();
 
             MyElectron.genId = ele->genLepton()->pdgId();
@@ -730,23 +742,22 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
 
         }// end check if genLepton
 
-        /*
-           ConversionFinder convFinder;
-           ConversionInfo convInfo = convFinder.getConversionInfo(*ele, trackHandle, evt_bField);
+        // don't have neccesary collections
+//           ConversionFinder convFinder;
+//           ConversionInfo convInfo = convFinder.getConversionInfo(*ele, trackHandle, evt_bField);
 
-           double dist = convInfo.dist();
-           double dcot = convInfo.dcot();
-           double convradius = convInfo.radiusOfConversion();
-           math::XYZPoint convPoint = convInfo.pointOfConversion();
+//           double dist = convInfo.dist();
+//           double dcot = convInfo.dcot();
+//           double convradius = convInfo.radiusOfConversion();
+//           math::XYZPoint convPoint = convInfo.pointOfConversion();
 
-           MyElectron.dist = dist;
-           MyElectron.dcot = dcot;
-           MyElectron.convradius = convradius;
-           MyElectron.convPointX = convPoint.x();
-           MyElectron.convPointY = convPoint.y();
-           MyElectron.convPointZ = convPoint.z();
-           MyElectron.passConvVeto = ele->passConversionVeto();
-         */
+//           MyElectron.dist = dist;
+//           MyElectron.dcot = dcot;
+//           MyElectron.convradius = convradius;
+//           MyElectron.convPointX = convPoint.x();
+//           MyElectron.convPointY = convPoint.y();
+//           MyElectron.convPointZ = convPoint.z();
+//           MyElectron.passConvVeto = ele->passConversionVeto();
 
         bool cutDelEta=false, cutDelPhi=false, cutSigIeta=false, cutE2x5=false, cutEMhad1=false, cutHad2=false, cutTrackIso=false;
 
@@ -790,9 +801,10 @@ BNelectronCollection	PATupleToBEANtranslator::PATtoBN(
         MyElectron.isHEEPnoEt = ( isHEEPnoEt ) ? 1 : 0;
 
         result.push_back(MyElectron);
-
+        
     }
     return result;
+
 }
 
 
@@ -801,15 +813,15 @@ BNmuonCollection		PATupleToBEANtranslator::PATtoBN(
         reco::Vertex const* primaryVertex,
         reco::BeamSpot const* beamSpot
 ){
-    math::XYZPoint beamSpotPosition = beamSpot->position();
-    double BSx = beamSpot->x0();
-    double BSy = beamSpot->y0();
-    double BSz = beamSpot->z0();
-    
+    //math::XYZPoint beamSpotPosition = beamSpot->position();
+    //double BSx = beamSpot->x0();
+    //double BSy = beamSpot->y0();
+    //double BSz = beamSpot->z0();
+   
     math::XYZPoint vertexPosition = primaryVertex->position();
-    double PVx = primaryVertex->x();
-    double PVy = primaryVertex->y();
-    double PVz = primaryVertex->z();
+    //double PVx = primaryVertex->x();
+    //double PVy = primaryVertex->y();
+    //double PVz = primaryVertex->z();
     
     BNmuonCollection result;
     for( pat::MuonCollection::const_iterator muon = iCollection->begin(); muon!=iCollection->end(); ++muon ){
@@ -889,7 +901,7 @@ BNmuonCollection		PATupleToBEANtranslator::PATtoBN(
         MyMuon.numberOfMatches = muon->numberOfMatches();
         MyMuon.numberOfMatchedStations = muon->numberOfMatchedStations();
     
-        MyMuon.dVzPVz = muon->vz() - PVz;
+        //MyMuon.dVzPVz = muon->vz() - PVz;
         MyMuon.dB = muon->dB();
 
         MyMuon.IP = muon->dB(pat::Muon::PV3D);
@@ -908,18 +920,21 @@ BNmuonCollection		PATupleToBEANtranslator::PATtoBN(
             MyMuon.pixelLayersWithMeasurement = muon->innerTrack()->hitPattern().pixelLayersWithMeasurement();
             MyMuon.numberOfValidPixelHits = muon->innerTrack()->hitPattern().numberOfValidPixelHits();
 
-            MyMuon.correctedD0 = muon->innerTrack()->dxy(beamSpotPosition);
-            MyMuon.correctedD0Vertex = muon->innerTrack()->dxy(vertexPosition);
-            MyMuon.correctedDZ = muon->innerTrack()->dz(vertexPosition);
+            //MyMuon.correctedD0 = muon->innerTrack()->dxy(beamSpotPosition);
+            MyMuon.correctedD0 = muon->dB(pat::Muon::BS2D);
+            //MyMuon.correctedD0Vertex = muon->innerTrack()->dxy(vertexPosition);
+            MyMuon.correctedD0Vertex = muon->dB(pat::Muon::PV2D);
+            //MyMuon.correctedDZ = muon->innerTrack()->dz(vertexPosition);
+            MyMuon.correctedDZ = sqrt( (muon->dB(pat::Muon::PV3D)*muon->dB(pat::Muon::PV3D)) - (muon->dB(pat::Muon::PV2D)*muon->dB(pat::Muon::PV2D)) );
         }
 
         // Get track muon info
         if( (muon->track().isAvailable()) ){
-            double tkvx = muon->track()->vx();
-            double tkvy = muon->track()->vy();
-            double tkpx = muon->track()->px();
-            double tkpy = muon->track()->py();
-            double tkpt = muon->track()->pt();
+            //double tkvx = muon->track()->vx();
+            //double tkvy = muon->track()->vy();
+            //double tkpx = muon->track()->px();
+            //double tkpy = muon->track()->py();
+            //double tkpt = muon->track()->pt();
 
             double ndof = muon->track()->ndof();
             if( (ndof!=0) ) MyMuon.tkNormChi2 = muon->track()->chi2()/ndof;
@@ -928,18 +943,18 @@ BNmuonCollection		PATupleToBEANtranslator::PATtoBN(
             MyMuon.tkPhi = muon->track()->phi();
             MyMuon.tkDZ = muon->track()->dz();
             MyMuon.tkD0 = muon->track()->d0();
-            MyMuon.tkD0bs = (tkvx-BSx)*tkpy/tkpt-(tkvy-BSy)*tkpx/tkpt;
+            //MyMuon.tkD0bs = (tkvx-BSx)*tkpy/tkpt-(tkvy-BSy)*tkpx/tkpt;
             MyMuon.tkD0err = muon->track()->d0Error();
             MyMuon.tkNumValidHits = muon->track()->numberOfValidHits();
             MyMuon.tkCharge = muon->track()->charge();
         }
         // Get standalone muon info
         if( (muon->standAloneMuon().isAvailable()) ){
-            double samvx = muon->standAloneMuon()->vx();
-            double samvy = muon->standAloneMuon()->vy();
-            double sampx = muon->standAloneMuon()->px();
-            double sampy = muon->standAloneMuon()->py();
-            double sampt = muon->standAloneMuon()->pt();
+            //double samvx = muon->standAloneMuon()->vx();
+            //double samvy = muon->standAloneMuon()->vy();
+            //double sampx = muon->standAloneMuon()->px();
+            //double sampy = muon->standAloneMuon()->py();
+            //double sampt = muon->standAloneMuon()->pt();
 
             double ndof = muon->standAloneMuon()->ndof();
             if( (ndof!=0) ) MyMuon.samNormChi2 = muon->standAloneMuon()->chi2()/ndof;
@@ -948,18 +963,18 @@ BNmuonCollection		PATupleToBEANtranslator::PATtoBN(
             MyMuon.samPhi = muon->standAloneMuon()->phi();
             MyMuon.samDZ = muon->standAloneMuon()->dz();
             MyMuon.samD0 = muon->standAloneMuon()->d0();
-            MyMuon.samD0bs = (samvx-BSx)*sampy/sampt-(samvy-BSy)*sampx/sampt;
+            //MyMuon.samD0bs = (samvx-BSx)*sampy/sampt-(samvy-BSy)*sampx/sampt;
             MyMuon.samD0err = muon->standAloneMuon()->d0Error();
             MyMuon.samNumValidHits = muon->standAloneMuon()->numberOfValidHits();
             MyMuon.samCharge = muon->standAloneMuon()->charge();
         }
         // Get global muon info
         if( (muon->combinedMuon().isAvailable()) ){
-            double comvx = muon->combinedMuon()->vx();
-            double comvy = muon->combinedMuon()->vy();
-            double compx = muon->combinedMuon()->px();
-            double compy = muon->combinedMuon()->py();
-            double compt = muon->combinedMuon()->pt();
+            //double comvx = muon->combinedMuon()->vx();
+            //double comvy = muon->combinedMuon()->vy();
+            //double compx = muon->combinedMuon()->px();
+            //double compy = muon->combinedMuon()->py();
+            //double compt = muon->combinedMuon()->pt();
 
             double ndof = muon->combinedMuon()->ndof();
             if( (ndof!=0) ) MyMuon.comNormChi2 = muon->combinedMuon()->chi2()/ndof;
@@ -968,7 +983,7 @@ BNmuonCollection		PATupleToBEANtranslator::PATtoBN(
             MyMuon.comPhi = muon->combinedMuon()->phi();
             MyMuon.comDZ = muon->combinedMuon()->dz();
             MyMuon.comD0 = muon->combinedMuon()->d0();
-            MyMuon.comD0bs = (comvx-BSx)*compy/compt-(comvy-BSy)*compx/compt;
+            //MyMuon.comD0bs = (comvx-BSx)*compy/compt-(comvy-BSy)*compx/compt;
             MyMuon.comD0err = muon->combinedMuon()->d0Error();
             MyMuon.comNumValidHits = muon->combinedMuon()->numberOfValidHits();
             MyMuon.comCharge = muon->combinedMuon()->charge();
@@ -1147,9 +1162,9 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
         const edm::EventSetup& eventSetup
 ){
     math::XYZPoint vertexPosition = primaryVertex->position();
-    double PVx = primaryVertex->x();
-    double PVy = primaryVertex->y();
-    double PVz = primaryVertex->z();
+    //double PVx = primaryVertex->x();
+    //double PVy = primaryVertex->y();
+    //double PVz = primaryVertex->z();
     
     BNjetCollection result;
 
@@ -1188,39 +1203,37 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
     PileupJetIdentifier puIdentifier;
      */
     for( pat::JetCollection::const_iterator pfjet = iCollection->begin(); pfjet != iCollection->end(); ++ pfjet ) {
-
         if( !(pfjet->pt()>minJetPt_) ) continue;
 
         BNjet MyPfjet;
 
-        unsigned int idx = pfjet-iCollection->begin();
+        //unsigned int idx = pfjet-iCollection->begin();
 
-        /*
-           float mva_full  = (*puJetIdMVA_full)[pfjets.refAt(idx)];
-           int idflag_full = (*puJetIdFlag_full)[pfjets.refAt(idx)];
+        //float mva_full  = (*puJetIdMVA_full)[pfjets.refAt(idx)];
+        //int idflag_full = (*puJetIdFlag_full)[pfjets.refAt(idx)];
 
-           float mva_simple  = (*puJetIdMVA_simple)[pfjets.refAt(idx)];
-           int idflag_simple = (*puJetIdFlag_simple)[pfjets.refAt(idx)];
+        //float mva_simple  = (*puJetIdMVA_simple)[pfjets.refAt(idx)];
+        //int idflag_simple = (*puJetIdFlag_simple)[pfjets.refAt(idx)];
 
-           float mva_cutbased  = (*puJetIdMVA_cutbased)[pfjets.refAt(idx)];
-           int idflag_cutbased = (*puJetIdFlag_cutbased)[pfjets.refAt(idx)];
+        //float mva_cutbased  = (*puJetIdMVA_cutbased)[pfjets.refAt(idx)];
+        //int idflag_cutbased = (*puJetIdFlag_cutbased)[pfjets.refAt(idx)];
 
-           puIdentifier = (*vmap)[pfjets.refAt(idx)];
+        //puIdentifier = (*vmap)[pfjets.refAt(idx)];
 
-           bool passTight_full=false, passMedium_full=false, passLoose_full=false;
-           if( ( ( idflag_full & (1 << 0) ) != 0 ) ) passTight_full  = true;
-           if( ( ( idflag_full & (1 << 1) ) != 0 ) ) passMedium_full = true;
-           if( ( ( idflag_full & (1 << 2) ) != 0 ) ) passLoose_full = true;
+        //bool passTight_full=false, passMedium_full=false, passLoose_full=false;
+        //if( ( ( idflag_full & (1 << 0) ) != 0 ) ) passTight_full  = true;
+        //if( ( ( idflag_full & (1 << 1) ) != 0 ) ) passMedium_full = true;
+        //if( ( ( idflag_full & (1 << 2) ) != 0 ) ) passLoose_full = true;
 
-           bool passTight_simple=false, passMedium_simple=false, passLoose_simple=false;
-           if( ( ( idflag_simple & (1 << 0) ) != 0 ) ) passTight_simple  = true;
-           if( ( ( idflag_simple & (1 << 1) ) != 0 ) ) passMedium_simple = true;
-           if( ( ( idflag_simple & (1 << 2) ) != 0 ) ) passLoose_simple = true;
+        //bool passTight_simple=false, passMedium_simple=false, passLoose_simple=false;
+        //if( ( ( idflag_simple & (1 << 0) ) != 0 ) ) passTight_simple  = true;
+        //if( ( ( idflag_simple & (1 << 1) ) != 0 ) ) passMedium_simple = true;
+        //if( ( ( idflag_simple & (1 << 2) ) != 0 ) ) passLoose_simple = true;
 
-           bool passTight_cutbased=false, passMedium_cutbased=false, passLoose_cutbased=false;
-           if( ( ( idflag_cutbased & (1 << 0) ) != 0 ) ) passTight_cutbased  = true;
-           if( ( ( idflag_cutbased & (1 << 1) ) != 0 ) ) passMedium_cutbased = true;
-           if( ( ( idflag_cutbased & (1 << 2) ) != 0 ) ) passLoose_cutbased = true;
+        //bool passTight_cutbased=false, passMedium_cutbased=false, passLoose_cutbased=false;
+        //if( ( ( idflag_cutbased & (1 << 0) ) != 0 ) ) passTight_cutbased  = true;
+        //if( ( ( idflag_cutbased & (1 << 1) ) != 0 ) ) passMedium_cutbased = true;
+        //if( ( ( idflag_cutbased & (1 << 2) ) != 0 ) ) passLoose_cutbased = true;
 
         // printf("  ===> jet %d,\t pt = %4.1f,\t eta = %4.2f \n", idx, pfjet->pt(), pfjet->eta() );
         // printf("\t\t\t mva_full = %4.3f,\t idflag_full = %d,\t passTight_full = %d,\t passMedium_full = %d,\t passLoose_full = %d \n",
@@ -1230,74 +1243,73 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
         // printf("\t\t\t mva_cutb = %4.3f,\t idflag_cutb = %d,\t passTight_cutb = %d,\t passMedium_cutb = %d,\t passLoose_cutb = %d \n",
         // 	      mva_cutbased, idflag_cutbased, (passTight_cutbased)?1:0, (passMedium_cutbased)?1:0, (passLoose_cutbased)?1:0 );
 
-        MyPfjet.puJetMVA_full     = mva_full;
-        MyPfjet.puJetMVA_simple   = mva_simple;
-        MyPfjet.puJetMVA_cutbased = mva_cutbased;
+        //MyPfjet.puJetMVA_full     = mva_full;
+        //MyPfjet.puJetMVA_simple   = mva_simple;
+        //MyPfjet.puJetMVA_cutbased = mva_cutbased;
 
-        MyPfjet.puJetId_full     = idflag_full;
-        MyPfjet.puJetId_simple   = idflag_simple;
-        MyPfjet.puJetId_cutbased = idflag_cutbased;
+        //MyPfjet.puJetId_full     = idflag_full;
+        //MyPfjet.puJetId_simple   = idflag_simple;
+        //MyPfjet.puJetId_cutbased = idflag_cutbased;
 
-        MyPfjet.puJetId_tight_full     = (passTight_full)?1:0;
-        MyPfjet.puJetId_tight_simple   = (passTight_simple)?1:0;
-        MyPfjet.puJetId_tight_cutbased = (passTight_cutbased)?1:0;
+        //MyPfjet.puJetId_tight_full     = (passTight_full)?1:0;
+        //MyPfjet.puJetId_tight_simple   = (passTight_simple)?1:0;
+        //MyPfjet.puJetId_tight_cutbased = (passTight_cutbased)?1:0;
 
-        MyPfjet.puJetId_medium_full     = (passMedium_full)?1:0;
-        MyPfjet.puJetId_medium_simple   = (passMedium_simple)?1:0;
-        MyPfjet.puJetId_medium_cutbased = (passMedium_cutbased)?1:0;
+        //MyPfjet.puJetId_medium_full     = (passMedium_full)?1:0;
+        //MyPfjet.puJetId_medium_simple   = (passMedium_simple)?1:0;
+        //MyPfjet.puJetId_medium_cutbased = (passMedium_cutbased)?1:0;
 
-        MyPfjet.puJetId_loose_full     = (passLoose_full)?1:0;
-        MyPfjet.puJetId_loose_simple   = (passLoose_simple)?1:0;
-        MyPfjet.puJetId_loose_cutbased = (passLoose_cutbased)?1:0;
-
-         */
+        //MyPfjet.puJetId_loose_full     = (passLoose_full)?1:0;
+        //MyPfjet.puJetId_loose_simple   = (passLoose_simple)?1:0;
+        //MyPfjet.puJetId_loose_cutbased = (passLoose_cutbased)?1:0;
 
         double rawpt = pfjet->correctedJet(0).pt();
 
         std::vector<PFCandidatePtr> PFJetPart = pfjet->getPFConstituents();
 
         double maxCandPt=0;
-        double leadCandVx=-99,leadCandVy=-99,leadCandVz=-99;
+        //double leadCandVx=-99,leadCandVy=-99,leadCandVz=-99;
         for(UInt_t j=0;j<PFJetPart.size();j++){
             double pTcand = PFJetPart[j]->pt();
             if( pTcand>maxCandPt ){
                 maxCandPt = pTcand;
-                leadCandVx = PFJetPart[j]->vx();
-                leadCandVy = PFJetPart[j]->vy();
-                leadCandVz = PFJetPart[j]->vz();
+                //leadCandVx = PFJetPart[j]->vx();
+                //leadCandVy = PFJetPart[j]->vy();
+                //leadCandVz = PFJetPart[j]->vz();
             }
         }
 
-        double leadCandDistFromPV = sqrt( (leadCandVx-PVx)*(leadCandVx-PVx) + (leadCandVy-PVy)*(leadCandVy-PVy) + (leadCandVz-PVz)*(leadCandVz-PVz) );
+        //double leadCandDistFromPV = sqrt( (leadCandVx-PVx)*(leadCandVx-PVx) + (leadCandVy-PVy)*(leadCandVy-PVy) + (leadCandVz-PVz)*(leadCandVz-PVz) );
 
         MyPfjet.leadCandPt = maxCandPt;
 
-        MyPfjet.leadCandVx = leadCandVx;
-        MyPfjet.leadCandVy = leadCandVy;
-        MyPfjet.leadCandVz = leadCandVz;
+        //MyPfjet.leadCandVx = leadCandVx;
+        //MyPfjet.leadCandVy = leadCandVy;
+        //MyPfjet.leadCandVz = leadCandVz;
         //MyPfjet.leadCandDistFromPV = leadCandDistFromPV;
 
-        /*
-           MyPfjet.dZ = puIdentifier.dZ();
-           MyPfjet.dR2Mean = puIdentifier.dR2Mean();
-           MyPfjet.dRMean = puIdentifier.dRMean();
-           MyPfjet.frac01 = puIdentifier.frac01();
-           MyPfjet.frac02 = puIdentifier.frac02();
-           MyPfjet.frac03 = puIdentifier.frac03();
-           MyPfjet.frac04 = puIdentifier.frac04();
-           MyPfjet.frac05 = puIdentifier.frac05();
-           MyPfjet.frac06 = puIdentifier.frac06();
-           MyPfjet.frac07 = puIdentifier.frac07(); //Always 0
-           MyPfjet.beta = puIdentifier.beta();
-           MyPfjet.betaStar = puIdentifier.betaStar();
-           MyPfjet.betaClassic = puIdentifier.betaClassic();
-           MyPfjet.betaStarClassic = puIdentifier.betaStarClassic();
-           MyPfjet.ptD = puIdentifier.ptD();
-           MyPfjet.nvtx = puIdentifier.nvtx();
-           MyPfjet.d0 = puIdentifier.d0(); //Not declared in class StoredPileupJetIdentifier (PileupJetIdentifier.h) 
-         */
+
+        //MyPfjet.dZ = puIdentifier.dZ();
+        //MyPfjet.dR2Mean = puIdentifier.dR2Mean();
+        //MyPfjet.dRMean = puIdentifier.dRMean();
+        //MyPfjet.frac01 = puIdentifier.frac01();
+        //MyPfjet.frac02 = puIdentifier.frac02();
+        //MyPfjet.frac03 = puIdentifier.frac03();
+        //MyPfjet.frac04 = puIdentifier.frac04();
+        //MyPfjet.frac05 = puIdentifier.frac05();
+        //MyPfjet.frac06 = puIdentifier.frac06();
+        //MyPfjet.frac07 = puIdentifier.frac07(); //Always 0
+        //MyPfjet.beta = puIdentifier.beta();
+        //MyPfjet.betaStar = puIdentifier.betaStar();
+        //MyPfjet.betaClassic = puIdentifier.betaClassic();
+        //MyPfjet.betaStarClassic = puIdentifier.betaStarClassic();
+        //MyPfjet.ptD = puIdentifier.ptD();
+        //MyPfjet.nvtx = puIdentifier.nvtx();
+        //MyPfjet.d0 = puIdentifier.d0(); //Not declared in class StoredPileupJetIdentifier (PileupJetIdentifier.h) 
+
         MyPfjet.Upt = rawpt;
 
+        //std::cout << "   --> JEC uncertainties " << std::endl;
         double unc = 1., JECuncUp = 1., JECuncDown = 1.; // JEC uncertainties only defined for jets with |eta| < 5.5 and pt > 9 GeV (2011 data)
         
         if( pfjet->pt()>9. && fabs(pfjet->eta())<5.0 ){
@@ -1310,6 +1322,7 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
             JECuncDown = jecUnc_PF->getUncertainty(false); //up variation
         }
         
+        //std::cout << "   --> got to kinematical variables " << std::endl;
         // general kinematic variables
         MyPfjet.energy = pfjet->energy();
         MyPfjet.et = pfjet->et();
@@ -1334,6 +1347,7 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
         MyPfjet.hitsInN90 = pfjet->jetID().hitsInN90;
 
 
+        //std::cout << "   --> got to b-tagging " << std::endl;
         // btag variables
         MyPfjet.btagTChighPur = pfjet->bDiscriminator("trackCountingHighPurBJetTags");
         MyPfjet.btagTChighEff = pfjet->bDiscriminator("trackCountingHighEffBJetTags");
@@ -1356,6 +1370,7 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
         MyPfjet.JECuncUp = JECuncUp;
         MyPfjet.JECuncDown = JECuncDown;
 
+        //std::cout << "   --> got to gen jets " << std::endl;
         if( (pfjet->genJet()) ){ // if there is a matched genjet, fill variables
             MyPfjet.genJetET = pfjet->genJet()->et();
             MyPfjet.genJetPT = pfjet->genJet()->pt();
@@ -1508,7 +1523,6 @@ BNmetCollection			PATupleToBEANtranslator::PATtoBN(pat::METCollection const* iCo
 
 BNprimaryvertexCollection	PATupleToBEANtranslator::RECOtoBN(reco::VertexCollection const* iCollection){
     BNprimaryvertexCollection result;
-    bool firstPV = true;
     for( reco::VertexCollection::const_iterator vtx = iCollection->begin(); vtx!=iCollection->end(); ++vtx ){
 
         BNprimaryvertex MyPV;

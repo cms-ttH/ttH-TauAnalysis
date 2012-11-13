@@ -25,7 +25,10 @@ void GenJetFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 
 // === Setup branches going into the ntuple === //
 void GenJetFiller::SetupBranches(){
-	ClearVectors();
+    
+    //std::cout << "<GenJetFiller::SetupBranches>: entering function" << std::endl;
+	
+    ClearVectors();
 
 	// Set up tree branches
 	_Tree->Branch("GJ_NumGenJets",&_NumGenJets);
@@ -35,6 +38,7 @@ void GenJetFiller::SetupBranches(){
 	_Tree->Branch("GJ_Phi", &_Phi);
 	_Tree->Branch("GJ_IsBjet", &_IsBjet);
 
+    //std::cout << "<GenJetFiller::SetupBranches>: exiting function" << std::endl;
 }
 
 // === Clear vectors that will be used to fill ntuple === //

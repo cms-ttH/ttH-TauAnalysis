@@ -272,6 +272,7 @@ void DitauElectronFiller::ClearVectors(){
 void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// Get the object collections from the event
+    //std::cout << "<DitauElectronFiller::FillNtuple>: enter function" << std::endl;
 	GetCollections(iEvent, iSetup);
 
 	// Clear vectors

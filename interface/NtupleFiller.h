@@ -109,6 +109,7 @@ class NtupleFiller : public EDAnalyzer {
 		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		string _Era;
+        bool _UsePfLeptons;
 		//BEANhelper beanHelper;
 
 		// === Generator level Inputs === //
