@@ -1,6 +1,6 @@
 // Author: Nil Valls <nvallsve@nd.edu>
 
-#include "../interface/Ntuplizer.h"
+#include "..//interface/Ntuplizer.h"
 
 using namespace std;
 using namespace edm;
@@ -13,7 +13,7 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	jobConfig						= new ParameterSet(iConfig);
 
 	// Analysis type
-	_DebugLevel						= iConfig.getParameter<unsigned int>("DebugLevel");
+	_DebugLevel						= ( iConfig.exists("DebugLevel") ) ? iConfig.getParameter<unsigned int>("DebugLevel") : 0;
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
 	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
 
@@ -38,6 +38,8 @@ Ntuplizer::~Ntuplizer(){
 // ------------ method called once each job just before starting event loop  ------------
 void  Ntuplizer::beginJob() {
 
+    //std::cout << "<Ntuplizer::beginJob>: enter function" << std::endl;
+
 	// Initialize TFileService
 	Service<TFileService> fs;
 	_EventsRead	= fs->make<TH1I>("EventsRead", "EventsRead",1,0,1);
@@ -55,7 +57,6 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree));			}
 	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree));		}
 	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree));	}
-	
 }
 
 // === Method called once each job just after ending the event loop === //
@@ -70,6 +71,8 @@ void Ntuplizer::endJob(){
 
 // ------------ method called to for each event  ------------
 void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
+
+    //std::cout << "<Ntuplizer::analyze>: enter function" << std::endl;
 
 	/*// Generic event info (commented out, but available if needed here)
 	double eventNum		= iEvent.id().event();
@@ -130,7 +133,7 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 
 bool Ntuplizer::IsFillerEnabled(const string iName){
 	for(unsigned int f=0; f<_enabledFillers.size(); f++){
-		if(_enabledFillers.at(f).compare(iName)==0){ return true; }	
+		if(_enabledFillers.at(f).compare(iName)==0){ std::cout << " ---> found " << iName << std::endl; return true; }	
 	}
 
 	return false;
