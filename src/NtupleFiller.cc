@@ -162,13 +162,13 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
         //const reco::BeamSpot* beamSpot = bsHandle.product();
         const reco::BeamSpot* beamSpot = 0;
 
-        //std::cout << " --> Getting genParticles " << std::endl;
         if( !SampleTypeContains("data") ) {
+            //std::cout << " --> Getting genParticles " << std::endl;
             Handle< reco::GenParticleCollection >				hGenParticles;
             if(_GenParticleSource.label()	!= "") { iEvent.getByLabel(_GenParticleSource, hGenParticles); }
             _BNmcparticles		= patTupleToBEANtranslator.RECOtoBN(hGenParticles.product());
 
-            std::cout << " --> Getting genJets " << std::endl;
+            //std::cout << " --> Getting genJets " << std::endl;
             Handle< reco::GenJetCollection >					hGenJets;
             if(_GenJetSource.label()		!= "") { iEvent.getByLabel(_GenJetSource, hGenJets); }
             _BNgenjets			= patTupleToBEANtranslator.RECOtoBN(hGenJets.product());
