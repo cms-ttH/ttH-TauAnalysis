@@ -271,12 +271,12 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	BNmcparticle			genTau1FromH, genTau2FromH, genTau1FromW, genTau2FromW;
 	// From H
 	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
-		cout << "gentau mother id: " << genTau->motherId << "   " << genTau->grandMotherId << endl;
+		//cout << "gentau mother id: " << genTau->motherId << "   " << genTau->grandMotherId << endl;
 		if((genTau->mother0Id==25) || (genTau->mother1Id==25)){
 			if(genTau->pt > genTau1FromH.pt){ 
 				genTau2FromH = genTau1FromH;
 				genTau1FromH = *genTau;
-				cout << "GOT IT!" << endl;
+				//cout << "GOT IT!" << endl;
 			}
 			if(genTau2FromH.pt > 0){ break; }
 		}
