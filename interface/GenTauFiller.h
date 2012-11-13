@@ -12,7 +12,7 @@ class GenTauFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit GenTauFiller(const ParameterSet&);
-		explicit GenTauFiller(const ParameterSet&, TTree*);
+		explicit GenTauFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~GenTauFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

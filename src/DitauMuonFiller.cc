@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+DitauMuonFiller::DitauMuonFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -262,12 +262,12 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	ClearVectors();
 
 	// Select muons (tight)
-	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, muonID::muonTight);
+	BNmuonCollection selectedMuons = beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
 
 	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
 
 	// Tau provenance
-	BNmcparticleCollection genTaus	= beanHelper.GetHadronicGenTaus(_BNmcparticles);
+	BNmcparticleCollection genTaus	= beanHelper->GetHadronicGenTaus(_BNmcparticles);
 	BNmcparticle			genTau1FromH, genTau2FromH, genTau1FromW, genTau2FromW;
 	// From H
 	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
@@ -349,30 +349,30 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				
 				// Jets and MET and related quantities
 				// Correct for jet pT
-				BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(_BNjets);
+				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets);
 
 				// Apply kinematic requirements on corrected jets
-				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
+				BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
 
 				// Clean jets from taus and muon
 				vector<TLorentzVector> tausAndMuon;
 				tausAndMuon.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
 				tausAndMuon.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
 				tausAndMuon.push_back(TLorentzVector(Muon->px, Muon->py, Muon->pz, Muon->energy));
-				BNjetCollection cleanSelCorrJets						= beanHelper.GetCleanJets(selCorrJets, tausAndMuon, 0.25);
+				BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tausAndMuon, 0.25);
 
 				// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
-				BNmet correctedMET  = beanHelper.GetCorrectedMET(*(_BNmets.begin()), beanHelper.GetUncorrectedJets(cleanSelCorrJets, _BNjets));
+				BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets));
 
-				_HT					.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper.GetHT(cleanSelCorrJets));
+				_HT					.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets));
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
 
-				_NumCSVLbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'L'));
-				_NumCSVMbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'M'));
-				_NumCSVTbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'T'));
-				_NumNonCSVLbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
-				_NumNonCSVMbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
-				_NumNonCSVTbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+				_NumCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
+				_NumCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
+				_NumNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
+				_NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
+				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
 				// Provenance
 				_Tau1MatchesGenHadTauFromH1.push_back( (genTau1FromH.pt>0) && (deltaR(genTau1FromH.eta, genTau1FromH.phi, Tau1->eta, Tau1->phi) < 0.25) );
@@ -472,9 +472,9 @@ void DitauMuonFiller::FillMuon(const BNmuon& Muon){
 	_MuonPt.push_back(Muon.pt);
 	_MuonEta.push_back(Muon.eta);
 	_MuonPhi.push_back(Muon.phi);
-	_MuonRelIso.push_back(beanHelper.GetMuonRelIso(Muon));
-	_MuonIsLooseMuon.push_back(beanHelper.IsLooseMuon(Muon));
-	_MuonIsTightMuon.push_back(beanHelper.IsTightMuon(Muon));
+	_MuonRelIso.push_back(beanHelper->GetMuonRelIso(Muon));
+	_MuonIsLooseMuon.push_back(beanHelper->IsLooseMuon(Muon));
+	_MuonIsTightMuon.push_back(beanHelper->IsTightMuon(Muon));
 
 }
 

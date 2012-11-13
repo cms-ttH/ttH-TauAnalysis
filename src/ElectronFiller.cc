@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-ElectronFiller::ElectronFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+ElectronFiller::ElectronFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-ElectronFiller::ElectronFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+ElectronFiller::ElectronFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -58,7 +58,7 @@ void ElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	unsigned int theNumberOfElectrons = 0;
 
-	BNelectronCollection selectedElectrons = beanHelper.GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
+	BNelectronCollection selectedElectrons = beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
 	//BNelectronCollection selectedElectrons = _BNelectrons;
 
 	_NumElectrons = selectedElectrons.size();
@@ -71,8 +71,8 @@ void ElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_ElectronPt.push_back(Electron->pt);
 		_ElectronEta.push_back(Electron->eta);
 		_ElectronPhi.push_back(Electron->phi);
-		_ElectronRelIso.push_back(beanHelper.GetElectronRelIso(*Electron));
-		_IsLooseElectron.push_back(beanHelper.IsLooseElectron(*Electron));
-		_IsTightElectron.push_back(beanHelper.IsTightElectron(*Electron));
+		_ElectronRelIso.push_back(beanHelper->GetElectronRelIso(*Electron));
+		_IsLooseElectron.push_back(beanHelper->IsLooseElectron(*Electron));
+		_IsTightElectron.push_back(beanHelper->IsTightElectron(*Electron));
 	}
 }

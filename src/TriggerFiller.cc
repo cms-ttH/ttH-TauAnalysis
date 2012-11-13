@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-TriggerFiller::TriggerFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+TriggerFiller::TriggerFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-TriggerFiller::TriggerFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+TriggerFiller::TriggerFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();

@@ -12,7 +12,7 @@ class MuTauMuonFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit MuTauMuonFiller(const ParameterSet&);
-		explicit MuTauMuonFiller(const ParameterSet&, TTree*);
+		explicit MuTauMuonFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~MuTauMuonFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

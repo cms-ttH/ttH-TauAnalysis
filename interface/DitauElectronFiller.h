@@ -12,7 +12,7 @@ class DitauElectronFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit DitauElectronFiller(const ParameterSet&);
-		explicit DitauElectronFiller(const ParameterSet&, TTree*);
+		explicit DitauElectronFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~DitauElectronFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

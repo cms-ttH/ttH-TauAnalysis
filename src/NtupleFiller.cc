@@ -11,7 +11,9 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
+NtupleFiller::NtupleFiller(){ cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); }
+
+NtupleFiller::NtupleFiller(const ParameterSet& iConfig, BEANhelper* iBEANhelper){
 	
 	_FillerName						= "NtupleFiller";
 	_Tree							= NULL;
@@ -19,7 +21,6 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
 	_DebugLevel						= ( iConfig.exists("DebugLevel") ) ? iConfig.getParameter<unsigned int>("DebugLevel") : 0;
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
 	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
-    _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
 
 	_GenParticleSource				= iConfig.getUntrackedParameter<InputTag>("GenParticleSource");
 	_GenJetSource					= iConfig.getUntrackedParameter<InputTag>("GenJetSource");
@@ -46,7 +47,7 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig){
     _HLTriggerSource				= iConfig.getParameter<InputTag>("HLTriggerSource");
 
 	// Setup BEANhelper
-	beanHelper.SetUp(atoi(GetAnalysisTypeParameter(0).c_str()), atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), "SingleMu", true, _UsePfLeptons);
+	beanHelper = iBEANhelper;
 
 }
 
@@ -55,41 +56,6 @@ NtupleFiller::~NtupleFiller(){}
 
 // === Get name of the filler === //
 string NtupleFiller::GetName(){ return _FillerName; }
-
-// === Check whether an analysis type is how we want === //
-string NtupleFiller::GetAnalysisTypeParameter(unsigned int iParam){
-
-	// Parse analysisType and store parts in the vector
-	if(_AnalysisTypeVector.size() == 0){	
-		if(_AnalysisType.length()==0){ cerr << "ERROR: 'AnalysisType' is empty." << endl; exit(1); }
-		char separator = '_';
-		string remainder = _AnalysisType;
-		while(remainder.length() > 0){
-			unsigned int pos = remainder.find(separator);
-			if(pos < remainder.size()){
-				_AnalysisTypeVector.push_back(remainder.substr(0, pos));
-				remainder = remainder.substr(pos+1);
-			}else{
-				_AnalysisTypeVector.push_back(remainder);
-				remainder = "";
-			}	
-		}
-	}
-
-	// Return the requested piece if it's there 
-	if(iParam >= _AnalysisTypeVector.size()){ cerr << "ERROR: Requesting AnalysisType parameter " << iParam << " but vector only has " << _AnalysisTypeVector.size() << " elements." << endl; exit(1); }
-	return _AnalysisTypeVector.at(iParam);
-}
-
-unsigned int NtupleFiller::GetEra(){ return abs(atoi(GetAnalysisTypeParameter(0).c_str())); }
-const char NtupleFiller::GetSubera(){ return *(GetAnalysisTypeParameter(1).c_str()); }
-string NtupleFiller::GetSampleType(){ return GetAnalysisTypeParameter(2); }
-string NtupleFiller::GetLeptonFlavor(){ return GetAnalysisTypeParameter(3); }
-bool NtupleFiller::EraIs(unsigned int iEra){ return (iEra==GetEra()); }
-bool NtupleFiller::SuberaIs(const char iSubera){ return (iSubera==GetSubera()); }
-bool NtupleFiller::SampleTypeIs(const string iSampleType){ return (iSampleType.compare(GetSampleType())==0); }
-bool NtupleFiller::SampleTypeContains(const string iSampleType){ string sampleType = GetSampleType(); return (sampleType.find(iSampleType) < sampleType.length()); }
-bool NtupleFiller::LeptonFlavorIs(const string iLeptonFlavor){ return (iLeptonFlavor.compare(GetLeptonFlavor())==0); }
 
 // ------------ method called to for each event  ------------
 void NtupleFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
@@ -224,3 +190,39 @@ bool NtupleFiller::IsInTheCracks(float etaValue){
 			(fabs(etaValue)>1.127 && fabs(etaValue)<1.163) ||
 			(fabs(etaValue)>1.460 && fabs(etaValue)<1.558));
 }
+
+// === Check whether an analysis type is how we want === //
+string NtupleFiller::GetAnalysisTypeParameter(unsigned int iParam){
+
+	// Parse analysisType and store parts in the vector
+	if(_AnalysisTypeVector.size() == 0){	
+		if(_AnalysisType.length()==0){ cerr << "ERROR: 'AnalysisType' is empty." << endl; exit(1); }
+		char separator = '_';
+		string remainder = _AnalysisType;
+		while(remainder.length() > 0){
+			unsigned int pos = remainder.find(separator);
+			if(pos < remainder.size()){
+				_AnalysisTypeVector.push_back(remainder.substr(0, pos));
+				remainder = remainder.substr(pos+1);
+			}else{
+				_AnalysisTypeVector.push_back(remainder);
+				remainder = "";
+			}	
+		}
+	}
+
+	// Return the requested piece if it's there 
+	if(iParam >= _AnalysisTypeVector.size()){ cerr << "ERROR: Requesting AnalysisType parameter " << iParam << " but vector only has " << _AnalysisTypeVector.size() << " elements." << endl; exit(1); }
+	return _AnalysisTypeVector.at(iParam);
+}
+
+unsigned int NtupleFiller::GetEra(){ return abs(atoi(GetAnalysisTypeParameter(0).c_str())); }
+const char NtupleFiller::GetSubera(){ return *(GetAnalysisTypeParameter(1).c_str()); }
+string NtupleFiller::GetSampleType(){ return GetAnalysisTypeParameter(2); }
+string NtupleFiller::GetLeptonFlavor(){ return GetAnalysisTypeParameter(3); }
+bool NtupleFiller::EraIs(unsigned int iEra){ return (iEra==GetEra()); }
+bool NtupleFiller::SuberaIs(const char iSubera){ return (iSubera==GetSubera()); }
+bool NtupleFiller::SampleTypeIs(const string iSampleType){ return (iSampleType.compare(GetSampleType())==0); }
+bool NtupleFiller::SampleTypeContains(const string iSampleType){ string sampleType = GetSampleType(); return (sampleType.find(iSampleType) < sampleType.length()); }
+bool NtupleFiller::LeptonFlavorIs(const string iLeptonFlavor){ return (iLeptonFlavor.compare(GetLeptonFlavor())==0); }
+

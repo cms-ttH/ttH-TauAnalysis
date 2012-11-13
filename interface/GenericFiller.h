@@ -12,7 +12,7 @@ class GenericFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit GenericFiller(const ParameterSet&);
-		explicit GenericFiller(const ParameterSet&, TTree*);
+		explicit GenericFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~GenericFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

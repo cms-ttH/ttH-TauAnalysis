@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-EventFiller::EventFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+EventFiller::EventFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-EventFiller::EventFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+EventFiller::EventFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -66,15 +66,15 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_lumiBlock			= iEvent.id().luminosityBlock();
 
 	// MET
-	BNjetCollection correctedJets							= beanHelper.GetCorrectedJets(_BNjets);
-	BNjetCollection selCorrJets								= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
-	BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper.GetUncorrectedJets(selCorrJets, _BNjets);
-	BNmet correctedMET	= beanHelper.GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection);
+	BNjetCollection correctedJets							= beanHelper->GetCorrectedJets(_BNjets);
+	BNjetCollection selCorrJets								= beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
+	BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper->GetUncorrectedJets(selCorrJets, _BNjets);
+	BNmet correctedMET	= beanHelper->GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection);
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
 
 	// Pileup
-	_PUweight			= beanHelper.GetPUweight(_BNevents.begin()->numTruePV);
+	_PUweight			= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
 	_numPrimaryVertices	= _BNprimaryVertices.size();
 
 }

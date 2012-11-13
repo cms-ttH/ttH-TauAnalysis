@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-JetFiller::JetFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+JetFiller::JetFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-JetFiller::JetFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+JetFiller::JetFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -61,8 +61,8 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	unsigned int theNumberOfJets = 0;
 
-	BNjetCollection correctedJets	= beanHelper.GetCorrectedJets(_BNjets);
-	BNjetCollection selCorrJets		= beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose,'-');
+	BNjetCollection correctedJets	= beanHelper->GetCorrectedJets(_BNjets);
+	BNjetCollection selCorrJets		= beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose,'-');
 
 	_NumJets = selCorrJets.size();
 	theNumberOfJets = 0;
@@ -75,9 +75,9 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_JetEta.push_back(Jet->eta);
 		_JetPhi.push_back(Jet->phi);
 
-		_combSecVtxBTag			.push_back(beanHelper.GetCSVvalue(*Jet));
-		_combSecVtxLooseBTag	.push_back(beanHelper.PassesCSV(*Jet, 'L'));
-		_combSecVtxMediumBTag	.push_back(beanHelper.PassesCSV(*Jet, 'M'));
-		_combSecVtxTightBTag	.push_back(beanHelper.PassesCSV(*Jet, 'T'));
+		_combSecVtxBTag			.push_back(beanHelper->GetCSVvalue(*Jet));
+		_combSecVtxLooseBTag	.push_back(beanHelper->PassesCSV(*Jet, 'L'));
+		_combSecVtxMediumBTag	.push_back(beanHelper->PassesCSV(*Jet, 'M'));
+		_combSecVtxTightBTag	.push_back(beanHelper->PassesCSV(*Jet, 'T'));
 	}
 }

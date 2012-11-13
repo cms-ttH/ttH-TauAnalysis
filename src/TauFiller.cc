@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-TauFiller::TauFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+TauFiller::TauFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-TauFiller::TauFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+TauFiller::TauFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();

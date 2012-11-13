@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-GenLevelFiller::GenLevelFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+GenLevelFiller::GenLevelFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-GenLevelFiller::GenLevelFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+GenLevelFiller::GenLevelFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
