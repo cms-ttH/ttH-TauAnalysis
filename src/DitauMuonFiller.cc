@@ -267,21 +267,24 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
 
 	// Tau provenance
-	BNmcparticleCollection genTaus	= beanHelper.GetGenTaus(_BNmcparticles);
+	BNmcparticleCollection genTaus	= beanHelper.GetHadronicGenTaus(_BNmcparticles);
 	BNmcparticle			genTau1FromH, genTau2FromH, genTau1FromW, genTau2FromW;
 	// From H
 	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
-		if(genTau->motherId==25){
+		cout << "gentau mother id: " << genTau->motherId << "   " << genTau->grandMotherId << endl;
+		if((genTau->mother0Id==25) || (genTau->mother1Id==25)){
 			if(genTau->pt > genTau1FromH.pt){ 
 				genTau2FromH = genTau1FromH;
 				genTau1FromH = *genTau;
+				cout << "GOT IT!" << endl;
 			}
 			if(genTau2FromH.pt > 0){ break; }
 		}
 	}
 	// From ttbar system
 	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
-		if((abs(genTau->motherId)==24) && (abs(genTau->grandMotherId)==6)){
+		if(((abs(genTau->mother0Id)==24) || (abs(genTau->mother1Id)==24)) && 
+			((abs(genTau->grandMother00Id)==6) || (abs(genTau->grandMother01Id)==6) || (abs(genTau->grandMother10Id)==6) || (abs(genTau->grandMother11Id)==6))){
 			if(genTau->pt > genTau1FromW.pt){ 
 				genTau2FromW = genTau1FromW;
 				genTau1FromW = *genTau;
