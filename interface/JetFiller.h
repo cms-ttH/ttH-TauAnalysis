@@ -12,7 +12,7 @@ class JetFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit JetFiller(const ParameterSet&);
-		explicit JetFiller(const ParameterSet&, TTree*);
+		explicit JetFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~JetFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

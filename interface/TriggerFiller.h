@@ -12,7 +12,7 @@ class TriggerFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit TriggerFiller(const ParameterSet&);
-		explicit TriggerFiller(const ParameterSet&, TTree*);
+		explicit TriggerFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~TriggerFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

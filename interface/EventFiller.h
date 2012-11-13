@@ -12,7 +12,7 @@ class EventFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit EventFiller(const ParameterSet&);
-		explicit EventFiller(const ParameterSet&, TTree*);
+		explicit EventFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~EventFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

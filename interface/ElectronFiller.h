@@ -12,7 +12,7 @@ class ElectronFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit ElectronFiller(const ParameterSet&);
-		explicit ElectronFiller(const ParameterSet&, TTree*);
+		explicit ElectronFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~ElectronFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

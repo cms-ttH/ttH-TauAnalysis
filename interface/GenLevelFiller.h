@@ -12,7 +12,7 @@ class GenLevelFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit GenLevelFiller(const ParameterSet&);
-		explicit GenLevelFiller(const ParameterSet&, TTree*);
+		explicit GenLevelFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~GenLevelFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

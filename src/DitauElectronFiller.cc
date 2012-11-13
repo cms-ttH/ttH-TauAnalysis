@@ -7,11 +7,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-DitauElectronFiller::DitauElectronFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+DitauElectronFiller::DitauElectronFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-DitauElectronFiller::DitauElectronFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+DitauElectronFiller::DitauElectronFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -282,7 +282,7 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 	if(_AnalysisType.compare("signal") == 0 ){ MatchRecoAndGenHadTausFromH(); } 
 
 	// Select muons (tight)
-	BNelectronCollection selectedElectrons = beanHelper.GetSelectedElectrons(_BNelectrons, electronID::electronTight);
+	BNelectronCollection selectedElectrons = beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronTight);
 
 	if(_BNtaus.size() < 2 || selectedElectrons.size() < 1){ return; }
 
@@ -342,30 +342,30 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 				
 				// Jets and MET and related quantities
 				// Correct for jet pT
-				BNjetCollection correctedJets                           = beanHelper.GetCorrectedJets(_BNjets);
+				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets);
 
 				// Apply kinematic requirements on corrected jets
-				BNjetCollection selCorrJets                             = beanHelper.GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
+				BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
 
 				// Clean jets from taus and electron
 				vector<TLorentzVector> tausAndElectron;
 				tausAndElectron.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
 				tausAndElectron.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
 				tausAndElectron.push_back(TLorentzVector(Electron->px, Electron->py, Electron->pz, Electron->energy));
-				BNjetCollection cleanSelCorrJets						= beanHelper.GetCleanJets(selCorrJets, tausAndElectron, 0.25);
+				BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tausAndElectron, 0.25);
 
 				// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
-				BNmet correctedMET  = beanHelper.GetCorrectedMET(*(_BNmets.begin()), beanHelper.GetUncorrectedJets(cleanSelCorrJets, _BNjets));
+				BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets));
 
-				_HT					.push_back(Tau1->pt + Tau2->pt + Electron->pt + correctedMET.pt + beanHelper.GetHT(cleanSelCorrJets));
+				_HT					.push_back(Tau1->pt + Tau2->pt + Electron->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets));
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
 
-				_NumCSVLbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'L'));
-				_NumCSVMbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'M'));
-				_NumCSVTbtagJets	.push_back(beanHelper.GetNumCSVbtags(cleanSelCorrJets, 'T'));
-				_NumNonCSVLbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
-				_NumNonCSVMbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
-				_NumNonCSVTbtagJets .push_back(beanHelper.GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+				_NumCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
+				_NumCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
+				_NumNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
+				_NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
+				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
 			} // end of electron loop
 		} // end of tau2 loop
@@ -453,9 +453,9 @@ void DitauElectronFiller::FillElectron(const BNelectron& Electron){
     _ElectronPt.push_back(Electron.pt);
     _ElectronEta.push_back(Electron.eta);
     _ElectronPhi.push_back(Electron.phi);
-    _ElectronRelIso.push_back(beanHelper.GetElectronRelIso(Electron));
-    _ElectronIsLooseElectron.push_back(beanHelper.IsLooseElectron(Electron));
-    _ElectronIsTightElectron.push_back(beanHelper.IsTightElectron(Electron));
+    _ElectronRelIso.push_back(beanHelper->GetElectronRelIso(Electron));
+    _ElectronIsLooseElectron.push_back(beanHelper->IsLooseElectron(Electron));
+    _ElectronIsTightElectron.push_back(beanHelper->IsTightElectron(Electron));
    
 }
 

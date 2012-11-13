@@ -12,7 +12,7 @@ class TauFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit TauFiller(const ParameterSet&);
-		explicit TauFiller(const ParameterSet&, TTree*);
+		explicit TauFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~TauFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

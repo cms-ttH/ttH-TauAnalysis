@@ -8,11 +8,11 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-MuonFiller::MuonFiller(const ParameterSet& iConfig): NtupleFiller(iConfig){
+MuonFiller::MuonFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-MuonFiller::MuonFiller(const ParameterSet& iConfig, TTree* iTree) : NtupleFiller(iConfig) {
+MuonFiller::MuonFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -61,7 +61,7 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	unsigned int theNumberOfMuons = 0;
 
-	BNmuonCollection selectedMuons = beanHelper.GetSelectedMuons(_BNmuons, muonID::muonTight);
+	BNmuonCollection selectedMuons = beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
 	//BNmuonCollection selectedMuons = _BNmuons;
 	
 	_NumMuons = selectedMuons.size();
@@ -74,9 +74,9 @@ void MuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_MuonPt.push_back(Muon->pt);
 		_MuonEta.push_back(Muon->eta);
 		_MuonPhi.push_back(Muon->phi);
-		_MuonRelIso.push_back(beanHelper.GetMuonRelIso(*Muon));
-		_IsLooseMuon.push_back(beanHelper.IsLooseMuon(*Muon));
-		_IsTightMuon.push_back(beanHelper.IsTightMuon(*Muon));
+		_MuonRelIso.push_back(beanHelper->GetMuonRelIso(*Muon));
+		_IsLooseMuon.push_back(beanHelper->IsLooseMuon(*Muon));
+		_IsTightMuon.push_back(beanHelper->IsTightMuon(*Muon));
 	}
 
 

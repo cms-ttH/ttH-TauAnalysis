@@ -12,7 +12,7 @@ class DitauFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit DitauFiller(const ParameterSet&);
-		explicit DitauFiller(const ParameterSet&, TTree*);
+		explicit DitauFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~DitauFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

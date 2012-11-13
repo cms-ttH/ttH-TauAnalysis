@@ -12,7 +12,7 @@ class MuonFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit MuonFiller(const ParameterSet&);
-		explicit MuonFiller(const ParameterSet&, TTree*);
+		explicit MuonFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~MuonFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 

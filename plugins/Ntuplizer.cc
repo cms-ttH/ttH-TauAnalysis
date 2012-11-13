@@ -13,9 +13,10 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	jobConfig						= new ParameterSet(iConfig);
 
 	// Analysis type
-	_DebugLevel						= ( iConfig.exists("DebugLevel") ) ? iConfig.getParameter<unsigned int>("DebugLevel") : 0;
-	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
+	_DebugLevel						= iConfig.getParameter<unsigned int>("DebugLevel");
 	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
+	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
+    _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
 
 	// Name of the ntuple tree
 	_TreeName						= iConfig.getUntrackedParameter<std::string>("TreeName");
@@ -45,18 +46,23 @@ void  Ntuplizer::beginJob() {
 	_EventsRead	= fs->make<TH1I>("EventsRead", "EventsRead",1,0,1);
 	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
 
+	// Instantiate and set up beanHelper
+	BEANhelper beanHelper;
+	beanHelper.SetUp(atoi(GetAnalysisTypeParameter(0).c_str()), atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), "SingleMu", true, _UsePfLeptons);
+
 	// Declare and store here NtupleFillers
-	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree));			}
-	if(IsFillerEnabled("GenLevel")){		ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree));			}
-	if(IsFillerEnabled("GenTau")){			ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree));			}
-	if(IsFillerEnabled("GenJet")){			ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree));			}
-	if(IsFillerEnabled("Tau")){				ntupleFillers.push_back(new TauFiller(*jobConfig, _Tree));				}
-	if(IsFillerEnabled("Electron")){		ntupleFillers.push_back(new ElectronFiller(*jobConfig, _Tree));			}
-	if(IsFillerEnabled("Muon")){			ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree));				}
-	if(IsFillerEnabled("Jet")){				ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree));				}
-	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree));			}
-	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree));		}
-	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree));	}
+	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("GenLevel")){		ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("GenTau")){			ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("GenJet")){			ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Tau")){				ntupleFillers.push_back(new TauFiller(*jobConfig, _Tree, &beanHelper));				}
+	if(IsFillerEnabled("Electron")){		ntupleFillers.push_back(new ElectronFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("Muon")){			ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Jet")){				ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree, &beanHelper));				}
+	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree, &beanHelper));	}
+	
 }
 
 // === Method called once each job just after ending the event loop === //
@@ -138,6 +144,42 @@ bool Ntuplizer::IsFillerEnabled(const string iName){
 
 	return false;
 }
+
+// === Check whether an analysis type is how we want === //
+string Ntuplizer::GetAnalysisTypeParameter(unsigned int iParam){
+
+	// Parse analysisType and store parts in the vector
+	if(_AnalysisTypeVector.size() == 0){	
+		if(_AnalysisType.length()==0){ cerr << "ERROR: 'AnalysisType' is empty." << endl; exit(1); }
+		char separator = '_';
+		string remainder = _AnalysisType;
+		while(remainder.length() > 0){
+			unsigned int pos = remainder.find(separator);
+			if(pos < remainder.size()){
+				_AnalysisTypeVector.push_back(remainder.substr(0, pos));
+				remainder = remainder.substr(pos+1);
+			}else{
+				_AnalysisTypeVector.push_back(remainder);
+				remainder = "";
+			}	
+		}
+	}
+
+	// Return the requested piece if it's there 
+	if(iParam >= _AnalysisTypeVector.size()){ cerr << "ERROR: Requesting AnalysisType parameter " << iParam << " but vector only has " << _AnalysisTypeVector.size() << " elements." << endl; exit(1); }
+	return _AnalysisTypeVector.at(iParam);
+}
+
+unsigned int Ntuplizer::GetEra(){ return abs(atoi(GetAnalysisTypeParameter(0).c_str())); }
+const char Ntuplizer::GetSubera(){ return *(GetAnalysisTypeParameter(1).c_str()); }
+string Ntuplizer::GetSampleType(){ return GetAnalysisTypeParameter(2); }
+string Ntuplizer::GetLeptonFlavor(){ return GetAnalysisTypeParameter(3); }
+bool Ntuplizer::EraIs(unsigned int iEra){ return (iEra==GetEra()); }
+bool Ntuplizer::SuberaIs(const char iSubera){ return (iSubera==GetSubera()); }
+bool Ntuplizer::SampleTypeIs(const string iSampleType){ return (iSampleType.compare(GetSampleType())==0); }
+bool Ntuplizer::SampleTypeContains(const string iSampleType){ string sampleType = GetSampleType(); return (sampleType.find(iSampleType) < sampleType.length()); }
+bool Ntuplizer::LeptonFlavorIs(const string iLeptonFlavor){ return (iLeptonFlavor.compare(GetLeptonFlavor())==0); }
+
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(Ntuplizer);

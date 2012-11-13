@@ -60,9 +60,8 @@ typedef std::vector< reco::Candidate::LorentzVector > LVCollection;
 
 class NtupleFiller : public EDAnalyzer {
 	public:
-		BEANhelper beanHelper;
-		PATupleToBEANtranslator patTupleToBEANtranslator;
-		explicit NtupleFiller(const ParameterSet&);
+		explicit NtupleFiller();
+		explicit NtupleFiller(const ParameterSet&, BEANhelper*);
 		~NtupleFiller();
 		string GetName();
 		virtual void FillNtuple(const Event&, const EventSetup&);
@@ -105,12 +104,13 @@ class NtupleFiller : public EDAnalyzer {
 		string _FillerName;
 		TTree* _Tree;
 
+		BEANhelper* beanHelper;
+		PATupleToBEANtranslator patTupleToBEANtranslator;
+
 		string _AnalysisType;
 		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		string _Era;
-        bool _UsePfLeptons;
-		//BEANhelper beanHelper;
 
 		// === Generator level Inputs === //
 		InputTag _GenParticleSource;
