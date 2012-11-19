@@ -47,7 +47,6 @@ void  Ntuplizer::beginJob() {
 	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
 
 	// Instantiate and set up beanHelper
-	BEANhelper beanHelper;
 	beanHelper.SetUp(atoi(GetAnalysisTypeParameter(0).c_str()), atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), "SingleMu", true, _UsePfLeptons);
 
 	// Declare and store here NtupleFillers
