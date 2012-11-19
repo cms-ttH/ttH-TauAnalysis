@@ -35,9 +35,9 @@ options = VarParsing.VarParsing("analysis")
 # 2012_X_MC-bg_electron
 # 2012_B_data-PR_muon
 options.register ('analysisType', # 
-                  '2011_X_MC-sig_muon_125',	# 2500	TTbar
-				  #'2012_X_MC-bg_muon_-1',	# -1		2012A collisions
-				  #'2012_X_MC-bg_muon_-11',	# -11		2012B collisions
+                  '2011_X_MC-sig_muon_125',	    # 125   tth->tautau
+				  #'2012_X_MC-bg_muon_-1',	    # -1	2012A collisions
+				  #'2012_X_MC-bg_muon_-11',	    # -11	2012B collisions
                   #'2012_X_MC-bg_muon_2500',	# 2500	TTbar
 				  #'2012_X_MC-bg_muon_2524',	# 2524	TTbar + W
 				  #'2012_X_MC-bg_muon_2523',	# 2523	TTbar + Z
@@ -60,28 +60,14 @@ options.register ('analysisType', #
                   VarParsing.VarParsing.varType.string )
 options.maxEvents = maxEvents
 options.outputFile = 'NUT.root'
-#options.inputFiles = 'file:/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
+options.inputFiles = 'file:/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
 #options.inputFiles = 'file:/afs/crc.nd.edu/user/n/nvallsve/CMSSW_5_2_5/src/NtupleMaker/BEANmaker/TTbar_summer12_BEAN.root'
-options.inputFiles = '/store/user/lannon/T_s-channel_TuneZ2star_8TeV-powheg-tauola/Summer12-PU_S7_START52_V9-v1_BEAN_53xOn52x_V01_CV01//74c4602d4f424e29e54ad6a04efd57f1/pat2bean_53x_9_1_1yE.root'
+#options.inputFiles = '/store/user/lannon/T_s-channel_TuneZ2star_8TeV-powheg-tauola/Summer12-PU_S7_START52_V9-v1_BEAN_53xOn52x_V01_CV01//74c4602d4f424e29e54ad6a04efd57f1/pat2bean_53x_9_1_1yE.root'
 options.parseArguments() # get and parse the command line arguments 
 
 if options.analysisType.find('muon') == -1 and options.analysisType.find('electron') == -1:
     print 'ERROR: analysisType must contain "muon" or "electron"'
     exit(1)
-
-# === Print some basic info about the job setup === #
-print ''
-print '	===================================================='
-print '		Ntuple Making Job'
-print '	===================================================='
-print ''
-print '		Analysis type....%s' % options.analysisType
-print '		Running on PAT?..%s' % runOnPAT
-print '		Max events.......%d' % options.maxEvents
-print '		Report every.....%d' % reportEvery
-print ''
-print '	===================================================='
-print ''
 
 # === Set up triggers and GEN collections based on analysis type === # 
 if options.analysisType.find('MC') != -1:
@@ -136,17 +122,6 @@ if( runOnPAT is not True ):
 
 # === make analysis-specific selections for skims, fillers, etc. === #
 SkimTriggerRequirements	= cms.vstring()
-        #	'ttHiggsElectronSkim',
-        #   'ttHiggsMuonSkim',
-        #	'ttElectronHiggsToElecTauSkim',
-        #	'ttMuonHiggsToElecTauSkim',
-        #	'ttElectronHiggsToMuTauSkim',
-        #	'ttMuonHiggsToMuTauSkim',
-        #	'ttElectronHiggsToTauTauSkim',
-        #	'ttMuonHiggsToTauTauSkim',
-        #	'ttHiggsToElecTauSkim',
-        #	'ttHiggsToMuTauSkim',
-        #   'ttHiggsToTauTauSkim',
 
 if (options.analysisType.find('sig') != -1 ) and (options.analysisType.find('muon') != -1):
     SkimTriggerRequirements = cms.vstring('ttMuonHiggsToTauTauSkim')
@@ -162,10 +137,10 @@ if (options.analysisType.find('data') != -1 ) and (options.analysisType.find('el
     SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
 
 NtupleFillers = cms.untracked.vstring(
-        #'Event',
-        #'GenLevel',
-        #'GenTau',
-        #'GenJet',
+        'Event',
+        'GenLevel',
+        'GenTau',
+        'GenJet',
         'Tau',
         'Electron',
         'Muon',
@@ -175,9 +150,9 @@ NtupleFillers = cms.untracked.vstring(
         #'Trigger' # not in use
 )
 if( options.analysisType.find('muon') != -1):
-        NtupleFillers.append('DitauMuon')
+            NtupleFillers.append('DitauMuon')
 if( options.analysisType.find('electron') != -1):
-        NtupleFillers.append('DitauElectron')
+            NtupleFillers.append('DitauElectron')
 
 
 # === Python process === #
@@ -198,8 +173,9 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
-from TTHTauTau.Skimming.globalTagMap_cfi import globalTagMap
-process.GlobalTag.globaltag = cms.string(globalTagMap[options.analysisType.rsplit('_',2)[0]] + '::All')
+from TTHTauTau.Analysis.globalTagMap_cfi import globalTagMap
+globalTag = globalTagMap[options.analysisType.rsplit('_',2)[0]] + '::All'
+process.GlobalTag.globaltag = cms.string(globalTag)
 
 
 # === Collision data trigger requirements === #
@@ -217,7 +193,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Analysis setup === #
 	AnalysisType						= cms.string(options.analysisType),				
-	FromBEAN							= cms.bool(False),
+	FromBEAN							= cms.bool(not runOnPAT),
     TreeName							= cms.untracked.string('TTbarHTauTau'),
     DebugLevel                          = cms.uint32(0),
     UsePfLeptons                        = UsePfLeptons,
@@ -265,6 +241,21 @@ if (options.analysisType.find('data') != -1):
     process.p = cms.Path( process.hltFilter + process.makeNtuple )
 else:
     process.p = cms.Path( process.makeNtuple )
+
+# === Print some basic info about the job setup === #
+print ''
+print '	===================================================='
+print '		Ntuple Making Job'
+print '	===================================================='
+print ''
+print '		Analysis type....%s' % options.analysisType
+print '		Running on PAT?..%s' % runOnPAT
+print '		Max events.......%d' % options.maxEvents
+print '		Report every.....%d' % reportEvery
+print '		Global tag.......%s' % globalTag
+print ''
+print '	===================================================='
+print ''
 
 # === Write-out all python configuration parameter information === #
 #pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
