@@ -75,6 +75,7 @@ class Ntuplizer : public EDAnalyzer {
 		TTree* _Tree;
 		string _TreeName;
         bool _UsePfLeptons;
+		BEANhelper beanHelper;
 
 		// === Trigger Inputs === //
 		bool _ApplySkimTriggerRequirements;

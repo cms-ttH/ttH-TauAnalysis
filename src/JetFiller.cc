@@ -75,7 +75,7 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_JetEta.push_back(Jet->eta);
 		_JetPhi.push_back(Jet->phi);
 
-		_combSecVtxBTag			.push_back(beanHelper->GetCSVvalue(*Jet));
+		_combSecVtxBTag			.push_back(Jet->btagCombinedSecVertex);
 		_combSecVtxLooseBTag	.push_back(beanHelper->PassesCSV(*Jet, 'L'));
 		_combSecVtxMediumBTag	.push_back(beanHelper->PassesCSV(*Jet, 'M'));
 		_combSecVtxTightBTag	.push_back(beanHelper->PassesCSV(*Jet, 'T'));
