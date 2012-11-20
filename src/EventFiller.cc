@@ -35,6 +35,7 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_numInteractionsBX0", &_numInteractionsBX0);
 	_Tree->Branch("Ev_numInteractionsBXp1", &_numInteractionsBXp1);
 	_Tree->Branch("Ev_numPrimaryVertices", &_numPrimaryVertices);
+	_Tree->Branch("Ev_puWeight", &_PUweight);
 
 	_Tree->Branch("Ev_MET", &_MET);
 	_Tree->Branch("Ev_METphi", &_METphi);
@@ -50,6 +51,7 @@ void EventFiller::ClearVectors(){
 	_numInteractionsBX0			= 0;
 	_numInteractionsBXp1		= 0;
 	_numPrimaryVertices			= 0;
+	_PUweight					= 1.0;
 
 	_MET						= 0;
 	_METphi						= 0;
@@ -61,9 +63,17 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
+	// Event info
 	_runNumber			= iEvent.id().run();
 	_eventNumber		= iEvent.id().event();
 	_lumiBlock			= iEvent.id().luminosityBlock();
+
+	// Pileup
+	_numInteractionsBXm1	= _BNevents.begin()->nm1_true;
+	_numInteractionsBX0		= _BNevents.begin()->n0_true;
+	_numInteractionsBXp1	= _BNevents.begin()->np1_true;
+	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
+	_numPrimaryVertices		= _BNprimaryVertices.size();
 
 	// MET
 	BNjetCollection correctedJets							= beanHelper->GetCorrectedJets(_BNjets);
@@ -73,8 +83,5 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
 
-	// Pileup
-	_PUweight			= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
-	_numPrimaryVertices	= _BNprimaryVertices.size();
 
 }
