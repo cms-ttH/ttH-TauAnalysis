@@ -23,6 +23,7 @@
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
 #include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 
 #include "ProductArea/BNcollections/interface/BNevent.h"

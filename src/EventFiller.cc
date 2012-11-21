@@ -83,5 +83,4 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
 
-
 }
