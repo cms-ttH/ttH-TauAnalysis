@@ -1,16 +1,20 @@
 import FWCore.ParameterSet.Config as cms
 import copy
 import sys
+import inspect
+
+
+# === Terminates execution === #
+def throwFatalError():
+    print "ERROR in line %d" % (inspect.currentframe().f_back.f_lineno); sys.exit(1);
 
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
 reportEvery	= 100
+debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 0
-
-# == are we running on PAT or BEAN == #
-runOnPAT = True
 
 # collection postfix for running on PF2APT
 postfix = ''
@@ -19,13 +23,13 @@ postfix = ''
 # === Parse external arguments === #
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
-# 'analysisType' parameter form: 
+# 'jobParams' parameter form: 
 # 
 # <era>_<subera>_<type>_<lepton flavor>_<sample number>
 #
 # <era>					= 2011, 2012
 # <subera> [N/A for MC]	= A, B, C...
-# <type>				= MC-sig, MC-bg, data-PR, data-RR
+# <type>				= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
 # <lepton flavor>		= muon, electron
 # <sample number>		= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
 #
@@ -34,8 +38,8 @@ options = VarParsing.VarParsing("analysis")
 # 2011_B_data-PR_electron
 # 2012_X_MC-bg_electron
 # 2012_B_data-PR_muon
-options.register ('analysisType', # 
-                  '2011_X_MC-sig_muon_125',	    # 125   tth->tautau
+options.register ('jobParams', # 
+                  '2011_X_MC-sigFullSim_muon_125',	    # 125   tth->tautau
 				  #'2012_X_MC-bg_muon_-1',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_muon_-11',	    # -11	2012B collisions
                   #'2012_X_MC-bg_muon_2500',	# 2500	TTbar
@@ -58,49 +62,92 @@ options.register ('analysisType', #
 				  #'2012_X_MC-bg_muon_9125',	# 9125	TTH_125_Fast
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string )
+
 options.maxEvents = maxEvents
 options.outputFile = 'NUT.root'
-options.inputFiles = 'file:/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
-#options.inputFiles = 'file:/afs/crc.nd.edu/user/n/nvallsve/CMSSW_5_2_5/src/NtupleMaker/BEANmaker/TTbar_summer12_BEAN.root'
-#options.inputFiles = '/store/user/lannon/T_s-channel_TuneZ2star_8TeV-powheg-tauola/Summer12-PU_S7_START52_V9-v1_BEAN_53xOn52x_V01_CV01//74c4602d4f424e29e54ad6a04efd57f1/pat2bean_53x_9_1_1yE.root'
+
+## 7TeV/2011 sample
+options.inputFiles = '/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
+## 8TeV/2012 sample
+#options.inputFiles = '/store/user/lannon/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/skimDilep_Summer12-PU_S7_START52_V9_53xOn52x_V02_CV01_ttjets_unpublished/skimDilep_ttjets_v2_job011.root'
+
 options.parseArguments() # get and parse the command line arguments 
 
-if options.analysisType.find('muon') == -1 and options.analysisType.find('electron') == -1:
-    print 'ERROR: analysisType must contain "muon" or "electron"'
-    exit(1)
+# === Parse Job Params === #
+import shlex;
+my_splitter = shlex.shlex(options.jobParams, posix=True);
+my_splitter.whitespace = '_'; 
+my_splitter.whitespace_split = True;
+jobParams       = list(my_splitter);
+
+
+# === Job params error checking === #
+if len(jobParams) != 5:
+    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 5 arguments (check config file for details). Terminating."; sys.exit(1);
+
+if (jobParams[0] != "2011") and (jobParams[0] != "2012"):
+    print "ERROR: era set to '" + jobParams[0] + "' but it must be '2011' or '2012'"; sys.exit(1);
+else:
+	era = int(jobParams[0]);
+
+runOnMC         = ((jobParams[2]).find('MC') != -1); 
+runOnSignal		= ((jobParams[2]).find('MC-sig') != -1); 
+runOnFastSim    = ((jobParams[2]).find('MC-sigFastSim') != -1); 
+if (not runOnMC) and ((jobParams[1] != 'A') and (jobParams[1] != 'B') and (jobParams[1] != 'C')):
+    print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', or 'C'."; sys.exit(1);
+
+if (jobParams[2] != "data-PR") and (jobParams[2] != "data-RR") and (jobParams[2] != "data-RRr")and (jobParams[2] != "MC-bg") and (jobParams[2] != "MC-sigFullSim") and (jobParams[2] != "MC-sigFastSim"):
+    print "ERROR: sample type set to '" + jobParams[2] + "' but it can only be 'data-PR', 'data-RR', 'data-RRr', 'MC-bg', 'MC-sigFullSim', or 'MC-sigFastSim'."; sys.exit(1); 
+
+if (jobParams[3] != "electron") and (jobParams[3] != "muon"):
+    print "ERROR: skim type set to '" + jobParams[3] + "' but it must be either 'electron' or 'muon'."; exit(1);
+else:
+	skimType = jobParams[3];
+
+sampleNumber    = int(jobParams[4]);
+if (runOnMC and sampleNumber < 0):
+    print "ERROR: job set to run on MC but sample number set to '" + sampleNumber + "' when it must be positive."; sys.exit(1);
+
+if (not runOnMC and sampleNumber >= 0):
+    print "ERROR: job set to run on collision data but sample number set to '" + sampleNumber + "' when it must be negative."; sys.exit(1);
+
+
 
 # === Set up triggers and GEN collections based on analysis type === # 
-if options.analysisType.find('MC') != -1:
+if runOnMC:
     inputForGenParticles = 'genParticles'
     inputForGenJets     = 'selectedPatJets:genJets:'
     triggerConditions = (
         'HLT_IsoMu24_v*',
         'HLT_IsoMu24_eta2p1_v*'
     )
-    if options.analysisType.find('electron') != -1:
+    if (skimType == 'electron'):
         triggerConditions = (
             'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
         )
 
-if options.analysisType.find('data') != -1:
+if (not runOnMC):
     inputForGenParticles = ''
     inputForGenJets         = ''
     triggerConditions = (
         'HLT_IsoMu24_v*',
         'HLT_IsoMu24_eta2p1_v*'
     )
-    if options.analysisType.find('electron') != -1:
+    if (skimType == 'electron'):
         triggerConditions = (
             'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
         )
 
-# === define Ntuplizer input collections === # 
-GenParticleSource                   = cms.untracked.InputTag(inputForGenParticles)
-GenJetSource                        = cms.untracked.InputTag(inputForGenJets)
+
+# === Define Ntuplizer input collections === # 
+## For 7TeV/2011 datasets, where we read PATuples
+GenParticleSource                   = cms.untracked.InputTag((inputForGenParticles))
+GenJetSource                        = cms.untracked.InputTag((inputForGenJets))
+TriggerSource						= cms.InputTag('TriggerResults::HLT')
 RecoVertexSource                    = cms.InputTag('offlinePrimaryVertices')
 RecoPATMetSource                    = cms.InputTag('patMETs'+postfix)
 RecoPFMetSource                     = cms.InputTag('patMETs'+postfix)
@@ -109,9 +156,12 @@ RecoMuonSource                      = cms.InputTag('selectedPatMuons'+postfix)
 RecoTauSource                       = cms.InputTag('selectedPatTaus'+postfix)
 RecoJetSource                       = cms.InputTag('selectedPatJets'+postfix+'::skimTTHiggsToDiTau')
 UsePfLeptons                        = cms.bool(False)
-
-if( runOnPAT is not True ):
+### For 8TeV/2012 datasets, where we read BEANs
+if( era == 2012 ):
     UsePfLeptons                        = cms.bool(True)
+    GenParticleSource                   = cms.untracked.InputTag('BNproducer:MCstatus3')
+    GenJetSource                        = cms.untracked.InputTag('BNproducer:ak5GenJets')
+    TriggerSource						= cms.InputTag('BNproducer:HLT')
     RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices')
     RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectronsPFlow'+postfix)
     RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuonsPFlow'+postfix)
@@ -123,18 +173,27 @@ if( runOnPAT is not True ):
 # === make analysis-specific selections for skims, fillers, etc. === #
 SkimTriggerRequirements	= cms.vstring()
 
-if (options.analysisType.find('sig') != -1 ) and (options.analysisType.find('muon') != -1):
-    SkimTriggerRequirements = cms.vstring('ttMuonHiggsToTauTauSkim')
-if (options.analysisType.find('sig') != -1 ) and (options.analysisType.find('electron') != -1):
-    SkimTriggerRequirements = cms.vstring('ttElectronHiggsToTauTauSkim')
-if (options.analysisType.find('bg') != -1 ) and (options.analysisType.find('muon') != -1):
-    SkimTriggerRequirements = cms.vstring('ttHiggsMuonSkim')
-if (options.analysisType.find('bg') != -1 ) and (options.analysisType.find('electron') != -1):
-    SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
-if (options.analysisType.find('data') != -1 ) and (options.analysisType.find('muon') != -1):
-    SkimTriggerRequirements = cms.vstring('ttHiggsMuonSkim')
-if (options.analysisType.find('data') != -1 ) and (options.analysisType.find('electron') != -1):
-    SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
+if (skimType == 'electron'):
+	if (runOnSignal):
+		SkimTriggerRequirements = cms.vstring('ttElectronHiggsToTauTauSkim')
+	elif (runOnMC and (not runOnSignal)):
+		SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
+	elif (not runOnMC):
+		SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
+	else:
+		throwFatalError();
+elif (skimType == 'muon'):
+	if (runOnSignal):
+		SkimTriggerRequirements = cms.vstring('ttMuonHiggsToTauTauSkim')
+	elif (runOnMC and (not runOnSignal)):
+		SkimTriggerRequirements = cms.vstring('ttHiggsMuonSkim')
+	elif (not runOnMC):
+		SkimTriggerRequirements = cms.vstring('ttHiggsMuonSkim')
+	else:
+		throwFatalError();
+else:
+	throwFatalError();
+
 
 NtupleFillers = cms.untracked.vstring(
         'Event',
@@ -149,10 +208,12 @@ NtupleFillers = cms.untracked.vstring(
         #'DitauElectron',
         #'Trigger' # not in use
 )
-if( options.analysisType.find('muon') != -1):
-            NtupleFillers.append('DitauMuon')
-if( options.analysisType.find('electron') != -1):
-            NtupleFillers.append('DitauElectron')
+if(skimType == 'muon'):
+	NtupleFillers.append('DitauMuon')
+elif(skimType == 'electron'):
+	NtupleFillers.append('DitauElectron')
+else:
+	throwFatalError();
 
 
 # === Python process === #
@@ -171,10 +232,11 @@ process.source = cms.Source("PoolSource",
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string(options.outputFile) )
 
+
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 from TTHTauTau.Analysis.globalTagMap_cfi import globalTagMap
-globalTag = globalTagMap[options.analysisType.rsplit('_',2)[0]] + '::All'
+globalTag = globalTagMap[options.jobParams.rsplit('_',2)[0]] + '::All'
 process.GlobalTag.globaltag = cms.string(globalTag)
 
 
@@ -184,26 +246,26 @@ process.hltFilter = hlt.triggerResultsFilter.clone(
         hltResults = cms.InputTag('TriggerResults::HLT'),
         triggerConditions = cms.vstring(triggerConditions),
         l1tResults = '',
-        throw = False
-)
+        throw = False)
 
 
 # === Define and setup main module === #
 process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Analysis setup === #
-	AnalysisType						= cms.string(options.analysisType),				
-	FromBEAN							= cms.bool(not runOnPAT),
+	DebugLevel							= cms.uint32(debugLevel),
+	AnalysisType						= cms.string(options.jobParams),				
+	FromBEAN							= cms.bool(era == 2012),
     TreeName							= cms.untracked.string('TTbarHTauTau'),
-    DebugLevel                          = cms.uint32(0),
     UsePfLeptons                        = UsePfLeptons,
 
 	# === HL Trigger === # (not in use)
-    HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),
+    #HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),
+    HLTriggerSource		    			= TriggerSource,
 
 	# === Skim Trigger === #
-    ApplySkimTriggerRequirements		= cms.bool(True),
-    SkimTriggerSource					= cms.InputTag("TriggerResults","","skimTTHiggsToDiTau"),
+    ApplySkimTriggerRequirements		= cms.bool(False),
+    SkimTriggerSource					= cms.InputTag("TriggerResults::"),
     SkimTriggerRequirements				= SkimTriggerRequirements,
 
 	# === Which branches to fill? === #
@@ -237,10 +299,11 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 )
 
 # === Run sequence === # 
-if (options.analysisType.find('data') != -1):
+if(not runOnMC):
     process.p = cms.Path( process.hltFilter + process.makeNtuple )
 else:
     process.p = cms.Path( process.makeNtuple )
+
 
 # === Print some basic info about the job setup === #
 print ''
@@ -248,8 +311,8 @@ print '	===================================================='
 print '		Ntuple Making Job'
 print '	===================================================='
 print ''
-print '		Analysis type....%s' % options.analysisType
-print '		Running on PAT?..%s' % runOnPAT
+print '		Analysis type....%s' % options.jobParams
+print '		Running on PAT?..%s' % (era == 2011)
 print '		Max events.......%d' % options.maxEvents
 print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
