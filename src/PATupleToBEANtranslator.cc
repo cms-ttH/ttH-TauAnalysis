@@ -18,8 +18,64 @@ PATupleToBEANtranslator::PATupleToBEANtranslator(){
 PATupleToBEANtranslator::~PATupleToBEANtranslator(){}
 
 BNeventCollection PATupleToBEANtranslator::EDMtoBN(Event const* iEvent){
-	BNeventCollection result;
-	return result;
+    BNeventCollection result;
+    BNevent MyEvent;
+
+    Handle<std::vector< PileupSummaryInfo > >  PupInfo;
+    iEvent->getByLabel(edm::InputTag("addPileupInfo"), PupInfo);
+    std::vector<PileupSummaryInfo>::const_iterator PVI;
+
+    float sum_nvtx_gen = 0, sum_nvtx_true = 0;
+    int npv_gen = -1;
+    float npv_true = -1;
+    int nm1 = -1, n0 = -1, np1 = -1;
+    float nm1_true = -1, n0_true = -1, np1_true = -1;
+
+    if( (PupInfo.isValid()) ){
+        for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
+
+            int BX = PVI->getBunchCrossing();
+
+            sum_nvtx_gen  += float(PVI->getPU_NumInteractions());
+            sum_nvtx_true += float(PVI->getTrueNumInteractions());
+
+            if( BX==0 ){
+                npv_gen = PVI->getPU_NumInteractions();
+                npv_true = PVI->getTrueNumInteractions();
+            }
+
+            if(BX == -1) { 
+                nm1 = PVI->getPU_NumInteractions();
+                nm1_true = PVI->getTrueNumInteractions();
+            }
+            else if(BX == 0) { 
+                n0 = PVI->getPU_NumInteractions();
+                n0_true = PVI->getTrueNumInteractions();
+            }
+            else if(BX == 1) { 
+                np1 = PVI->getPU_NumInteractions();
+                np1_true = PVI->getTrueNumInteractions();
+            }
+        }
+    }    
+    MyEvent.sumNVtx     = sum_nvtx_gen;
+    MyEvent.sumTrueNVtx = sum_nvtx_true;
+    MyEvent.numGenPV = npv_gen;
+    MyEvent.nm1 = nm1;
+    MyEvent.n0  = n0;
+    MyEvent.np1 = np1;
+    MyEvent.numTruePV = npv_true;
+    MyEvent.nm1_true = nm1_true;
+    MyEvent.n0_true  = n0_true;
+    MyEvent.np1_true = np1_true;
+
+    MyEvent.run = iEvent->id().run();
+    MyEvent.evt = iEvent->id().event();
+    MyEvent.lumi = iEvent->luminosityBlock();
+
+
+    result.push_back(MyEvent);
+    return result;
 }
 
 BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollection const* iCollection){
