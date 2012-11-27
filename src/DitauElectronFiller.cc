@@ -138,7 +138,7 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_HT", &_HT);
 	_Tree->Branch("TTE_NumCSVLbtagJets", &_NumCSVLbtagJets);
 	_Tree->Branch("TTE_NumCSVMbtagJets", &_NumCSVMbtagJets);
-	_Tree->Branch("TTE_NumCSVTbtagsJets", &_NumCSVTbtagJets);
+	_Tree->Branch("TTE_NumCSVTbtagJets", &_NumCSVTbtagJets);
 	_Tree->Branch("TTE_NumNonCSVLbtagJets", &_NumNonCSVLbtagJets);
 	_Tree->Branch("TTE_NumNonCSVMbtagJets", &_NumNonCSVMbtagJets);
 	_Tree->Branch("TTE_NumNonCSVTbtagJets", &_NumNonCSVTbtagJets);

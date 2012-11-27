@@ -132,7 +132,7 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_HT", &_HT);
 	_Tree->Branch("TTM_NumCSVLbtagJets", &_NumCSVLbtagJets);
 	_Tree->Branch("TTM_NumCSVMbtagJets", &_NumCSVMbtagJets);
-	_Tree->Branch("TTM_NumCSVTbtagsJets", &_NumCSVTbtagJets);
+	_Tree->Branch("TTM_NumCSVTbtagJets", &_NumCSVTbtagJets);
 	_Tree->Branch("TTM_NumNonCSVLbtagJets", &_NumNonCSVLbtagJets);
 	_Tree->Branch("TTM_NumNonCSVMbtagJets", &_NumNonCSVMbtagJets);
 	_Tree->Branch("TTM_NumNonCSVTbtagJets", &_NumNonCSVTbtagJets);
