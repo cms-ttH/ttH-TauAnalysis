@@ -1525,6 +1525,9 @@ BNjetCollection			PATupleToBEANtranslator::PATtoBN(
 
         result.push_back(MyPfjet);
     }
+
+	delete jecUnc_PF; jecUnc_PF = NULL;
+
     return result;
 }
 
