@@ -72,8 +72,8 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_numInteractionsBXm1	= _BNevents.begin()->nm1_true;
 	_numInteractionsBX0		= _BNevents.begin()->n0_true;
 	_numInteractionsBXp1	= _BNevents.begin()->np1_true;
-	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
 	_numPrimaryVertices		= _BNprimaryVertices.size();
+	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
 
 	// MET
 	BNjetCollection correctedJets							= beanHelper->GetCorrectedJets(_BNjets);
