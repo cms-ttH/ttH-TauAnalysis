@@ -27,10 +27,10 @@ class EventFiller : public NtupleFiller {
 		double				_runNumber;
 		double				_eventNumber;
 		double				_lumiBlock;
-		unsigned int		_numInteractionsBXm1;
-		unsigned int		_numInteractionsBX0;
-		unsigned int		_numInteractionsBXp1;
-		unsigned int		_numPrimaryVertices;
+		double				_numInteractionsBXm1;
+		double				_numInteractionsBX0;
+		double				_numInteractionsBXp1;
+		double				_numPrimaryVertices;
 
 		double				_MET;
 		double				_METphi;
