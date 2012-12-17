@@ -20,6 +20,7 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig, BEANhelper* iBEANhelper)
 
 	_DebugLevel						= ( iConfig.exists("DebugLevel") ) ? iConfig.getParameter<unsigned int>("DebugLevel") : 0;
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
+	_EraRelease						= iConfig.getParameter<string>("EraRelease");
 	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
 
 	_GenParticleSource				= iConfig.getUntrackedParameter<InputTag>("GenParticleSource");
