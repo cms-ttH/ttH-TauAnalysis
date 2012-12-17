@@ -16,6 +16,7 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	_DebugLevel						= iConfig.getParameter<unsigned int>("DebugLevel");
 	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
+	_EraRelease						= iConfig.getParameter<string>("EraRelease");
     _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
 
 	// Name of the ntuple tree
@@ -46,8 +47,10 @@ void  Ntuplizer::beginJob() {
 	_EventsRead	= fs->make<TH1I>("EventsRead", "EventsRead",1,0,1);
 	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
 
+
 	// Instantiate and set up beanHelper
-	beanHelper.SetUp(atoi(GetAnalysisTypeParameter(0).c_str()), atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), "SingleMu", true, _UsePfLeptons);
+	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
+	beanHelper.SetUp(eraForBEANhelper, atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), std::string("SingleMu"), true, _UsePfLeptons);
 
 	// Declare and store here NtupleFillers
 	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
@@ -61,6 +64,7 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));			}
 	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree, &beanHelper));		}
 	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree, &beanHelper));	}
+	//if(IsFillerEnabled("Test")){			ntupleFillers.push_back(new TestFiller(*jobConfig, _Tree, &beanHelper));			}
 	
 }
 

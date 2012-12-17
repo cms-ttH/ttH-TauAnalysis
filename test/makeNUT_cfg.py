@@ -12,6 +12,7 @@ def throwFatalError():
 # === Give values to some basic parameters === #
 maxEvents	= -1
 reportEvery	= 100
+era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 0
@@ -25,13 +26,13 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 # 'jobParams' parameter form: 
 # 
-# <era>_<subera>_<type>_<lepton flavor>_<sample number>
+# <era>_<subera>_<era release>_<type>_<lepton flavor>_<sample number>
 #
-# <era>					= 2011, 2012
-# <subera> [N/A for MC]	= A, B, C...
-# <type>				= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
-# <lepton flavor>		= muon, electron
-# <sample number>		= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
+# <era>						= 2011, 2012
+# <subera> [N/A for MC]		= A, B, C...
+# <type>					= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
+# <lepton flavor>			= muon, electron
+# <sample number>			= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
 #
 # Examples:
 # 2011_X_MC-sig_muon
@@ -39,7 +40,9 @@ options = VarParsing.VarParsing("analysis")
 # 2012_X_MC-bg_electron
 # 2012_B_data-PR_muon
 options.register ('jobParams', # 
-                  '2011_X_MC-sigFullSim_muon_125',	    # 125   tth->tautau
+                  #'2011_X_MC-sigFullSim_muon_125',	    # 125   tth->tautau
+                  '2011_X_MC-bg_muon_2500',	# 2500	TTbar
+				  #'2011_A_data-PR_muon_-1',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_muon_-1',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_muon_-11',	    # -11	2012B collisions
                   #'2012_X_MC-bg_muon_2500',	# 2500	TTbar
@@ -67,7 +70,9 @@ options.maxEvents = maxEvents
 options.outputFile = 'NUT.root'
 
 ## 7TeV/2011 sample
-options.inputFiles = '/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
+#options.inputFiles = '/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
+options.inputFiles = '/store/user/jkolb/TTJets_TuneZ2_7TeV-madgraph-tauola/skimTTHiggsToDiTau_428_v8_TTbar_fall11//e8b575bbba85cc8369f2a58b1d9ff532/ttHiggsToDiTauSkim_1504_1_pn7.root'
+#options.inputFiles = '/store/user/jkolb/SingleMu/skimTTHiggsToDiTau_428_v8_data_SingleMu_2011A_PRv4/de416a70484169d21ef326580ea52c59/ttHiggsToDiTauSkim_100_1_UgW.root'
 ## 8TeV/2012 sample
 #options.inputFiles = '/store/user/lannon/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/skimDilep_Summer12-PU_S7_START52_V9_53xOn52x_V02_CV01_ttjets_unpublished/skimDilep_ttjets_v2_job011.root'
 
@@ -95,6 +100,11 @@ runOnSignal		= ((jobParams[2]).find('MC-sig') != -1);
 runOnFastSim    = ((jobParams[2]).find('MC-sigFastSim') != -1); 
 if (not runOnMC) and ((jobParams[1] != 'A') and (jobParams[1] != 'B') and (jobParams[1] != 'C')):
     print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', or 'C'."; sys.exit(1);
+
+if (era == 2011):
+	era_release = 'NA'
+if (era == 2012) and ((era_release != '52x') and (era_release != '53x')):
+    print "ERROR: era set to 2012 and era release set to '" + era_release + "' but it must be '52x' (2012 ICHEP) or '53x' (full 2012)."; sys.exit(1);
 
 if (jobParams[2] != "data-PR") and (jobParams[2] != "data-RR") and (jobParams[2] != "data-RRr")and (jobParams[2] != "MC-bg") and (jobParams[2] != "MC-sigFullSim") and (jobParams[2] != "MC-sigFastSim"):
     print "ERROR: sample type set to '" + jobParams[2] + "' but it can only be 'data-PR', 'data-RR', 'data-RRr', 'MC-bg', 'MC-sigFullSim', or 'MC-sigFastSim'."; sys.exit(1); 
@@ -197,23 +207,24 @@ else:
 
 NtupleFillers = cms.untracked.vstring(
         'Event',
-        'GenLevel',
-        'GenTau',
-        'GenJet',
-        'Tau',
+        #'GenLevel',
+        #'GenTau',
+        #'GenJet',
+        #'Tau',
         'Electron',
         'Muon',
         'Jet',
         #'DitauMuon',
         #'DitauElectron',
-        #'Trigger' # not in use
+        #'Trigger', # not in use
+		'Test',
 )
-if(skimType == 'muon'):
-	NtupleFillers.append('DitauMuon')
-elif(skimType == 'electron'):
-	NtupleFillers.append('DitauElectron')
-else:
-	throwFatalError();
+#if(skimType == 'muon'):
+#	NtupleFillers.append('DitauMuon')
+#elif(skimType == 'electron'):
+#	NtupleFillers.append('DitauElectron')
+#else:
+#	throwFatalError();
 
 
 # === Python process === #
@@ -255,6 +266,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	# === Analysis setup === #
 	DebugLevel							= cms.uint32(debugLevel),
 	AnalysisType						= cms.string(options.jobParams),				
+	EraRelease							= cms.string(era_release),				
 	FromBEAN							= cms.bool(era == 2012),
     TreeName							= cms.untracked.string('TTbarHTauTau'),
     UsePfLeptons                        = UsePfLeptons,
@@ -313,6 +325,7 @@ print '	===================================================='
 print ''
 print '		Analysis type....%s' % options.jobParams
 print '		Running on PAT?..%s' % (era == 2011)
+print '		Era Release......%s' % era_release
 print '		Max events.......%d' % options.maxEvents
 print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
