@@ -108,6 +108,7 @@ class NtupleFiller : public EDAnalyzer {
 		PATupleToBEANtranslator patTupleToBEANtranslator;
 
 		string _AnalysisType;
+		string _EraRelease;
 		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		string _Era;
