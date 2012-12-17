@@ -28,6 +28,7 @@
 #include "DitauMuonFiller.h"
 #include "DitauElectronFiller.h"
 #include "TriggerFiller.h"
+//#include "TestFiller.h"
 
 using namespace std;
 using namespace edm;
@@ -70,6 +71,7 @@ class Ntuplizer : public EDAnalyzer {
 		vector<string> _enabledFillers;
 		ParameterSet* jobConfig;
 		string _AnalysisType;
+		string _EraRelease;
 		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		TTree* _Tree;
