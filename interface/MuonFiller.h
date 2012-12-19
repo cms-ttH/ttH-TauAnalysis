@@ -32,6 +32,24 @@ class MuonFiller : public NtupleFiller {
         vector<float>       _MuonRelIso;
         vector<bool>        _IsLooseMuon;
         vector<bool>        _IsTightMuon;
+		vector<int>			_MuonGenMatchDaughter0Id;
+		vector<int>			_MuonGenMatchDaughter1Id;
+		vector<int>			_MuonGenMatchId;
+		vector<int>			_MuonGenMatchMother0Id;
+		vector<int>			_MuonGenMatchMother1Id;
+		vector<int>			_MuonGenMatchGrandmother00Id;
+		vector<int>			_MuonGenMatchGrandmother01Id;
+		vector<int>			_MuonGenMatchGrandmother10Id;
+		vector<int>			_MuonGenMatchGrandmother11Id;
+		vector<int>			_MuonGenMatchDaughter0Status;
+		vector<int>			_MuonGenMatchDaughter1Status;
+		vector<int>			_MuonGenMatchStatus;
+		vector<int>			_MuonGenMatchMother0Status;
+		vector<int>			_MuonGenMatchMother1Status;
+		vector<int>			_MuonGenMatchGrandmother00Status;
+		vector<int>			_MuonGenMatchGrandmother01Status;
+		vector<int>			_MuonGenMatchGrandmother10Status;
+		vector<int>			_MuonGenMatchGrandmother11Status;
 		
 };
 

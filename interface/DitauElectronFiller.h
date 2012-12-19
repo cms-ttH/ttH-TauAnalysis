@@ -87,6 +87,24 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<bool>			_Tau1MatchesGenHadTauFromH2;
 		vector<bool>			_Tau1MatchesGenHadTauFromW1;
 		vector<bool>			_Tau1MatchesGenHadTauFromW2;
+		vector<int>				_Tau1GenMatchDaughter0Id;
+		vector<int>				_Tau1GenMatchDaughter1Id;
+		vector<int>				_Tau1GenMatchId;
+		vector<int>				_Tau1GenMatchMother0Id;
+		vector<int>				_Tau1GenMatchMother1Id;
+		vector<int>				_Tau1GenMatchGrandmother00Id;
+		vector<int>				_Tau1GenMatchGrandmother01Id;
+		vector<int>				_Tau1GenMatchGrandmother10Id;
+		vector<int>				_Tau1GenMatchGrandmother11Id;
+		vector<int>				_Tau1GenMatchDaughter0Status;
+		vector<int>				_Tau1GenMatchDaughter1Status;
+		vector<int>				_Tau1GenMatchStatus;
+		vector<int>				_Tau1GenMatchMother0Status;
+		vector<int>				_Tau1GenMatchMother1Status;
+		vector<int>				_Tau1GenMatchGrandmother00Status;
+		vector<int>				_Tau1GenMatchGrandmother01Status;
+		vector<int>				_Tau1GenMatchGrandmother10Status;
+		vector<int>				_Tau1GenMatchGrandmother11Status;
 
 		// === Tau2 === //
 		vector<unsigned int>	_Tau2MomentumRank;
@@ -127,6 +145,24 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<bool>			_Tau2MatchesGenHadTauFromH2;
 		vector<bool>			_Tau2MatchesGenHadTauFromW1;
 		vector<bool>			_Tau2MatchesGenHadTauFromW2;
+		vector<int>				_Tau2GenMatchDaughter0Id;
+		vector<int>				_Tau2GenMatchDaughter1Id;
+		vector<int>				_Tau2GenMatchId;
+		vector<int>				_Tau2GenMatchMother0Id;
+		vector<int>				_Tau2GenMatchMother1Id;
+		vector<int>				_Tau2GenMatchGrandmother00Id;
+		vector<int>				_Tau2GenMatchGrandmother01Id;
+		vector<int>				_Tau2GenMatchGrandmother10Id;
+		vector<int>				_Tau2GenMatchGrandmother11Id;
+		vector<int>				_Tau2GenMatchDaughter0Status;
+		vector<int>				_Tau2GenMatchDaughter1Status;
+		vector<int>				_Tau2GenMatchStatus;
+		vector<int>				_Tau2GenMatchMother0Status;
+		vector<int>				_Tau2GenMatchMother1Status;
+		vector<int>				_Tau2GenMatchGrandmother00Status;
+		vector<int>				_Tau2GenMatchGrandmother01Status;
+		vector<int>				_Tau2GenMatchGrandmother10Status;
+		vector<int>				_Tau2GenMatchGrandmother11Status;
 
 		// === Electron === //
 		vector<unsigned int>	_ElectronMomentumRank;
@@ -136,6 +172,24 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<float>			_ElectronRelIso;
 		vector<int> 			_ElectronIsLooseElectron;
 		vector<int> 			_ElectronIsTightElectron;
+		vector<int>				_ElectronGenMatchDaughter0Id;
+		vector<int>				_ElectronGenMatchDaughter1Id;
+		vector<int>				_ElectronGenMatchId;
+		vector<int>				_ElectronGenMatchMother0Id;
+		vector<int>				_ElectronGenMatchMother1Id;
+		vector<int>				_ElectronGenMatchGrandmother00Id;
+		vector<int>				_ElectronGenMatchGrandmother01Id;
+		vector<int>				_ElectronGenMatchGrandmother10Id;
+		vector<int>				_ElectronGenMatchGrandmother11Id;
+		vector<int>				_ElectronGenMatchDaughter0Status;
+		vector<int>				_ElectronGenMatchDaughter1Status;
+		vector<int>				_ElectronGenMatchStatus;
+		vector<int>				_ElectronGenMatchMother0Status;
+		vector<int>				_ElectronGenMatchMother1Status;
+		vector<int>				_ElectronGenMatchGrandmother00Status;
+		vector<int>				_ElectronGenMatchGrandmother01Status;
+		vector<int>				_ElectronGenMatchGrandmother10Status;
+		vector<int>				_ElectronGenMatchGrandmother11Status;
 
 		// === Combo === //
 		vector<float>			_DitauVisibleMass;

@@ -62,6 +62,24 @@ class TauFiller : public NtupleFiller {
 		vector<bool>			_TauMatchesGenHadTauFromH2;
 		vector<bool>			_TauMatchesGenHadTauFromW1;
 		vector<bool>			_TauMatchesGenHadTauFromW2;
+		vector<int>				_TauGenMatchDaughter0Id;
+		vector<int>				_TauGenMatchDaughter1Id;
+		vector<int>				_TauGenMatchId;
+		vector<int>				_TauGenMatchMother0Id;
+		vector<int>				_TauGenMatchMother1Id;
+		vector<int>				_TauGenMatchGrandmother00Id;
+		vector<int>				_TauGenMatchGrandmother01Id;
+		vector<int>				_TauGenMatchGrandmother10Id;
+		vector<int>				_TauGenMatchGrandmother11Id;
+		vector<int>				_TauGenMatchDaughter0Status;
+		vector<int>				_TauGenMatchDaughter1Status;
+		vector<int>				_TauGenMatchStatus;
+		vector<int>				_TauGenMatchMother0Status;
+		vector<int>				_TauGenMatchMother1Status;
+		vector<int>				_TauGenMatchGrandmother00Status;
+		vector<int>				_TauGenMatchGrandmother01Status;
+		vector<int>				_TauGenMatchGrandmother10Status;
+		vector<int>				_TauGenMatchGrandmother11Status;
 		
 };
 

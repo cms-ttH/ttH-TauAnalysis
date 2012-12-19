@@ -78,6 +78,24 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromH2", &_Tau1MatchesGenHadTauFromH2);
 	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromW1", &_Tau1MatchesGenHadTauFromW1);
 	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromW2", &_Tau1MatchesGenHadTauFromW2);
+	_Tree->Branch("TTE_Tau1GenMatchDaughter0Id", &_Tau1GenMatchDaughter0Id);
+	_Tree->Branch("TTE_Tau1GenMatchDaughter1Id", &_Tau1GenMatchDaughter1Id);
+	_Tree->Branch("TTE_Tau1GenMatchId", &_Tau1GenMatchId);
+	_Tree->Branch("TTE_Tau1GenMatchMother0Id", &_Tau1GenMatchMother0Id);
+	_Tree->Branch("TTE_Tau1GenMatchMother1Id", &_Tau1GenMatchMother1Id);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother00Id", &_Tau1GenMatchGrandmother00Id);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother01Id", &_Tau1GenMatchGrandmother01Id);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother10Id", &_Tau1GenMatchGrandmother10Id);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother11Id", &_Tau1GenMatchGrandmother11Id);
+	_Tree->Branch("TTE_Tau1GenMatchDaughter0Status", &_Tau1GenMatchDaughter0Status);
+	_Tree->Branch("TTE_Tau1GenMatchDaughter1Status", &_Tau1GenMatchDaughter1Status);
+	_Tree->Branch("TTE_Tau1GenMatchStatus", &_Tau1GenMatchStatus);
+	_Tree->Branch("TTE_Tau1GenMatchMother0Status", &_Tau1GenMatchMother0Status);
+	_Tree->Branch("TTE_Tau1GenMatchMother1Status", &_Tau1GenMatchMother1Status);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother00Status", &_Tau1GenMatchGrandmother00Status);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother01Status", &_Tau1GenMatchGrandmother01Status);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother10Status", &_Tau1GenMatchGrandmother10Status);
+	_Tree->Branch("TTE_Tau1GenMatchGrandmother11Status", &_Tau1GenMatchGrandmother11Status);
 
 	// === Tau2 === //
 	_Tree->Branch("TTE_Tau2MomentumRank", &_Tau2MomentumRank);
@@ -118,6 +136,24 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromH2", &_Tau2MatchesGenHadTauFromH2);
 	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromW1", &_Tau2MatchesGenHadTauFromW1);
 	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromW2", &_Tau2MatchesGenHadTauFromW2);
+	_Tree->Branch("TTE_Tau2GenMatchDaughter0Id", &_Tau2GenMatchDaughter0Id);
+	_Tree->Branch("TTE_Tau2GenMatchDaughter1Id", &_Tau2GenMatchDaughter1Id);
+	_Tree->Branch("TTE_Tau2GenMatchId", &_Tau2GenMatchId);
+	_Tree->Branch("TTE_Tau2GenMatchMother0Id", &_Tau2GenMatchMother0Id);
+	_Tree->Branch("TTE_Tau2GenMatchMother1Id", &_Tau2GenMatchMother1Id);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother00Id", &_Tau2GenMatchGrandmother00Id);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother01Id", &_Tau2GenMatchGrandmother01Id);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother10Id", &_Tau2GenMatchGrandmother10Id);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother11Id", &_Tau2GenMatchGrandmother11Id);
+	_Tree->Branch("TTE_Tau2GenMatchDaughter0Status", &_Tau2GenMatchDaughter0Status);
+	_Tree->Branch("TTE_Tau2GenMatchDaughter1Status", &_Tau2GenMatchDaughter1Status);
+	_Tree->Branch("TTE_Tau2GenMatchStatus", &_Tau2GenMatchStatus);
+	_Tree->Branch("TTE_Tau2GenMatchMother0Status", &_Tau2GenMatchMother0Status);
+	_Tree->Branch("TTE_Tau2GenMatchMother1Status", &_Tau2GenMatchMother1Status);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother00Status", &_Tau2GenMatchGrandmother00Status);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother01Status", &_Tau2GenMatchGrandmother01Status);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother10Status", &_Tau2GenMatchGrandmother10Status);
+	_Tree->Branch("TTE_Tau2GenMatchGrandmother11Status", &_Tau2GenMatchGrandmother11Status);
 
 	// === Electron === //
 	_Tree->Branch("TTE_ElectronMomentumRank", &_ElectronMomentumRank);
@@ -127,6 +163,24 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_ElectronRelIso", &_ElectronRelIso);
 	_Tree->Branch("TTE_ElectronIsLooseElectron", &_ElectronIsLooseElectron);
 	_Tree->Branch("TTE_ElectronIsTightElectron", &_ElectronIsTightElectron);
+	_Tree->Branch("TTE_ElectronGenMatchDaughter0Id", &_ElectronGenMatchDaughter0Id);
+	_Tree->Branch("TTE_ElectronGenMatchDaughter1Id", &_ElectronGenMatchDaughter1Id);
+	_Tree->Branch("TTE_ElectronGenMatchId", &_ElectronGenMatchId);
+	_Tree->Branch("TTE_ElectronGenMatchMother0Id", &_ElectronGenMatchMother0Id);
+	_Tree->Branch("TTE_ElectronGenMatchMother1Id", &_ElectronGenMatchMother1Id);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother00Id", &_ElectronGenMatchGrandmother00Id);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother01Id", &_ElectronGenMatchGrandmother01Id);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother10Id", &_ElectronGenMatchGrandmother10Id);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother11Id", &_ElectronGenMatchGrandmother11Id);
+	_Tree->Branch("TTE_ElectronGenMatchDaughter0Status", &_ElectronGenMatchDaughter0Status);
+	_Tree->Branch("TTE_ElectronGenMatchDaughter1Status", &_ElectronGenMatchDaughter1Status);
+	_Tree->Branch("TTE_ElectronGenMatchStatus", &_ElectronGenMatchStatus);
+	_Tree->Branch("TTE_ElectronGenMatchMother0Status", &_ElectronGenMatchMother0Status);
+	_Tree->Branch("TTE_ElectronGenMatchMother1Status", &_ElectronGenMatchMother1Status);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother00Status", &_ElectronGenMatchGrandmother00Status);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother01Status", &_ElectronGenMatchGrandmother01Status);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother10Status", &_ElectronGenMatchGrandmother10Status);
+	_Tree->Branch("TTE_ElectronGenMatchGrandmother11Status", &_ElectronGenMatchGrandmother11Status);
 
 	// === Combo === //
 	_Tree->Branch("TTE_DitauVisibleMass", &_DitauVisibleMass);
@@ -202,6 +256,24 @@ void DitauElectronFiller::ClearVectors(){
 	_Tau1MatchesGenHadTauFromH2						.clear();
 	_Tau1MatchesGenHadTauFromW1						.clear();
 	_Tau1MatchesGenHadTauFromW2						.clear();
+	_Tau1GenMatchDaughter0Id						.clear();
+	_Tau1GenMatchDaughter1Id						.clear();
+	_Tau1GenMatchId									.clear();
+	_Tau1GenMatchMother0Id							.clear();
+	_Tau1GenMatchMother1Id							.clear();
+	_Tau1GenMatchGrandmother00Id					.clear();
+	_Tau1GenMatchGrandmother01Id					.clear();
+	_Tau1GenMatchGrandmother10Id					.clear();
+	_Tau1GenMatchGrandmother11Id					.clear();
+	_Tau1GenMatchDaughter0Status					.clear();
+	_Tau1GenMatchDaughter1Status					.clear();
+	_Tau1GenMatchStatus								.clear();
+	_Tau1GenMatchMother0Status						.clear();
+	_Tau1GenMatchMother1Status						.clear();
+	_Tau1GenMatchGrandmother00Status				.clear();
+	_Tau1GenMatchGrandmother01Status				.clear();
+	_Tau1GenMatchGrandmother10Status				.clear();
+	_Tau1GenMatchGrandmother11Status				.clear();
 
 	// === Tau2 === //
 	_Tau2MomentumRank								.clear();
@@ -242,6 +314,24 @@ void DitauElectronFiller::ClearVectors(){
 	_Tau2MatchesGenHadTauFromH2						.clear();
 	_Tau2MatchesGenHadTauFromW1						.clear();
 	_Tau2MatchesGenHadTauFromW2						.clear();
+	_Tau2GenMatchDaughter0Id						.clear();
+	_Tau2GenMatchDaughter1Id						.clear();
+	_Tau2GenMatchId									.clear();
+	_Tau2GenMatchMother0Id							.clear();
+	_Tau2GenMatchMother1Id							.clear();
+	_Tau2GenMatchGrandmother00Id					.clear();
+	_Tau2GenMatchGrandmother01Id					.clear();
+	_Tau2GenMatchGrandmother10Id					.clear();
+	_Tau2GenMatchGrandmother11Id					.clear();
+	_Tau2GenMatchDaughter0Status					.clear();
+	_Tau2GenMatchDaughter1Status					.clear();
+	_Tau2GenMatchStatus								.clear();
+	_Tau2GenMatchMother0Status						.clear();
+	_Tau2GenMatchMother1Status						.clear();
+	_Tau2GenMatchGrandmother00Status				.clear();
+	_Tau2GenMatchGrandmother01Status				.clear();
+	_Tau2GenMatchGrandmother10Status				.clear();
+	_Tau2GenMatchGrandmother11Status				.clear();
 
 	// === Electron === //
 	_ElectronMomentumRank							.clear();
@@ -251,6 +341,24 @@ void DitauElectronFiller::ClearVectors(){
     _ElectronRelIso                                 .clear();
     _ElectronIsTightElectron                        .clear();
     _ElectronIsLooseElectron                        .clear();
+	_ElectronGenMatchDaughter0Id					.clear();
+	_ElectronGenMatchDaughter1Id					.clear();
+	_ElectronGenMatchId								.clear();
+	_ElectronGenMatchMother0Id						.clear();
+	_ElectronGenMatchMother1Id						.clear();
+	_ElectronGenMatchGrandmother00Id				.clear();
+	_ElectronGenMatchGrandmother01Id				.clear();
+	_ElectronGenMatchGrandmother10Id				.clear();
+	_ElectronGenMatchGrandmother11Id				.clear();
+	_ElectronGenMatchDaughter0Status				.clear();
+	_ElectronGenMatchDaughter1Status				.clear();
+	_ElectronGenMatchStatus							.clear();
+	_ElectronGenMatchMother0Status					.clear();
+	_ElectronGenMatchMother1Status					.clear();
+	_ElectronGenMatchGrandmother00Status			.clear();
+	_ElectronGenMatchGrandmother01Status			.clear();
+	_ElectronGenMatchGrandmother10Status			.clear();
+	_ElectronGenMatchGrandmother11Status			.clear();
 
 	// === Combo === //
 	_DitauVisibleMass								.clear();
@@ -367,6 +475,7 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 				_NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
 				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
+
 			} // end of electron loop
 		} // end of tau2 loop
 	} // end of tau1 loop
@@ -409,6 +518,28 @@ void DitauElectronFiller::FillTau1(const BNtau& Tau){
 	_Tau1LTvz			.push_back(Tau.leadingTrackVz);
 	_Tau1LTValidHits	.push_back(Tau.leadingTrackValidHits);
 	_Tau1LTNormChiSqrd	.push_back(Tau.leadingTrackNormChiSqrd);
+
+	// Provenance
+	BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Tau, 0.25);
+	_Tau1GenMatchDaughter0Id			.push_back(tauGenMatch.daughter0Id);
+	_Tau1GenMatchDaughter1Id			.push_back(tauGenMatch.daughter1Id);
+	_Tau1GenMatchId						.push_back(tauGenMatch.id);
+	_Tau1GenMatchMother0Id				.push_back(tauGenMatch.mother0Id);
+	_Tau1GenMatchMother1Id				.push_back(tauGenMatch.mother1Id);
+	_Tau1GenMatchGrandmother00Id		.push_back(tauGenMatch.grandMother00Id);
+	_Tau1GenMatchGrandmother01Id		.push_back(tauGenMatch.grandMother01Id);
+	_Tau1GenMatchGrandmother10Id		.push_back(tauGenMatch.grandMother10Id);
+	_Tau1GenMatchGrandmother11Id		.push_back(tauGenMatch.grandMother11Id);
+	_Tau1GenMatchDaughter0Status		.push_back(tauGenMatch.daughter0Status);
+	_Tau1GenMatchDaughter1Status		.push_back(tauGenMatch.daughter1Status);
+	_Tau1GenMatchStatus					.push_back(tauGenMatch.status);
+	_Tau1GenMatchMother0Status			.push_back(tauGenMatch.mother0Status);
+	_Tau1GenMatchMother1Status			.push_back(tauGenMatch.mother1Status);
+	_Tau1GenMatchGrandmother00Status	.push_back(tauGenMatch.grandMother00Status);
+	_Tau1GenMatchGrandmother01Status	.push_back(tauGenMatch.grandMother01Status);
+	_Tau1GenMatchGrandmother10Status	.push_back(tauGenMatch.grandMother10Status);
+	_Tau1GenMatchGrandmother11Status	.push_back(tauGenMatch.grandMother11Status);
+				
 }
 
 void DitauElectronFiller::FillTau2(const BNtau& Tau){
@@ -447,6 +578,28 @@ void DitauElectronFiller::FillTau2(const BNtau& Tau){
 	_Tau2LTvz										.push_back(Tau.leadingTrackVz);
 	_Tau2LTValidHits								.push_back(Tau.leadingTrackValidHits);
 	_Tau2LTNormChiSqrd								.push_back(Tau.leadingTrackNormChiSqrd);
+
+	// Provenance
+	BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Tau, 0.25);
+	_Tau2GenMatchDaughter0Id			.push_back(tauGenMatch.daughter0Id);
+	_Tau2GenMatchDaughter1Id			.push_back(tauGenMatch.daughter1Id);
+	_Tau2GenMatchId						.push_back(tauGenMatch.id);
+	_Tau2GenMatchMother0Id				.push_back(tauGenMatch.mother0Id);
+	_Tau2GenMatchMother1Id				.push_back(tauGenMatch.mother1Id);
+	_Tau2GenMatchGrandmother00Id		.push_back(tauGenMatch.grandMother00Id);
+	_Tau2GenMatchGrandmother01Id		.push_back(tauGenMatch.grandMother01Id);
+	_Tau2GenMatchGrandmother10Id		.push_back(tauGenMatch.grandMother10Id);
+	_Tau2GenMatchGrandmother11Id		.push_back(tauGenMatch.grandMother11Id);
+	_Tau2GenMatchDaughter0Status		.push_back(tauGenMatch.daughter0Status);
+	_Tau2GenMatchDaughter1Status		.push_back(tauGenMatch.daughter1Status);
+	_Tau2GenMatchStatus					.push_back(tauGenMatch.status);
+	_Tau2GenMatchMother0Status			.push_back(tauGenMatch.mother0Status);
+	_Tau2GenMatchMother1Status			.push_back(tauGenMatch.mother1Status);
+	_Tau2GenMatchGrandmother00Status	.push_back(tauGenMatch.grandMother00Status);
+	_Tau2GenMatchGrandmother01Status	.push_back(tauGenMatch.grandMother01Status);
+	_Tau2GenMatchGrandmother10Status	.push_back(tauGenMatch.grandMother10Status);
+	_Tau2GenMatchGrandmother11Status	.push_back(tauGenMatch.grandMother11Status);
+
 }
 
 void DitauElectronFiller::FillElectron(const BNelectron& Electron){
@@ -456,6 +609,26 @@ void DitauElectronFiller::FillElectron(const BNelectron& Electron){
     _ElectronRelIso.push_back(beanHelper->GetElectronRelIso(Electron));
     _ElectronIsLooseElectron.push_back(beanHelper->IsLooseElectron(Electron));
     _ElectronIsTightElectron.push_back(beanHelper->IsTightElectron(Electron));
+
+	BNmcparticle electronGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Electron, 0.25);
+	_ElectronGenMatchDaughter0Id			.push_back(electronGenMatch.daughter0Id);
+	_ElectronGenMatchDaughter1Id			.push_back(electronGenMatch.daughter1Id);
+	_ElectronGenMatchId						.push_back(electronGenMatch.id);
+	_ElectronGenMatchMother0Id				.push_back(electronGenMatch.mother0Id);
+	_ElectronGenMatchMother1Id				.push_back(electronGenMatch.mother1Id);
+	_ElectronGenMatchGrandmother00Id		.push_back(electronGenMatch.grandMother00Id);
+	_ElectronGenMatchGrandmother01Id		.push_back(electronGenMatch.grandMother01Id);
+	_ElectronGenMatchGrandmother10Id		.push_back(electronGenMatch.grandMother10Id);
+	_ElectronGenMatchGrandmother11Id		.push_back(electronGenMatch.grandMother11Id);
+	_ElectronGenMatchDaughter0Status		.push_back(electronGenMatch.daughter0Status);
+	_ElectronGenMatchDaughter1Status		.push_back(electronGenMatch.daughter1Status);
+	_ElectronGenMatchStatus					.push_back(electronGenMatch.status);
+	_ElectronGenMatchMother0Status			.push_back(electronGenMatch.mother0Status);
+	_ElectronGenMatchMother1Status			.push_back(electronGenMatch.mother1Status);
+	_ElectronGenMatchGrandmother00Status	.push_back(electronGenMatch.grandMother00Status);
+	_ElectronGenMatchGrandmother01Status	.push_back(electronGenMatch.grandMother01Status);
+	_ElectronGenMatchGrandmother10Status	.push_back(electronGenMatch.grandMother10Status);
+	_ElectronGenMatchGrandmother11Status	.push_back(electronGenMatch.grandMother11Status);
    
 }
 

@@ -32,6 +32,24 @@ class ElectronFiller : public NtupleFiller {
         vector<float>       _ElectronRelIso;
         vector<bool>        _IsLooseElectron;
         vector<bool>        _IsTightElectron;
+		vector<int>			_ElectronGenMatchDaughter0Id;
+		vector<int>			_ElectronGenMatchDaughter1Id;
+		vector<int>			_ElectronGenMatchId;
+		vector<int>			_ElectronGenMatchMother0Id;
+		vector<int>			_ElectronGenMatchMother1Id;
+		vector<int>			_ElectronGenMatchGrandmother00Id;
+		vector<int>			_ElectronGenMatchGrandmother01Id;
+		vector<int>			_ElectronGenMatchGrandmother10Id;
+		vector<int>			_ElectronGenMatchGrandmother11Id;
+		vector<int>			_ElectronGenMatchDaughter0Status;
+		vector<int>			_ElectronGenMatchDaughter1Status;
+		vector<int>			_ElectronGenMatchStatus;
+		vector<int>			_ElectronGenMatchMother0Status;
+		vector<int>			_ElectronGenMatchMother1Status;
+		vector<int>			_ElectronGenMatchGrandmother00Status;
+		vector<int>			_ElectronGenMatchGrandmother01Status;
+		vector<int>			_ElectronGenMatchGrandmother10Status;
+		vector<int>			_ElectronGenMatchGrandmother11Status;
 		
 };
 
