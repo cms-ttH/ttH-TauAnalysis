@@ -28,7 +28,7 @@
 #include "DitauMuonFiller.h"
 #include "DitauElectronFiller.h"
 #include "TriggerFiller.h"
-//#include "TestFiller.h"
+#include "QuickFiller.h"
 
 using namespace std;
 using namespace edm;
