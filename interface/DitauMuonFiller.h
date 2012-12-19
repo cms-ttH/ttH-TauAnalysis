@@ -86,6 +86,24 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<bool>			_Tau1MatchesGenHadTauFromH2;
 		vector<bool>			_Tau1MatchesGenHadTauFromW1;
 		vector<bool>			_Tau1MatchesGenHadTauFromW2;
+		vector<int>				_Tau1GenMatchDaughter0Id;
+		vector<int>				_Tau1GenMatchDaughter1Id;
+		vector<int>				_Tau1GenMatchId;
+		vector<int>				_Tau1GenMatchMother0Id;
+		vector<int>				_Tau1GenMatchMother1Id;
+		vector<int>				_Tau1GenMatchGrandmother00Id;
+		vector<int>				_Tau1GenMatchGrandmother01Id;
+		vector<int>				_Tau1GenMatchGrandmother10Id;
+		vector<int>				_Tau1GenMatchGrandmother11Id;
+		vector<int>				_Tau1GenMatchDaughter0Status;
+		vector<int>				_Tau1GenMatchDaughter1Status;
+		vector<int>				_Tau1GenMatchStatus;
+		vector<int>				_Tau1GenMatchMother0Status;
+		vector<int>				_Tau1GenMatchMother1Status;
+		vector<int>				_Tau1GenMatchGrandmother00Status;
+		vector<int>				_Tau1GenMatchGrandmother01Status;
+		vector<int>				_Tau1GenMatchGrandmother10Status;
+		vector<int>				_Tau1GenMatchGrandmother11Status;
 
 		// === Tau2 === //
 		vector<unsigned int>	_Tau2MomentumRank;
@@ -126,6 +144,24 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<bool>			_Tau2MatchesGenHadTauFromH2;
 		vector<bool>			_Tau2MatchesGenHadTauFromW1;
 		vector<bool>			_Tau2MatchesGenHadTauFromW2;
+		vector<int>				_Tau2GenMatchDaughter0Id;
+		vector<int>				_Tau2GenMatchDaughter1Id;
+		vector<int>				_Tau2GenMatchId;
+		vector<int>				_Tau2GenMatchMother0Id;
+		vector<int>				_Tau2GenMatchMother1Id;
+		vector<int>				_Tau2GenMatchGrandmother00Id;
+		vector<int>				_Tau2GenMatchGrandmother01Id;
+		vector<int>				_Tau2GenMatchGrandmother10Id;
+		vector<int>				_Tau2GenMatchGrandmother11Id;
+		vector<int>				_Tau2GenMatchDaughter0Status;
+		vector<int>				_Tau2GenMatchDaughter1Status;
+		vector<int>				_Tau2GenMatchStatus;
+		vector<int>				_Tau2GenMatchMother0Status;
+		vector<int>				_Tau2GenMatchMother1Status;
+		vector<int>				_Tau2GenMatchGrandmother00Status;
+		vector<int>				_Tau2GenMatchGrandmother01Status;
+		vector<int>				_Tau2GenMatchGrandmother10Status;
+		vector<int>				_Tau2GenMatchGrandmother11Status;
 
 		// === Muon === //
 		vector<unsigned int>	_MuonMomentumRank;
@@ -135,6 +171,24 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_MuonRelIso;
 		vector<int> 			_MuonIsLooseMuon;
 		vector<int> 			_MuonIsTightMuon;
+		vector<int>				_MuonGenMatchDaughter0Id;
+		vector<int>				_MuonGenMatchDaughter1Id;
+		vector<int>				_MuonGenMatchId;
+		vector<int>				_MuonGenMatchMother0Id;
+		vector<int>				_MuonGenMatchMother1Id;
+		vector<int>				_MuonGenMatchGrandmother00Id;
+		vector<int>				_MuonGenMatchGrandmother01Id;
+		vector<int>				_MuonGenMatchGrandmother10Id;
+		vector<int>				_MuonGenMatchGrandmother11Id;
+		vector<int>				_MuonGenMatchDaughter0Status;
+		vector<int>				_MuonGenMatchDaughter1Status;
+		vector<int>				_MuonGenMatchStatus;
+		vector<int>				_MuonGenMatchMother0Status;
+		vector<int>				_MuonGenMatchMother1Status;
+		vector<int>				_MuonGenMatchGrandmother00Status;
+		vector<int>				_MuonGenMatchGrandmother01Status;
+		vector<int>				_MuonGenMatchGrandmother10Status;
+		vector<int>				_MuonGenMatchGrandmother11Status;
 
 		// === Combo === //
 		vector<float>			_DitauVisibleMass;

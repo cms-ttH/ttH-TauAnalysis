@@ -60,6 +60,25 @@ void TauFiller::SetupBranches(){
 	_Tree->Branch("T_LTvz", &_TauLTvz);
 	_Tree->Branch("T_LTValidHits", &_TauLTValidHits);
 	_Tree->Branch("T_LTNormChiSqrd", &_TauLTNormChiSqrd);
+
+	_Tree->Branch("T_TauGenMatchDaughter0Id", &_TauGenMatchDaughter0Id);
+	_Tree->Branch("T_TauGenMatchDaughter1Id", &_TauGenMatchDaughter1Id);
+	_Tree->Branch("T_TauGenMatchId", &_TauGenMatchId);
+	_Tree->Branch("T_TauGenMatchMother0Id", &_TauGenMatchMother0Id);
+	_Tree->Branch("T_TauGenMatchMother1Id", &_TauGenMatchMother1Id);
+	_Tree->Branch("T_TauGenMatchGrandmother00Id", &_TauGenMatchGrandmother00Id);
+	_Tree->Branch("T_TauGenMatchGrandmother01Id", &_TauGenMatchGrandmother01Id);
+	_Tree->Branch("T_TauGenMatchGrandmother10Id", &_TauGenMatchGrandmother10Id);
+	_Tree->Branch("T_TauGenMatchGrandmother11Id", &_TauGenMatchGrandmother11Id);
+	_Tree->Branch("T_TauGenMatchDaughter0Status", &_TauGenMatchDaughter0Status);
+	_Tree->Branch("T_TauGenMatchDaughter1Status", &_TauGenMatchDaughter1Status);
+	_Tree->Branch("T_TauGenMatchStatus", &_TauGenMatchStatus);
+	_Tree->Branch("T_TauGenMatchMother0Status", &_TauGenMatchMother0Status);
+	_Tree->Branch("T_TauGenMatchMother1Status", &_TauGenMatchMother1Status);
+	_Tree->Branch("T_TauGenMatchGrandmother00Status", &_TauGenMatchGrandmother00Status);
+	_Tree->Branch("T_TauGenMatchGrandmother01Status", &_TauGenMatchGrandmother01Status);
+	_Tree->Branch("T_TauGenMatchGrandmother10Status", &_TauGenMatchGrandmother10Status);
+	_Tree->Branch("T_TauGenMatchGrandmother11Status", &_TauGenMatchGrandmother11Status);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -100,6 +119,24 @@ void TauFiller::ClearVectors(){
 	_TauLTvz										.clear();
 	_TauLTValidHits									.clear();
 	_TauLTNormChiSqrd								.clear();
+	_TauGenMatchDaughter0Id							.clear();
+	_TauGenMatchDaughter1Id							.clear();
+	_TauGenMatchId									.clear();
+	_TauGenMatchMother0Id							.clear();
+	_TauGenMatchMother1Id							.clear();
+	_TauGenMatchGrandmother00Id						.clear();
+	_TauGenMatchGrandmother01Id						.clear();
+	_TauGenMatchGrandmother10Id						.clear();
+	_TauGenMatchGrandmother11Id						.clear();
+	_TauGenMatchDaughter0Status	   					.clear();
+	_TauGenMatchDaughter1Status	   					.clear();
+	_TauGenMatchStatus			   					.clear();
+	_TauGenMatchMother0Status	   					.clear();
+	_TauGenMatchMother1Status	   					.clear();
+	_TauGenMatchGrandmother00Status					.clear();
+	_TauGenMatchGrandmother01Status					.clear();
+	_TauGenMatchGrandmother10Status					.clear();
+	_TauGenMatchGrandmother11Status					.clear();
 
 }
 
@@ -154,5 +191,26 @@ void TauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_TauLTvz			.push_back(Tau->leadingTrackVz);
 		_TauLTValidHits		.push_back(Tau->leadingTrackValidHits);
 		_TauLTNormChiSqrd	.push_back(Tau->leadingTrackNormChiSqrd);
+
+		// Provenance
+		BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, *Tau, 0.25);
+		_TauGenMatchDaughter0Id			.push_back(tauGenMatch.daughter0Id);
+		_TauGenMatchDaughter1Id			.push_back(tauGenMatch.daughter1Id);
+		_TauGenMatchId					.push_back(tauGenMatch.id);
+		_TauGenMatchMother0Id			.push_back(tauGenMatch.mother0Id);
+		_TauGenMatchMother1Id			.push_back(tauGenMatch.mother1Id);
+		_TauGenMatchGrandmother00Id		.push_back(tauGenMatch.grandMother00Id);
+		_TauGenMatchGrandmother01Id		.push_back(tauGenMatch.grandMother01Id);
+		_TauGenMatchGrandmother10Id		.push_back(tauGenMatch.grandMother10Id);
+		_TauGenMatchGrandmother11Id		.push_back(tauGenMatch.grandMother11Id);
+		_TauGenMatchDaughter0Status	   	.push_back(tauGenMatch.daughter0Status);
+		_TauGenMatchDaughter1Status	   	.push_back(tauGenMatch.daughter1Status);
+		_TauGenMatchStatus			   	.push_back(tauGenMatch.status);
+		_TauGenMatchMother0Status	  	.push_back(tauGenMatch.mother0Status);
+		_TauGenMatchMother1Status	   	.push_back(tauGenMatch.mother1Status);
+		_TauGenMatchGrandmother00Status	.push_back(tauGenMatch.grandMother00Status);
+		_TauGenMatchGrandmother01Status	.push_back(tauGenMatch.grandMother01Status);
+		_TauGenMatchGrandmother10Status	.push_back(tauGenMatch.grandMother10Status);
+		_TauGenMatchGrandmother11Status	.push_back(tauGenMatch.grandMother11Status);
 	}
 }
