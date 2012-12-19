@@ -108,15 +108,12 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		_BNprimaryVertices	= *(hBNprimaryVertices.product());
 
 		Handle<BNtriggerCollection>				hBNtrigger;
-		//if(!SampleTypeContains("data")){ iEvent.getByLabel("BNproducer::HLT",	hBNtrigger); }
 		iEvent.getByLabel(_HLTriggerSource,		hBNtrigger);
 		_BNtrigger			= *(hBNtrigger.product());
 
 	}else{
 		_BNevents			= patTupleToBEANtranslator.EDMtoBN(&iEvent);
         
-        // get vertex collection first, so we can identify PV
-        //std::cout << " --> Getting PV " << std::endl;
 		Handle< reco::VertexCollection >					hPrimaryVertices;
 		iEvent.getByLabel(_RecoVertexSource,	hPrimaryVertices);
 		_BNprimaryVertices	= patTupleToBEANtranslator.RECOtoBN(hPrimaryVertices.product());
