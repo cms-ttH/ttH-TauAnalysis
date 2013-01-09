@@ -98,8 +98,8 @@ else:
 runOnMC         = ((jobParams[2]).find('MC') != -1); 
 runOnSignal		= ((jobParams[2]).find('MC-sig') != -1); 
 runOnFastSim    = ((jobParams[2]).find('MC-sigFastSim') != -1); 
-if (not runOnMC) and ((jobParams[1] != 'A') and (jobParams[1] != 'B') and (jobParams[1] != 'C')):
-    print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', or 'C'."; sys.exit(1);
+if (not runOnMC) and ((jobParams[1] != 'A') and (jobParams[1] != 'B') and (jobParams[1] != 'C') and (jobParams[1] != 'D')):
+    print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', 'C', or 'D'."; sys.exit(1);
 
 if (era == 2011):
 	era_release = 'NA'
@@ -210,7 +210,7 @@ NtupleFillers = cms.untracked.vstring(
         #'GenLevel',
         #'GenTau',
         #'GenJet',
-        #'Tau',
+        'Tau',
         'Electron',
         'Muon',
         'Jet',
@@ -219,12 +219,16 @@ NtupleFillers = cms.untracked.vstring(
         #'Trigger', # not in use
 		'Test',
 )
-#if(skimType == 'muon'):
-#	NtupleFillers.append('DitauMuon')
-#elif(skimType == 'electron'):
-#	NtupleFillers.append('DitauElectron')
-#else:
-#	throwFatalError();
+if(skimType == 'muon'):
+	NtupleFillers.append('DitauMuon')
+elif(skimType == 'electron'):
+	NtupleFillers.append('DitauElectron')
+else:
+	throwFatalError();
+if(runOnMC):
+  NtupleFillers.append('GenJet')
+  #NtupleFillers.append('GenLevel') # not implemented
+  #NtupleFillers.append('GenTau') # not working
 
 
 # === Python process === #
@@ -303,15 +307,15 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     RecoJetMinAbsEta					= cms.double(0.0),
     RecoJetMaxAbsEta					= cms.double(2.4),
     JetAntiMatchingDeltaR               = cms.double(0.25),
-    CSVlooseWP							= cms.double(0.244),
-	CSVmediumWP							= cms.double(0.679),
-	CSVtightWP							= cms.double(0.898)
+    #CSVlooseWP							= cms.double(0.244),
+    #CSVmediumWP							= cms.double(0.679),
+    #CSVtightWP							= cms.double(0.898)
 
 	# === === #
 )
 
 # === Run sequence === # 
-if(not runOnMC):
+if(not runOnMC and era == 2011):
     process.p = cms.Path( process.hltFilter + process.makeNtuple )
 else:
     process.p = cms.Path( process.makeNtuple )
