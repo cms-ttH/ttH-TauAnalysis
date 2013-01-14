@@ -132,24 +132,24 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromW1", &_Tau2MatchesGenHadTauFromW1);
 	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromW2", &_Tau2MatchesGenHadTauFromW2);
 
-	_Tree->Branch("TTM_Tau1GenMatchDaughter0Id", &_Tau1GenMatchDaughter0Id);
-	_Tree->Branch("TTM_Tau1GenMatchDaughter1Id", &_Tau1GenMatchDaughter1Id);
-	_Tree->Branch("TTM_Tau1GenMatchId", &_Tau1GenMatchId);
-	_Tree->Branch("TTM_Tau1GenMatchMother0Id", &_Tau1GenMatchMother0Id);
-	_Tree->Branch("TTM_Tau1GenMatchMother1Id", &_Tau1GenMatchMother1Id);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother00Id", &_Tau1GenMatchGrandmother00Id);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother01Id", &_Tau1GenMatchGrandmother01Id);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother10Id", &_Tau1GenMatchGrandmother10Id);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother11Id", &_Tau1GenMatchGrandmother11Id);
-	_Tree->Branch("TTM_Tau1GenMatchDaughter0Status", &_Tau1GenMatchDaughter0Status);
-	_Tree->Branch("TTM_Tau1GenMatchDaughter1Status", &_Tau1GenMatchDaughter1Status);
-	_Tree->Branch("TTM_Tau1GenMatchStatus", &_Tau1GenMatchStatus);
-	_Tree->Branch("TTM_Tau1GenMatchMother0Status", &_Tau1GenMatchMother0Status);
-	_Tree->Branch("TTM_Tau1GenMatchMother1Status", &_Tau1GenMatchMother1Status);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother00Status", &_Tau1GenMatchGrandmother00Status);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother01Status", &_Tau1GenMatchGrandmother01Status);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother10Status", &_Tau1GenMatchGrandmother10Status);
-	_Tree->Branch("TTM_Tau1GenMatchGrandmother11Status", &_Tau1GenMatchGrandmother11Status);
+	_Tree->Branch("TTM_Tau2GenMatchDaughter0Id", &_Tau2GenMatchDaughter0Id);
+	_Tree->Branch("TTM_Tau2GenMatchDaughter1Id", &_Tau2GenMatchDaughter1Id);
+	_Tree->Branch("TTM_Tau2GenMatchId", &_Tau2GenMatchId);
+	_Tree->Branch("TTM_Tau2GenMatchMother0Id", &_Tau2GenMatchMother0Id);
+	_Tree->Branch("TTM_Tau2GenMatchMother1Id", &_Tau2GenMatchMother1Id);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother00Id", &_Tau2GenMatchGrandmother00Id);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother01Id", &_Tau2GenMatchGrandmother01Id);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother10Id", &_Tau2GenMatchGrandmother10Id);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother11Id", &_Tau2GenMatchGrandmother11Id);
+	_Tree->Branch("TTM_Tau2GenMatchDaughter0Status", &_Tau2GenMatchDaughter0Status);
+	_Tree->Branch("TTM_Tau2GenMatchDaughter1Status", &_Tau2GenMatchDaughter1Status);
+	_Tree->Branch("TTM_Tau2GenMatchStatus", &_Tau2GenMatchStatus);
+	_Tree->Branch("TTM_Tau2GenMatchMother0Status", &_Tau2GenMatchMother0Status);
+	_Tree->Branch("TTM_Tau2GenMatchMother1Status", &_Tau2GenMatchMother1Status);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother00Status", &_Tau2GenMatchGrandmother00Status);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother01Status", &_Tau2GenMatchGrandmother01Status);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother10Status", &_Tau2GenMatchGrandmother10Status);
+	_Tree->Branch("TTM_Tau2GenMatchGrandmother11Status", &_Tau2GenMatchGrandmother11Status);
 
 	// === Muon === //
 	_Tree->Branch("TTM_MuonMomentumRank", &_MuonMomentumRank);
