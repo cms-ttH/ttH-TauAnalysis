@@ -41,9 +41,9 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig, BEANhelper* iBEANhelper)
 	_RecoJetMinAbsEta				= iConfig.getParameter<double>("RecoJetMinAbsEta");
 	_RecoJetMaxAbsEta				= iConfig.getParameter<double>("RecoJetMaxAbsEta");
 	_JetAntiMatchingDeltaR			= iConfig.getParameter<double>("JetAntiMatchingDeltaR");
-	_CSVlooseWP						= iConfig.getParameter<double>("CSVlooseWP");
-	_CSVmediumWP					= iConfig.getParameter<double>("CSVmediumWP");
-	_CSVtightWP						= iConfig.getParameter<double>("CSVtightWP");
+	//_CSVlooseWP						= iConfig.getParameter<double>("CSVlooseWP");
+	//_CSVmediumWP					= iConfig.getParameter<double>("CSVmediumWP");
+	//_CSVtightWP						= iConfig.getParameter<double>("CSVtightWP");
 
     _HLTriggerSource				= iConfig.getParameter<InputTag>("HLTriggerSource");
 
