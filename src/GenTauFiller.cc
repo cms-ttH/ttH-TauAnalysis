@@ -81,53 +81,41 @@ void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	// Loop over all gen particles looking for taus
-	/*for(GenParticleCollection::const_iterator genParticle = _genParticles->begin(); genParticle != _genParticles->end(); ++genParticle){
 
-		// Only care for taus
-		if((abs(genParticle->pdgId()) != 15) || (genParticle->status() == 3)){ continue; }
+	vector<int> tauIDs; tauIDs.push_back(15); tauIDs.push_back(-15);
+	BNmcparticleCollection mcTaus		= beanHelper->GetSelectedMCparticlesByPDGid(_BNmcparticles, tauIDs);
+	BNmcparticleCollection status2taus	= beanHelper->GetSelectedMCparticlesByStatus(mcTaus, false, true,  false); 
+
+	for(BNmcparticleCollection::const_iterator status2tau = status2taus.begin(); status2tau != status2taus.end(); ++status2tau){
 
 		_NumGenTaus++;
 		_MomentumRank	.push_back(_NumGenTaus-1);
-		reco::Candidate::LorentzVector visGenTau = genParticle->p4();
 
 		// Fill visGenTau info
-		_Pt		.push_back(genParticle->pt());
-		_Eta	.push_back(genParticle->eta());
-		_Phi	.push_back(genParticle->phi());
+		_Pt		.push_back(status2tau->pt);
+		_Eta	.push_back(status2tau->eta);
+		_Phi	.push_back(status2tau->phi);
 
-		// Figure out info about parent
-		const reco::Candidate* parent;
-		if(genParticle->mother(0)->pdgId() == genParticle->pdgId()){	parent = genParticle->mother(0)->mother(0);	}
-		else{															parent = genParticle->mother(0);			}
-		_ParentId.push_back(parent->pdgId());
-		_ParentP.push_back(parent->p());
-		_ParentPt.push_back(parent->pt());
-		_ParentEta.push_back(parent->eta());
-		_ParentPhi.push_back(parent->phi());
+		// Fill visGenTau info
+		BNmcparticle visGenTau = beanHelper->GetVisGenTau(*status2tau, _BNmcparticles);
+		_VisPt	.push_back(visGenTau.pt);
+		_VisEta	.push_back(visGenTau.eta);
+		_VisPhi	.push_back(visGenTau.phi);
 
-		// Examine number of neutrinos
-		bool foundElectron	= false;
-		bool foundMuon		= false;
-		for( unsigned int i=0; i < (genParticle->numberOfDaughters()); i++) {
-			const reco::Candidate* daughterCand = genParticle->daughter(i);
-
-			// Figure out the decay mode
-			if( abs(daughterCand->pdgId()) == 12 ){ foundElectron	= true; }    
-			if( abs(daughterCand->pdgId()) == 14 ){ foundMuon		= true; }    
-
-			// Obtain visible momentum by subtracting the p4 of neutrinos
-			if( (abs(daughterCand->pdgId()) == 12) || (abs(daughterCand->pdgId()) == 14) || (abs(daughterCand->pdgId()) == 16) ) {
-				visGenTau = visGenTau - daughterCand->p4();
-			}    
-		}    
+		// Info about parent
+		BNmcparticleCollection tauParents = beanHelper->GetParents(*status2tau,_BNmcparticles);
+		_ParentId.push_back(tauParents.begin()->id);
+		_ParentP.push_back(sqrt(pow(tauParents.begin()->px,2) + pow(tauParents.begin()->py,2) + pow(tauParents.begin()->pz,2)));
+		_ParentPt.push_back(tauParents.begin()->pt);
+		_ParentEta.push_back(tauParents.begin()->eta);
+		_ParentPhi.push_back(tauParents.begin()->phi);
 
 		// Fill decay mode
-		if(foundElectron){
+		if(abs(status2tau->daughter0Id) == 11 || abs(status2tau->daughter1Id) == 11){
 			_ToElectron	.push_back(true);
 			_ToMuon		.push_back(false);
 			_ToHadrons	.push_back(false);
-		}else if(foundMuon){
+		}else if(abs(status2tau->daughter0Id) == 13 || abs(status2tau->daughter1Id) == 13){
 			_ToElectron	.push_back(false);
 			_ToMuon		.push_back(true);
 			_ToHadrons	.push_back(false);
@@ -137,11 +125,6 @@ void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 			_ToHadrons	.push_back(true);
 		}
 
-		// Fill visGenTau info
-		_VisPt	.push_back(visGenTau.pt());
-		_VisEta	.push_back(visGenTau.eta());
-		_VisPhi	.push_back(visGenTau.phi());
-
-	}//*/
+	}
 
 }
