@@ -93,7 +93,7 @@ BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollec
         if( (status==3) ||
                 (aId==23 || aId==24 || aId==25 || aId==6 || aId==5 || aId==4 || aId==11 || aId==13 || aId==15) ) keep = true;
 
-        if( !keep ) continue;
+      //  if( !keep ) continue;
 
 
         BNmcparticle MyMCparticle;
