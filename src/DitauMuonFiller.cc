@@ -652,7 +652,19 @@ void DitauMuonFiller::FillMuon(const BNmuon& Muon){
 	_MuonIsLooseMuon.push_back(beanHelper->IsLooseMuon(Muon));
 	_MuonIsTightMuon.push_back(beanHelper->IsTightMuon(Muon));
 
-	BNmcparticle muonGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Muon, 0.25);
+	// Provenance
+	vector<int> undesiredIDs;
+	undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
+	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
+	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
+	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
+	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	undesiredIDs.push_back(25);									// No H
+	undesiredIDs.push_back(21);									// No g
+
+	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
+	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
+	BNmcparticle muonGenMatch = beanHelper->GetMatchedMCparticle(selectedMCparticles, Muon, 0.25);
 	_MuonGenMatchDaughter0Id			.push_back(muonGenMatch.daughter0Id);
 	_MuonGenMatchDaughter1Id			.push_back(muonGenMatch.daughter1Id);
 	_MuonGenMatchId						.push_back(muonGenMatch.id);

@@ -520,7 +520,18 @@ void DitauElectronFiller::FillTau1(const BNtau& Tau){
 	_Tau1LTNormChiSqrd	.push_back(Tau.leadingTrackNormChiSqrd);
 
 	// Provenance
-	BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Tau, 0.25);
+	vector<int> undesiredIDs;
+	undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
+	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
+	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
+	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
+	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	undesiredIDs.push_back(25);									// No H
+	undesiredIDs.push_back(21);									// No g
+
+	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
+	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
+	BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(selectedMCparticles, Tau, 0.25);
 	_Tau1GenMatchDaughter0Id			.push_back(tauGenMatch.daughter0Id);
 	_Tau1GenMatchDaughter1Id			.push_back(tauGenMatch.daughter1Id);
 	_Tau1GenMatchId						.push_back(tauGenMatch.id);
@@ -580,7 +591,18 @@ void DitauElectronFiller::FillTau2(const BNtau& Tau){
 	_Tau2LTNormChiSqrd								.push_back(Tau.leadingTrackNormChiSqrd);
 
 	// Provenance
-	BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Tau, 0.25);
+	vector<int> undesiredIDs;
+	undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
+	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
+	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
+	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
+	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	undesiredIDs.push_back(25);									// No H
+	undesiredIDs.push_back(21);									// No g
+
+	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
+	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
+	BNmcparticle tauGenMatch = beanHelper->GetMatchedMCparticle(selectedMCparticles, Tau, 0.25);
 	_Tau2GenMatchDaughter0Id			.push_back(tauGenMatch.daughter0Id);
 	_Tau2GenMatchDaughter1Id			.push_back(tauGenMatch.daughter1Id);
 	_Tau2GenMatchId						.push_back(tauGenMatch.id);
@@ -610,7 +632,19 @@ void DitauElectronFiller::FillElectron(const BNelectron& Electron){
     _ElectronIsLooseElectron.push_back(beanHelper->IsLooseElectron(Electron));
     _ElectronIsTightElectron.push_back(beanHelper->IsTightElectron(Electron));
 
-	BNmcparticle electronGenMatch = beanHelper->GetMatchedMCparticle(_BNmcparticles, Electron, 0.25);
+	// Provenance
+	vector<int> undesiredIDs;
+	undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
+	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
+	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
+	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
+	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	undesiredIDs.push_back(25);									// No H
+	undesiredIDs.push_back(21);									// No g
+
+	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
+	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
+	BNmcparticle electronGenMatch = beanHelper->GetMatchedMCparticle(selectedMCparticles, Electron, 0.25);
 	_ElectronGenMatchDaughter0Id			.push_back(electronGenMatch.daughter0Id);
 	_ElectronGenMatchDaughter1Id			.push_back(electronGenMatch.daughter1Id);
 	_ElectronGenMatchId						.push_back(electronGenMatch.id);
