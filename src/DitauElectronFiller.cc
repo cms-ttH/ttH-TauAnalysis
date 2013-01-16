@@ -525,9 +525,9 @@ void DitauElectronFiller::FillTau1(const BNtau& Tau){
 	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
 	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
 	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
-	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	//undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
 	undesiredIDs.push_back(25);									// No H
-	undesiredIDs.push_back(21);									// No g
+	//undesiredIDs.push_back(21);									// No g
 
 	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
 	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
@@ -596,9 +596,9 @@ void DitauElectronFiller::FillTau2(const BNtau& Tau){
 	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
 	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
 	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
-	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	//undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
 	undesiredIDs.push_back(25);									// No H
-	undesiredIDs.push_back(21);									// No g
+	//undesiredIDs.push_back(21);									// No g
 
 	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
 	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
@@ -638,9 +638,9 @@ void DitauElectronFiller::FillElectron(const BNelectron& Electron){
 	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
 	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
 	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
-	undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+	//undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
 	undesiredIDs.push_back(25);									// No H
-	undesiredIDs.push_back(21);									// No g
+	//undesiredIDs.push_back(21);									// No g
 
 	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
 	BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
