@@ -104,11 +104,19 @@ void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 		// Info about parent
 		BNmcparticleCollection tauParents = beanHelper->GetParents(*status2tau,_BNmcparticles);
-		_ParentId.push_back(tauParents.begin()->id);
-		_ParentP.push_back(sqrt(pow(tauParents.begin()->px,2) + pow(tauParents.begin()->py,2) + pow(tauParents.begin()->pz,2)));
-		_ParentPt.push_back(tauParents.begin()->pt);
-		_ParentEta.push_back(tauParents.begin()->eta);
-		_ParentPhi.push_back(tauParents.begin()->phi);
+		if(tauParents.size() > 0){
+			_ParentId.push_back(tauParents.begin()->id);
+			_ParentP.push_back(sqrt(pow(tauParents.begin()->px,2) + pow(tauParents.begin()->py,2) + pow(tauParents.begin()->pz,2)));
+			_ParentPt.push_back(tauParents.begin()->pt);
+			_ParentEta.push_back(tauParents.begin()->eta);
+			_ParentPhi.push_back(tauParents.begin()->phi);
+		}else{
+			_ParentId.push_back(0);
+			_ParentP.push_back(0);
+			_ParentPt.push_back(0);
+			_ParentEta.push_back(0);
+			_ParentPhi.push_back(0);
+		}
 
 		// Fill decay mode
 		if(abs(status2tau->daughter0Id) == 11 || abs(status2tau->daughter1Id) == 11){
