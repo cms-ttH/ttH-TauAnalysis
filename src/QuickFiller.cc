@@ -39,6 +39,100 @@ QuickFiller::QuickFiller(const ParameterSet& iConfig, TTree* iTree, Service<TFil
 	tau2MatchParentVsTauMatch		= (*_FileService)->make<TH2D>("ParentVsTau2Match",		"Parent Vs Tau2 Match",			20, -10, 10, 20, -10, 10);
 	tau2MatchParentVsTauMatch_pu	= (*_FileService)->make<TH2D>("ParentVsTau2Match_PURW", "Parent Vs Tau2 Match PURW",	20, -10, 10, 20, -10, 10);
 
+	tau2MPvsTau1MP					= (*_FileService)->make<TH2F>("tau2MPvsTau1MP", "tau2MPvsTau1MP",    45, -10, 35, 45, -10, 35);
+
+
+	tau1_fromH_pt						= (*_FileService)->make<TH1F>("tau1_fromH_pt",						"tau1_fromH_pt",					50, 0, 100);
+	tau1_fromH_eta						= (*_FileService)->make<TH1F>("tau1_fromH_eta",						"tau1_fromH_eta",					50, -3, -3);
+	tau1_fromH_nProngs					= (*_FileService)->make<TH1F>("tau1_fromH_nProngs",					"tau1_fromH_nProngs",				5, 0, 5);
+	tau1_fromH_dm						= (*_FileService)->make<TH1F>("tau1_fromH_dm",						"tau1_fromH_dm",					20, 0, 20);
+	tau1_fromH_nSignalGammas			= (*_FileService)->make<TH1F>("tau1_fromH_nSignalGammas",			"tau1_fromH_nSignalGammas",			10, 0, 10);
+	tau1_fromH_nSignalNeutrals			= (*_FileService)->make<TH1F>("tau1_fromH_nSignalNeutrals",			"tau1_fromH_nSignalNeutrals",		10, 0, 10);
+	tau1_fromH_antiElectronIndex		= (*_FileService)->make<TH1F>("tau1_fromH_antiElectronIndex",		"tau1_fromH_antiElectronIndex",		5, 0, 5);
+	tau1_fromH_antiMuonIndex			= (*_FileService)->make<TH1F>("tau1_fromH_antiMuonIndex",			"tau1_fromH_antiMuonIndex",			5, 0, 5);
+	tau1_fromH_isoIndex					= (*_FileService)->make<TH1F>("tau1_fromH_isoIndex",				"tau1_fromH_isoIndex",				5, 0, 5);
+	tau1_fromH_ltPt						= (*_FileService)->make<TH1F>("tau1_fromH_ltPt",					"tau1_fromH_ltPt",					30, 0, 60);
+	tau1_fromW_pt						= (*_FileService)->make<TH1F>("tau1_fromW_pt",						"tau1_fromW_pt",					50, 0, 100);
+	tau1_fromW_eta						= (*_FileService)->make<TH1F>("tau1_fromW_eta",						"tau1_fromW_eta",					50, -3, -3);
+	tau1_fromW_nProngs					= (*_FileService)->make<TH1F>("tau1_fromW_nProngs",					"tau1_fromW_nProngs",				5, 0, 5);
+	tau1_fromW_dm						= (*_FileService)->make<TH1F>("tau1_fromW_dm",						"tau1_fromW_dm",					20, 0, 20);
+	tau1_fromW_nSignalGammas			= (*_FileService)->make<TH1F>("tau1_fromW_nSignalGammas",			"tau1_fromW_nSignalGammas",			10, 0, 10);
+	tau1_fromW_nSignalNeutrals			= (*_FileService)->make<TH1F>("tau1_fromW_nSignalNeutrals",			"tau1_fromW_nSignalNeutrals",		10, 0, 10);
+	tau1_fromW_antiElectronIndex		= (*_FileService)->make<TH1F>("tau1_fromW_antiElectronIndex",		"tau1_fromW_antiElectronIndex",		5, 0, 5);
+	tau1_fromW_antiMuonIndex			= (*_FileService)->make<TH1F>("tau1_fromW_antiMuonIndex",			"tau1_fromW_antiMuonIndex",			5, 0, 5);
+	tau1_fromW_isoIndex					= (*_FileService)->make<TH1F>("tau1_fromW_isoIndex",				"tau1_fromW_isoIndex",				5, 0, 5);
+	tau1_fromW_ltPt						= (*_FileService)->make<TH1F>("tau1_fromW_ltPt",					"tau1_fromW_ltPt",					30, 0, 60);
+	tau1_fromOther_pt					= (*_FileService)->make<TH1F>("tau1_fromOther_pt",					"tau1_fromOther_pt",				50, 0, 100);
+	tau1_fromOther_eta					= (*_FileService)->make<TH1F>("tau1_fromOther_eta",					"tau1_fromOther_eta",				50, -3, -3);
+	tau1_fromOther_nProngs				= (*_FileService)->make<TH1F>("tau1_fromOther_nProngs",				"tau1_fromOther_nProngs",			5, 0, 5);
+	tau1_fromOther_dm					= (*_FileService)->make<TH1F>("tau1_fromOther_dm",					"tau1_fromOther_dm",				20, 0, 20);
+	tau1_fromOther_nSignalGammas		= (*_FileService)->make<TH1F>("tau1_fromOther_nSignalGammas",		"tau1_fromOther_nSignalGammas",		10, 0, 10);
+	tau1_fromOther_nSignalNeutrals		= (*_FileService)->make<TH1F>("tau1_fromOther_nSignalNeutrals",		"tau1_fromOther_nSignalNeutrals",	10, 0, 10);
+	tau1_fromOther_antiElectronIndex	= (*_FileService)->make<TH1F>("tau1_fromOther_antiElectronIndex",	"tau1_fromOther_antiElectronIndex",	5, 0, 5);
+	tau1_fromOther_antiMuonIndex		= (*_FileService)->make<TH1F>("tau1_fromOther_antiMuonIndex",		"tau1_fromOther_antiMuonIndex",		5, 0, 5);
+	tau1_fromOther_isoIndex				= (*_FileService)->make<TH1F>("tau1_fromOther_isoIndex",			"tau1_fromOther_isoIndex",			5, 0, 5);
+	tau1_fromOther_ltPt					= (*_FileService)->make<TH1F>("tau1_fromOther_ltPt",				"tau1_fromOther_ltPt",				30, 0, 60);
+	tau2_fromH_pt						= (*_FileService)->make<TH1F>("tau2_fromH_pt",						"tau2_fromH_pt",					50, 0, 100);
+	tau2_fromH_eta						= (*_FileService)->make<TH1F>("tau2_fromH_eta",						"tau2_fromH_eta",					50, -3, -3);
+	tau2_fromH_nProngs					= (*_FileService)->make<TH1F>("tau2_fromH_nProngs",					"tau2_fromH_nProngs",				5, 0, 5);
+	tau2_fromH_dm						= (*_FileService)->make<TH1F>("tau2_fromH_dm",						"tau2_fromH_dm",					20, 0, 20);
+	tau2_fromH_nSignalGammas			= (*_FileService)->make<TH1F>("tau2_fromH_nSignalGammas",			"tau2_fromH_nSignalGammas",			10, 0, 10);
+	tau2_fromH_nSignalNeutrals			= (*_FileService)->make<TH1F>("tau2_fromH_nSignalNeutrals",			"tau2_fromH_nSignalNeutrals",		10, 0, 10);
+	tau2_fromH_antiElectronIndex		= (*_FileService)->make<TH1F>("tau2_fromH_antiElectronIndex",		"tau2_fromH_antiElectronIndex",		5, 0, 5);
+	tau2_fromH_antiMuonIndex			= (*_FileService)->make<TH1F>("tau2_fromH_antiMuonIndex",			"tau2_fromH_antiMuonIndex",			5, 0, 5);
+	tau2_fromH_isoIndex					= (*_FileService)->make<TH1F>("tau2_fromH_isoIndex",				"tau2_fromH_isoIndex",				5, 0, 5);
+	tau2_fromH_ltPt						= (*_FileService)->make<TH1F>("tau2_fromH_ltPt",					"tau2_fromH_ltPt",					30, 0, 60);
+	tau2_fromW_pt						= (*_FileService)->make<TH1F>("tau2_fromW_pt",						"tau2_fromW_pt",					50, 0, 100);
+	tau2_fromW_eta						= (*_FileService)->make<TH1F>("tau2_fromW_eta",						"tau2_fromW_eta",					50, -3, -3);
+	tau2_fromW_nProngs					= (*_FileService)->make<TH1F>("tau2_fromW_nProngs",					"tau2_fromW_nProngs",				5, 0, 5);
+	tau2_fromW_dm						= (*_FileService)->make<TH1F>("tau2_fromW_dm",						"tau2_fromW_dm",					20, 0, 20);
+	tau2_fromW_nSignalGammas			= (*_FileService)->make<TH1F>("tau2_fromW_nSignalGammas",			"tau2_fromW_nSignalGammas",			10, 0, 10);
+	tau2_fromW_nSignalNeutrals			= (*_FileService)->make<TH1F>("tau2_fromW_nSignalNeutrals",			"tau2_fromW_nSignalNeutrals",		10, 0, 10);
+	tau2_fromW_antiElectronIndex		= (*_FileService)->make<TH1F>("tau2_fromW_antiElectronIndex",		"tau2_fromW_antiElectronIndex",		5, 0, 5);
+	tau2_fromW_antiMuonIndex			= (*_FileService)->make<TH1F>("tau2_fromW_antiMuonIndex",			"tau2_fromW_antiMuonIndex",			5, 0, 5);
+	tau2_fromW_isoIndex					= (*_FileService)->make<TH1F>("tau2_fromW_isoIndex",				"tau2_fromW_isoIndex",				5, 0, 5);
+	tau2_fromW_ltPt						= (*_FileService)->make<TH1F>("tau2_fromW_ltPt",					"tau2_fromW_ltPt",					30, 0, 60);
+	tau2_fromOther_pt					= (*_FileService)->make<TH1F>("tau2_fromOther_pt",					"tau2_fromOther_pt",				50, 0, 100);
+	tau2_fromOther_eta					= (*_FileService)->make<TH1F>("tau2_fromOther_eta",					"tau2_fromOther_eta",				50, -3, -3);
+	tau2_fromOther_nProngs				= (*_FileService)->make<TH1F>("tau2_fromOther_nProngs",				"tau2_fromOther_nProngs",			5, 0, 5);
+	tau2_fromOther_dm					= (*_FileService)->make<TH1F>("tau2_fromOther_dm",					"tau2_fromOther_dm",				20, 0, 20);
+	tau2_fromOther_nSignalGammas		= (*_FileService)->make<TH1F>("tau2_fromOther_nSignalGammas",		"tau2_fromOther_nSignalGammas",		10, 0, 10);
+	tau2_fromOther_nSignalNeutrals		= (*_FileService)->make<TH1F>("tau2_fromOther_nSignalNeutrals",		"tau2_fromOther_nSignalNeutrals",	10, 0, 10);
+	tau2_fromOther_antiElectronIndex	= (*_FileService)->make<TH1F>("tau2_fromOther_antiElectronIndex",	"tau2_fromOther_antiElectronIndex",	5, 0, 5);
+	tau2_fromOther_antiMuonIndex		= (*_FileService)->make<TH1F>("tau2_fromOther_antiMuonIndex",		"tau2_fromOther_antiMuonIndex",		5, 0, 5);
+	tau2_fromOther_isoIndex				= (*_FileService)->make<TH1F>("tau2_fromOther_isoIndex",			"tau2_fromOther_isoIndex",			5, 0, 5);
+	tau2_fromOther_ltPt					= (*_FileService)->make<TH1F>("tau2_fromOther_ltPt",				"tau2_fromOther_ltPt",				30, 0, 60);
+	tau12_fromH_pt						= (*_FileService)->make<TH1F>("tau12_fromH_pt",						"tau12_fromH_pt",					50, 0, 100);
+	tau12_fromH_eta						= (*_FileService)->make<TH1F>("tau12_fromH_eta",					"tau12_fromH_eta",					50, -3, -3);
+	tau12_fromH_nProngs					= (*_FileService)->make<TH1F>("tau12_fromH_nProngs",				"tau12_fromH_nProngs",				5, 0, 5);
+	tau12_fromH_dm						= (*_FileService)->make<TH1F>("tau12_fromH_dm",						"tau12_fromH_dm",					20, 0, 20);
+	tau12_fromH_nSignalGammas			= (*_FileService)->make<TH1F>("tau12_fromH_nSignalGammas",			"tau12_fromH_nSignalGammas",		10, 0, 10);
+	tau12_fromH_nSignalNeutrals			= (*_FileService)->make<TH1F>("tau12_fromH_nSignalNeutrals",		"tau12_fromH_nSignalNeutrals",		10, 0, 10);
+	tau12_fromH_antiElectronIndex		= (*_FileService)->make<TH1F>("tau12_fromH_antiElectronIndex",		"tau12_fromH_antiElectronIndex",	5, 0, 5);
+	tau12_fromH_antiMuonIndex			= (*_FileService)->make<TH1F>("tau12_fromH_antiMuonIndex",			"tau12_fromH_antiMuonIndex",		5, 0, 5);
+	tau12_fromH_isoIndex				= (*_FileService)->make<TH1F>("tau12_fromH_isoIndex",				"tau12_fromH_isoIndex",				5, 0, 5);
+	tau12_fromH_ltPt					= (*_FileService)->make<TH1F>("tau12_fromH_ltPt",					"tau12_fromH_ltPt",					30, 0, 60);
+	tau12_fromW_pt						= (*_FileService)->make<TH1F>("tau12_fromW_pt",						"tau12_fromW_pt",					50, 0, 100);
+	tau12_fromW_eta						= (*_FileService)->make<TH1F>("tau12_fromW_eta",					"tau12_fromW_eta",					50, -3, -3);
+	tau12_fromW_nProngs					= (*_FileService)->make<TH1F>("tau12_fromW_nProngs",				"tau12_fromW_nProngs",				5, 0, 5);
+	tau12_fromW_dm						= (*_FileService)->make<TH1F>("tau12_fromW_dm",						"tau12_fromW_dm",					20, 0, 20);
+	tau12_fromW_nSignalGammas			= (*_FileService)->make<TH1F>("tau12_fromW_nSignalGammas",			"tau12_fromW_nSignalGammas",		10, 0, 10);
+	tau12_fromW_nSignalNeutrals			= (*_FileService)->make<TH1F>("tau12_fromW_nSignalNeutrals",		"tau12_fromW_nSignalNeutrals",		10, 0, 10);
+	tau12_fromW_antiElectronIndex		= (*_FileService)->make<TH1F>("tau12_fromW_antiElectronIndex",		"tau12_fromW_antiElectronIndex",	5, 0, 5);
+	tau12_fromW_antiMuonIndex			= (*_FileService)->make<TH1F>("tau12_fromW_antiMuonIndex",			"tau12_fromW_antiMuonIndex",		5, 0, 5);
+	tau12_fromW_isoIndex				= (*_FileService)->make<TH1F>("tau12_fromW_isoIndex",				"tau12_fromW_isoIndex",				5, 0, 5);
+	tau12_fromW_ltPt					= (*_FileService)->make<TH1F>("tau12_fromW_ltPt",					"tau12_fromW_ltPt",					30, 0, 60);
+	tau12_fromOther_pt					= (*_FileService)->make<TH1F>("tau12_fromOther_pt",					"tau12_fromOther_pt",				50, 0, 100);
+	tau12_fromOther_eta					= (*_FileService)->make<TH1F>("tau12_fromOther_eta",				"tau12_fromOther_eta",				50, -3, -3);
+	tau12_fromOther_nProngs				= (*_FileService)->make<TH1F>("tau12_fromOther_nProngs",			"tau12_fromOther_nProngs",			5, 0, 5);
+	tau12_fromOther_dm					= (*_FileService)->make<TH1F>("tau12_fromOther_dm",					"tau12_fromOther_dm",				20, 0, 20);
+	tau12_fromOther_nSignalGammas		= (*_FileService)->make<TH1F>("tau12_fromOther_nSignalGammas",		"tau12_fromOther_nSignalGammas",	10, 0, 10);
+	tau12_fromOther_nSignalNeutrals		= (*_FileService)->make<TH1F>("tau12_fromOther_nSignalNeutrals",	"tau12_fromOther_nSignalNeutrals",	10, 0, 10);
+	tau12_fromOther_antiElectronIndex	= (*_FileService)->make<TH1F>("tau12_fromOther_antiElectronIndex",	"tau12_fromOther_antiElectronIndex",5, 0, 5);
+	tau12_fromOther_antiMuonIndex		= (*_FileService)->make<TH1F>("tau12_fromOther_antiMuonIndex",		"tau12_fromOther_antiMuonIndex",	5, 0, 5);
+	tau12_fromOther_isoIndex			= (*_FileService)->make<TH1F>("tau12_fromOther_isoIndex",			"tau12_fromOther_isoIndex",			5, 0, 5);
+	tau12_fromOther_ltPt				= (*_FileService)->make<TH1F>("tau12_fromOther_ltPt",				"tau12_fromOther_ltPt",				30, 0, 60);
+
 
 }
 
@@ -114,9 +208,7 @@ void QuickFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 			_NumMuons = selectedMuons.size();
 			theNumberOfMuons = 0;
 			for ( BNmuonCollection::const_iterator Muon = selectedMuons.begin(); Muon != selectedMuons.end(); ++Muon ) {
-				if(theNumberOfCombos > 0){ break; }
 				theNumberOfMuons++;
-				theNumberOfCombos++;
 
 
 				// =========   NO VECTOR FILLING BEFORE THIS POINT   ========= //
@@ -143,6 +235,8 @@ void QuickFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				//if(_NumNonCSVMbtagJets.back() < 1 || _NumNonCSVMbtagJets.back() > 3){ continue; }
 				if(_NumNonCSVMbtagJets.back() !=2){ continue; }
 
+				if(theNumberOfCombos > 0){ break; }
+				theNumberOfCombos++;
 
 
 				// ===== DONE WITH SELECTION ==== //
@@ -151,12 +245,14 @@ void QuickFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
 				undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
 				undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
-				undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+				//undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
 				undesiredIDs.push_back(25);									// No H
-				undesiredIDs.push_back(21);									// No g
+				//undesiredIDs.push_back(21);									// No g
 
 				BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
 				BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status3MCparticles, undesiredIDs);
+				//BNmcparticleCollection status2MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, true, false); 
+				//BNmcparticleCollection selectedMCparticles	= beanHelper->GetUnrejectedMCparticlesByPDGid(status2MCparticles, undesiredIDs);
 				BNmcparticle tau1GenMatch = beanHelper->GetMatchedMCparticle(selectedMCparticles, *Tau1, 0.25);
 				BNmcparticle tau2GenMatch = beanHelper->GetMatchedMCparticle(selectedMCparticles, *Tau2, 0.25);
 
@@ -175,6 +271,11 @@ void QuickFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				int tau1MatchParentId = GetMatchParentId(&tau1GenMatch);
 				int tau2MatchParentId = GetMatchParentId(&tau2GenMatch);
 
+				if( tau1GenMatch.mother0Id == tau2GenMatch.mother0Id && abs(tau1GenMatch.mother0Id)==24){ cout << "SAME W! gparents: " << tau1GenMatch.grandMother00Id << "," << tau2GenMatch.grandMother00Id << " DeltaR(tau1,tau2): " << deltaR(Tau1->eta, Tau1->phi, Tau2->eta, Tau2->phi) << " mass: " << GetComboMassBN(*Tau1, *Tau2) << endl; }
+				else if( tau1GenMatch.mother0Id == -1*tau2GenMatch.mother0Id && abs(tau1GenMatch.mother0Id)==24){ cout << "DIFF W! gparents: "<< tau1GenMatch.grandMother00Id << "," << tau2GenMatch.grandMother00Id << " DeltaR(tau1,tau2): " << deltaR(Tau1->eta, Tau1->phi, Tau2->eta, Tau2->phi) << " mass: " << GetComboMassBN(*Tau1, *Tau2) << endl; }
+				else if( tau1GenMatch.mother0Id == tau2GenMatch.mother0Id && abs(tau1GenMatch.mother0Id)==25){ cout << "SAME H! gparents: " << tau1GenMatch.grandMother00Id << "," << tau2GenMatch.grandMother00Id << " DeltaR(tau1,tau2): " << deltaR(Tau1->eta, Tau1->phi, Tau2->eta, Tau2->phi) << " mass: " << GetComboMassBN(*Tau1, *Tau2) << endl; }
+
+
 				if(tau1MatchParentId == 0){ beanHelper->DrawFeynman(tau1GenMatch); }
 				if(tau2MatchParentId == 0){ beanHelper->DrawFeynman(tau2GenMatch); }
 
@@ -185,7 +286,145 @@ void QuickFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				tau1MatchParentVsTauMatch		->Fill(tau1MatchId, tau1MatchParentId); 
 				tau2MatchParentVsTauMatch		->Fill(tau2MatchId, tau2MatchParentId); 
 				tau1MatchParentVsTauMatch_pu	->Fill(tau1MatchId, tau1MatchParentId, _PUweight); //*/
-				tau2MatchParentVsTauMatch_pu	->Fill(tau2MatchId, tau2MatchParentId, _PUweight); //*/
+				tau2MatchParentVsTauMatch_pu	->Fill(tau2MatchId, tau2MatchParentId, _PUweight); //*/	
+
+				tau2MPvsTau1MP->Fill(tau1MatchId + tau1MatchParentId*9, tau2MatchId + tau2MatchParentId*9);
+
+				if(tau1MatchParentId==1){
+					tau1_fromH_pt					->Fill(Tau1->pt,						_PUweight);
+					tau1_fromH_eta					->Fill(Tau1->eta,						_PUweight);
+					tau1_fromH_nProngs				->Fill(Tau1->numProngs,					_PUweight);
+					tau1_fromH_dm					->Fill(Tau1->decayMode,					_PUweight);
+					tau1_fromH_nSignalGammas		->Fill(Tau1->numSignalGammas,			_PUweight);
+					tau1_fromH_nSignalNeutrals		->Fill(Tau1->numSignalNeutrals,			_PUweight);
+					tau1_fromH_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau1)),	_PUweight);
+					tau1_fromH_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau1)),		_PUweight);
+					tau1_fromH_isoIndex				->Fill(GetIsolationIndex(&(*Tau1)),		_PUweight);
+					tau1_fromH_ltPt					->Fill(Tau1->leadingTrackPt,			_PUweight);
+
+					tau12_fromH_pt					->Fill(Tau1->pt,						_PUweight);
+					tau12_fromH_eta					->Fill(Tau1->eta,						_PUweight);
+					tau12_fromH_nProngs				->Fill(Tau1->numProngs,					_PUweight);
+					tau12_fromH_dm					->Fill(Tau1->decayMode,					_PUweight);
+					tau12_fromH_nSignalGammas		->Fill(Tau1->numSignalGammas,			_PUweight);
+					tau12_fromH_nSignalNeutrals		->Fill(Tau1->numSignalNeutrals,			_PUweight);
+					tau12_fromH_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau1)),	_PUweight);
+					tau12_fromH_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau1)),		_PUweight);
+					tau12_fromH_isoIndex			->Fill(GetIsolationIndex(&(*Tau1)),		_PUweight);
+					tau12_fromH_ltPt				->Fill(Tau1->leadingTrackPt,			_PUweight);
+				}else if(tau1MatchParentId==2){
+					tau1_fromW_pt					->Fill(Tau1->pt,						_PUweight);
+					tau1_fromW_eta					->Fill(Tau1->eta,						_PUweight);
+					tau1_fromW_nProngs				->Fill(Tau1->numProngs,					_PUweight);
+					tau1_fromW_dm					->Fill(Tau1->decayMode,					_PUweight);
+					tau1_fromW_nSignalGammas		->Fill(Tau1->numSignalGammas,			_PUweight);
+					tau1_fromW_nSignalNeutrals		->Fill(Tau1->numSignalNeutrals,			_PUweight);
+					tau1_fromW_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau1)),	_PUweight);
+					tau1_fromW_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau1)),		_PUweight);
+					tau1_fromW_isoIndex				->Fill(GetIsolationIndex(&(*Tau1)),		_PUweight);
+					tau1_fromW_ltPt					->Fill(Tau1->leadingTrackPt,			_PUweight);
+
+					tau12_fromW_pt					->Fill(Tau1->pt,						_PUweight);
+					tau12_fromW_eta					->Fill(Tau1->eta,						_PUweight);
+					tau12_fromW_nProngs				->Fill(Tau1->numProngs,					_PUweight);
+					tau12_fromW_dm					->Fill(Tau1->decayMode,					_PUweight);
+					tau12_fromW_nSignalGammas		->Fill(Tau1->numSignalGammas,			_PUweight);
+					tau12_fromW_nSignalNeutrals		->Fill(Tau1->numSignalNeutrals,			_PUweight);
+					tau12_fromW_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau1)),	_PUweight);
+					tau12_fromW_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau1)),		_PUweight);
+					tau12_fromW_isoIndex			->Fill(GetIsolationIndex(&(*Tau1)),		_PUweight);
+					tau12_fromW_ltPt				->Fill(Tau1->leadingTrackPt,			_PUweight);
+				}else if(tau1MatchParentId>0){
+					tau1_fromOther_pt					->Fill(Tau1->pt,						_PUweight);
+					tau1_fromOther_eta					->Fill(Tau1->eta,						_PUweight);
+					tau1_fromOther_nProngs				->Fill(Tau1->numProngs,					_PUweight);
+					tau1_fromOther_dm					->Fill(Tau1->decayMode,					_PUweight);
+					tau1_fromOther_nSignalGammas		->Fill(Tau1->numSignalGammas,			_PUweight);
+					tau1_fromOther_nSignalNeutrals		->Fill(Tau1->numSignalNeutrals,			_PUweight);
+					tau1_fromOther_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau1)),	_PUweight);
+					tau1_fromOther_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau1)),		_PUweight);
+					tau1_fromOther_isoIndex				->Fill(GetIsolationIndex(&(*Tau1)),		_PUweight);
+					tau1_fromOther_ltPt					->Fill(Tau1->leadingTrackPt,			_PUweight);
+
+					tau12_fromOther_pt					->Fill(Tau1->pt,						_PUweight);
+					tau12_fromOther_eta					->Fill(Tau1->eta,						_PUweight);
+					tau12_fromOther_nProngs				->Fill(Tau1->numProngs,					_PUweight);
+					tau12_fromOther_dm					->Fill(Tau1->decayMode,					_PUweight);
+					tau12_fromOther_nSignalGammas		->Fill(Tau1->numSignalGammas,			_PUweight);
+					tau12_fromOther_nSignalNeutrals		->Fill(Tau1->numSignalNeutrals,			_PUweight);
+					tau12_fromOther_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau1)),	_PUweight);
+					tau12_fromOther_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau1)),		_PUweight);
+					tau12_fromOther_isoIndex			->Fill(GetIsolationIndex(&(*Tau1)),		_PUweight);
+					tau12_fromOther_ltPt				->Fill(Tau1->leadingTrackPt,			_PUweight);
+				}
+
+				if(tau2MatchParentId==1){
+					tau2_fromH_pt					->Fill(Tau2->pt,						_PUweight);
+					tau2_fromH_eta					->Fill(Tau2->eta,						_PUweight);
+					tau2_fromH_nProngs				->Fill(Tau2->numProngs,					_PUweight);
+					tau2_fromH_dm					->Fill(Tau2->decayMode,					_PUweight);
+					tau2_fromH_nSignalGammas		->Fill(Tau2->numSignalGammas,			_PUweight);
+					tau2_fromH_nSignalNeutrals		->Fill(Tau2->numSignalNeutrals,			_PUweight);
+					tau2_fromH_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau2)),	_PUweight);
+					tau2_fromH_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau2)),		_PUweight);
+					tau2_fromH_isoIndex				->Fill(GetIsolationIndex(&(*Tau2)),		_PUweight);
+					tau2_fromH_ltPt					->Fill(Tau2->leadingTrackPt,			_PUweight);
+
+					tau12_fromH_pt					->Fill(Tau2->pt,						_PUweight);
+					tau12_fromH_eta					->Fill(Tau2->eta,						_PUweight);
+					tau12_fromH_nProngs				->Fill(Tau2->numProngs,					_PUweight);
+					tau12_fromH_dm					->Fill(Tau2->decayMode,					_PUweight);
+					tau12_fromH_nSignalGammas		->Fill(Tau2->numSignalGammas,			_PUweight);
+					tau12_fromH_nSignalNeutrals		->Fill(Tau2->numSignalNeutrals,			_PUweight);
+					tau12_fromH_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau2)),	_PUweight);
+					tau12_fromH_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau2)),		_PUweight);
+					tau12_fromH_isoIndex			->Fill(GetIsolationIndex(&(*Tau2)),		_PUweight);
+					tau12_fromH_ltPt				->Fill(Tau2->leadingTrackPt,			_PUweight);
+				}else if(tau2MatchParentId==2){
+					tau2_fromW_pt					->Fill(Tau2->pt,						_PUweight);
+					tau2_fromW_eta					->Fill(Tau2->eta,						_PUweight);
+					tau2_fromW_nProngs				->Fill(Tau2->numProngs,					_PUweight);
+					tau2_fromW_dm					->Fill(Tau2->decayMode,					_PUweight);
+					tau2_fromW_nSignalGammas		->Fill(Tau2->numSignalGammas,			_PUweight);
+					tau2_fromW_nSignalNeutrals		->Fill(Tau2->numSignalNeutrals,			_PUweight);
+					tau2_fromW_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau2)),	_PUweight);
+					tau2_fromW_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau2)),		_PUweight);
+					tau2_fromW_isoIndex				->Fill(GetIsolationIndex(&(*Tau2)),		_PUweight);
+					tau2_fromW_ltPt					->Fill(Tau2->leadingTrackPt,			_PUweight);
+
+					tau12_fromW_pt					->Fill(Tau2->pt,						_PUweight);
+					tau12_fromW_eta					->Fill(Tau2->eta,						_PUweight);
+					tau12_fromW_nProngs				->Fill(Tau2->numProngs,					_PUweight);
+					tau12_fromW_dm					->Fill(Tau2->decayMode,					_PUweight);
+					tau12_fromW_nSignalGammas		->Fill(Tau2->numSignalGammas,			_PUweight);
+					tau12_fromW_nSignalNeutrals		->Fill(Tau2->numSignalNeutrals,			_PUweight);
+					tau12_fromW_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau2)),	_PUweight);
+					tau12_fromW_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau2)),		_PUweight);
+					tau12_fromW_isoIndex			->Fill(GetIsolationIndex(&(*Tau2)),		_PUweight);
+					tau12_fromW_ltPt				->Fill(Tau2->leadingTrackPt,			_PUweight);
+				}else if(tau2MatchParentId>0){
+					tau2_fromOther_pt					->Fill(Tau2->pt,						_PUweight);
+					tau2_fromOther_eta					->Fill(Tau2->eta,						_PUweight);
+					tau2_fromOther_nProngs				->Fill(Tau2->numProngs,					_PUweight);
+					tau2_fromOther_dm					->Fill(Tau2->decayMode,					_PUweight);
+					tau2_fromOther_nSignalGammas		->Fill(Tau2->numSignalGammas,			_PUweight);
+					tau2_fromOther_nSignalNeutrals		->Fill(Tau2->numSignalNeutrals,			_PUweight);
+					tau2_fromOther_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau2)),	_PUweight);
+					tau2_fromOther_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau2)),		_PUweight);
+					tau2_fromOther_isoIndex				->Fill(GetIsolationIndex(&(*Tau2)),		_PUweight);
+					tau2_fromOther_ltPt					->Fill(Tau2->leadingTrackPt,			_PUweight);
+
+					tau12_fromOther_pt					->Fill(Tau2->pt,						_PUweight);
+					tau12_fromOther_eta					->Fill(Tau2->eta,						_PUweight);
+					tau12_fromOther_nProngs				->Fill(Tau2->numProngs,					_PUweight);
+					tau12_fromOther_dm					->Fill(Tau2->decayMode,					_PUweight);
+					tau12_fromOther_nSignalGammas		->Fill(Tau2->numSignalGammas,			_PUweight);
+					tau12_fromOther_nSignalNeutrals		->Fill(Tau2->numSignalNeutrals,			_PUweight);
+					tau12_fromOther_antiElectronIndex	->Fill(GetAntiElectronIndex(&(*Tau2)),	_PUweight);
+					tau12_fromOther_antiMuonIndex		->Fill(GetAntiMuonIndex(&(*Tau2)),		_PUweight);
+					tau12_fromOther_isoIndex			->Fill(GetIsolationIndex(&(*Tau2)),		_PUweight);
+					tau12_fromOther_ltPt				->Fill(Tau2->leadingTrackPt,			_PUweight);
+				}
 
 
 			}
@@ -228,6 +467,39 @@ int QuickFiller::GetMatchParentId(BNmcparticle* iMCparticle){
 	else{											tauMatchParentId = 0;	} // Other
 
 	return tauMatchParentId;
+
+}
+
+unsigned int QuickFiller::GetAntiElectronIndex(const BNtau* iTau){
+	unsigned int result = 0;
+
+		 if(iTau->HPSagainstElectronTight){		result = 3; }
+	else if(iTau->HPSagainstElectronMedium){	result = 2; }
+	else if(iTau->HPSagainstElectronLoose){		result = 1; }
+
+	return result;
+}
+
+unsigned int QuickFiller::GetAntiMuonIndex(const BNtau* iTau){
+	unsigned int result = 0;
+
+		 if(iTau->HPSagainstMuonTight){		result = 3; }
+	else if(iTau->HPSagainstMuonMedium){	result = 2; }
+	else if(iTau->HPSagainstMuonLoose){		result = 1; }
+
+	return result;
+
+}
+
+unsigned int QuickFiller::GetIsolationIndex(const BNtau* iTau){
+	unsigned int result = 0;
+
+		 if(iTau->HPSbyTightCombinedIsolationDeltaBetaCorr){	result = 4; }
+	else if(iTau->HPSbyMediumCombinedIsolationDeltaBetaCorr){	result = 3; }
+	else if(iTau->HPSbyLooseCombinedIsolationDeltaBetaCorr){	result = 2; }
+	else if(iTau->HPSbyVLooseCombinedIsolationDeltaBetaCorr){	result = 1; }
+
+	return result;
 
 }
 
