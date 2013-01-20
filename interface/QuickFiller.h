@@ -26,6 +26,9 @@ class QuickFiller : public NtupleFiller {
 		// === Helper functions === //
 		int GetMatchId(BNmcparticle*);
 		int GetMatchParentId(BNmcparticle*);
+		unsigned int GetAntiElectronIndex(const BNtau*);
+		unsigned int GetAntiMuonIndex(const BNtau*);
+		unsigned int GetIsolationIndex(const BNtau*);
 
 	// ----- Variables ----- //
 	private:
@@ -44,6 +47,98 @@ class QuickFiller : public NtupleFiller {
 		TH1D* tau2Match_pu;
 		TH2D* tau2MatchParentVsTauMatch;
 		TH2D* tau2MatchParentVsTauMatch_pu;
+		TH2F* tau2MPvsTau1MP;
+
+		TH1F* tau1_fromH_pt;
+		TH1F* tau1_fromH_eta;
+		TH1F* tau1_fromH_nProngs;
+		TH1F* tau1_fromH_dm;
+		TH1F* tau1_fromH_nSignalGammas;
+		TH1F* tau1_fromH_nSignalNeutrals;
+		TH1F* tau1_fromH_antiElectronIndex;
+		TH1F* tau1_fromH_antiMuonIndex;
+		TH1F* tau1_fromH_isoIndex;
+		TH1F* tau1_fromH_ltPt;
+		TH1F* tau1_fromW_pt;
+		TH1F* tau1_fromW_eta;
+		TH1F* tau1_fromW_nProngs;
+		TH1F* tau1_fromW_dm;
+		TH1F* tau1_fromW_nSignalGammas;
+		TH1F* tau1_fromW_nSignalNeutrals;
+		TH1F* tau1_fromW_antiElectronIndex;
+		TH1F* tau1_fromW_antiMuonIndex;
+		TH1F* tau1_fromW_isoIndex;
+		TH1F* tau1_fromW_ltPt;
+		TH1F* tau1_fromOther_pt;
+		TH1F* tau1_fromOther_eta;
+		TH1F* tau1_fromOther_nProngs;
+		TH1F* tau1_fromOther_dm;
+		TH1F* tau1_fromOther_nSignalGammas;
+		TH1F* tau1_fromOther_nSignalNeutrals;
+		TH1F* tau1_fromOther_antiElectronIndex;
+		TH1F* tau1_fromOther_antiMuonIndex;
+		TH1F* tau1_fromOther_isoIndex;
+		TH1F* tau1_fromOther_ltPt;
+		TH1F* tau2_fromH_pt;
+		TH1F* tau2_fromH_eta;
+		TH1F* tau2_fromH_nProngs;
+		TH1F* tau2_fromH_dm;
+		TH1F* tau2_fromH_nSignalGammas;
+		TH1F* tau2_fromH_nSignalNeutrals;
+		TH1F* tau2_fromH_antiElectronIndex;
+		TH1F* tau2_fromH_antiMuonIndex;
+		TH1F* tau2_fromH_isoIndex;
+		TH1F* tau2_fromH_ltPt;
+		TH1F* tau2_fromW_pt;
+		TH1F* tau2_fromW_eta;
+		TH1F* tau2_fromW_nProngs;
+		TH1F* tau2_fromW_dm;
+		TH1F* tau2_fromW_nSignalGammas;
+		TH1F* tau2_fromW_nSignalNeutrals;
+		TH1F* tau2_fromW_antiElectronIndex;
+		TH1F* tau2_fromW_antiMuonIndex;
+		TH1F* tau2_fromW_isoIndex;
+		TH1F* tau2_fromW_ltPt;
+		TH1F* tau2_fromOther_pt;
+		TH1F* tau2_fromOther_eta;
+		TH1F* tau2_fromOther_nProngs;
+		TH1F* tau2_fromOther_dm;
+		TH1F* tau2_fromOther_nSignalGammas;
+		TH1F* tau2_fromOther_nSignalNeutrals;
+		TH1F* tau2_fromOther_antiElectronIndex;
+		TH1F* tau2_fromOther_antiMuonIndex;
+		TH1F* tau2_fromOther_isoIndex;
+		TH1F* tau2_fromOther_ltPt;
+		TH1F* tau12_fromH_pt;
+		TH1F* tau12_fromH_eta;
+		TH1F* tau12_fromH_nProngs;
+		TH1F* tau12_fromH_dm;
+		TH1F* tau12_fromH_nSignalGammas;
+		TH1F* tau12_fromH_nSignalNeutrals;
+		TH1F* tau12_fromH_antiElectronIndex;
+		TH1F* tau12_fromH_antiMuonIndex;
+		TH1F* tau12_fromH_isoIndex;
+		TH1F* tau12_fromH_ltPt;
+		TH1F* tau12_fromW_pt;
+		TH1F* tau12_fromW_eta;
+		TH1F* tau12_fromW_nProngs;
+		TH1F* tau12_fromW_dm;
+		TH1F* tau12_fromW_nSignalGammas;
+		TH1F* tau12_fromW_nSignalNeutrals;
+		TH1F* tau12_fromW_antiElectronIndex;
+		TH1F* tau12_fromW_antiMuonIndex;
+		TH1F* tau12_fromW_isoIndex;
+		TH1F* tau12_fromW_ltPt;
+		TH1F* tau12_fromOther_pt;
+		TH1F* tau12_fromOther_eta;
+		TH1F* tau12_fromOther_nProngs;
+		TH1F* tau12_fromOther_dm;
+		TH1F* tau12_fromOther_nSignalGammas;
+		TH1F* tau12_fromOther_nSignalNeutrals;
+		TH1F* tau12_fromOther_antiElectronIndex;
+		TH1F* tau12_fromOther_antiMuonIndex;
+		TH1F* tau12_fromOther_isoIndex;
+		TH1F* tau12_fromOther_ltPt;
 
 
 
