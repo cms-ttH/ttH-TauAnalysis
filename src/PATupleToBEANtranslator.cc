@@ -82,6 +82,8 @@ BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollec
     BNmcparticleCollection result;
 
     for( size_t k = 0; k < iCollection->size(); k++ ){
+		if(k!=43){ continue; }
+
         const reco::Candidate & mcParticle = (*iCollection)[k];
 
         int status = mcParticle.status();
@@ -93,7 +95,7 @@ BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollec
         if( (status==3) ||
                 (aId==23 || aId==24 || aId==25 || aId==6 || aId==5 || aId==4 || aId==11 || aId==13 || aId==15) ) keep = true;
 
-      //  if( !keep ) continue;
+        //if( !keep ) continue;
 
 
         BNmcparticle MyMCparticle;
@@ -144,33 +146,41 @@ BNmcparticleCollection	PATupleToBEANtranslator::RECOtoBN(reco::GenParticleCollec
             int mother1id = ( Mother1!=0 ) ? Mother1->pdgId() : -99;
 
             bool staytrapped = true;
-            while( (mother0id==pdgId || mother1id==pdgId) && staytrapped ){
-                if( mother0id==pdgId && (Mother0!=0) ){
-                    if( Mother0->numberOfMothers()>=1 ){
-                        Mother0 = Mother0->mother(0);
-                        mother0id = Mother0->pdgId();
-                        mother1id = -99;
-                        if( Mother0->numberOfMothers()>=2 ){
-                            Mother1 = Mother0->mother(1);
-                            mother1id = Mother1->pdgId();
-                        }
-                    }
-                    else staytrapped = false;
-                }
-                else if( mother1id==pdgId && (Mother1!=0) ){
-                    if( Mother1->numberOfMothers()>=1 ){
-                        Mother1 = Mother1->mother(0);
-                        mother1id = Mother1->pdgId();
-                        mother0id = -99;
-                        if( Mother1->numberOfMothers()>=2 ){
-                            Mother0 = Mother1->mother(1);
-                            mother0id = Mother0->pdgId();
-                        }
-                    }
-                    else staytrapped = false;
-                }
-                else staytrapped = false;
-            }
+			while( (mother0id==pdgId || mother1id==pdgId) && staytrapped ){
+				if( mother0id==pdgId && (Mother0!=0) ){
+					if( Mother0->numberOfMothers()>=1 ){
+						Mother0 = Mother0->mother(0);
+						mother0id = Mother0->pdgId();
+						mother1id = -99;
+						if( Mother0->numberOfMothers()>=2 ){
+							Mother1 = Mother0->mother(1);
+							mother1id = Mother1->pdgId();
+						}
+						if(mother0id==pdgId && mother1id != -99){
+							mother0id = mother1id;
+							mother1id = -99;
+						}
+					}
+					else staytrapped = false;
+				}
+				else if( mother1id==pdgId && (Mother1!=0) ){
+					if( Mother1->numberOfMothers()>=1 ){
+						Mother1 = Mother1->mother(0);
+						mother1id = Mother1->pdgId();
+						mother0id = -99;
+						if( Mother1->numberOfMothers()>=2 ){
+							Mother0 = Mother1->mother(1);
+							mother0id = Mother0->pdgId();
+						}
+						if(mother0id==pdgId && mother1id != -99){
+							mother0id = mother1id;
+							mother1id = -99;
+						}
+					}
+					else staytrapped = false;
+				}
+				else staytrapped = false;
+			}
 
             if( mother0id!=-99 ){
                 MyMCparticle.mother0Id = Mother0->pdgId();
