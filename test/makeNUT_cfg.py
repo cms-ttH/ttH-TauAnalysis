@@ -16,6 +16,8 @@ era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 0
+CSV_WP      = 0.244
+minNumBtags = 1
 
 # collection postfix for running on PF2APT
 postfix = ''
@@ -208,8 +210,8 @@ else:
 NtupleFillers = cms.untracked.vstring(
         'Event',
         #'GenLevel',
-        #'GenTau',
-        #'GenJet',
+        'GenTau',
+        'GenJet',
         'Tau',
         'Electron',
         'Muon',
@@ -225,10 +227,6 @@ elif(skimType == 'electron'):
 	NtupleFillers.append('DitauElectron')
 else:
 	throwFatalError();
-if(runOnMC):
-  NtupleFillers.append('GenJet')
-  #NtupleFillers.append('GenLevel') # not implemented
-  #NtupleFillers.append('GenTau') # not working
 
 
 # === Python process === #
@@ -314,11 +312,16 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	# === === #
 )
 
+process.bFilter = cms.EDFilter("BEANskimmer",
+    MinNumTags  = cms.untracked.uint32(minNumBtags),
+    CSV_WP      = cms.untracked.double(CSV_WP)
+)
+
 # === Run sequence === # 
 if(not runOnMC and era == 2011):
-    process.p = cms.Path( process.hltFilter + process.makeNtuple )
+    process.p = cms.Path( process.bFilter + process.hltFilter + process.makeNtuple )
 else:
-    process.p = cms.Path( process.makeNtuple )
+    process.p = cms.Path( process.bFilter + process.makeNtuple )
 
 
 # === Print some basic info about the job setup === #
