@@ -159,6 +159,11 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_MuonRelIso", &_MuonRelIso);
 	_Tree->Branch("TTM_MuonIsLooseMuon", &_MuonIsLooseMuon);
 	_Tree->Branch("TTM_MuonIsTightMuon", &_MuonIsTightMuon);
+	_Tree->Branch("TTM_NumOtherLooseMuons",&_NumOtherLooseMuons);
+	_Tree->Branch("TTM_NumOtherTightMuons",&_NumOtherTightMuons);
+	_Tree->Branch("TTM_NumOtherLooseElectrons",&_NumOtherLooseElectrons);
+	_Tree->Branch("TTM_NumOtherTightElectrons",&_NumOtherTightElectrons);
+	_Tree->Branch("TTM_LeptonEventWeight",&_LeptonEventWeight);
 	_Tree->Branch("TTM_MuonGenMatchDaughter0Id", &_MuonGenMatchDaughter0Id);
 	_Tree->Branch("TTM_MuonGenMatchDaughter1Id", &_MuonGenMatchDaughter1Id);
 	_Tree->Branch("TTM_MuonGenMatchId", &_MuonGenMatchId);
@@ -326,6 +331,11 @@ void DitauMuonFiller::ClearVectors(){
     _MuonRelIso                                     .clear();
     _MuonIsTightMuon                                .clear();
     _MuonIsLooseMuon                                .clear();
+	_NumOtherLooseMuons								.clear();
+	_NumOtherTightMuons								.clear();
+	_NumOtherLooseElectrons							= 0;
+	_NumOtherTightElectrons							= 0;
+	_LeptonEventWeight								.clear();
 	_MuonGenMatchDaughter0Id						.clear();
 	_MuonGenMatchDaughter1Id						.clear();
 	_MuonGenMatchId									.clear();
@@ -371,8 +381,17 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	// Clear vectors
 	ClearVectors();
 
+	// Other leptons
+	BNelectronCollection looseElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
+	BNelectronCollection tightElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronTight);
+	_NumOtherLooseElectrons	= looseElectrons.size();
+	_NumOtherTightElectrons	= tightElectrons.size();
+
+	BNmuonCollection looseMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonLoose);
+	BNmuonCollection tightMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
 	// Select muons (tight)
-	BNmuonCollection selectedMuons = beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
+	BNmuonCollection selectedMuons = tightMuons;
+
 
 	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
 
@@ -456,6 +475,9 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 				_MuonMomentumRank.push_back(theNumberOfMuons-1);
 				FillMuon(*Muon);
+
+				_NumOtherLooseMuons.push_back( beanHelper->IsTightMuon(*Muon) ? (looseMuons.size())		:	(looseMuons.size()-1)	);
+				_NumOtherTightMuons.push_back( beanHelper->IsTightMuon(*Muon) ? (tightMuons.size()-1)	:	(tightMuons.size())		);
 
 				
 				// Jets and MET and related quantities
@@ -652,6 +674,7 @@ void DitauMuonFiller::FillMuon(const BNmuon& Muon){
 	_MuonRelIso.push_back(beanHelper->GetMuonRelIso(Muon));
 	_MuonIsLooseMuon.push_back(beanHelper->IsLooseMuon(Muon));
 	_MuonIsTightMuon.push_back(beanHelper->IsTightMuon(Muon));
+	_LeptonEventWeight.push_back(beanHelper->GetMuonSF(Muon));
 
 	// Provenance
 	vector<int> undesiredIDs;
