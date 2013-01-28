@@ -163,6 +163,11 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_ElectronRelIso", &_ElectronRelIso);
 	_Tree->Branch("TTE_ElectronIsLooseElectron", &_ElectronIsLooseElectron);
 	_Tree->Branch("TTE_ElectronIsTightElectron", &_ElectronIsTightElectron);
+	_Tree->Branch("TTE_NumOtherLooseMuons",&_NumOtherLooseMuons);
+	_Tree->Branch("TTE_NumOtherTightMuons",&_NumOtherTightMuons);
+	_Tree->Branch("TTE_NumOtherLooseElectrons",&_NumOtherLooseElectrons);
+	_Tree->Branch("TTE_NumOtherTightElectrons",&_NumOtherTightElectrons);
+	_Tree->Branch("TTE_LeptonEventWeight",&_LeptonEventWeight);
 	_Tree->Branch("TTE_ElectronGenMatchDaughter0Id", &_ElectronGenMatchDaughter0Id);
 	_Tree->Branch("TTE_ElectronGenMatchDaughter1Id", &_ElectronGenMatchDaughter1Id);
 	_Tree->Branch("TTE_ElectronGenMatchId", &_ElectronGenMatchId);
@@ -212,8 +217,8 @@ void DitauElectronFiller::ClearVectors(){
 	_recoTauMatchedToGenHadTauFromW1 = NULL;
 	_recoTauMatchedToGenHadTauFromW2 = NULL;//*/
 
-	_NumTaus	    									= 0;
-	_NumElectrons										= 0;
+	_NumTaus	    								= 0;
+	_NumElectrons									= 0;
 	_NumCombos										= 0;	
 	_MomentumRank									.clear();
 
@@ -341,6 +346,11 @@ void DitauElectronFiller::ClearVectors(){
     _ElectronRelIso                                 .clear();
     _ElectronIsTightElectron                        .clear();
     _ElectronIsLooseElectron                        .clear();
+	_NumOtherLooseMuons								= 0;
+	_NumOtherTightMuons								= 0;
+	_NumOtherLooseElectrons							.clear();
+	_NumOtherTightElectrons							.clear();
+	_LeptonEventWeight								.clear();
 	_ElectronGenMatchDaughter0Id					.clear();
 	_ElectronGenMatchDaughter1Id					.clear();
 	_ElectronGenMatchId								.clear();
@@ -389,8 +399,19 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
     // Match Reco and GenHadTaus from H                                                               
 	if(_AnalysisType.compare("signal") == 0 ){ MatchRecoAndGenHadTausFromH(); } 
 
-	// Select muons (tight)
-	BNelectronCollection selectedElectrons = beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronTight);
+	// Other leptons
+	BNmuonCollection looseMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonLoose);
+	BNmuonCollection tightMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
+	_NumOtherLooseMuons	= looseMuons.size();
+	_NumOtherTightMuons	= tightMuons.size();
+
+	BNelectronCollection looseElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
+	BNelectronCollection tightElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronTight);
+
+	// Select electrons (tight)
+	BNelectronCollection selectedElectrons	= tightElectrons;
+
+
 
 	if(_BNtaus.size() < 2 || selectedElectrons.size() < 1){ return; }
 
@@ -446,6 +467,9 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 
 				_ElectronMomentumRank.push_back(theNumberOfElectrons-1);
 				FillElectron(*Electron);
+
+				_NumOtherLooseElectrons.push_back( beanHelper->IsTightElectron(*Electron) ? (looseElectrons.size())		:	(looseElectrons.size()-1)	);
+				_NumOtherTightElectrons.push_back( beanHelper->IsTightElectron(*Electron) ? (tightElectrons.size()-1)	:	(tightElectrons.size())		);
 
 				
 				// Jets and MET and related quantities
@@ -631,6 +655,7 @@ void DitauElectronFiller::FillElectron(const BNelectron& Electron){
     _ElectronRelIso.push_back(beanHelper->GetElectronRelIso(Electron));
     _ElectronIsLooseElectron.push_back(beanHelper->IsLooseElectron(Electron));
     _ElectronIsTightElectron.push_back(beanHelper->IsTightElectron(Electron));
+	_LeptonEventWeight.push_back(beanHelper->GetElectronSF(Electron));
 
 	// Provenance
 	vector<int> undesiredIDs;

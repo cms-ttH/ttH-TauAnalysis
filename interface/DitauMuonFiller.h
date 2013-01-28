@@ -171,6 +171,11 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_MuonRelIso;
 		vector<int> 			_MuonIsLooseMuon;
 		vector<int> 			_MuonIsTightMuon;
+		vector<unsigned int>	_NumOtherLooseMuons;
+		vector<unsigned int>	_NumOtherTightMuons;
+		unsigned int			_NumOtherLooseElectrons;
+		unsigned int			_NumOtherTightElectrons;
+		vector<float>			_LeptonEventWeight;
 		vector<int>				_MuonGenMatchDaughter0Id;
 		vector<int>				_MuonGenMatchDaughter1Id;
 		vector<int>				_MuonGenMatchId;

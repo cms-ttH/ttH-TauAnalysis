@@ -172,6 +172,11 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<float>			_ElectronRelIso;
 		vector<int> 			_ElectronIsLooseElectron;
 		vector<int> 			_ElectronIsTightElectron;
+		unsigned int			_NumOtherLooseMuons;
+		unsigned int			_NumOtherTightMuons;
+		vector<unsigned int>	_NumOtherLooseElectrons;
+		vector<unsigned int>	_NumOtherTightElectrons;
+		vector<float>			_LeptonEventWeight;
 		vector<int>				_ElectronGenMatchDaughter0Id;
 		vector<int>				_ElectronGenMatchDaughter1Id;
 		vector<int>				_ElectronGenMatchId;
