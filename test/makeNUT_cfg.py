@@ -17,7 +17,7 @@ debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 0
 CSV_WP      = 0.244
-minNumBtags = 1
+minNumBtags = 2
 
 # collection postfix for running on PF2APT
 postfix = ''
@@ -130,29 +130,43 @@ if runOnMC:
     inputForGenParticles = 'genParticles'
     inputForGenJets     = 'selectedPatJets:genJets:'
     triggerConditions = (
-        'HLT_IsoMu24_v*',
         'HLT_IsoMu24_eta2p1_v*'
     )
+    if era == 2011:
+      triggerConditions = (
+        'HLT_IsoMu24_v*'
+      )
     if (skimType == 'electron'):
         triggerConditions = (
+          'HLT_Ele27_WP80_v*'
+        )
+        if era == 2011:
+          triggerConditions = (
             'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-        )
+          )
 
 if (not runOnMC):
     inputForGenParticles = ''
     inputForGenJets         = ''
     triggerConditions = (
-        'HLT_IsoMu24_v*',
         'HLT_IsoMu24_eta2p1_v*'
     )
+    if era == 2011:
+      triggerConditions = (
+        'HLT_IsoMu24_v*'
+      )
     if (skimType == 'electron'):
         triggerConditions = (
+            'HLT_Ele27_WP80_v*'
+        )
+        if era == 2011:
+          triggerConditions = (   
             'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-        )
+          )
 
 
 # === Define Ntuplizer input collections === # 
@@ -261,6 +275,11 @@ process.hltFilter = hlt.triggerResultsFilter.clone(
         l1tResults = '',
         throw = False)
 
+# === Skim === #
+process.bFilter = cms.EDFilter("BEANskimmer",
+    MinNumTags  = cms.untracked.uint32(minNumBtags),
+    CSV_WP      = cms.untracked.double(CSV_WP)
+)
 
 # === Define and setup main module === #
 process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
@@ -312,13 +331,8 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	# === === #
 )
 
-process.bFilter = cms.EDFilter("BEANskimmer",
-    MinNumTags  = cms.untracked.uint32(minNumBtags),
-    CSV_WP      = cms.untracked.double(CSV_WP)
-)
-
 # === Run sequence === # 
-if(not runOnMC and era == 2011):
+if not runOnMC:
     process.p = cms.Path( process.bFilter + process.hltFilter + process.makeNtuple )
 else:
     process.p = cms.Path( process.bFilter + process.makeNtuple )
@@ -336,6 +350,7 @@ print '		Era Release......%s' % era_release
 print '		Max events.......%d' % options.maxEvents
 print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
+print '		Triggers.........%s' % triggerConditions
 print ''
 print '	===================================================='
 print ''
