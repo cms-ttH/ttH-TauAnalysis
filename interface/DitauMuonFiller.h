@@ -27,21 +27,9 @@ class DitauMuonFiller : public NtupleFiller {
 		void FillTau2(const BNtau&);
 		void FillMuon(const BNmuon&);
 		void FillDitauMuon(const BNtau&, const BNtau&, const BNmuon&);
-		void MatchRecoAndGenHadTausFromH();
-		void FindGenTausFromHandW();
-		//pat::Tau * FindClosestRecoTau(reco::Candidate::LorentzVector *);
 
 	// ----- Variables ----- //
 	private:
-	/*	reco::Candidate::LorentzVector genHadTauFromH1;
-		reco::Candidate::LorentzVector genHadTauFromH2;
-		reco::Candidate::LorentzVector genHadTauFromW1;
-		reco::Candidate::LorentzVector genHadTauFromW2;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromH1;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromH2;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromW1;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromW2;//*/
-
 		unsigned int			_NumTaus;
 		unsigned int			_NumMuons;
 		unsigned int			_NumCombos;
@@ -82,10 +70,6 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau1LTvz;
 		vector<unsigned int>	_Tau1LTValidHits;
 		vector<float>			_Tau1LTNormChiSqrd;
-		vector<bool>			_Tau1MatchesGenHadTauFromH1;
-		vector<bool>			_Tau1MatchesGenHadTauFromH2;
-		vector<bool>			_Tau1MatchesGenHadTauFromW1;
-		vector<bool>			_Tau1MatchesGenHadTauFromW2;
 		vector<int>				_Tau1GenMatchDaughter0Id;
 		vector<int>				_Tau1GenMatchDaughter1Id;
 		vector<int>				_Tau1GenMatchId;
@@ -140,10 +124,6 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<float>			_Tau2LTvz;
 		vector<unsigned int>	_Tau2LTValidHits;
 		vector<float>			_Tau2LTNormChiSqrd;
-		vector<bool>			_Tau2MatchesGenHadTauFromH1;
-		vector<bool>			_Tau2MatchesGenHadTauFromH2;
-		vector<bool>			_Tau2MatchesGenHadTauFromW1;
-		vector<bool>			_Tau2MatchesGenHadTauFromW2;
 		vector<int>				_Tau2GenMatchDaughter0Id;
 		vector<int>				_Tau2GenMatchDaughter1Id;
 		vector<int>				_Tau2GenMatchId;
@@ -172,8 +152,10 @@ class DitauMuonFiller : public NtupleFiller {
 		vector<int> 			_MuonIsLooseMuon;
 		vector<int> 			_MuonIsTightMuon;
 		vector<unsigned int>	_NumOtherLooseMuons;
+		vector<unsigned int>	_NumOtherExLooseMuons;
 		vector<unsigned int>	_NumOtherTightMuons;
 		unsigned int			_NumOtherLooseElectrons;
+		unsigned int			_NumOtherExLooseElectrons;
 		unsigned int			_NumOtherTightElectrons;
 		vector<float>			_LeptonEventWeight;
 		vector<int>				_MuonGenMatchDaughter0Id;

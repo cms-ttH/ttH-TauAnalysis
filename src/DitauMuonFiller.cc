@@ -68,10 +68,6 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau1LTvz", &_Tau1LTvz);
 	_Tree->Branch("TTM_Tau1LTValidHits", &_Tau1LTValidHits);
 	_Tree->Branch("TTM_Tau1LTNormChiSqrd", &_Tau1LTNormChiSqrd);
-	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromH1", &_Tau1MatchesGenHadTauFromH1);
-	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromH2", &_Tau1MatchesGenHadTauFromH2);
-	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromW1", &_Tau1MatchesGenHadTauFromW1);
-	_Tree->Branch("TTM_Tau1MatchesGenHadTauFromW2", &_Tau1MatchesGenHadTauFromW2);
 
 	_Tree->Branch("TTM_Tau1GenMatchDaughter0Id", &_Tau1GenMatchDaughter0Id);
 	_Tree->Branch("TTM_Tau1GenMatchDaughter1Id", &_Tau1GenMatchDaughter1Id);
@@ -127,10 +123,6 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_Tau2LTvz", &_Tau2LTvz);
 	_Tree->Branch("TTM_Tau2LTValidHits", &_Tau2LTValidHits);
 	_Tree->Branch("TTM_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
-	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromH1", &_Tau2MatchesGenHadTauFromH1);
-	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromH2", &_Tau2MatchesGenHadTauFromH2);
-	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromW1", &_Tau2MatchesGenHadTauFromW1);
-	_Tree->Branch("TTM_Tau2MatchesGenHadTauFromW2", &_Tau2MatchesGenHadTauFromW2);
 
 	_Tree->Branch("TTM_Tau2GenMatchDaughter0Id", &_Tau2GenMatchDaughter0Id);
 	_Tree->Branch("TTM_Tau2GenMatchDaughter1Id", &_Tau2GenMatchDaughter1Id);
@@ -160,8 +152,10 @@ void DitauMuonFiller::SetupBranches(){
 	_Tree->Branch("TTM_MuonIsLooseMuon", &_MuonIsLooseMuon);
 	_Tree->Branch("TTM_MuonIsTightMuon", &_MuonIsTightMuon);
 	_Tree->Branch("TTM_NumOtherLooseMuons",&_NumOtherLooseMuons);
+	_Tree->Branch("TTM_NumOtherExLooseMuons",&_NumOtherExLooseMuons);
 	_Tree->Branch("TTM_NumOtherTightMuons",&_NumOtherTightMuons);
 	_Tree->Branch("TTM_NumOtherLooseElectrons",&_NumOtherLooseElectrons);
+	_Tree->Branch("TTM_NumOtherExLooseElectrons",&_NumOtherExLooseElectrons);
 	_Tree->Branch("TTM_NumOtherTightElectrons",&_NumOtherTightElectrons);
 	_Tree->Branch("TTM_LeptonEventWeight",&_LeptonEventWeight);
 	_Tree->Branch("TTM_MuonGenMatchDaughter0Id", &_MuonGenMatchDaughter0Id);
@@ -242,10 +236,6 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau1LTvz										.clear();
 	_Tau1LTValidHits								.clear();
 	_Tau1LTNormChiSqrd								.clear();
-	_Tau1MatchesGenHadTauFromH1						.clear();
-	_Tau1MatchesGenHadTauFromH2						.clear();
-	_Tau1MatchesGenHadTauFromW1						.clear();
-	_Tau1MatchesGenHadTauFromW2						.clear();
 	_Tau1GenMatchDaughter0Id						.clear();
 	_Tau1GenMatchDaughter1Id						.clear();
 	_Tau1GenMatchId									.clear();
@@ -300,10 +290,6 @@ void DitauMuonFiller::ClearVectors(){
 	_Tau2LTvz										.clear();
 	_Tau2LTValidHits								.clear();
 	_Tau2LTNormChiSqrd								.clear();
-	_Tau2MatchesGenHadTauFromH1						.clear();
-	_Tau2MatchesGenHadTauFromH2						.clear();
-	_Tau2MatchesGenHadTauFromW1						.clear();
-	_Tau2MatchesGenHadTauFromW2						.clear();
 	_Tau2GenMatchDaughter0Id						.clear();
 	_Tau2GenMatchDaughter1Id						.clear();
 	_Tau2GenMatchId									.clear();
@@ -332,8 +318,10 @@ void DitauMuonFiller::ClearVectors(){
     _MuonIsTightMuon                                .clear();
     _MuonIsLooseMuon                                .clear();
 	_NumOtherLooseMuons								.clear();
+	_NumOtherExLooseMuons							.clear();
 	_NumOtherTightMuons								.clear();
 	_NumOtherLooseElectrons							= 0;
+	_NumOtherExLooseElectrons						= 0;
 	_NumOtherTightElectrons							= 0;
 	_LeptonEventWeight								.clear();
 	_MuonGenMatchDaughter0Id						.clear();
@@ -369,7 +357,6 @@ void DitauMuonFiller::ClearVectors(){
 	_NumNonCSVLbtagJets								.clear();
 	_NumNonCSVMbtagJets								.clear();
 	_NumNonCSVTbtagJets								.clear();
-
 }
 
 // === Fill ntuple === //
@@ -384,44 +371,21 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	// Other leptons
 	BNelectronCollection looseElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
 	BNelectronCollection tightElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronTight);
-	_NumOtherLooseElectrons	= looseElectrons.size();
-	_NumOtherTightElectrons	= tightElectrons.size();
+	BNelectronCollection exLooseElectrons	= beanHelper->GetDifference(looseElectrons, tightElectrons);
+	_NumOtherExLooseElectrons	= exLooseElectrons.size();
+	_NumOtherLooseElectrons		= looseElectrons.size();
+	_NumOtherTightElectrons		= tightElectrons.size();
 
 	BNmuonCollection looseMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonLoose);
 	BNmuonCollection tightMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
+	BNmuonCollection exLooseMuons			= beanHelper->GetDifference(looseMuons, tightMuons);
+
+
 	// Select muons (tight)
 	BNmuonCollection selectedMuons = tightMuons;
 
 
 	if(_BNtaus.size() < 2 || selectedMuons.size() < 1){ return; }
-
-	// Tau provenance
-	BNmcparticleCollection genTaus	= beanHelper->GetHadronicGenTaus(_BNmcparticles);
-	BNmcparticle			genTau1FromH, genTau2FromH, genTau1FromW, genTau2FromW;
-
-	// From H
-	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
-		//cout << "gentau mother id: " << genTau->motherId << "   " << genTau->grandMotherId << endl;
-		if((genTau->mother0Id==25) || (genTau->mother1Id==25)){
-			if(genTau->pt > genTau1FromH.pt){ 
-				genTau2FromH = genTau1FromH;
-				genTau1FromH = *genTau;
-				//cout << "GOT IT!" << endl;
-			}
-			if(genTau2FromH.pt > 0){ break; }
-		}
-	}
-	// From ttbar system
-	for(BNmcparticleCollection::const_iterator genTau = genTaus.begin(); genTau != genTaus.end(); ++genTau){
-		if(((abs(genTau->mother0Id)==24) || (abs(genTau->mother1Id)==24)) && 
-			((abs(genTau->grandMother00Id)==6) || (abs(genTau->grandMother01Id)==6) || (abs(genTau->grandMother10Id)==6) || (abs(genTau->grandMother11Id)==6))){
-			if(genTau->pt > genTau1FromW.pt){ 
-				genTau2FromW = genTau1FromW;
-				genTau1FromW = *genTau;
-			}
-			if(genTau2FromW.pt > 0){ break; }
-		}
-	}
 
 	// Tau loops: Tau1 is always leads in pT
 	unsigned int theNumberOfTaus1 = 0;
@@ -476,8 +440,26 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				_MuonMomentumRank.push_back(theNumberOfMuons-1);
 				FillMuon(*Muon);
 
-				_NumOtherLooseMuons.push_back( beanHelper->IsTightMuon(*Muon) ? (looseMuons.size())		:	(looseMuons.size()-1)	);
-				_NumOtherTightMuons.push_back( beanHelper->IsTightMuon(*Muon) ? (tightMuons.size()-1)	:	(tightMuons.size())		);
+				// Other muons
+				bool isTight = beanHelper->IsTightMuon(*Muon);
+				bool isLoose = beanHelper->IsLooseMuon(*Muon);
+					  if(  isLoose &&  isTight){ // This muon will be in: tight, loose
+						_NumOtherLooseMuons		.push_back(looseMuons.size()-1);
+						_NumOtherExLooseMuons	.push_back(exLooseMuons.size());
+						_NumOtherTightMuons		.push_back(tightMuons.size()-1);
+				}else if(  isLoose && !isTight){ // This muon will be in: loose, exLoose
+						_NumOtherLooseMuons		.push_back(looseMuons.size()-1);
+						_NumOtherExLooseMuons	.push_back(exLooseMuons.size()-1);
+						_NumOtherTightMuons		.push_back(tightMuons.size());
+				}else if( !isLoose &&  isTight){ // This muon will be in: tight
+						_NumOtherLooseMuons		.push_back(looseMuons.size());
+						_NumOtherExLooseMuons	.push_back(exLooseMuons.size());
+						_NumOtherTightMuons		.push_back(tightMuons.size()-1);
+				}else{ // Redundant
+						_NumOtherLooseMuons		.push_back(looseMuons.size());
+						_NumOtherExLooseMuons	.push_back(exLooseMuons.size());
+						_NumOtherTightMuons		.push_back(tightMuons.size());
+				}
 
 				
 				// Jets and MET and related quantities
@@ -507,15 +489,6 @@ void DitauMuonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 				_NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
 				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
-				// Provenance
-				_Tau1MatchesGenHadTauFromH1.push_back( (genTau1FromH.pt>0) && (deltaR(genTau1FromH.eta, genTau1FromH.phi, Tau1->eta, Tau1->phi) < 0.25) );
-				_Tau2MatchesGenHadTauFromH1.push_back( (genTau1FromH.pt>0) && (deltaR(genTau1FromH.eta, genTau1FromH.phi, Tau2->eta, Tau2->phi) < 0.25) );
-				_Tau1MatchesGenHadTauFromH2.push_back( (genTau2FromH.pt>0) && (deltaR(genTau2FromH.eta, genTau2FromH.phi, Tau1->eta, Tau1->phi) < 0.25) );
-				_Tau2MatchesGenHadTauFromH2.push_back( (genTau2FromH.pt>0) && (deltaR(genTau2FromH.eta, genTau2FromH.phi, Tau2->eta, Tau2->phi) < 0.25) );
-				_Tau1MatchesGenHadTauFromW1.push_back( (genTau1FromW.pt>0) && (deltaR(genTau1FromW.eta, genTau1FromW.phi, Tau1->eta, Tau1->phi) < 0.25) );
-				_Tau2MatchesGenHadTauFromW1.push_back( (genTau1FromW.pt>0) && (deltaR(genTau1FromW.eta, genTau1FromW.phi, Tau2->eta, Tau2->phi) < 0.25) );
-				_Tau1MatchesGenHadTauFromW2.push_back( (genTau2FromW.pt>0) && (deltaR(genTau2FromW.eta, genTau2FromW.phi, Tau1->eta, Tau1->phi) < 0.25) );
-				_Tau2MatchesGenHadTauFromW2.push_back( (genTau2FromW.pt>0) && (deltaR(genTau2FromW.eta, genTau2FromW.phi, Tau2->eta, Tau2->phi) < 0.25) );
 
 			} // end of muon loop
 		} // end of tau2 loop
