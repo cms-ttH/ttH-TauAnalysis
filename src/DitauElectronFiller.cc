@@ -15,12 +15,6 @@ DitauElectronFiller::DitauElectronFiller(const ParameterSet& iConfig, TTree* iTr
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
-	
-    /*_recoTauMatchedToGenHadTauFromH1 = NULL;
-	_recoTauMatchedToGenHadTauFromH2 = NULL;
-	_recoTauMatchedToGenHadTauFromW1 = NULL;
-	_recoTauMatchedToGenHadTauFromW2 = NULL;//*/
-
 }
 
 // === Destructor === //
@@ -74,10 +68,6 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau1LTvz", &_Tau1LTvz);
 	_Tree->Branch("TTE_Tau1LTValidHits", &_Tau1LTValidHits);
 	_Tree->Branch("TTE_Tau1LTNormChiSqrd", &_Tau1LTNormChiSqrd);
-	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromH1", &_Tau1MatchesGenHadTauFromH1);
-	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromH2", &_Tau1MatchesGenHadTauFromH2);
-	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromW1", &_Tau1MatchesGenHadTauFromW1);
-	_Tree->Branch("TTE_Tau1MatchesGenHadTauFromW2", &_Tau1MatchesGenHadTauFromW2);
 	_Tree->Branch("TTE_Tau1GenMatchDaughter0Id", &_Tau1GenMatchDaughter0Id);
 	_Tree->Branch("TTE_Tau1GenMatchDaughter1Id", &_Tau1GenMatchDaughter1Id);
 	_Tree->Branch("TTE_Tau1GenMatchId", &_Tau1GenMatchId);
@@ -132,10 +122,6 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau2LTvz", &_Tau2LTvz);
 	_Tree->Branch("TTE_Tau2LTValidHits", &_Tau2LTValidHits);
 	_Tree->Branch("TTE_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
-	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromH1", &_Tau2MatchesGenHadTauFromH1);
-	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromH2", &_Tau2MatchesGenHadTauFromH2);
-	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromW1", &_Tau2MatchesGenHadTauFromW1);
-	_Tree->Branch("TTE_Tau2MatchesGenHadTauFromW2", &_Tau2MatchesGenHadTauFromW2);
 	_Tree->Branch("TTE_Tau2GenMatchDaughter0Id", &_Tau2GenMatchDaughter0Id);
 	_Tree->Branch("TTE_Tau2GenMatchDaughter1Id", &_Tau2GenMatchDaughter1Id);
 	_Tree->Branch("TTE_Tau2GenMatchId", &_Tau2GenMatchId);
@@ -164,8 +150,10 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_ElectronIsLooseElectron", &_ElectronIsLooseElectron);
 	_Tree->Branch("TTE_ElectronIsTightElectron", &_ElectronIsTightElectron);
 	_Tree->Branch("TTE_NumOtherLooseMuons",&_NumOtherLooseMuons);
+	_Tree->Branch("TTE_NumOtherExLooseMuons",&_NumOtherExLooseMuons);
 	_Tree->Branch("TTE_NumOtherTightMuons",&_NumOtherTightMuons);
 	_Tree->Branch("TTE_NumOtherLooseElectrons",&_NumOtherLooseElectrons);
+	_Tree->Branch("TTE_NumOtherExLooseElectrons",&_NumOtherExLooseElectrons);
 	_Tree->Branch("TTE_NumOtherTightElectrons",&_NumOtherTightElectrons);
 	_Tree->Branch("TTE_LeptonEventWeight",&_LeptonEventWeight);
 	_Tree->Branch("TTE_ElectronGenMatchDaughter0Id", &_ElectronGenMatchDaughter0Id);
@@ -205,17 +193,6 @@ void DitauElectronFiller::SetupBranches(){
 
 // === Clear vectors that will be used to fill ntuple === //
 void DitauElectronFiller::ClearVectors(){
-
-	genHadTauFromH1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromH2 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW2 = reco::Candidate::LorentzVector(0,0,0,0);
-
-
-	/*_recoTauMatchedToGenHadTauFromH1 = NULL;
-	_recoTauMatchedToGenHadTauFromH2 = NULL;
-	_recoTauMatchedToGenHadTauFromW1 = NULL;
-	_recoTauMatchedToGenHadTauFromW2 = NULL;//*/
 
 	_NumTaus	    								= 0;
 	_NumElectrons									= 0;
@@ -257,10 +234,6 @@ void DitauElectronFiller::ClearVectors(){
 	_Tau1LTvz										.clear();
 	_Tau1LTValidHits								.clear();
 	_Tau1LTNormChiSqrd								.clear();
-	_Tau1MatchesGenHadTauFromH1						.clear();
-	_Tau1MatchesGenHadTauFromH2						.clear();
-	_Tau1MatchesGenHadTauFromW1						.clear();
-	_Tau1MatchesGenHadTauFromW2						.clear();
 	_Tau1GenMatchDaughter0Id						.clear();
 	_Tau1GenMatchDaughter1Id						.clear();
 	_Tau1GenMatchId									.clear();
@@ -315,10 +288,6 @@ void DitauElectronFiller::ClearVectors(){
 	_Tau2LTvz										.clear();
 	_Tau2LTValidHits								.clear();
 	_Tau2LTNormChiSqrd								.clear();
-	_Tau2MatchesGenHadTauFromH1						.clear();
-	_Tau2MatchesGenHadTauFromH2						.clear();
-	_Tau2MatchesGenHadTauFromW1						.clear();
-	_Tau2MatchesGenHadTauFromW2						.clear();
 	_Tau2GenMatchDaughter0Id						.clear();
 	_Tau2GenMatchDaughter1Id						.clear();
 	_Tau2GenMatchId									.clear();
@@ -347,8 +316,10 @@ void DitauElectronFiller::ClearVectors(){
     _ElectronIsTightElectron                        .clear();
     _ElectronIsLooseElectron                        .clear();
 	_NumOtherLooseMuons								= 0;
+	_NumOtherExLooseMuons							= 0;
 	_NumOtherTightMuons								= 0;
 	_NumOtherLooseElectrons							.clear();
+	_NumOtherExLooseElectrons						.clear();
 	_NumOtherTightElectrons							.clear();
 	_LeptonEventWeight								.clear();
 	_ElectronGenMatchDaughter0Id					.clear();
@@ -390,27 +361,25 @@ void DitauElectronFiller::ClearVectors(){
 void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// Get the object collections from the event
-    //std::cout << "<DitauElectronFiller::FillNtuple>: enter function" << std::endl;
 	GetCollections(iEvent, iSetup);
 
 	// Clear vectors
 	ClearVectors();
 
-    // Match Reco and GenHadTaus from H                                                               
-	if(_AnalysisType.compare("signal") == 0 ){ MatchRecoAndGenHadTausFromH(); } 
-
 	// Other leptons
 	BNmuonCollection looseMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonLoose);
 	BNmuonCollection tightMuons				= beanHelper->GetSelectedMuons(_BNmuons, muonID::muonTight);
-	_NumOtherLooseMuons	= looseMuons.size();
-	_NumOtherTightMuons	= tightMuons.size();
+	BNmuonCollection exLooseMuons			= beanHelper->GetDifference(looseMuons, tightMuons);
+	_NumOtherLooseMuons		= looseMuons.size();
+	_NumOtherExLooseMuons	= exLooseMuons.size();
+	_NumOtherTightMuons		= tightMuons.size();
 
 	BNelectronCollection looseElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronLoose);
 	BNelectronCollection tightElectrons		= beanHelper->GetSelectedElectrons(_BNelectrons, electronID::electronTight);
+	BNelectronCollection exLooseElectrons	= beanHelper->GetDifference(looseElectrons, tightElectrons);
 
 	// Select electrons (tight)
 	BNelectronCollection selectedElectrons	= tightElectrons;
-
 
 
 	if(_BNtaus.size() < 2 || selectedElectrons.size() < 1){ return; }
@@ -468,8 +437,26 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 				_ElectronMomentumRank.push_back(theNumberOfElectrons-1);
 				FillElectron(*Electron);
 
-				_NumOtherLooseElectrons.push_back( beanHelper->IsTightElectron(*Electron) ? (looseElectrons.size())		:	(looseElectrons.size()-1)	);
-				_NumOtherTightElectrons.push_back( beanHelper->IsTightElectron(*Electron) ? (tightElectrons.size()-1)	:	(tightElectrons.size())		);
+				// Other electrons
+				bool isTight = beanHelper->IsTightElectron(*Electron);
+				bool isLoose = beanHelper->IsLooseElectron(*Electron);
+					  if(  isLoose &&  isTight){ // This Electron will be in: tight, loose
+						_NumOtherLooseElectrons		.push_back(looseElectrons.size()-1);
+						_NumOtherExLooseElectrons	.push_back(exLooseElectrons.size());
+						_NumOtherTightElectrons		.push_back(tightElectrons.size()-1);
+				}else if(  isLoose && !isTight){ // This Electron will be in: loose, exLoose
+						_NumOtherLooseElectrons		.push_back(looseElectrons.size()-1);
+						_NumOtherExLooseElectrons	.push_back(exLooseElectrons.size()-1);
+						_NumOtherTightElectrons		.push_back(tightElectrons.size());
+				}else if( !isLoose &&  isTight){ // This Electron will be in: tight
+						_NumOtherLooseElectrons		.push_back(looseElectrons.size());
+						_NumOtherExLooseElectrons	.push_back(exLooseElectrons.size());
+						_NumOtherTightElectrons		.push_back(tightElectrons.size()-1);
+				}else{ // Redundant
+						_NumOtherLooseElectrons		.push_back(looseElectrons.size());
+						_NumOtherExLooseElectrons	.push_back(exLooseElectrons.size());
+						_NumOtherTightElectrons		.push_back(tightElectrons.size());
+				}
 
 				
 				// Jets and MET and related quantities
@@ -698,95 +685,3 @@ void DitauElectronFiller::FillDitauElectron(const BNtau& Tau1, const BNtau& Tau2
 	_Tau1ElectronDeltaR		.push_back(reco::deltaR(Tau1.eta, Tau1.phi, Electron.eta, Electron.phi));
 	_Tau2ElectronDeltaR		.push_back(reco::deltaR(Tau2.eta, Tau2.phi, Electron.eta, Electron.phi));
 }
-
-
-void DitauElectronFiller::MatchRecoAndGenHadTausFromH(){
-	//FindGenTausFromHandW();
-
-	/*_recoTauMatchedToGenHadTauFromH1 = FindClosestRecoTau(&genHadTauFromH1);
-	_recoTauMatchedToGenHadTauFromH2 = FindClosestRecoTau(&genHadTauFromH2);
-	_recoTauMatchedToGenHadTauFromW1 = FindClosestRecoTau(&genHadTauFromW1);
-	_recoTauMatchedToGenHadTauFromW2 = FindClosestRecoTau(&genHadTauFromW2);//*/
-}
-
-/*pat::Tau * DitauElectronFiller::FindClosestRecoTau(reco::Candidate::LorentzVector * iParticle){
-
-	if(iParticle->mag2()==0){ return NULL; }
-
-	float minDeltaR = 999;
-	pat::TauCollection::const_iterator closestTau;
-	for ( pat::TauCollection::const_iterator Tau = _patTaus->begin(); Tau != _patTaus->end(); ++Tau ) {
-
-			float thisDeltaR = reco::deltaR(Tau->eta(), Tau->phi(), iParticle->eta(), iParticle->phi());
-			if(thisDeltaR < minDeltaR){
-				minDeltaR = thisDeltaR;	
-				closestTau = (Tau);
-			}
-	}
-
-	return const_cast<pat::Tau*>(&(*closestTau));
-}//*/
-
-void DitauElectronFiller::FindGenTausFromHandW(){
-/*	genHadTauFromH1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromH2 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW1 = reco::Candidate::LorentzVector(0,0,0,0);
-	genHadTauFromW2 = reco::Candidate::LorentzVector(0,0,0,0);
-
-	// Loop over all gen particles looking for taus
-	unsigned int numGenHadTau		= 0;
-	unsigned int numGenHadTauFromH	= 0;
-	for(GenParticleCollection::const_iterator genParticle = _genParticles->begin(); genParticle != _genParticles->end(); ++genParticle){
-
-		// Only care for taus
-		if((abs(genParticle->pdgId()) != 15) || (genParticle->status() == 3)){ continue; }
-		reco::Candidate::LorentzVector visGenTau = genParticle->p4();
-
-		// Examine number of neutrinos
-		bool foundElectron	= false;
-		bool foundMuon		= false;
-		for( unsigned int i=0; i < (genParticle->numberOfDaughters()); i++) {
-			const reco::Candidate* daughterCand = genParticle->daughter(i);
-
-			// Figure out the decay mode
-			if( abs(daughterCand->pdgId()) == 12 ){ foundElectron	= true; }    
-			if( abs(daughterCand->pdgId()) == 14 ){ foundMuon		= true; }    
-
-			// Obtain visible momentum by subtracting the p4 of neutrinos
-			if( (abs(daughterCand->pdgId()) == 12) || (abs(daughterCand->pdgId()) == 14) || (abs(daughterCand->pdgId()) == 16) ) {
-				visGenTau = visGenTau - daughterCand->p4();
-			}    
-		}    
-		// Fill decay mode
-		if(foundElectron || foundMuon){ continue; }
-		numGenHadTau++;
-
-		const reco::Candidate* parent;
-		if(genParticle->mother(0)->pdgId() == genParticle->pdgId()){    parent = genParticle->mother(0)->mother(0); }
-		else{                                                           parent = genParticle->mother(0);            }  
-		if(parent->pdgId() == 25){
-
-			if(genHadTauFromH1.mag2() ==0){
-				genHadTauFromH1 = visGenTau;
-			}else if(genHadTauFromH1.pt() > visGenTau.pt()){
-				genHadTauFromH2 = visGenTau;
-			}else{
-				genHadTauFromH2 = genHadTauFromH1;
-				genHadTauFromH1 = visGenTau;
-			}
-		}else{
-			if(genHadTauFromW1.mag2() == 0){
-				genHadTauFromW1 = visGenTau;
-			}else if(genHadTauFromW1.pt() > visGenTau.pt()){
-				genHadTauFromW2 = visGenTau;
-			}else{
-				genHadTauFromW2 = genHadTauFromW1;
-				genHadTauFromW1 = visGenTau;
-			}
-		
-		}
-
-	}
-//*/
-}
-

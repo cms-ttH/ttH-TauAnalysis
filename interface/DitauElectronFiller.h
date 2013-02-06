@@ -27,22 +27,9 @@ class DitauElectronFiller : public NtupleFiller {
 		void FillTau2(const BNtau&);
 		void FillElectron(const BNelectron&);
 		void FillDitauElectron(const BNtau&, const BNtau&, const BNelectron&);
-		void MatchRecoAndGenHadTausFromH();
-		void FindGenTausFromHandW();
-		//pat::Tau * FindClosestRecoTau(reco::Candidate::LorentzVector *);
 
 	// ----- Variables ----- //
 	private:
-		TH1F*				_Plot1;
-		TH1F*				_Plot2;
-		reco::Candidate::LorentzVector genHadTauFromH1;
-		reco::Candidate::LorentzVector genHadTauFromH2;
-		reco::Candidate::LorentzVector genHadTauFromW1;
-		reco::Candidate::LorentzVector genHadTauFromW2;
-		/*pat::Tau *				_recoTauMatchedToGenHadTauFromH1;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromH2;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromW1;
-		pat::Tau *				_recoTauMatchedToGenHadTauFromW2;//*/
 		unsigned int			_NumTaus;
 		unsigned int			_NumElectrons;
 		unsigned int			_NumCombos;
@@ -141,10 +128,6 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<float>			_Tau2LTvz;
 		vector<unsigned int>	_Tau2LTValidHits;
 		vector<float>			_Tau2LTNormChiSqrd;
-		vector<bool>			_Tau2MatchesGenHadTauFromH1;
-		vector<bool>			_Tau2MatchesGenHadTauFromH2;
-		vector<bool>			_Tau2MatchesGenHadTauFromW1;
-		vector<bool>			_Tau2MatchesGenHadTauFromW2;
 		vector<int>				_Tau2GenMatchDaughter0Id;
 		vector<int>				_Tau2GenMatchDaughter1Id;
 		vector<int>				_Tau2GenMatchId;
@@ -173,8 +156,10 @@ class DitauElectronFiller : public NtupleFiller {
 		vector<int> 			_ElectronIsLooseElectron;
 		vector<int> 			_ElectronIsTightElectron;
 		unsigned int			_NumOtherLooseMuons;
+		unsigned int			_NumOtherExLooseMuons;
 		unsigned int			_NumOtherTightMuons;
 		vector<unsigned int>	_NumOtherLooseElectrons;
+		vector<unsigned int>	_NumOtherExLooseElectrons;
 		vector<unsigned int>	_NumOtherTightElectrons;
 		vector<float>			_LeptonEventWeight;
 		vector<int>				_ElectronGenMatchDaughter0Id;
