@@ -16,10 +16,8 @@ era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 0
-CSV_WP      = 0.244
-minNumBtags = 2
 
-# collection postfix for running on PF2APT
+# collection postfix for running on PF2PAT
 postfix = ''
 # postfix = 'PFlow'
 
@@ -28,22 +26,25 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 # 'jobParams' parameter form: 
 # 
-# <era>_<subera>_<era release>_<type>_<lepton flavor>_<sample number>
+# <era>_<subera>_<era release>_<type>_<lepton flavor>_<sample number>_<skim selection>
 #
 # <era>						= 2011, 2012
 # <subera> [N/A for MC]		= A, B, C...
 # <type>					= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
 # <lepton flavor>			= muon, electron
 # <sample number>			= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
+# <skim selection>          = up to five numbers; 1st is min. num. of total jets, 2nd is min. num. loose Btags, 
+#                             3rd is min. num. med. Btags, 4th is min. num. tight Btags, 
+#                             5th is min num. "base taus", as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
 #
 # Examples:
-# 2011_X_MC-sig_muon
-# 2011_B_data-PR_electron
-# 2012_X_MC-bg_electron
-# 2012_B_data-PR_muon
+# 2011_X_MC-sig_muon_0
+# 2011_B_data-PR_electron_0
+# 2012_X_MC-bg_electron_0
+# 2012_B_data-PR_muon_0
 options.register ('jobParams', # 
                   #'2011_X_MC-sigFullSim_muon_125',	    # 125   tth->tautau
-                  '2011_X_MC-bg_muon_2500',	# 2500	TTbar
+                  '2011_X_MC-bg_muon_2500_0',	# 2500	TTbar
 				  #'2011_A_data-PR_muon_-1',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_muon_-1',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_muon_-11',	    # -11	2012B collisions
@@ -87,10 +88,9 @@ my_splitter.whitespace = '_';
 my_splitter.whitespace_split = True;
 jobParams       = list(my_splitter);
 
-
 # === Job params error checking === #
-if len(jobParams) != 5:
-    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 5 arguments (check config file for details). Terminating."; sys.exit(1);
+if len(jobParams) != 6:
+    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 6 arguments (check config file for details). Terminating."; sys.exit(1);
 
 if (jobParams[0] != "2011") and (jobParams[0] != "2012"):
     print "ERROR: era set to '" + jobParams[0] + "' but it must be '2011' or '2012'"; sys.exit(1);
@@ -123,6 +123,11 @@ if (runOnMC and sampleNumber < 0):
 if (not runOnMC and sampleNumber >= 0):
     print "ERROR: job set to run on collision data but sample number set to '" + sampleNumber + "' when it must be negative."; sys.exit(1);
 
+skimParams = jobParams[5]
+if len(skimParams) is 0:
+    print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams); sys.exit(1)
+if len(skimParams) > 5:
+    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 5 characters are not supported'.format(skimParams); sys.exit(1)
 
 
 # === Set up triggers and GEN collections based on analysis type === # 
@@ -130,7 +135,7 @@ if runOnMC:
     inputForGenParticles = 'genParticles'
     inputForGenJets     = 'selectedPatJets:genJets:'
     triggerConditions = (
-        'HLT_IsoMu24_eta2p1_v*'
+        'HLT_IsoMu24_eta2p1'
     )
     if era == 2011:
       triggerConditions = (
@@ -138,7 +143,7 @@ if runOnMC:
       )
     if (skimType == 'electron'):
         triggerConditions = (
-          'HLT_Ele27_WP80_v*'
+          'HLT_Ele27_WP80'
         )
         if era == 2011:
           triggerConditions = (
@@ -263,22 +268,25 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 from TTHTauTau.Analysis.globalTagMap_cfi import globalTagMap
-globalTag = globalTagMap[options.jobParams.rsplit('_',2)[0]] + '::All'
+globalTag = globalTagMap[options.jobParams.rsplit('_',3)[0]] + '::All'
 process.GlobalTag.globaltag = cms.string(globalTag)
 
 
 # === Collision data trigger requirements === #
 import HLTrigger.HLTfilters.triggerResultsFilter_cfi as hlt
 process.hltFilter = hlt.triggerResultsFilter.clone(
-        hltResults = cms.InputTag('TriggerResults::HLT'),
+        hltResults = TriggerSource,
         triggerConditions = cms.vstring(triggerConditions),
         l1tResults = '',
         throw = False)
+if era == 2012:
+  process.hltFilter = cms.EDFilter("BEANhltFilter",
+      HLTacceptPath = cms.string(triggerConditions[0])
+  )
 
 # === Skim === #
-process.bFilter = cms.EDFilter("BEANskimmer",
-    MinNumTags  = cms.untracked.uint32(minNumBtags),
-    CSV_WP      = cms.untracked.double(CSV_WP)
+process.beanSkimmer = cms.EDFilter("BEANskimmer",
+    config = cms.untracked.string(skimParams)
 )
 
 # === Define and setup main module === #
@@ -333,9 +341,9 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 # === Run sequence === # 
 if not runOnMC:
-    process.p = cms.Path( process.bFilter + process.hltFilter + process.makeNtuple )
+    process.p = cms.Path( process.beanSkimmer + process.hltFilter + process.makeNtuple )
 else:
-    process.p = cms.Path( process.bFilter + process.makeNtuple )
+    process.p = cms.Path( process.beanSkimmer + process.makeNtuple )
 
 
 # === Print some basic info about the job setup === #
@@ -351,6 +359,7 @@ print '		Max events.......%d' % options.maxEvents
 print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
 print '		Triggers.........%s' % triggerConditions
+print '		Skim parameters..%s' % skimParams
 print ''
 print '	===================================================='
 print ''
