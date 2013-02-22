@@ -44,18 +44,49 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau1DecayMode", &_Tau1DecayMode);
 	_Tree->Branch("TTE_Tau1EmFraction", &_Tau1EmFraction);
 	_Tree->Branch("TTE_Tau1IsInTheCracks", &_Tau1IsInTheCracks);
-	_Tree->Branch("TTE_Tau1HPSagainstElectronLoose", &_Tau1HPSagainstElectronLoose);
-	_Tree->Branch("TTE_Tau1HPSagainstElectronMVA", &_Tau1HPSagainstElectronMVA);
-	_Tree->Branch("TTE_Tau1HPSagainstElectronMedium", &_Tau1HPSagainstElectronMedium);
-	_Tree->Branch("TTE_Tau1HPSagainstElectronTight", &_Tau1HPSagainstElectronTight);
-	_Tree->Branch("TTE_Tau1HPSagainstMuonLoose", &_Tau1HPSagainstMuonLoose);
-	_Tree->Branch("TTE_Tau1HPSagainstMuonMedium", &_Tau1HPSagainstMuonMedium);
-	_Tree->Branch("TTE_Tau1HPSagainstMuonTight", &_Tau1HPSagainstMuonTight);
-	_Tree->Branch("TTE_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau1HPSdecayModeFinding", &_Tau1HPSdecayModeFinding);
+    
+    _Tree->Branch("TTE_Tau1HPSagainstElectronDeadECAL", &_Tau1HPSagainstElectronDeadECAL);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronLoose", &_Tau1HPSagainstElectronLoose);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronLooseMVA2", &_Tau1HPSagainstElectronLooseMVA2);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronLooseMVA3", &_Tau1HPSagainstElectronLooseMVA3);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMVA", &_Tau1HPSagainstElectronMVA);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMVA2category", &_Tau1HPSagainstElectronMVA2category);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMVA2raw", &_Tau1HPSagainstElectronMVA2raw);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMVA3category", &_Tau1HPSagainstElectronMVA3category);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMVA3raw", &_Tau1HPSagainstElectronMVA3raw);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMedium", &_Tau1HPSagainstElectronMedium);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMediumMVA2", &_Tau1HPSagainstElectronMediumMVA2);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronMediumMVA3", &_Tau1HPSagainstElectronMediumMVA3);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronTight", &_Tau1HPSagainstElectronTight);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronTightMVA2", &_Tau1HPSagainstElectronTightMVA2);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronTightMVA3", &_Tau1HPSagainstElectronTightMVA3);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronVLooseMVA2", &_Tau1HPSagainstElectronVLooseMVA2);
+    _Tree->Branch("TTE_Tau1HPSagainstElectronVTightMVA3", &_Tau1HPSagainstElectronVTightMVA3);
+    _Tree->Branch("TTE_Tau1HPSagainstMuonLoose", &_Tau1HPSagainstMuonLoose);
+    _Tree->Branch("TTE_Tau1HPSagainstMuonLoose2", &_Tau1HPSagainstMuonLoose2);
+    _Tree->Branch("TTE_Tau1HPSagainstMuonMedium", &_Tau1HPSagainstMuonMedium);
+    _Tree->Branch("TTE_Tau1HPSagainstMuonMedium2", &_Tau1HPSagainstMuonMedium2);
+    _Tree->Branch("TTE_Tau1HPSagainstMuonTight", &_Tau1HPSagainstMuonTight);
+    _Tree->Branch("TTE_Tau1HPSagainstMuonTight2", &_Tau1HPSagainstMuonTight2);
+    _Tree->Branch("TTE_Tau1HPSbyCombinedIsolationDeltaBetaCorrRaw", &_Tau1HPSbyCombinedIsolationDeltaBetaCorrRaw);
+    _Tree->Branch("TTE_Tau1HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits", &_Tau1HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits);
+    _Tree->Branch("TTE_Tau1HPSbyIsolationMVA2raw", &_Tau1HPSbyIsolationMVA2raw);
+    _Tree->Branch("TTE_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits", &_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits);
+    _Tree->Branch("TTE_Tau1HPSbyLooseIsolationMVA", &_Tau1HPSbyLooseIsolationMVA);
+    _Tree->Branch("TTE_Tau1HPSbyLooseIsolationMVA2", &_Tau1HPSbyLooseIsolationMVA2);
+    _Tree->Branch("TTE_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits", &_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits);
+    _Tree->Branch("TTE_Tau1HPSbyMediumIsolationMVA", &_Tau1HPSbyMediumIsolationMVA);
+    _Tree->Branch("TTE_Tau1HPSbyMediumIsolationMVA2", &_Tau1HPSbyMediumIsolationMVA2);
+    _Tree->Branch("TTE_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr3Hits", &_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr3Hits);
+    _Tree->Branch("TTE_Tau1HPSbyTightIsolationMVA", &_Tau1HPSbyTightIsolationMVA);
+    _Tree->Branch("TTE_Tau1HPSbyTightIsolationMVA2", &_Tau1HPSbyTightIsolationMVA2);
+    _Tree->Branch("TTE_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau1HPSdecayModeFinding", &_Tau1HPSdecayModeFinding);
+    _Tree->Branch("TTE_Tau1HPSbyIsolationMVAraw", &_Tau1HPSbyIsolationMVAraw);
+
 	_Tree->Branch("TTE_Tau1LTPt", &_Tau1LTPt);
 	_Tree->Branch("TTE_Tau1Charge", &_Tau1Charge);
 	_Tree->Branch("TTE_Tau1LTvalid", &_Tau1LTvalid);
@@ -68,7 +99,8 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau1LTvz", &_Tau1LTvz);
 	_Tree->Branch("TTE_Tau1LTValidHits", &_Tau1LTValidHits);
 	_Tree->Branch("TTE_Tau1LTNormChiSqrd", &_Tau1LTNormChiSqrd);
-	_Tree->Branch("TTE_Tau1GenMatchDaughter0Id", &_Tau1GenMatchDaughter0Id);
+	
+    _Tree->Branch("TTE_Tau1GenMatchDaughter0Id", &_Tau1GenMatchDaughter0Id);
 	_Tree->Branch("TTE_Tau1GenMatchDaughter1Id", &_Tau1GenMatchDaughter1Id);
 	_Tree->Branch("TTE_Tau1GenMatchId", &_Tau1GenMatchId);
 	_Tree->Branch("TTE_Tau1GenMatchMother0Id", &_Tau1GenMatchMother0Id);
@@ -98,18 +130,49 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau2DecayMode", &_Tau2DecayMode);
 	_Tree->Branch("TTE_Tau2EmFraction", &_Tau2EmFraction);
 	_Tree->Branch("TTE_Tau2IsInTheCracks", &_Tau2IsInTheCracks);
-	_Tree->Branch("TTE_Tau2HPSagainstElectronLoose", &_Tau2HPSagainstElectronLoose);
-	_Tree->Branch("TTE_Tau2HPSagainstElectronMVA", &_Tau2HPSagainstElectronMVA);
-	_Tree->Branch("TTE_Tau2HPSagainstElectronMedium", &_Tau2HPSagainstElectronMedium);
-	_Tree->Branch("TTE_Tau2HPSagainstElectronTight", &_Tau2HPSagainstElectronTight);
-	_Tree->Branch("TTE_Tau2HPSagainstMuonLoose", &_Tau2HPSagainstMuonLoose);
-	_Tree->Branch("TTE_Tau2HPSagainstMuonMedium", &_Tau2HPSagainstMuonMedium);
-	_Tree->Branch("TTE_Tau2HPSagainstMuonTight", &_Tau2HPSagainstMuonTight);
-	_Tree->Branch("TTE_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tree->Branch("TTE_Tau2HPSdecayModeFinding", &_Tau2HPSdecayModeFinding);
+    
+    _Tree->Branch("TTE_Tau2HPSagainstElectronDeadECAL", &_Tau2HPSagainstElectronDeadECAL);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronLoose", &_Tau2HPSagainstElectronLoose);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronLooseMVA2", &_Tau2HPSagainstElectronLooseMVA2);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronLooseMVA3", &_Tau2HPSagainstElectronLooseMVA3);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMVA", &_Tau2HPSagainstElectronMVA);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMVA2category", &_Tau2HPSagainstElectronMVA2category);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMVA2raw", &_Tau2HPSagainstElectronMVA2raw);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMVA3category", &_Tau2HPSagainstElectronMVA3category);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMVA3raw", &_Tau2HPSagainstElectronMVA3raw);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMedium", &_Tau2HPSagainstElectronMedium);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMediumMVA2", &_Tau2HPSagainstElectronMediumMVA2);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronMediumMVA3", &_Tau2HPSagainstElectronMediumMVA3);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronTight", &_Tau2HPSagainstElectronTight);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronTightMVA2", &_Tau2HPSagainstElectronTightMVA2);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronTightMVA3", &_Tau2HPSagainstElectronTightMVA3);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronVLooseMVA2", &_Tau2HPSagainstElectronVLooseMVA2);
+    _Tree->Branch("TTE_Tau2HPSagainstElectronVTightMVA3", &_Tau2HPSagainstElectronVTightMVA3);
+    _Tree->Branch("TTE_Tau2HPSagainstMuonLoose", &_Tau2HPSagainstMuonLoose);
+    _Tree->Branch("TTE_Tau2HPSagainstMuonLoose2", &_Tau2HPSagainstMuonLoose2);
+    _Tree->Branch("TTE_Tau2HPSagainstMuonMedium", &_Tau2HPSagainstMuonMedium);
+    _Tree->Branch("TTE_Tau2HPSagainstMuonMedium2", &_Tau2HPSagainstMuonMedium2);
+    _Tree->Branch("TTE_Tau2HPSagainstMuonTight", &_Tau2HPSagainstMuonTight);
+    _Tree->Branch("TTE_Tau2HPSagainstMuonTight2", &_Tau2HPSagainstMuonTight2);
+    _Tree->Branch("TTE_Tau2HPSbyCombinedIsolationDeltaBetaCorrRaw", &_Tau2HPSbyCombinedIsolationDeltaBetaCorrRaw);
+    _Tree->Branch("TTE_Tau2HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits", &_Tau2HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits);
+    _Tree->Branch("TTE_Tau2HPSbyIsolationMVA2raw", &_Tau2HPSbyIsolationMVA2raw);
+    _Tree->Branch("TTE_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits", &_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits);
+    _Tree->Branch("TTE_Tau2HPSbyLooseIsolationMVA", &_Tau2HPSbyLooseIsolationMVA);
+    _Tree->Branch("TTE_Tau2HPSbyLooseIsolationMVA2", &_Tau2HPSbyLooseIsolationMVA2);
+    _Tree->Branch("TTE_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits", &_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits);
+    _Tree->Branch("TTE_Tau2HPSbyMediumIsolationMVA", &_Tau2HPSbyMediumIsolationMVA);
+    _Tree->Branch("TTE_Tau2HPSbyMediumIsolationMVA2", &_Tau2HPSbyMediumIsolationMVA2);
+    _Tree->Branch("TTE_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr3Hits", &_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr3Hits);
+    _Tree->Branch("TTE_Tau2HPSbyTightIsolationMVA", &_Tau2HPSbyTightIsolationMVA);
+    _Tree->Branch("TTE_Tau2HPSbyTightIsolationMVA2", &_Tau2HPSbyTightIsolationMVA2);
+    _Tree->Branch("TTE_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr", &_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr);
+    _Tree->Branch("TTE_Tau2HPSdecayModeFinding", &_Tau2HPSdecayModeFinding);
+    _Tree->Branch("TTE_Tau2HPSbyIsolationMVAraw", &_Tau2HPSbyIsolationMVAraw);
+
 	_Tree->Branch("TTE_Tau2LTPt", &_Tau2LTPt);
 	_Tree->Branch("TTE_Tau2Charge", &_Tau2Charge);
 	_Tree->Branch("TTE_Tau2LTvalid", &_Tau2LTvalid);
@@ -122,7 +185,8 @@ void DitauElectronFiller::SetupBranches(){
 	_Tree->Branch("TTE_Tau2LTvz", &_Tau2LTvz);
 	_Tree->Branch("TTE_Tau2LTValidHits", &_Tau2LTValidHits);
 	_Tree->Branch("TTE_Tau2LTNormChiSqrd", &_Tau2LTNormChiSqrd);
-	_Tree->Branch("TTE_Tau2GenMatchDaughter0Id", &_Tau2GenMatchDaughter0Id);
+
+    _Tree->Branch("TTE_Tau2GenMatchDaughter0Id", &_Tau2GenMatchDaughter0Id);
 	_Tree->Branch("TTE_Tau2GenMatchDaughter1Id", &_Tau2GenMatchDaughter1Id);
 	_Tree->Branch("TTE_Tau2GenMatchId", &_Tau2GenMatchId);
 	_Tree->Branch("TTE_Tau2GenMatchMother0Id", &_Tau2GenMatchMother0Id);
@@ -210,19 +274,6 @@ void DitauElectronFiller::ClearVectors(){
 	_Tau1DecayMode									.clear();
 	_Tau1EmFraction									.clear();
 	_Tau1IsInTheCracks								.clear();
-	_Tau1HPSagainstElectronLoose					.clear();
-	_Tau1HPSagainstElectronMVA						.clear();
-	_Tau1HPSagainstElectronMedium					.clear();
-	_Tau1HPSagainstElectronTight					.clear();
-	_Tau1HPSagainstMuonLoose						.clear();
-	_Tau1HPSagainstMuonMedium						.clear();
-	_Tau1HPSagainstMuonTight						.clear();
-	_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.clear();
-	_Tau1HPSdecayModeFinding						.clear();
-	_Tau1LTPt										.clear();
 	_Tau1Charge										.clear();
 	_Tau1LTvalid									.clear();
 	_Tau1LTIpVtdxy									.clear();
@@ -503,18 +554,6 @@ void DitauElectronFiller::FillTau1(const BNtau& Tau){
 	_Tau1DecayMode									.push_back(Tau.decayMode);
 	_Tau1EmFraction									.push_back(Tau.emFraction);
 	_Tau1IsInTheCracks								.push_back(Tau.inTheCracks);
-	_Tau1HPSagainstElectronMVA						.push_back(Tau.HPSagainstElectronMVA);
-	_Tau1HPSagainstElectronLoose					.push_back(Tau.HPSagainstElectronLoose);
-	_Tau1HPSagainstElectronMedium					.push_back(Tau.HPSagainstElectronMedium);
-	_Tau1HPSagainstElectronTight					.push_back(Tau.HPSagainstElectronTight);
-	_Tau1HPSagainstMuonLoose						.push_back(Tau.HPSagainstMuonLoose);
-	_Tau1HPSagainstMuonMedium						.push_back(Tau.HPSagainstMuonMedium);
-	_Tau1HPSagainstMuonTight						.push_back(Tau.HPSagainstMuonTight);
-	_Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tau1HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tau1HPSdecayModeFinding						.push_back(Tau.HPSdecayModeFinding);
 
 	// Leading track variables
 	_Tau1LTPt			.push_back(Tau.leadingTrackPt);
@@ -526,13 +565,56 @@ void DitauElectronFiller::FillTau1(const BNtau& Tau){
 	_Tau1LTIpVtdzError	.push_back(Tau.leadingTrackIpVtdzError);
 	_Tau1LTvx			.push_back(Tau.leadingTrackVx);
 	_Tau1LTvy			.push_back(Tau.leadingTrackVy);
-	_Tau1LTvz			.push_back(Tau.leadingTrackVz);
-	_Tau1LTValidHits	.push_back(Tau.leadingTrackValidHits);
-	_Tau1LTNormChiSqrd	.push_back(Tau.leadingTrackNormChiSqrd);
+    _Tau1LTvz			.push_back(Tau.leadingTrackVz);
+    _Tau1LTValidHits	.push_back(Tau.leadingTrackValidHits);
+    _Tau1LTNormChiSqrd	.push_back(Tau.leadingTrackNormChiSqrd);
 
-	// Provenance
-	vector<int> undesiredIDs;
-	undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
+    // HPS discriminants
+    _Tau1HPSagainstElectronDeadECAL                     .push_back(Tau.HPSagainstElectronDeadECAL);
+    _Tau1HPSagainstElectronLoose                        .push_back(Tau.HPSagainstElectronLoose);
+    _Tau1HPSagainstElectronLooseMVA2                    .push_back(Tau.HPSagainstElectronLooseMVA2);
+    _Tau1HPSagainstElectronLooseMVA3                    .push_back(Tau.HPSagainstElectronLooseMVA3);
+    _Tau1HPSagainstElectronMVA                          .push_back(Tau.HPSagainstElectronMVA);
+    _Tau1HPSagainstElectronMVA2category                 .push_back(Tau.HPSagainstElectronMVA2category);
+    _Tau1HPSagainstElectronMVA2raw                      .push_back(Tau.HPSagainstElectronMVA2raw);
+    _Tau1HPSagainstElectronMVA3category                 .push_back(Tau.HPSagainstElectronMVA3category);
+    _Tau1HPSagainstElectronMVA3raw                      .push_back(Tau.HPSagainstElectronMVA3raw);
+    _Tau1HPSagainstElectronMedium                       .push_back(Tau.HPSagainstElectronMedium);
+    _Tau1HPSagainstElectronMediumMVA2                   .push_back(Tau.HPSagainstElectronMediumMVA2);
+    _Tau1HPSagainstElectronMediumMVA3                   .push_back(Tau.HPSagainstElectronMediumMVA3);
+    _Tau1HPSagainstElectronTight                        .push_back(Tau.HPSagainstElectronTight);
+    _Tau1HPSagainstElectronTightMVA2                    .push_back(Tau.HPSagainstElectronTightMVA2);
+    _Tau1HPSagainstElectronTightMVA3                    .push_back(Tau.HPSagainstElectronTightMVA3);
+    _Tau1HPSagainstElectronVLooseMVA2                   .push_back(Tau.HPSagainstElectronVLooseMVA2);
+    _Tau1HPSagainstElectronVTightMVA3                   .push_back(Tau.HPSagainstElectronVTightMVA3);
+    _Tau1HPSagainstMuonLoose                            .push_back(Tau.HPSagainstMuonLoose);
+    _Tau1HPSagainstMuonLoose2                           .push_back(Tau.HPSagainstMuonLoose2);
+    _Tau1HPSagainstMuonMedium                           .push_back(Tau.HPSagainstMuonMedium);
+    _Tau1HPSagainstMuonMedium2                          .push_back(Tau.HPSagainstMuonMedium2);
+    _Tau1HPSagainstMuonTight                            .push_back(Tau.HPSagainstMuonTight);
+    _Tau1HPSagainstMuonTight2                           .push_back(Tau.HPSagainstMuonTight2);
+    _Tau1HPSbyCombinedIsolationDeltaBetaCorrRaw         .push_back(Tau.HPSbyCombinedIsolationDeltaBetaCorrRaw);
+    _Tau1HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits    .push_back(Tau.HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits);
+    _Tau1HPSbyIsolationMVA2raw                          .push_back(Tau.HPSbyIsolationMVA2raw);
+    _Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr       .push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr);
+    _Tau1HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits  .push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits);
+    _Tau1HPSbyLooseIsolationMVA                         .push_back(Tau.HPSbyLooseIsolationMVA);
+    _Tau1HPSbyLooseIsolationMVA2                        .push_back(Tau.HPSbyLooseIsolationMVA2);
+    _Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr      .push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr);
+    _Tau1HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits .push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits);
+    _Tau1HPSbyMediumIsolationMVA                        .push_back(Tau.HPSbyMediumIsolationMVA);
+    _Tau1HPSbyMediumIsolationMVA2                       .push_back(Tau.HPSbyMediumIsolationMVA2);
+    _Tau1HPSbyTightCombinedIsolationDeltaBetaCorr       .push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr);
+    _Tau1HPSbyTightCombinedIsolationDeltaBetaCorr3Hits  .push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr3Hits);
+    _Tau1HPSbyTightIsolationMVA                         .push_back(Tau.HPSbyTightIsolationMVA);
+    _Tau1HPSbyTightIsolationMVA2                        .push_back(Tau.HPSbyTightIsolationMVA2);
+    _Tau1HPSbyVLooseCombinedIsolationDeltaBetaCorr      .push_back(Tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr);
+    _Tau1HPSdecayModeFinding                            .push_back(Tau.HPSdecayModeFinding);
+    _Tau1HPSbyIsolationMVAraw                           .push_back(Tau.HPSbyIsolationMVAraw);
+
+    // Provenance
+    vector<int> undesiredIDs;
+    undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
 	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
 	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
 	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
@@ -574,18 +656,6 @@ void DitauElectronFiller::FillTau2(const BNtau& Tau){
 	_Tau2DecayMode									.push_back(Tau.decayMode);
 	_Tau2EmFraction									.push_back(Tau.emFraction);
 	_Tau2IsInTheCracks								.push_back(Tau.inTheCracks);
-	_Tau2HPSagainstElectronMVA						.push_back(Tau.HPSagainstElectronMVA);
-	_Tau2HPSagainstElectronLoose					.push_back(Tau.HPSagainstElectronLoose);
-	_Tau2HPSagainstElectronMedium					.push_back(Tau.HPSagainstElectronMedium);
-	_Tau2HPSagainstElectronTight					.push_back(Tau.HPSagainstElectronTight);
-	_Tau2HPSagainstMuonLoose						.push_back(Tau.HPSagainstMuonLoose);
-	_Tau2HPSagainstMuonMedium						.push_back(Tau.HPSagainstMuonMedium);
-	_Tau2HPSagainstMuonTight						.push_back(Tau.HPSagainstMuonTight);
-	_Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr);
-	_Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr);
-	_Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr);
-	_Tau2HPSbyTightCombinedIsolationDeltaBetaCorr	.push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr);
-	_Tau2HPSdecayModeFinding						.push_back(Tau.HPSdecayModeFinding);
 
 	// Leading track variables
 	_Tau2LTPt										.push_back(Tau.leadingTrackPt);
@@ -599,16 +669,60 @@ void DitauElectronFiller::FillTau2(const BNtau& Tau){
 	_Tau2LTvy										.push_back(Tau.leadingTrackVy);
 	_Tau2LTvz										.push_back(Tau.leadingTrackVz);
 	_Tau2LTValidHits								.push_back(Tau.leadingTrackValidHits);
-	_Tau2LTNormChiSqrd								.push_back(Tau.leadingTrackNormChiSqrd);
+    _Tau2LTNormChiSqrd								.push_back(Tau.leadingTrackNormChiSqrd);
+    
+    // HPS discriminants
+    _Tau2HPSagainstElectronDeadECAL                     .push_back(Tau.HPSagainstElectronDeadECAL);
+    _Tau2HPSagainstElectronLoose                        .push_back(Tau.HPSagainstElectronLoose);
+    _Tau2HPSagainstElectronLooseMVA2                    .push_back(Tau.HPSagainstElectronLooseMVA2);
+    _Tau2HPSagainstElectronLooseMVA3                    .push_back(Tau.HPSagainstElectronLooseMVA3);
+    _Tau2HPSagainstElectronMVA                          .push_back(Tau.HPSagainstElectronMVA);
+    _Tau2HPSagainstElectronMVA2category                 .push_back(Tau.HPSagainstElectronMVA2category);
+    _Tau2HPSagainstElectronMVA2raw                      .push_back(Tau.HPSagainstElectronMVA2raw);
+    _Tau2HPSagainstElectronMVA3category                 .push_back(Tau.HPSagainstElectronMVA3category);
+    _Tau2HPSagainstElectronMVA3raw                      .push_back(Tau.HPSagainstElectronMVA3raw);
+    _Tau2HPSagainstElectronMedium                       .push_back(Tau.HPSagainstElectronMedium);
+    _Tau2HPSagainstElectronMediumMVA2                   .push_back(Tau.HPSagainstElectronMediumMVA2);
+    _Tau2HPSagainstElectronMediumMVA3                   .push_back(Tau.HPSagainstElectronMediumMVA3);
+    _Tau2HPSagainstElectronTight                        .push_back(Tau.HPSagainstElectronTight);
+    _Tau2HPSagainstElectronTightMVA2                    .push_back(Tau.HPSagainstElectronTightMVA2);
+    _Tau2HPSagainstElectronTightMVA3                    .push_back(Tau.HPSagainstElectronTightMVA3);
+    _Tau2HPSagainstElectronVLooseMVA2                   .push_back(Tau.HPSagainstElectronVLooseMVA2);
+    _Tau2HPSagainstElectronVTightMVA3                   .push_back(Tau.HPSagainstElectronVTightMVA3);
+    _Tau2HPSagainstMuonLoose                            .push_back(Tau.HPSagainstMuonLoose);
+    _Tau2HPSagainstMuonLoose2                           .push_back(Tau.HPSagainstMuonLoose2);
+    _Tau2HPSagainstMuonMedium                           .push_back(Tau.HPSagainstMuonMedium);
+    _Tau2HPSagainstMuonMedium2                          .push_back(Tau.HPSagainstMuonMedium2);
+    _Tau2HPSagainstMuonTight                            .push_back(Tau.HPSagainstMuonTight);
+    _Tau2HPSagainstMuonTight2                           .push_back(Tau.HPSagainstMuonTight2);
+    _Tau2HPSbyCombinedIsolationDeltaBetaCorrRaw         .push_back(Tau.HPSbyCombinedIsolationDeltaBetaCorrRaw);
+    _Tau2HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits    .push_back(Tau.HPSbyCombinedIsolationDeltaBetaCorrRaw3Hits);
+    _Tau2HPSbyIsolationMVA2raw                          .push_back(Tau.HPSbyIsolationMVA2raw);
+    _Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr       .push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr);
+    _Tau2HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits  .push_back(Tau.HPSbyLooseCombinedIsolationDeltaBetaCorr3Hits);
+    _Tau2HPSbyLooseIsolationMVA                         .push_back(Tau.HPSbyLooseIsolationMVA);
+    _Tau2HPSbyLooseIsolationMVA2                        .push_back(Tau.HPSbyLooseIsolationMVA2);
+    _Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr      .push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr);
+    _Tau2HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits .push_back(Tau.HPSbyMediumCombinedIsolationDeltaBetaCorr3Hits);
+    _Tau2HPSbyMediumIsolationMVA                        .push_back(Tau.HPSbyMediumIsolationMVA);
+    _Tau2HPSbyMediumIsolationMVA2                       .push_back(Tau.HPSbyMediumIsolationMVA2);
+    _Tau2HPSbyTightCombinedIsolationDeltaBetaCorr       .push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr);
+    _Tau2HPSbyTightCombinedIsolationDeltaBetaCorr3Hits  .push_back(Tau.HPSbyTightCombinedIsolationDeltaBetaCorr3Hits);
+    _Tau2HPSbyTightIsolationMVA                         .push_back(Tau.HPSbyTightIsolationMVA);
+    _Tau2HPSbyTightIsolationMVA2                        .push_back(Tau.HPSbyTightIsolationMVA2);
+    _Tau2HPSbyVLooseCombinedIsolationDeltaBetaCorr      .push_back(Tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr);
+    _Tau2HPSdecayModeFinding                            .push_back(Tau.HPSdecayModeFinding);
+    _Tau2HPSbyIsolationMVAraw                           .push_back(Tau.HPSbyIsolationMVAraw);
 
-	// Provenance
-	vector<int> undesiredIDs;
-	undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
-	undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
-	undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
-	undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
-	//undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
-	undesiredIDs.push_back(25);									// No H
+
+    // Provenance
+    vector<int> undesiredIDs;
+    undesiredIDs.push_back(6);	undesiredIDs.push_back(-6);		// No tops
+    undesiredIDs.push_back(12);	undesiredIDs.push_back(-12);	// No e neutrinos
+    undesiredIDs.push_back(14);	undesiredIDs.push_back(-14);	// No mu neutrinos
+    undesiredIDs.push_back(16);	undesiredIDs.push_back(-16);	// No tau neutrinos
+    //undesiredIDs.push_back(24);	undesiredIDs.push_back(-24);	// No W
+    undesiredIDs.push_back(25);									// No H
 	//undesiredIDs.push_back(21);									// No g
 
 	BNmcparticleCollection status3MCparticles	= beanHelper->GetSelectedMCparticlesByStatus(_BNmcparticles, false, false, true); 
