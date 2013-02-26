@@ -11,11 +11,12 @@ def throwFatalError():
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
-reportEvery	= 100
+reportEvery	= 1000
 era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 0
+baseTreeName = 'TTbarHTauTau'
 
 # collection postfix for running on PF2PAT
 postfix = ''
@@ -26,7 +27,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 # 'jobParams' parameter form: 
 # 
-# <era>_<subera>_<era release>_<type>_<lepton flavor>_<sample number>_<skim selection>
+# <era>_<subera>_<era release>_<type>_<lepton flavor>_<sample number>_<skim selection>_<systematic type>
 #
 # <era>						= 2011, 2012
 # <subera> [N/A for MC]		= A, B, C...
@@ -36,36 +37,39 @@ options = VarParsing.VarParsing("analysis")
 # <skim selection>          = up to five numbers; 1st is min. num. of total jets, 2nd is min. num. loose Btags, 
 #                             3rd is min. num. med. Btags, 4th is min. num. tight Btags, 
 #                             5th is min num. "base taus", as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
+# <systematic type>         = dash-separated systematic uncertainty shift type(s). 
+#                             Options are defined in NtupleMaker/BEANmaker/interface/BEANhelper.h
+#                             Must include 'NA'
 #
 # Examples:
-# 2011_X_MC-sig_muon_0
-# 2011_B_data-PR_electron_0
-# 2012_X_MC-bg_electron_0
-# 2012_B_data-PR_muon_0
+# 2011_X_MC-sig_muon_0_NA
+# 2011_B_data-PR_electron_0_JESup-JESdown
+# 2012_X_MC-bg_electron_30101_NA
+# 2012_B_data-PR_muon_0_NA
 options.register ('jobParams', # 
-                  #'2011_X_MC-sigFullSim_muon_125',	    # 125   tth->tautau
-                  '2011_X_MC-bg_muon_2500_0',	# 2500	TTbar
-				  #'2011_A_data-PR_muon_-1',	    # -1	2012A collisions
-				  #'2012_X_MC-bg_muon_-1',	    # -1	2012A collisions
-				  #'2012_X_MC-bg_muon_-11',	    # -11	2012B collisions
-                  #'2012_X_MC-bg_muon_2500',	# 2500	TTbar
-				  #'2012_X_MC-bg_muon_2524',	# 2524	TTbar + W
-				  #'2012_X_MC-bg_muon_2523',	# 2523	TTbar + Z
-				  #'2012_X_MC-bg_muon_2400',	# 2400	W+jets
-				  #'2012_X_MC-bg_muon_2800',	# 2800	Z+jets (50<M)
-				  #'2012_X_MC-bg_muon_2850',	# 2850	Z+jets (10<M<50)
-				  #'2012_X_MC-bg_muon_2700',	# 2700	WW	
-				  #'2012_X_MC-bg_muon_2701',	# 2701	WZ
-				  #'2012_X_MC-bg_muon_2702',	# 2702	ZZ
-				  #'2012_X_MC-bg_muon_2504',	# 2504	sT+W
-				  #'2012_X_MC-bg_muon_2505',	# 2505	sTbar+W	
-                  #'2012_X_MC-bg_muon_2600',	# 2600	sT-sCh
-				  #'2012_X_MC-bg_muon_2501',	# 2501	sTbar-sCh
-				  #'2012_X_MC-bg_muon_2602',	# 2602	sT-tCh
-				  #'2012_X_MC-bg_muon_2503',	# 2503	sTbar-tCh
-				  #'2012_X_MC-bg_muon_9115',	# 9115	TTH_115_Fast
-				  #'2012_X_MC-bg_muon_9120',	# 9120	TTH_120_Fast
-				  #'2012_X_MC-bg_muon_9125',	# 9125	TTH_125_Fast
+                  #'2011_X_MC-sigFullSim_muon_125_0_NA',	    # 125   tth->tautau
+                  '2011_X_MC-bg_muon_2500_0_NA',	# 2500	TTbar
+				  #'2011_A_data-PR_muon_-1_0_NA',	    # -1	2012A collisions
+				  #'2012_X_MC-bg_muon_-1_0_NA',	    # -1	2012A collisions
+				  #'2012_X_MC-bg_muon_-11_0_NA',	    # -11	2012B collisions
+                  #'2012_X_MC-bg_muon_2500_0_NA',	# 2500	TTbar
+				  #'2012_X_MC-bg_muon_2524_0_NA',	# 2524	TTbar + W
+				  #'2012_X_MC-bg_muon_2523_0_NA',	# 2523	TTbar + Z
+				  #'2012_X_MC-bg_muon_2400_0_NA',	# 2400	W+jets
+				  #'2012_X_MC-bg_muon_2800_0_NA',	# 2800	Z+jets (50<M)
+				  #'2012_X_MC-bg_muon_2850_0_NA',	# 2850	Z+jets (10<M<50)
+				  #'2012_X_MC-bg_muon_2700_0_NA',	# 2700	WW	
+				  #'2012_X_MC-bg_muon_2701_0_NA',	# 2701	WZ
+				  #'2012_X_MC-bg_muon_2702_0_NA',	# 2702	ZZ
+				  #'2012_X_MC-bg_muon_2504_0_NA',	# 2504	sT+W
+				  #'2012_X_MC-bg_muon_2505_0_NA',	# 2505	sTbar+W	
+                  #'2012_X_MC-bg_muon_2600_0_NA',	# 2600	sT-sCh
+				  #'2012_X_MC-bg_muon_2501_0_NA',	# 2501	sTbar-sCh
+				  #'2012_X_MC-bg_muon_2602_0_NA',	# 2602	sT-tCh
+				  #'2012_X_MC-bg_muon_2503_0_NA',	# 2503	sTbar-tCh
+				  #'2012_X_MC-bg_muon_9115_0_NA',	# 9115	TTH_115_Fast
+				  #'2012_X_MC-bg_muon_9120_0_NA',	# 9120	TTH_120_Fast
+				  #'2012_X_MC-bg_muon_9125_0_NA',	# 9125	TTH_125_Fast
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string )
 
@@ -89,8 +93,8 @@ my_splitter.whitespace_split = True;
 jobParams       = list(my_splitter);
 
 # === Job params error checking === #
-if len(jobParams) != 6:
-    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 6 arguments (check config file for details). Terminating."; sys.exit(1);
+if len(jobParams) != 7:
+    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 7 arguments (check config file for details). Terminating."; sys.exit(1);
 
 if (jobParams[0] != "2011") and (jobParams[0] != "2012"):
     print "ERROR: era set to '" + jobParams[0] + "' but it must be '2011' or '2012'"; sys.exit(1);
@@ -129,6 +133,10 @@ if len(skimParams) is 0:
 if len(skimParams) > 5:
     print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 5 characters are not supported'.format(skimParams); sys.exit(1)
 
+sys_splitter = shlex.shlex(jobParams[6], posix=True);
+sys_splitter.whitespace = '-'; 
+sys_splitter.whitespace_split = True;
+sysTypes= list(sys_splitter);
 
 # === Set up triggers and GEN collections based on analysis type === # 
 if runOnMC:
@@ -247,7 +255,6 @@ elif(skimType == 'electron'):
 else:
 	throwFatalError();
 
-
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
 
@@ -268,7 +275,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 from TTHTauTau.Analysis.globalTagMap_cfi import globalTagMap
-globalTag = globalTagMap[options.jobParams.rsplit('_',3)[0]] + '::All'
+globalTag = globalTagMap[options.jobParams.rsplit('_',4)[0]] + '::All'
 process.GlobalTag.globaltag = cms.string(globalTag)
 
 
@@ -297,7 +304,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	AnalysisType						= cms.string(options.jobParams),				
 	EraRelease							= cms.string(era_release),				
 	FromBEAN							= cms.bool(era == 2012),
-    TreeName							= cms.untracked.string('TTbarHTauTau'),
+    TreeName							= cms.untracked.string(baseTreeName),
     UsePfLeptons                        = UsePfLeptons,
 
 	# === HL Trigger === # (not in use)
@@ -336,14 +343,27 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     #CSVmediumWP							= cms.double(0.679),
     #CSVtightWP							= cms.double(0.898)
 
-	# === === #
+	# === Systematics stuff === #
+    SysType                             = cms.untracked.string('NA'),
 )
+process.makeNtupleSeq = cms.Sequence(process.makeNtuple)
+
+# add modules for systematic shifts
+for sys in sysTypes:
+  if sys is 'NA': 
+    continue
+  mod = copy.deepcopy(process.makeNtuple)
+  mod.SysType = sys
+  mod.TreeName = baseTreeName + '_' + sys
+  setattr(process,'makeNtuple'+sys,mod)
+  process.makeNtupleSeq += getattr(process,'makeNtuple'+sys)
+
 
 # === Run sequence === # 
 if not runOnMC:
-    process.p = cms.Path( process.beanSkimmer + process.hltFilter + process.makeNtuple )
+    process.p = cms.Path( process.beanSkimmer + process.hltFilter + process.makeNtupleSeq )
 else:
-    process.p = cms.Path( process.beanSkimmer + process.makeNtuple )
+    process.p = cms.Path( process.beanSkimmer + process.makeNtupleSeq )
 
 
 # === Print some basic info about the job setup === #
@@ -360,6 +380,12 @@ print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
 print '		Triggers.........%s' % triggerConditions
 print '		Skim parameters..%s' % skimParams
+sysString = ''
+for sys in sysTypes:
+  sysString += sys
+  sysString += ','
+sysString = sysString.rstrip(',')
+print '		Systematics......%s' % sysString
 print ''
 print '	===================================================='
 print ''
