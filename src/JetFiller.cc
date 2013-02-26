@@ -61,7 +61,7 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	unsigned int theNumberOfJets = 0;
 
-	BNjetCollection correctedJets	= beanHelper->GetCorrectedJets(_BNjets);
+	BNjetCollection correctedJets	= beanHelper->GetCorrectedJets(_BNjets, _sysType);
 	BNjetCollection selCorrJets		= beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose,'-');
 
 	_NumJets = selCorrJets.size();

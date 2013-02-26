@@ -512,7 +512,7 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 				
 				// Jets and MET and related quantities
 				// Correct for jet pT
-				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets);
+				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets, _sysType);
 
 				// Apply kinematic requirements on corrected jets
 				BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
@@ -525,7 +525,7 @@ void DitauElectronFiller::FillNtuple(const Event& iEvent, const EventSetup& iSet
 				BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tausAndElectron, 0.25);
 
 				// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
-				BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets));
+				BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets), _sysType);
 
 				_HT					.push_back(Tau1->pt + Tau2->pt + Electron->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets));
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
