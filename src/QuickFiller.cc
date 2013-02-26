@@ -215,7 +215,7 @@ void QuickFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 				// Jets and MET and related quantities
 				// Correct for jet pT
-				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets);
+				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets, _sysType);
 
 				// Apply kinematic requirements on corrected jets
 				BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
