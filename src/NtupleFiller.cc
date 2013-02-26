@@ -47,6 +47,18 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig, BEANhelper* iBEANhelper)
 
     _HLTriggerSource				= iConfig.getParameter<InputTag>("HLTriggerSource");
 
+    // set up systematic shift options
+    std::string sysTypeString       = iConfig.getUntrackedParameter<std::string>("SysType");
+    if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
+    if( sysTypeString.compare("JERup") == 0 ) _sysType = sysType::JERup;
+    if( sysTypeString.compare("JERdown") == 0 ) _sysType = sysType::JERdown;
+    if( sysTypeString.compare("JESup") == 0 ) _sysType = sysType::JESup;
+    if( sysTypeString.compare("JESdown") == 0 ) _sysType = sysType::JESdown;
+    if( sysTypeString.compare("hfSFup") == 0 ) _sysType = sysType::hfSFup;
+    if( sysTypeString.compare("hfSFdown") == 0 ) _sysType = sysType::hfSFdown;
+    if( sysTypeString.compare("lfSFup") == 0 ) _sysType = sysType::lfSFup;
+    if( sysTypeString.compare("lfSFdown") == 0 ) _sysType = sysType::lfSFdown;
+
 	// Setup BEANhelper
 	beanHelper = iBEANhelper;
 
