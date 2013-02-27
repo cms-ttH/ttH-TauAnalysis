@@ -114,6 +114,7 @@ class NtupleFiller : public EDAnalyzer {
 		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		string _Era;
+		sysType::sysType _sysType;
 
 		// === Generator level Inputs === //
 		InputTag _GenParticleSource;
