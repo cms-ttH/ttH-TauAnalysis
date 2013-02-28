@@ -58,6 +58,8 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig, BEANhelper* iBEANhelper)
     if( sysTypeString.compare("hfSFdown") == 0 ) _sysType = sysType::hfSFdown;
     if( sysTypeString.compare("lfSFup") == 0 ) _sysType = sysType::lfSFup;
     if( sysTypeString.compare("lfSFdown") == 0 ) _sysType = sysType::lfSFdown;
+    if( sysTypeString.compare("TESup") == 0 ) _sysType = sysType::TESup;
+    if( sysTypeString.compare("TESdown") == 0 ) _sysType = sysType::TESdown;
 
 	// Setup BEANhelper
 	beanHelper = iBEANhelper;
