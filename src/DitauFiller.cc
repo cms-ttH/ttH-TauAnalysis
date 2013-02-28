@@ -416,20 +416,24 @@ void DitauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	// Clear vectors
 	ClearVectors();
 
-	if(_BNtaus.size() < 2 ){ return; }
+    // Taus  (corrected taus currently just account for systematic shifts)
+    BNtauCollection correctedTaus =  beanHelper->GetCorrectedTaus(_BNtaus, _sysType);
 
-	// Tau loops: Tau1 is always leads in pT
-	unsigned int theNumberOfTaus1 = 0;
+	// Make sure we can at least make one TT combo
+	if(correctedTaus.size() < 2 ){ return; }
+
+    // Tau loops: Tau1 is always leads in pT
+    unsigned int theNumberOfTaus1 = 0;
 	unsigned int theNumberOfTaus2 = 0;
 
-	// Start loop over patTaus so select two (if applicable) that form a good (and heaviest) pair
-	_NumTaus = _BNtaus.size();
+	// Start loop over Taus so select two (if applicable) that form a good (and heaviest) pair
+	_NumTaus = correctedTaus.size();
 	theNumberOfTaus1 = 0;
-	for ( BNtauCollection::const_iterator Tau1 = _BNtaus.begin(); Tau1 != _BNtaus.end(); ++Tau1 ) {
+	for ( BNtauCollection::const_iterator Tau1 = correctedTaus.begin(); Tau1 != correctedTaus.end(); ++Tau1 ) {
 		theNumberOfTaus1++;
 
 		theNumberOfTaus2 = theNumberOfTaus1 + 1;
-		for ( BNtauCollection::const_iterator Tau2 = (Tau1 + 1); Tau2 != _BNtaus.end(); ++Tau2 ) {
+		for ( BNtauCollection::const_iterator Tau2 = (Tau1 + 1); Tau2 != correctedTaus.end(); ++Tau2 ) {
 			theNumberOfTaus2++;
 
 			if( theNumberOfTaus2 <= theNumberOfTaus1 ){ continue; }// Make sure we don't double-count: only compare pairs in which the tau2 iterator is larger than the tau 1 iterator, else skip combo
@@ -464,7 +468,6 @@ void DitauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 		} // end of tau2 loop
 	} // end of tau1 loop
-
 
 }
 void DitauFiller::FillTau1(const BNtau& Tau){

@@ -204,12 +204,14 @@ void TauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	ClearVectors();
 
 	unsigned int theNumberOfTaus = 0;
+    
+    // Taus  (corrected taus currently just account for systematic shifts)
+    BNtauCollection correctedTaus =  beanHelper->GetCorrectedTaus(_BNtaus, _sysType);
 
-	BNtauCollection selectedTaus = _BNtaus;
+	_NumTaus = correctedTaus.size();
 
-	_NumTaus = selectedTaus.size();
 	theNumberOfTaus = 0;
-	for ( BNtauCollection::const_iterator Tau = selectedTaus.begin(); Tau != selectedTaus.end(); ++Tau ) {
+	for ( BNtauCollection::const_iterator Tau = correctedTaus.begin(); Tau != correctedTaus.end(); ++Tau ) {
 		theNumberOfTaus++;
 
 		_NumTaus++;
