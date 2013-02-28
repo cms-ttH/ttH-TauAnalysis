@@ -86,6 +86,7 @@ class NtupleFiller : public EDAnalyzer {
 		bool LeptonFlavorIs(const string);
 
 		// === Helper functions === //
+		template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject1&, const BNObject2&, const BNCollection&, const double);
 		template <typename PatObject1, typename PatObject2> double GetComboMass(const PatObject1&, const PatObject2&);
 		template <typename BNObject1, typename BNObject2> double GetComboMassBN(const BNObject1&, const BNObject2&);
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetComboMass(const PatObject1&, const PatObject2&, const MetObject&);
@@ -191,6 +192,16 @@ class NtupleFiller : public EDAnalyzer {
 	
 
 };
+
+
+template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int NtupleFiller::GetNumberOfUnmatchedLeptons(const BNObject1& iObject1, const BNObject2& iObject2, const BNCollection& iCollection, const double iMinDeltaR){
+	unsigned int result = 0;
+	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
+		if(	deltaR(It->eta, It->phi, iObject1.eta, iObject1.phi) > iMinDeltaR &&
+			deltaR(It->eta, It->phi, iObject2.eta, iObject2.phi) > iMinDeltaR ){ result++; }
+	}
+	return result;
+}
 
 
 // === Visible mass === //
