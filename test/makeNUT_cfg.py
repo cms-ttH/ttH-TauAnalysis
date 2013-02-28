@@ -27,12 +27,11 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 # 'jobParams' parameter form: 
 # 
-# <era>_<subera>_<era release>_<type>_<lepton flavor>_<sample number>_<skim selection>_<systematic type>
+# <era>_<subera>_<era release>_<type>_<sample number>_<skim selection>_<systematic type>
 #
 # <era>						= 2011, 2012
 # <subera> [N/A for MC]		= A, B, C...
 # <type>					= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
-# <lepton flavor>			= muon, electron
 # <sample number>			= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
 # <skim selection>          = up to five numbers; 1st is min. num. of total jets, 2nd is min. num. loose Btags, 
 #                             3rd is min. num. med. Btags, 4th is min. num. tight Btags, 
@@ -42,34 +41,34 @@ options = VarParsing.VarParsing("analysis")
 #                             Must include 'NA'
 #
 # Examples:
-# 2011_X_MC-sig_muon_0_NA
-# 2011_B_data-PR_electron_0_JESup-JESdown
-# 2012_X_MC-bg_electron_30101_NA
-# 2012_B_data-PR_muon_0_NA
+# 2011_X_MC-sig_0_NA
+# 2011_B_data-PR_0_JESup-JESdown
+# 2012_X_MC-bg_30101_NA
+# 2012_B_data-PR_0_NA
 options.register ('jobParams', # 
-                  #'2011_X_MC-sigFullSim_muon_125_0_NA',	    # 125   tth->tautau
-                  '2011_X_MC-bg_muon_2500_0_NA',	# 2500	TTbar
-				  #'2011_A_data-PR_muon_-1_0_NA',	    # -1	2012A collisions
-				  #'2012_X_MC-bg_muon_-1_0_NA',	    # -1	2012A collisions
-				  #'2012_X_MC-bg_muon_-11_0_NA',	    # -11	2012B collisions
-                  #'2012_X_MC-bg_muon_2500_0_NA',	# 2500	TTbar
-				  #'2012_X_MC-bg_muon_2524_0_NA',	# 2524	TTbar + W
-				  #'2012_X_MC-bg_muon_2523_0_NA',	# 2523	TTbar + Z
-				  #'2012_X_MC-bg_muon_2400_0_NA',	# 2400	W+jets
-				  #'2012_X_MC-bg_muon_2800_0_NA',	# 2800	Z+jets (50<M)
-				  #'2012_X_MC-bg_muon_2850_0_NA',	# 2850	Z+jets (10<M<50)
-				  #'2012_X_MC-bg_muon_2700_0_NA',	# 2700	WW	
-				  #'2012_X_MC-bg_muon_2701_0_NA',	# 2701	WZ
-				  #'2012_X_MC-bg_muon_2702_0_NA',	# 2702	ZZ
-				  #'2012_X_MC-bg_muon_2504_0_NA',	# 2504	sT+W
-				  #'2012_X_MC-bg_muon_2505_0_NA',	# 2505	sTbar+W	
-                  #'2012_X_MC-bg_muon_2600_0_NA',	# 2600	sT-sCh
-				  #'2012_X_MC-bg_muon_2501_0_NA',	# 2501	sTbar-sCh
-				  #'2012_X_MC-bg_muon_2602_0_NA',	# 2602	sT-tCh
-				  #'2012_X_MC-bg_muon_2503_0_NA',	# 2503	sTbar-tCh
-				  #'2012_X_MC-bg_muon_9115_0_NA',	# 9115	TTH_115_Fast
-				  #'2012_X_MC-bg_muon_9120_0_NA',	# 9120	TTH_120_Fast
-				  #'2012_X_MC-bg_muon_9125_0_NA',	# 9125	TTH_125_Fast
+                  #'2011_X_MC-sigFullSim_125_0_NA',	    # 125   tth->tautau
+                  '2011_X_MC-bg_2500_0_NA',	# 2500	TTbar
+				  #'2011_A_data-PR_-1_0_NA',	    # -1	2012A collisions
+				  #'2012_X_MC-bg_-1_0_NA',	    # -1	2012A collisions
+				  #'2012_X_MC-bg_-11_0_NA',	    # -11	2012B collisions
+                  #'2012_X_MC-bg_2500_0_NA',	# 2500	TTbar
+				  #'2012_X_MC-bg_2524_0_NA',	# 2524	TTbar + W
+				  #'2012_X_MC-bg_2523_0_NA',	# 2523	TTbar + Z
+				  #'2012_X_MC-bg_2400_0_NA',	# 2400	W+jets
+				  #'2012_X_MC-bg_2800_0_NA',	# 2800	Z+jets (50<M)
+				  #'2012_X_MC-bg_2850_0_NA',	# 2850	Z+jets (10<M<50)
+				  #'2012_X_MC-bg_2700_0_NA',	# 2700	WW	
+				  #'2012_X_MC-bg_2701_0_NA',	# 2701	WZ
+				  #'2012_X_MC-bg_2702_0_NA',	# 2702	ZZ
+				  #'2012_X_MC-bg_2504_0_NA',	# 2504	sT+W
+				  #'2012_X_MC-bg_2505_0_NA',	# 2505	sTbar+W	
+                  #'2012_X_MC-bg_2600_0_NA',	# 2600	sT-sCh
+				  #'2012_X_MC-bg_2501_0_NA',	# 2501	sTbar-sCh
+				  #'2012_X_MC-bg_2602_0_NA',	# 2602	sT-tCh
+				  #'2012_X_MC-bg_2503_0_NA',	# 2503	sTbar-tCh
+				  #'2012_X_MC-bg_9115_0_NA',	# 9115	TTH_115_Fast
+				  #'2012_X_MC-bg_9120_0_NA',	# 9120	TTH_120_Fast
+				  #'2012_X_MC-bg_9125_0_NA',	# 9125	TTH_125_Fast
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string )
 
@@ -78,11 +77,11 @@ options.outputFile = 'NUT.root'
 
 ## 7TeV/2011 sample
 #options.inputFiles = '/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
-options.inputFiles = '/store/user/jkolb/TTJets_TuneZ2_7TeV-madgraph-tauola/skimTTHiggsToDiTau_428_v8_TTbar_fall11//e8b575bbba85cc8369f2a58b1d9ff532/ttHiggsToDiTauSkim_1504_1_pn7.root'
+#options.inputFiles = '/store/user/jkolb/TTJets_TuneZ2_7TeV-madgraph-tauola/skimTTHiggsToDiTau_428_v8_TTbar_fall11//e8b575bbba85cc8369f2a58b1d9ff532/ttHiggsToDiTauSkim_1504_1_pn7.root'
 #options.inputFiles = '/store/user/jkolb/SingleMu/skimTTHiggsToDiTau_428_v8_data_SingleMu_2011A_PRv4/de416a70484169d21ef326580ea52c59/ttHiggsToDiTauSkim_100_1_UgW.root'
 ## 8TeV/2012 sample
 #options.inputFiles = '/store/user/lannon/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/skimDilep_Summer12-PU_S7_START52_V9_53xOn52x_V02_CV01_ttjets_unpublished/skimDilep_ttjets_v2_job011.root'
-
+options.inputFiles = '/store/user/abrinke1/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_53xOn53x_V02_CV01/932e15c487207b473572def8d9167a18/ttH_pat2bean_53x_222_1_qIU.root'
 options.parseArguments() # get and parse the command line arguments 
 
 # === Parse Job Params === #
@@ -93,8 +92,8 @@ my_splitter.whitespace_split = True;
 jobParams       = list(my_splitter);
 
 # === Job params error checking === #
-if len(jobParams) != 7:
-    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 7 arguments (check config file for details). Terminating."; sys.exit(1);
+if len(jobParams) != 6:
+    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 6 arguments (check config file for details). Terminating."; sys.exit(1);
 
 if (jobParams[0] != "2011") and (jobParams[0] != "2012"):
     print "ERROR: era set to '" + jobParams[0] + "' but it must be '2011' or '2012'"; sys.exit(1);
@@ -115,25 +114,20 @@ if (era == 2012) and ((era_release != '52x') and (era_release != '53x')):
 if (jobParams[2] != "data-PR") and (jobParams[2] != "data-RR") and (jobParams[2] != "data-RRr")and (jobParams[2] != "MC-bg") and (jobParams[2] != "MC-sigFullSim") and (jobParams[2] != "MC-sigFastSim"):
     print "ERROR: sample type set to '" + jobParams[2] + "' but it can only be 'data-PR', 'data-RR', 'data-RRr', 'MC-bg', 'MC-sigFullSim', or 'MC-sigFastSim'."; sys.exit(1); 
 
-if (jobParams[3] != "electron") and (jobParams[3] != "muon"):
-    print "ERROR: skim type set to '" + jobParams[3] + "' but it must be either 'electron' or 'muon'."; exit(1);
-else:
-	skimType = jobParams[3];
-
-sampleNumber    = int(jobParams[4]);
+sampleNumber    = int(jobParams[3]);
 if (runOnMC and sampleNumber < 0):
     print "ERROR: job set to run on MC but sample number set to '" + sampleNumber + "' when it must be positive."; sys.exit(1);
 
 if (not runOnMC and sampleNumber >= 0):
     print "ERROR: job set to run on collision data but sample number set to '" + sampleNumber + "' when it must be negative."; sys.exit(1);
 
-skimParams = jobParams[5]
+skimParams = jobParams[4]
 if len(skimParams) is 0:
     print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams); sys.exit(1)
 if len(skimParams) > 5:
     print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 5 characters are not supported'.format(skimParams); sys.exit(1)
 
-sys_splitter = shlex.shlex(jobParams[6], posix=True);
+sys_splitter = shlex.shlex(jobParams[5], posix=True);
 sys_splitter.whitespace = '-'; 
 sys_splitter.whitespace_split = True;
 sysTypes= list(sys_splitter);
@@ -143,43 +137,31 @@ if runOnMC:
     inputForGenParticles = 'genParticles'
     inputForGenJets     = 'selectedPatJets:genJets:'
     triggerConditions = (
-        'HLT_IsoMu24_eta2p1'
+        'HLT_IsoMu24_eta2p1',
+        'HLT_Ele27_WP80'
     )
     if era == 2011:
       triggerConditions = (
-        'HLT_IsoMu24_v*'
-      )
-    if (skimType == 'electron'):
-        triggerConditions = (
-          'HLT_Ele27_WP80'
-        )
-        if era == 2011:
-          triggerConditions = (
-            'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
-            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
-            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-          )
+          'HLT_IsoMu24_v*',
+          'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
+          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
+          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
+    )
 
 if (not runOnMC):
     inputForGenParticles = ''
-    inputForGenJets         = ''
+    inputForGenJets = ''
     triggerConditions = (
-        'HLT_IsoMu24_eta2p1_v*'
+        'HLT_IsoMu24_eta2p1_v*',
+        'HLT_Ele27_WP80_v*'
     )
     if era == 2011:
       triggerConditions = (
-        'HLT_IsoMu24_v*'
-      )
-    if (skimType == 'electron'):
-        triggerConditions = (
-            'HLT_Ele27_WP80_v*'
-        )
-        if era == 2011:
-          triggerConditions = (   
-            'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
-            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
-            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-          )
+          'HLT_IsoMu24_v*',
+          'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
+          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
+          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
+    )
 
 
 # === Define Ntuplizer input collections === # 
@@ -212,27 +194,6 @@ if( era == 2012 ):
 # === make analysis-specific selections for skims, fillers, etc. === #
 SkimTriggerRequirements	= cms.vstring()
 
-if (skimType == 'electron'):
-	if (runOnSignal):
-		SkimTriggerRequirements = cms.vstring('ttElectronHiggsToTauTauSkim')
-	elif (runOnMC and (not runOnSignal)):
-		SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
-	elif (not runOnMC):
-		SkimTriggerRequirements = cms.vstring('ttHiggsElectronSkim')
-	else:
-		throwFatalError();
-elif (skimType == 'muon'):
-	if (runOnSignal):
-		SkimTriggerRequirements = cms.vstring('ttMuonHiggsToTauTauSkim')
-	elif (runOnMC and (not runOnSignal)):
-		SkimTriggerRequirements = cms.vstring('ttHiggsMuonSkim')
-	elif (not runOnMC):
-		SkimTriggerRequirements = cms.vstring('ttHiggsMuonSkim')
-	else:
-		throwFatalError();
-else:
-	throwFatalError();
-
 
 NtupleFillers = cms.untracked.vstring(
         'Event',
@@ -243,17 +204,12 @@ NtupleFillers = cms.untracked.vstring(
         'Electron',
         'Muon',
         'Jet',
+        'DitauLepton',
         #'DitauMuon',
         #'DitauElectron',
         #'Trigger', # not in use
 		'Test',
 )
-if(skimType == 'muon'):
-	NtupleFillers.append('DitauMuon')
-elif(skimType == 'electron'):
-	NtupleFillers.append('DitauElectron')
-else:
-	throwFatalError();
 
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
@@ -275,7 +231,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 from TTHTauTau.Analysis.globalTagMap_cfi import globalTagMap
-globalTag = globalTagMap[options.jobParams.rsplit('_',4)[0]] + '::All'
+globalTag = globalTagMap[options.jobParams.rsplit('_',3)[0]] + '::All'
 process.GlobalTag.globaltag = cms.string(globalTag)
 
 
@@ -350,7 +306,7 @@ process.makeNtupleSeq = cms.Sequence(process.makeNtuple)
 
 # add modules for systematic shifts
 for sys in sysTypes:
-  if sys is 'NA': 
+  if sys == 'NA': 
     continue
   mod = copy.deepcopy(process.makeNtuple)
   mod.SysType = sys
@@ -378,7 +334,7 @@ print '		Era Release......%s' % era_release
 print '		Max events.......%d' % options.maxEvents
 print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
-print '		Triggers.........%s' % triggerConditions
+#print '		Triggers.........%s' % triggerConditions
 print '		Skim parameters..%s' % skimParams
 sysString = ''
 for sys in sysTypes:
@@ -391,5 +347,5 @@ print '	===================================================='
 print ''
 
 # === Write-out all python configuration parameter information === #
-#pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
+pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
 
