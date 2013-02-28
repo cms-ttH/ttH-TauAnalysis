@@ -143,7 +143,7 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 
 bool Ntuplizer::IsFillerEnabled(const string iName){
 	for(unsigned int f=0; f<_enabledFillers.size(); f++){
-		if(_enabledFillers.at(f).compare(iName)==0){ std::cout << " ---> found " << iName << std::endl; return true; }	
+		if(_enabledFillers.at(f).compare(iName)==0){ std::cout << " " << _TreeName << " ---> found " << iName << std::endl; return true; }	
 	}
 
 	return false;
