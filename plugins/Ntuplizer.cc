@@ -50,7 +50,7 @@ void  Ntuplizer::beginJob() {
 
 	// Instantiate and set up beanHelper
 	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
-	beanHelper.SetUp(eraForBEANhelper, atoi(GetAnalysisTypeParameter(4).c_str()), false, SampleTypeContains("data"), std::string("SingleMu"), true, _UsePfLeptons);
+	beanHelper.SetUp(eraForBEANhelper, atoi(GetAnalysisTypeParameter(3).c_str()), false, SampleTypeContains("data"), std::string("SingleMu"), true, _UsePfLeptons);
 
 	// Declare and store here NtupleFillers
 	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
