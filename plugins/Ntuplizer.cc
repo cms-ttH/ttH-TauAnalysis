@@ -62,6 +62,7 @@ void  Ntuplizer::beginJob() {
 	if(IsFillerEnabled("Muon")){			ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree, &beanHelper));			}
 	if(IsFillerEnabled("Jet")){				ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree, &beanHelper));				}
 	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("DitauLepton")){		ntupleFillers.push_back(new DitauLeptonFiller(*jobConfig, _Tree, &beanHelper));		}
 	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree, &beanHelper));		}
 	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree, &beanHelper));	}
 	if(IsFillerEnabled("Quick")){			ntupleFillers.push_back(new QuickFiller(*jobConfig, _Tree, &fs, &beanHelper));		}
