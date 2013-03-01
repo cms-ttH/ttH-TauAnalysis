@@ -13,10 +13,10 @@
 BEANhltFilter::BEANhltFilter(const edm::ParameterSet& iConfig)
 {
    //now do what ever initialization is needed
-  if( iConfig.exists("HLTacceptPath") ) 
+  if( iConfig.exists("HLTacceptPaths") ) 
     hltAcceptPaths_ = iConfig.getParameter<std::vector<std::string> >("HLTacceptPaths");
   else
-    edm::LogError ("BEANhltFilter::BEANhltFilter") << " parameter 'HLTacceptPath' must be configured! Exiting...";
+    edm::LogError ("BEANhltFilter::BEANhltFilter") << " parameter 'HLTacceptPaths' must be configured! Exiting...";
 }
 
 
