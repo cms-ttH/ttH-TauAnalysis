@@ -14,7 +14,7 @@ BEANhltFilter::BEANhltFilter(const edm::ParameterSet& iConfig)
 {
    //now do what ever initialization is needed
   if( iConfig.exists("HLTacceptPath") ) 
-    hltAcceptPath_ = iConfig.getParameter<std::string>("HLTacceptPath");
+    hltAcceptPaths_ = iConfig.getParameter<std::vector<std::string> >("HLTacceptPaths");
   else
     edm::LogError ("BEANhltFilter::BEANhltFilter") << " parameter 'HLTacceptPath' must be configured! Exiting...";
 }
@@ -39,21 +39,25 @@ BEANhltFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   edm::Handle<BNtriggerCollection> triggerHandle;
   iEvent.getByLabel("BNproducer","HLT", triggerHandle);
-  BNtriggerCollection const &hlt = *triggerHandle;
+  BNtriggerCollection const &hltBeanList = *triggerHandle;
 
-  bool triggerFound = false;
+  int triggersFound = 0;
   bool triggerPassed = false;
-  for( BNtriggerCollection::const_iterator trgIt = hlt.begin(); trgIt != hlt.end(); trgIt++ ){
-    std::string hlt_name = trgIt->name;
-    if( (hlt_name.find(hltAcceptPath_)!=std::string::npos) ){
-      if( trgIt->prescale!=1 ) continue;
-      triggerFound = true;
-      triggerPassed = ( trgIt->pass==1 );
+  for( BNtriggerCollection::const_iterator hltBeanIt = hltBeanList.begin(); hltBeanIt != hltBeanList.end(); hltBeanIt++ ){
+    std::string hltBeanName = hltBeanIt->name;
+    for( std::vector<std::string>::const_iterator hltAcceptTrg = hltAcceptPaths_.begin();
+        hltAcceptTrg != hltAcceptPaths_.end(); hltAcceptTrg++ ) {
+      if( (hltBeanName.find(*hltAcceptTrg)!=std::string::npos) ){
+        if( hltBeanIt->prescale!=1 ) continue;
+        triggersFound++;
+        triggerPassed = ( hltBeanIt->pass==1 );
+        if( triggerPassed ) break; 
+      }
     }
     if( triggerPassed ) break; 
   }
-  if( !triggerFound) {
-    edm::LogError ("BEANhltFilter::filter") << "HLT path " << hltAcceptPath_ << " not found in event!"; 
+  if( triggersFound == 0) {
+    edm::LogError ("BEANhltFilter::filter") << "None of the requested HLT paths were found in the event!"; 
   }
   return triggerPassed;
 }

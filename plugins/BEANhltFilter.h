@@ -41,6 +41,6 @@ class BEANhltFilter : public edm::EDFilter {
 
       // ----------member data ---------------------------
 
-      std::string hltAcceptPath_;
+      std::vector<std::string> hltAcceptPaths_;
 };
 
