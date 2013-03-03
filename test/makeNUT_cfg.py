@@ -11,7 +11,7 @@ def throwFatalError():
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
-reportEvery	= 1000
+reportEvery	= 1
 era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
@@ -47,11 +47,11 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register ('jobParams', # 
                   #'2011_X_MC-sigFullSim_125_0_NA',	    # 125   tth->tautau
-                  '2011_X_MC-bg_2500_0_NA',	# 2500	TTbar
+                  #'2011_X_MC-bg_2500_0_NA',	# 2500	TTbar
 				  #'2011_A_data-PR_-1_0_NA',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_-1_0_NA',	    # -1	2012A collisions
 				  #'2012_X_MC-bg_-11_0_NA',	    # -11	2012B collisions
-                  #'2012_X_MC-bg_2500_0_NA',	# 2500	TTbar
+                  '2012_X_MC-bg_2500_0_NA',	# 2500	TTbar
 				  #'2012_X_MC-bg_2524_0_NA',	# 2524	TTbar + W
 				  #'2012_X_MC-bg_2523_0_NA',	# 2523	TTbar + Z
 				  #'2012_X_MC-bg_2400_0_NA',	# 2400	W+jets
@@ -152,8 +152,8 @@ if (not runOnMC):
     inputForGenParticles = ''
     inputForGenJets = ''
     triggerConditions = (
-        'HLT_IsoMu24_eta2p1_v*',
-        'HLT_Ele27_WP80_v*'
+        'HLT_IsoMu24_eta2p1',
+        'HLT_Ele27_WP80'
     )
     if era == 2011:
       triggerConditions = (
@@ -244,7 +244,8 @@ process.hltFilter = hlt.triggerResultsFilter.clone(
         throw = False)
 if era == 2012:
   process.hltFilter = cms.EDFilter("BEANhltFilter",
-      HLTacceptPath = cms.string(triggerConditions[0])
+      HLTacceptPaths = cms.vstring(triggerConditions),
+      debug = cms.bool(False)
   )
 
 # === Skim === #
@@ -319,7 +320,7 @@ for sys in sysTypes:
 if not runOnMC:
     process.p = cms.Path( process.beanSkimmer + process.hltFilter + process.makeNtupleSeq )
 else:
-    process.p = cms.Path( process.beanSkimmer + process.makeNtupleSeq )
+    process.p = cms.Path( process.beanSkimmer + process.hltFilter + process.makeNtupleSeq )
 
 
 # === Print some basic info about the job setup === #
@@ -347,5 +348,5 @@ print '	===================================================='
 print ''
 
 # === Write-out all python configuration parameter information === #
-pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
+#pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
 
