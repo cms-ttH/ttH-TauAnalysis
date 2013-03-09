@@ -36,6 +36,10 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_numInteractionsBXp1", &_numInteractionsBXp1);
 	_Tree->Branch("Ev_numPrimaryVertices", &_numPrimaryVertices);
 	_Tree->Branch("Ev_puWeight", &_PUweight);
+	
+    _Tree->Branch("Ev_topPtWeight", &_topPtWeight);
+	_Tree->Branch("Ev_topPtWeightUp", &_topPtWeightUp);
+	_Tree->Branch("Ev_topPtWeightDown", &_topPtWeightDown);
 
 	_Tree->Branch("Ev_MET", &_MET);
 	_Tree->Branch("Ev_METphi", &_METphi);
@@ -52,6 +56,9 @@ void EventFiller::ClearVectors(){
 	_numInteractionsBXp1		= 0;
 	_numPrimaryVertices			= 0;
 	_PUweight					= 1.0;
+    _topPtWeight                = 1.0;
+    _topPtWeightUp              = 1.0;
+    _topPtWeightDown            = 1.0;
 
 	_MET						= 0;
 	_METphi						= 0;
@@ -82,5 +89,10 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	BNmet correctedMET	= beanHelper->GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection, _sysType);
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
+
+    // top PT
+    _topPtWeight = beanHelper->GetTopPtweight(_BNmcparticles);
+    _topPtWeightUp = beanHelper->GetTopPtweightUp(_BNmcparticles);
+    _topPtWeightDown = beanHelper->GetTopPtweightDown(_BNmcparticles);
 
 }
