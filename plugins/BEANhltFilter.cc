@@ -17,6 +17,11 @@ BEANhltFilter::BEANhltFilter(const edm::ParameterSet& iConfig)
     hltAcceptPaths_ = iConfig.getParameter<std::vector<std::string> >("HLTacceptPaths");
   else
     edm::LogError ("BEANhltFilter::BEANhltFilter") << " parameter 'HLTacceptPaths' must be configured! Exiting...";
+  
+  if( iConfig.exists("debug") ) 
+    debug_ = iConfig.getParameter<bool >("debug");
+  else
+    debug_ = false;
 }
 
 
@@ -48,13 +53,15 @@ BEANhltFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for( std::vector<std::string>::const_iterator hltAcceptTrg = hltAcceptPaths_.begin();
         hltAcceptTrg != hltAcceptPaths_.end(); hltAcceptTrg++ ) {
       if( (hltBeanName.find(*hltAcceptTrg)!=std::string::npos) ){
-        if( hltBeanIt->prescale!=1 ) continue;
         triggersFound++;
+        if( hltBeanIt->prescale!=1 ) continue;
+        if(debug_) std::cout << " Found " << hltBeanName << " in BEAN;  which is in accept list; passed? " << ( hltBeanIt->pass==1 ) << std::endl;
         triggerPassed = ( hltBeanIt->pass==1 );
         if( triggerPassed ) break; 
+      } else {
       }
     }
-    if( triggerPassed ) break; 
+    if( triggerPassed && !debug_ ) break; 
   }
   if( triggersFound == 0) {
     edm::LogError ("BEANhltFilter::filter") << "None of the requested HLT paths were found in the event!"; 
