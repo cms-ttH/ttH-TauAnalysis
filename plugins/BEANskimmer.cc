@@ -92,7 +92,8 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
         tau.leadingTrackPt > 5 &&
         tau.leadingTrackValid > 0 &&
         tau.HPSagainstElectronLoose > 0 &&
-        tau.HPSagainstMuonLoose > 0 ) numBaseTaus++;
+        tau.HPSagainstMuonLoose > 0 &&
+        tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr > 0) numBaseTaus++;
   }
   if( numBaseTaus < minNumBaseTaus_ )
     return false;
