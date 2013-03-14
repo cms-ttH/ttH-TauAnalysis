@@ -36,6 +36,7 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_numInteractionsBXp1", &_numInteractionsBXp1);
 	_Tree->Branch("Ev_numPrimaryVertices", &_numPrimaryVertices);
 	_Tree->Branch("Ev_puWeight", &_PUweight);
+	_Tree->Branch("Ev_isTauTauLepton", &_isTauTauLepton);
 	
     _Tree->Branch("Ev_topPtWeight", &_topPtWeight);
 	_Tree->Branch("Ev_topPtWeightUp", &_topPtWeightUp);
@@ -56,6 +57,7 @@ void EventFiller::ClearVectors(){
 	_numInteractionsBXp1		= 0;
 	_numPrimaryVertices			= 0;
 	_PUweight					= 1.0;
+	_isTauTauLepton				= false;
     _topPtWeight                = 1.0;
     _topPtWeightUp              = 1.0;
     _topPtWeightDown            = 1.0;
@@ -74,6 +76,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_runNumber			= iEvent.id().run();
 	_eventNumber		= iEvent.id().event();
 	_lumiBlock			= iEvent.id().luminosityBlock();
+	_isTauTauLepton		= beanHelper->IsTauTauLeptonEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
 	// Pileup
 	_numInteractionsBXm1	= _BNevents.begin()->nm1_true;

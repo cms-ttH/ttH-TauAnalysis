@@ -259,6 +259,12 @@ void DitauLeptonFiller::SetupBranches(){
 	_Tree->Branch("TTL_NumNonCSVLbtagJets", &_NumNonCSVLbtagJets);
 	_Tree->Branch("TTL_NumNonCSVMbtagJets", &_NumNonCSVMbtagJets);
 	_Tree->Branch("TTL_NumNonCSVTbtagJets", &_NumNonCSVTbtagJets);
+	_Tree->Branch("TTL_NumCleanCSVLbtagJets", &_NumCleanCSVLbtagJets);
+	_Tree->Branch("TTL_NumCleanCSVMbtagJets", &_NumCleanCSVMbtagJets);
+	_Tree->Branch("TTL_NumCleanCSVTbtagJets", &_NumCleanCSVTbtagJets);
+	_Tree->Branch("TTL_NumCleanNonCSVLbtagJets", &_NumCleanNonCSVLbtagJets);
+	_Tree->Branch("TTL_NumCleanNonCSVMbtagJets", &_NumCleanNonCSVMbtagJets);
+	_Tree->Branch("TTL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -487,6 +493,12 @@ void DitauLeptonFiller::ClearVectors(){
 	_NumNonCSVLbtagJets								.clear();
 	_NumNonCSVMbtagJets								.clear();
 	_NumNonCSVTbtagJets								.clear();
+	_NumCleanCSVLbtagJets							.clear();
+	_NumCleanCSVMbtagJets							.clear();
+	_NumCleanCSVTbtagJets							.clear();
+	_NumCleanNonCSVLbtagJets						.clear();
+	_NumCleanNonCSVMbtagJets						.clear();
+	_NumCleanNonCSVTbtagJets						.clear();
 }
 
 // === Fill ntuple === //
@@ -649,12 +661,19 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
 
-				_NumCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
-				_NumCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M'));
-				_NumCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
-				_NumNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
-				_NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
-				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+				_NumCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'L'));
+				_NumCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'M'));
+				_NumCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'T'));
+				_NumNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'L'));
+				_NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'M'));
+				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'T'));
+
+				_NumCleanCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
+				_NumCleanCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCleanCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
+				_NumCleanNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
+				_NumCleanNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCleanNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
 				// Move to the next lepton
 				if(useMuon){ ++Muon; }

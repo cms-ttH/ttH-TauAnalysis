@@ -31,6 +31,7 @@ class EventFiller : public NtupleFiller {
 		double				_numInteractionsBX0;
 		double				_numInteractionsBXp1;
 		double				_numPrimaryVertices;
+		bool				_isTauTauLepton;
 
 		double				_MET;
 		double				_METphi;
