@@ -11,11 +11,11 @@ def throwFatalError():
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
-reportEvery	= 1
+reportEvery	= 10000
 era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
-tauMinPt	= 0
+tauMinPt	= 10
 baseTreeName = 'TTbarHTauTau'
 
 # collection postfix for running on PF2PAT
@@ -33,9 +33,9 @@ options = VarParsing.VarParsing("analysis")
 # <subera> [N/A for MC]		= A, B, C...
 # <type>					= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
 # <sample number>			= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
-# <skim selection>          = up to five numbers; 1st is min. num. of total jets, 2nd is min. num. loose Btags, 
+# <skim selection>          = up to six numbers; 1st is min. num. of total jets, 2nd is min. num. loose Btags, 
 #                             3rd is min. num. med. Btags, 4th is min. num. tight Btags, 
-#                             5th is min num. "base taus", as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
+#                             5th/6th are min num. "base"/iso taus, as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
 # <systematic type>         = dash-separated systematic uncertainty shift type(s). 
 #                             Options are defined in NtupleMaker/BEANmaker/interface/BEANhelper.h
 #                             Must include 'NA'
@@ -124,8 +124,8 @@ if (not runOnMC and sampleNumber >= 0):
 skimParams = jobParams[4]
 if len(skimParams) is 0:
     print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams); sys.exit(1)
-if len(skimParams) > 5:
-    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 5 characters are not supported'.format(skimParams); sys.exit(1)
+if len(skimParams) > 6:
+    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 6 characters are not supported'.format(skimParams); sys.exit(1)
 
 sys_splitter = shlex.shlex(jobParams[5], posix=True);
 sys_splitter.whitespace = '-'; 
@@ -312,8 +312,8 @@ for sys in sysTypes:
   mod = copy.deepcopy(process.makeNtuple)
   mod.SysType = sys
   mod.TreeName = baseTreeName + '_' + sys
-  setattr(process,'makeNtuple'+sys,mod)
-  process.makeNtupleSeq += getattr(process,'makeNtuple'+sys)
+  setattr(process,'makeNtuple_'+sys,mod)
+  process.makeNtupleSeq += getattr(process,'makeNtuple_'+sys)
 
 
 # === Run sequence === # 
