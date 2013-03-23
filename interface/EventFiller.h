@@ -37,10 +37,17 @@ class EventFiller : public NtupleFiller {
 		double				_METphi;
 
 		double				_PUweight;
+		double				_PUweightUp;
+		double				_PUweightDown;
 		
         double				_topPtWeight;
         double				_topPtWeightUp;
         double				_topPtWeightDown;
+
+        bool                _isTauEvent;
+
+        double              _q2WeightUp;
+        double              _q2WeightDown;
 };
 
 #endif

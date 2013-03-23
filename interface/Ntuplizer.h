@@ -79,6 +79,13 @@ class Ntuplizer : public EDAnalyzer {
 		string _TreeName;
         bool _UsePfLeptons;
 		BEANhelper beanHelper;
+        sysType::sysType _sysType;
+
+        // required for TTL-event check
+        InputTag _RecoJetSource;
+        InputTag _RecoTauSource;
+        InputTag _RecoMuonSource;
+        InputTag _RecoElectronSource;
 
 		// === Trigger Inputs === //
 		bool _ApplySkimTriggerRequirements;
