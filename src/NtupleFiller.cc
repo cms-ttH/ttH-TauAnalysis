@@ -49,6 +49,7 @@ NtupleFiller::NtupleFiller(const ParameterSet& iConfig, BEANhelper* iBEANhelper)
 
     // set up systematic shift options
     std::string sysTypeString       = iConfig.getUntrackedParameter<std::string>("SysType");
+    _sysType = sysType::NA;
     if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
     if( sysTypeString.compare("JERup") == 0 ) _sysType = sysType::JERup;
     if( sysTypeString.compare("JERdown") == 0 ) _sysType = sysType::JERdown;

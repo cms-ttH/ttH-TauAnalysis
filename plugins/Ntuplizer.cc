@@ -29,7 +29,28 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	_ApplySkimTriggerRequirements	= iConfig.getParameter<bool>("ApplySkimTriggerRequirements");
 	_SkimTriggerSource				= iConfig.getParameter<InputTag>("SkimTriggerSource");
 	_SkimTriggerRequirements		= iConfig.getParameter<vector<string> >("SkimTriggerRequirements");
+    
+    // required for TTL event check
+    _RecoTauSource                  = iConfig.getParameter<InputTag>("RecoTauSource");
+    _RecoMuonSource                 = iConfig.getParameter<InputTag>("RecoMuonSource");
+    _RecoElectronSource             = iConfig.getParameter<InputTag>("RecoElectronSource");
+    _RecoJetSource                  = iConfig.getParameter<InputTag>("RecoJetSource");
 
+    // required for TTL event check
+    std::string sysTypeString       = iConfig.getUntrackedParameter<std::string>("SysType");
+    _sysType = sysType::NA;
+    if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
+    if( sysTypeString.compare("JERup") == 0 ) _sysType = sysType::JERup;
+    if( sysTypeString.compare("JERdown") == 0 ) _sysType = sysType::JERdown;
+    if( sysTypeString.compare("JESup") == 0 ) _sysType = sysType::JESup;
+    if( sysTypeString.compare("JESdown") == 0 ) _sysType = sysType::JESdown;
+    if( sysTypeString.compare("hfSFup") == 0 ) _sysType = sysType::hfSFup;
+    if( sysTypeString.compare("hfSFdown") == 0 ) _sysType = sysType::hfSFdown;
+    if( sysTypeString.compare("lfSFup") == 0 ) _sysType = sysType::lfSFup;
+    if( sysTypeString.compare("lfSFdown") == 0 ) _sysType = sysType::lfSFdown;
+    if( sysTypeString.compare("TESup") == 0 ) _sysType = sysType::TESup;
+    if( sysTypeString.compare("TESdown") == 0 ) _sysType = sysType::TESdown;
+    
 }
 
 // === Destructor === //
@@ -92,6 +113,24 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
 
 	// Fill histogram that keeps track of the number of events read
 	_EventsRead->Fill(0);
+
+    // Remove non-TTL events
+    Handle<BNelectronCollection>			hBNelectrons;
+    Handle<BNmuonCollection>				hBNmuons;
+    Handle<BNtauCollection>					hBNtaus;
+    Handle<BNjetCollection>					hBNjets;
+    
+    iEvent.getByLabel(_RecoElectronSource,	hBNelectrons);
+    iEvent.getByLabel(_RecoMuonSource, 		hBNmuons);
+    iEvent.getByLabel(_RecoTauSource, 		hBNtaus);
+    iEvent.getByLabel(_RecoJetSource, 		hBNjets);
+    
+    BNelectronCollection BNelectrons	= *(hBNelectrons.product());
+    BNmuonCollection BNmuons			= *(hBNmuons.product());
+    BNtauCollection BNtaus				= *(hBNtaus.product());
+    BNjetCollection BNjets				= *(hBNjets.product());
+
+    if(_FromBEAN && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ return; }
 
 	// See if event meets skim trigger requirements
 	if((!_FromBEAN) && _ApplySkimTriggerRequirements){
