@@ -48,6 +48,7 @@ class BEANskimmer : public edm::EDFilter {
     int minNumMediumBtags_;
     int minNumTightBtags_;
     int minNumBaseTaus_;
+    int minNumIsoTaus_;
     double CSV_WP_L_;
     double CSV_WP_M_;
     double CSV_WP_T_;

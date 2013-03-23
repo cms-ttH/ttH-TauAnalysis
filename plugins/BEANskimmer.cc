@@ -26,12 +26,22 @@ BEANskimmer::BEANskimmer(const edm::ParameterSet& iConfig)
   minNumTightBtags_ = 0;
   minNumJets_ = 0;
   minNumBaseTaus_ = 0;
+  minNumIsoTaus_ = 0;
   
   if( cfg_.size() > 0 ) minNumJets_ = atoi(cfg_.substr(0,1).c_str());
   if( cfg_.size() > 1 ) minNumLooseBtags_ = atoi(cfg_.substr(1,1).c_str());
   if( cfg_.size() > 2 ) minNumMediumBtags_ = atoi(cfg_.substr(2,1).c_str());
   if( cfg_.size() > 3 ) minNumTightBtags_ = atoi(cfg_.substr(3,1).c_str());
   if( cfg_.size() > 4 ) minNumBaseTaus_ = atoi(cfg_.substr(4,1).c_str());
+  if( cfg_.size() > 5 ) minNumIsoTaus_ = atoi(cfg_.substr(5,1).c_str());
+
+  //std::cout << "Configuration: " << std::endl
+  //  << "minNumJets_ = " << minNumJets_ << std::endl
+  //  << "minNumLooseBtags_ = " << minNumLooseBtags_ << std::endl
+  //  << "minNumMediumBtags_ = " << minNumMediumBtags_ << std::endl
+  //  << "minNumTightBtags_ = " << minNumTightBtags_ << std::endl
+  //  << "minNumBaseTaus_ = " << minNumBaseTaus_ << std::endl
+  //  << "minNumIsoTaus_ = " << minNumIsoTaus_ << std::endl;
 
 }
 
@@ -63,8 +73,13 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
   int numLooseTags = 0;
   int numMediumTags = 0;
   int numTightTags = 0;
-  int numJets = int(pfjets.size());
+  int numJets = 0;
+
+  if( pfjets.size() < 4 ) return false;
+  
   for( int i=0; i<int(pfjets.size()); i++ ){
+    if( pfjets.at(i).pt < 30 ) continue;
+    numJets++;
     double csv = pfjets.at(i).btagCombinedSecVertex;
     if( csv > CSV_WP_T_ ) numTightTags++; 
     if( csv > CSV_WP_M_ ) numMediumTags++; 
@@ -81,6 +96,7 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     return false;
 
   int numBaseTaus = 0;
+  int numIsoTaus = 0;
   edm::Handle<BNtauCollection> tausHandle;
   iEvent.getByLabel("BNproducer","selectedPatTaus", tausHandle);
   BNtauCollection const &taus = *tausHandle;
@@ -93,10 +109,19 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
         tau.leadingTrackValid > 0 &&
         tau.HPSagainstElectronLoose > 0 &&
         tau.HPSagainstMuonLoose > 0 &&
-        tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr > 0) numBaseTaus++;
+        tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr > 0) numIsoTaus++;
+    if( tau.pt > 20 &&
+        tau.HPSdecayModeFinding > 0 &&
+        tau.leadingTrackPt > 5 &&
+        tau.leadingTrackValid > 0 &&
+        tau.HPSagainstElectronLoose > 0 &&
+        tau.HPSagainstMuonLoose > 0 ) numBaseTaus++;
   }
   if( numBaseTaus < minNumBaseTaus_ )
     return false;
+  if( numIsoTaus < minNumIsoTaus_ )
+    return false;
+
   return true;
 }
 
