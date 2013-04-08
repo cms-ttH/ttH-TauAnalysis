@@ -164,7 +164,7 @@ class NtupleFiller : public EDAnalyzer {
 		BNtauCollection					_BNtaus;
 		BNjetCollection					_BNjets;
 		BNmetCollection					_BNmets;
-		BNprimaryvertexCollection		_BNprimaryVertices;
+		BNprimaryvertexCollection		_BNvertices;
 		BNtriggerCollection				_BNtrigger;
 		// === Handles to collections === //
 /*		Handle<BNeventCollection>				_BNevent;
@@ -173,7 +173,7 @@ class NtupleFiller : public EDAnalyzer {
 		Handle<BNtauCollection>					_BNtaus;
 		Handle<BNjetCollection>					_BNjets;
 		Handle<BNmetCollection>					_BNmets;
-		Handle<BNprimaryvertexCollection>		_BNprimaryVertices;
+		Handle<BNprimaryvertexCollection>		_BNvertices;
 		Handle<BNtriggerCollection>				_BNtrigger;
 
 		Handle< reco::GenParticleCollection >				_genParticles;
@@ -184,7 +184,7 @@ class NtupleFiller : public EDAnalyzer {
 		Handle< pat::JetCollection >						_patJets;
 		Handle< pat::METCollection >						_patMETs;
 		Handle< edm::View<pat::MET> >						_pfMETs;
-		Handle< reco::VertexCollection >					_primaryVertices;
+		Handle< reco::VertexCollection >					_vertices;
 		Handle< std::vector< PileupSummaryInfo > >			_puInfo;
         Handle< edm::TriggerResults >                       _triggerResults;
 //*/
