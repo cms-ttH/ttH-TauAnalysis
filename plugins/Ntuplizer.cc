@@ -75,6 +75,7 @@ void  Ntuplizer::beginJob() {
 
 	// Declare and store here NtupleFillers
 	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Vertex")){			ntupleFillers.push_back(new VertexFiller(*jobConfig, _Tree, &beanHelper));			}
 	if(IsFillerEnabled("GenLevel")){		ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree, &beanHelper));		}
 	if(IsFillerEnabled("GenTau")){			ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree, &beanHelper));			}
 	if(IsFillerEnabled("GenJet")){			ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree, &beanHelper));			}

@@ -30,6 +30,7 @@
 #include "DitauElectronFiller.h"
 #include "TriggerFiller.h"
 #include "QuickFiller.h"
+#include "VertexFiller.h"
 
 using namespace std;
 using namespace edm;

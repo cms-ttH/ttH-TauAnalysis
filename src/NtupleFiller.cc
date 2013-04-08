@@ -118,9 +118,9 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		iEvent.getByLabel(_RecoPFMetSource,		hBNmets);
 		_BNmets				= *(hBNmets.product());
 
-		Handle<BNprimaryvertexCollection>		hBNprimaryVertices;
-		iEvent.getByLabel(_RecoVertexSource,	hBNprimaryVertices);
-		_BNprimaryVertices	= *(hBNprimaryVertices.product());
+		Handle<BNprimaryvertexCollection>		hBNvertices;
+		iEvent.getByLabel(_RecoVertexSource,	hBNvertices);
+		_BNvertices	        = *(hBNvertices.product());
 
 		Handle<BNtriggerCollection>				hBNtrigger;
 		iEvent.getByLabel(_HLTriggerSource,		hBNtrigger);
@@ -128,12 +128,12 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 
 	}else{
 		_BNevents			= patTupleToBEANtranslator.EDMtoBN(&iEvent);
-        
-		Handle< reco::VertexCollection >					hPrimaryVertices;
-		iEvent.getByLabel(_RecoVertexSource,	hPrimaryVertices);
-		_BNprimaryVertices	= patTupleToBEANtranslator.RECOtoBN(hPrimaryVertices.product());
+       /* 
+		//Handle< reco::VertexCollection >					hVertices;
+		//iEvent.getByLabel(_RecoVertexSource,	hVertices);
+		//_BNvertices	= patTupleToBEANtranslator.RECOtoBN(hVertices.product());
 	
-        const reco::Vertex* primaryVertex = patTupleToBEANtranslator.getPrimaryVertex(hPrimaryVertices.product());
+        const reco::Vertex* vertex = patTupleToBEANtranslator.getPrimaryVertex(hVertices.product());
 
         // get beam spot   BeamSpot collection not in current 7TeV PAT-tuples
         //edm::Handle<reco::BeamSpot> bsHandle;
@@ -156,22 +156,22 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
         //std::cout << " --> Getting patTaus " << std::endl;
 		Handle< pat::TauCollection >						hPatTaus;
 		iEvent.getByLabel(_RecoTauSource, 		hPatTaus);
-		_BNtaus				= patTupleToBEANtranslator.PATtoBN(hPatTaus.product(), primaryVertex);
+		_BNtaus				= patTupleToBEANtranslator.PATtoBN(hPatTaus.product(), vertex);
 		
         //std::cout << " --> Getting electrons " << std::endl;
 		Handle< pat::ElectronCollection >					hPatElectrons;
 		iEvent.getByLabel(_RecoElectronSource,	hPatElectrons);
-		_BNelectrons		= patTupleToBEANtranslator.PATtoBN(hPatElectrons.product(), primaryVertex, beamSpot);
+		_BNelectrons		= patTupleToBEANtranslator.PATtoBN(hPatElectrons.product(), vertex, beamSpot);
 		
         //std::cout << " --> Getting muons " << std::endl;
 		Handle< pat::MuonCollection >						hPatMuons;
 		iEvent.getByLabel(_RecoMuonSource, 		hPatMuons);
-		_BNmuons			= patTupleToBEANtranslator.PATtoBN(hPatMuons.product(), primaryVertex, beamSpot);
+		_BNmuons			= patTupleToBEANtranslator.PATtoBN(hPatMuons.product(), vertex, beamSpot);
 		
         //std::cout << " --> Getting jets " << std::endl;
 		Handle< pat::JetCollection >						hPatJets;
 		iEvent.getByLabel(_RecoJetSource,		hPatJets);
-		_BNjets				= patTupleToBEANtranslator.PATtoBN(hPatJets.product(), primaryVertex, iEvent, iSetup);
+		_BNjets				= patTupleToBEANtranslator.PATtoBN(hPatJets.product(), vertex, iEvent, iSetup);
 	
         //std::cout << " --> Getting MET " << std::endl;
 		Handle< pat::METCollection >						hPatMETs;
@@ -182,7 +182,7 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
 		//iEvent.getByLabel(_HLTriggerSource,     hTriggerResults);
 		//_BNtrigger				= patTupleToBEANtranslator.EDMtoBN(hTriggerResults.product(), iEvent, iSetup, iEvent.id().run());
 		//_BNtrigger				= patTupleToBEANtranslator.EDMtoBN(hTriggerResults.product(), iEvent, iSetup);
-	}
+	*/}
 
 }
 

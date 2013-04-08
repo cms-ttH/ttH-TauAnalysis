@@ -31,10 +31,6 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_runNumber", &_runNumber);
 	_Tree->Branch("Ev_eventNumber", &_eventNumber);
 	_Tree->Branch("Ev_lumiBlock", &_lumiBlock);
-	_Tree->Branch("Ev_numInteractionsBXm1", &_numInteractionsBXm1);
-	_Tree->Branch("Ev_numInteractionsBX0", &_numInteractionsBX0);
-	_Tree->Branch("Ev_numInteractionsBXp1", &_numInteractionsBXp1);
-	_Tree->Branch("Ev_numPrimaryVertices", &_numPrimaryVertices);
 	_Tree->Branch("Ev_puWeight", &_PUweight);
 	_Tree->Branch("Ev_puWeightUp", &_PUweightUp);
 	_Tree->Branch("Ev_puWeightDown", &_PUweightDown);
@@ -54,10 +50,6 @@ void EventFiller::ClearVectors(){
 	_runNumber					= 0;
 	_eventNumber				= 0;
 	_lumiBlock					= 0;
-	_numInteractionsBXm1		= 0;
-	_numInteractionsBX0			= 0;
-	_numInteractionsBXp1		= 0;
-	_numPrimaryVertices			= 0;
 	_PUweight					= 1.0;
 	_PUweightUp					= 1.0;
 	_PUweightDown   			= 1.0;
@@ -83,11 +75,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_lumiBlock			= iEvent.id().luminosityBlock();
 	_isTauTauLepton		= beanHelper->IsTauTauLeptonEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
-	// Pileup
-	_numInteractionsBXm1	= _BNevents.begin()->nm1_true;
-	_numInteractionsBX0		= _BNevents.begin()->n0_true;
-	_numInteractionsBXp1	= _BNevents.begin()->np1_true;
-	_numPrimaryVertices		= _BNprimaryVertices.size();
+	// Pileup weights
 	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
 	_PUweightUp				= beanHelper->GetPUweightUp(_BNevents.begin()->numTruePV);
 	_PUweightDown			= beanHelper->GetPUweightDown(_BNevents.begin()->numTruePV);
@@ -109,7 +97,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     _isTauEvent         = beanHelper->IsTauTauLeptonEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
     // Q^2 weights
-    _q2WeightUp = _BNevents.begin()->Q2ScaleUpWgt;
-    _q2WeightDown = _BNevents.begin()->Q2ScaleDownWgt;
+    _q2WeightUp = _BNevents.begin()->Q2ScaleUpWgt * 1.402;
+    _q2WeightDown = _BNevents.begin()->Q2ScaleDownWgt * 0.683;
 
 }
