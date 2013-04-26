@@ -18,6 +18,7 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
 	_EraRelease						= iConfig.getParameter<string>("EraRelease");
     _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
+    _DataRange                      = ( iConfig.exists("DataRange") ) ? iConfig.getParameter<string>("DataRange") : "All";
 
 	// Name of the ntuple tree
 	_TreeName						= iConfig.getUntrackedParameter<std::string>("TreeName");
@@ -71,7 +72,15 @@ void  Ntuplizer::beginJob() {
 
 	// Instantiate and set up beanHelper
 	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
-	beanHelper.SetUp(eraForBEANhelper, atoi(GetAnalysisTypeParameter(3).c_str()), false, SampleTypeContains("data"), std::string("SingleMu"), true, _UsePfLeptons);
+	beanHelper.SetUp(eraForBEANhelper, // 2011, 2012_52x, 2012_53x
+            atoi(GetAnalysisTypeParameter(3).c_str()), // sample number
+            false, // is lepton+jets
+            SampleTypeContains("data"), // is data
+            std::string("SingleMu"), // data set
+            false, // do CSV reshaping
+            _UsePfLeptons, 
+            _DataRange // 2012A_13July,2012A_06Aug,2012B_13July,2012C_PR,2012C_24Aug,2012D_PR,All,all
+    );
 
 	// Declare and store here NtupleFillers
 	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}

@@ -263,6 +263,7 @@ class DitauLeptonFiller : public NtupleFiller {
 		vector<unsigned int>	_NumCleanNonCSVLbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVMbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVTbtagJets;
+		vector<float>	_TotalJetWeight;
 		
 };
 
