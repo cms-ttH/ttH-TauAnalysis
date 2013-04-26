@@ -265,6 +265,7 @@ void DitauLeptonFiller::SetupBranches(){
 	_Tree->Branch("TTL_NumCleanNonCSVLbtagJets", &_NumCleanNonCSVLbtagJets);
 	_Tree->Branch("TTL_NumCleanNonCSVMbtagJets", &_NumCleanNonCSVMbtagJets);
 	_Tree->Branch("TTL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
+	_Tree->Branch("TTL_TotalJetWeight", &_TotalJetWeight);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -499,6 +500,7 @@ void DitauLeptonFiller::ClearVectors(){
 	_NumCleanNonCSVLbtagJets						.clear();
 	_NumCleanNonCSVMbtagJets						.clear();
 	_NumCleanNonCSVTbtagJets						.clear();
+    _TotalJetWeight                                 .clear();
 }
 
 // === Fill ntuple === //
@@ -525,7 +527,12 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
     // Taus  (corrected taus currently just account for systematic shifts)
     BNtauCollection correctedTaus =  beanHelper->GetCorrectedTaus(_BNtaus, _sysType);
 
-	// Make sure we can at least make one TTL combo
+    // Correct for jet pT
+    BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets, _sysType);
+    // Apply kinematic requirements on corrected jets
+    BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
+	
+    // Make sure we can at least make one TTL combo
 	if(correctedTaus.size() < 2 || (selectedMuons.size() + selectedElectrons.size()) < 1){ return; }
 
 	// Tau loops: Tau1 is always leads in pT
@@ -603,14 +610,11 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 				}
 				
 				// Jets and MET and related quantities
-				// Correct for jet pT
-				BNjetCollection correctedJets                           = beanHelper->GetCorrectedJets(_BNjets, _sysType);
-				// Apply kinematic requirements on corrected jets
-				BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
+
 				vector<TLorentzVector> tausAndLepton; // Clean jets from taus and muon
 				tausAndLepton.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
 				tausAndLepton.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
-
+                
 				_MomentumRank.push_back(_MomentumRank.size());
 				_NumCombos++;
 				theNumberOfLeptons++;
@@ -658,6 +662,9 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 
 				if(useMuon){	_HT.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets)); }
 				else{			_HT.push_back(Tau1->pt + Tau2->pt + Electron->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets)); }
+
+                // fill total jet weight with clean jets
+                _TotalJetWeight     .push_back(beanHelper->GetCSVweight(cleanSelCorrJets, _sysType));
 
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
 

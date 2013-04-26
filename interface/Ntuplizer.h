@@ -81,6 +81,7 @@ class Ntuplizer : public EDAnalyzer {
         bool _UsePfLeptons;
 		BEANhelper beanHelper;
         sysType::sysType _sysType;
+        string _DataRange;
 
         // required for TTL-event check
         InputTag _RecoJetSource;
