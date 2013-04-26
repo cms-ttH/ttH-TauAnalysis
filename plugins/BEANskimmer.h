@@ -53,5 +53,7 @@ class BEANskimmer : public edm::EDFilter {
     double CSV_WP_M_;
     double CSV_WP_T_;
     std::string cfg_;
+    edm::InputTag tauSrc_;
+    edm::InputTag jetSrc_;
 };
 
