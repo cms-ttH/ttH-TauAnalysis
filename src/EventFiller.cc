@@ -97,7 +97,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     _isTauEvent         = beanHelper->IsTauTauLeptonEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
     // Q^2 weights
-    _q2WeightUp = _BNevents.begin()->Q2ScaleUpWgt * 1.402;
-    _q2WeightDown = _BNevents.begin()->Q2ScaleDownWgt * 0.683;
+    _q2WeightUp = beanHelper->GetQ2ScaleUp(*(_BNevents.begin()));
+    _q2WeightDown = beanHelper->GetQ2ScaleDown(*(_BNevents.begin()));
 
 }
