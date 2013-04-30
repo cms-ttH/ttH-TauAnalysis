@@ -8,7 +8,63 @@
 using namespace std;
 
 class DitauLeptonFiller : public NtupleFiller {
+    /*
+    // === Helper Class === //
+    public:
+    class Weights {
+        public:
+        Weights() {
+            LeptonEventWeight = 1;
+            TotalJetWeight = 1;
+            TotalJetWeightLF = 1;
+            TotalJetWeightLFup = 1;
+            TotalJetWeightLFdown = 1;
+            TotalJetWeightHFup = 1;
+            TotalJetWeightHFdown = 1;
+            TotalJetWeightLFStats1up = 1;
+            TotalJetWeightLFStats1down = 1;
+            TotalJetWeightHFStats1up = 1;
+            TotalJetWeightHFStats1down = 1;
+            TotalJetWeightLFStats2up = 1;
+            TotalJetWeightLFStats2down = 1;
+            TotalJetWeightHFStats2up = 1;
+            TotalJetWeightHFStats2down = 1;
+        };
+        void clear() {
+            LeptonEventWeight = 1;
+            TotalJetWeight = 1;
+            TotalJetWeightLF = 1;
+            TotalJetWeightLFup = 1;
+            TotalJetWeightLFdown = 1;
+            TotalJetWeightHFup = 1;
+            TotalJetWeightHFdown = 1;
+            TotalJetWeightLFStats1up = 1;
+            TotalJetWeightLFStats1down = 1;
+            TotalJetWeightHFStats1up = 1;
+            TotalJetWeightHFStats1down = 1;
+            TotalJetWeightLFStats2up = 1;
+            TotalJetWeightLFStats2down = 1;
+            TotalJetWeightHFStats2up = 1;
+            TotalJetWeightHFStats2down = 1;
+        };
 
+        float LeptonEventWeight;
+        float TotalJetWeight;
+        float TotalJetWeightLF;
+        float TotalJetWeightLFup;
+        float TotalJetWeightLFdown;
+        float TotalJetWeightHFup;
+        float TotalJetWeightHFdown;
+        float TotalJetWeightLFStats1up;
+        float TotalJetWeightLFStats1down;
+        float TotalJetWeightHFStats1up;
+        float TotalJetWeightHFStats1down;
+        float TotalJetWeightLFStats2up;
+        float TotalJetWeightLFStats2down;
+        float TotalJetWeightHFStats2up;
+        float TotalJetWeightHFStats2down;
+    };
+    */
 	// ----- Functions ----- //
 	public:
 		explicit DitauLeptonFiller(const ParameterSet&);
@@ -223,7 +279,6 @@ class DitauLeptonFiller : public NtupleFiller {
 		vector<float>			_LeptonRelIso;
 		vector<bool> 			_LeptonIsLoose;
 		vector<bool> 			_LeptonIsTight;
-		vector<float>			_LeptonEventWeight;
 		vector<int>				_LeptonGenMatchDaughter0Id;
 		vector<int>				_LeptonGenMatchDaughter1Id;
 		vector<int>				_LeptonGenMatchId;
@@ -263,7 +318,21 @@ class DitauLeptonFiller : public NtupleFiller {
 		vector<unsigned int>	_NumCleanNonCSVLbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVMbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVTbtagJets;
-		vector<float>	_TotalJetWeight;
+		
+        vector<float>	        _LeptonEventWeight;
+        vector<float>	        _CSVeventWeight;
+        vector<float>	        _CSVeventWeightLFup;
+        vector<float>	        _CSVeventWeightLFdown;
+        vector<float>	        _CSVeventWeightHFup;
+        vector<float>	        _CSVeventWeightHFdown;
+        vector<float>	        _CSVeventWeightLFStats1up;
+        vector<float>	        _CSVeventWeightLFStats1down;
+        vector<float>	        _CSVeventWeightHFStats1up;
+        vector<float>	        _CSVeventWeightHFStats1down;
+        vector<float>	        _CSVeventWeightLFStats2up;
+        vector<float>	        _CSVeventWeightLFStats2down;
+        vector<float>	        _CSVeventWeightHFStats2up;
+        vector<float>	        _CSVeventWeightHFStats2down;
 		
 };
 
