@@ -17,10 +17,12 @@ debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 10
 baseTreeName = 'TTbarHTauTau'
+dataRange   = 'All'
+#dataRange   = '2012D_PR'
 
 # collection postfix for running on PF2PAT
 postfix = ''
-# postfix = 'PFlow'
+#postfix = 'PFlow'
 
 # === Parse external arguments === #
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -81,7 +83,10 @@ options.outputFile = 'NUT.root'
 #options.inputFiles = '/store/user/jkolb/SingleMu/skimTTHiggsToDiTau_428_v8_data_SingleMu_2011A_PRv4/de416a70484169d21ef326580ea52c59/ttHiggsToDiTauSkim_100_1_UgW.root'
 ## 8TeV/2012 sample
 #options.inputFiles = '/store/user/lannon/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/skimDilep_Summer12-PU_S7_START52_V9_53xOn52x_V02_CV01_ttjets_unpublished/skimDilep_ttjets_v2_job011.root'
-options.inputFiles = '/store/user/abrinke1/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_53xOn53x_V02_CV01/932e15c487207b473572def8d9167a18/ttH_pat2bean_53x_222_1_qIU.root'
+# 2012B SingleMu - Spring 2013 BEAN
+#options.inputFiles = '/store/user/awoodard/SingleMu/BEAN_GTV7G_V01_CV03/2b5bf57d4ab2a303a22b86a50ccffab2/ttH_pat2bean_53x_3185_1_BJl.root'
+# ttbar semi-leptonic - Spring2013 BEAN
+options.inputFiles = '/store/user/awoodard/TTJets_SemiLeptMGDecays_8TeV-madgraph/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02/d0a71c5bb6f6754a25e53f49b1990e4b/ttH_pat2bean_53x_2222_1_nqg.root'
 options.parseArguments() # get and parse the command line arguments 
 
 # === Parse Job Params === #
@@ -184,11 +189,11 @@ if( era == 2012 ):
     GenJetSource                        = cms.untracked.InputTag('BNproducer:ak5GenJets')
     TriggerSource						= cms.InputTag('BNproducer:HLT')
     RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices')
-    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectronsPFlow'+postfix)
-    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuonsPFlow'+postfix)
+    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectronsPFlow')
+    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuonsPFlow')
     RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus'+postfix)
-    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJetsPFlow'+postfix)
-    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETsPFlow'+postfix)
+    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJetsPFlow')
+    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETsPFlow')
 
 
 # === make analysis-specific selections for skims, fillers, etc. === #
@@ -197,6 +202,7 @@ SkimTriggerRequirements	= cms.vstring()
 
 NtupleFillers = cms.untracked.vstring(
         'Event',
+        'Vertex',
         #'GenLevel',
         'GenTau',
         'GenJet',
@@ -250,7 +256,9 @@ if era == 2012:
 
 # === Skim === #
 process.beanSkimmer = cms.EDFilter("BEANskimmer",
-    config = cms.untracked.string(skimParams)
+    config = cms.untracked.string(skimParams),
+    tauSrc = RecoTauSource,
+    jetSrc = RecoJetSource
 )
 
 # === Define and setup main module === #
@@ -263,6 +271,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 	FromBEAN							= cms.bool(era == 2012),
     TreeName							= cms.untracked.string(baseTreeName),
     UsePfLeptons                        = UsePfLeptons,
+    DataRange                           = cms.string(dataRange),
 
 	# === HL Trigger === # (not in use)
     #HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),
