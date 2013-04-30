@@ -79,20 +79,21 @@ void  Ntuplizer::beginJob() {
     );
 
 	// Declare and store here NtupleFillers
-	if(IsFillerEnabled("Event")){			ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
-	if(IsFillerEnabled("Vertex")){			ntupleFillers.push_back(new VertexFiller(*jobConfig, _Tree, &beanHelper));			}
-	if(IsFillerEnabled("GenLevel")){		ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree, &beanHelper));		}
-	if(IsFillerEnabled("GenTau")){			ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree, &beanHelper));			}
-	if(IsFillerEnabled("GenJet")){			ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree, &beanHelper));			}
-	if(IsFillerEnabled("Tau")){				ntupleFillers.push_back(new TauFiller(*jobConfig, _Tree, &beanHelper));				}
-	if(IsFillerEnabled("Electron")){		ntupleFillers.push_back(new ElectronFiller(*jobConfig, _Tree, &beanHelper));		}
-	if(IsFillerEnabled("Muon")){			ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree, &beanHelper));			}
-	if(IsFillerEnabled("Jet")){				ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree, &beanHelper));				}
-	if(IsFillerEnabled("Ditau")){			ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));			}
-	if(IsFillerEnabled("DitauLepton")){		ntupleFillers.push_back(new DitauLeptonFiller(*jobConfig, _Tree, &beanHelper));		}
-	if(IsFillerEnabled("DitauMuon")){		ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree, &beanHelper));		}
-	if(IsFillerEnabled("DitauElectron")){	ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree, &beanHelper));	}
-	if(IsFillerEnabled("Quick")){			ntupleFillers.push_back(new QuickFiller(*jobConfig, _Tree, &fs, &beanHelper));		}
+	if(IsFillerEnabled("Event")){				ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Vertex")){				ntupleFillers.push_back(new VertexFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("GenLevel")){			ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("GenTau")){				ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("GenJet")){				ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Tau")){					ntupleFillers.push_back(new TauFiller(*jobConfig, _Tree, &beanHelper));				}
+	if(IsFillerEnabled("Electron")){			ntupleFillers.push_back(new ElectronFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("Muon")){				ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Jet")){					ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree, &beanHelper));				}
+	if(IsFillerEnabled("Ditau")){				ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("DitauLepton")){			ntupleFillers.push_back(new DitauLeptonFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("DitauMuon")){			ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree, &beanHelper));		}
+	if(IsFillerEnabled("DitauElectron")){		ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree, &beanHelper));	}
+	if(IsFillerEnabled("TauLeptonLepton")){		ntupleFillers.push_back(new TauLeptonLeptonFiller(*jobConfig, _Tree, &beanHelper));	}
+	//if(IsFillerEnabled("Quick")){				ntupleFillers.push_back(new QuickFiller(*jobConfig, _Tree, &fs, &beanHelper));		}
 	
 }
 
@@ -136,7 +137,8 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNtauCollection BNtaus				= *(hBNtaus.product());
     BNjetCollection BNjets				= *(hBNjets.product());
 
-    if(_FromBEAN && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ return; }
+    //if(!_FromBEAN){ return; }
+	//if(!beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ return; }
 
 	// See if event meets skim trigger requirements
 	if((!_FromBEAN) && _ApplySkimTriggerRequirements){

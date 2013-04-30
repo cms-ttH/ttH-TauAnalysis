@@ -30,6 +30,7 @@
 #include "DitauElectronFiller.h"
 #include "TriggerFiller.h"
 #include "QuickFiller.h"
+#include "TauLeptonLeptonFiller.h"
 #include "VertexFiller.h"
 
 using namespace std;

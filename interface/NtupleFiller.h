@@ -42,6 +42,8 @@
 #include "ProductArea/BNcollections/interface/BNmet.h"
 #include "ProductArea/BNcollections/interface/BNelectron.h"
 #include "ProductArea/BNcollections/interface/BNmuon.h"
+#include "ProductArea/BNcollections/interface/BNlepton.h"
+#include "ProductArea/BNcollections/interface/BNleptonCollection.h"
 #include "ProductArea/BNcollections/interface/BNtau.h"
 #include "ProductArea/BNcollections/interface/BNphoton.h"
 #include "ProductArea/BNcollections/interface/BNsupercluster.h"
@@ -87,6 +89,8 @@ class NtupleFiller : public EDAnalyzer {
 
 		// === Helper functions === //
 		template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject1&, const BNObject2&, const BNCollection&, const double);
+		template <typename BNObject, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject&, const BNCollection&, const double);
+		template <typename BNObject, typename BNCollection> BNCollection GetUnmatchedLeptons(const BNObject&, const BNCollection&, const double);
 		template <typename PatObject1, typename PatObject2> double GetComboMass(const PatObject1&, const PatObject2&);
 		template <typename BNObject1, typename BNObject2> double GetComboMassBN(const BNObject1&, const BNObject2&);
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetComboMass(const PatObject1&, const PatObject2&, const MetObject&);
@@ -199,6 +203,22 @@ template <typename BNObject1, typename BNObject2, typename BNCollection> unsigne
 	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
 		if(	deltaR(It->eta, It->phi, iObject1.eta, iObject1.phi) > iMinDeltaR &&
 			deltaR(It->eta, It->phi, iObject2.eta, iObject2.phi) > iMinDeltaR ){ result++; }
+	}
+	return result;
+}
+
+template <typename BNObject, typename BNCollection> unsigned int NtupleFiller::GetNumberOfUnmatchedLeptons(const BNObject& iObject, const BNCollection& iCollection, const double iMinDeltaR){
+	unsigned int result = 0;
+	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
+		if(	deltaR(It->eta, It->phi, iObject.eta, iObject.phi) > iMinDeltaR ){ result++; }
+	}
+	return result;
+}
+
+template <typename BNObject, typename BNCollection> BNCollection NtupleFiller::GetUnmatchedLeptons(const BNObject& iObject, const BNCollection& iCollection, const double iMinDeltaR){
+	BNCollection result;
+	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
+		if(	deltaR((*It)->eta, (*It)->phi, iObject.eta, iObject.phi) > iMinDeltaR ){ result.push_back((*It)); }
 	}
 	return result;
 }
