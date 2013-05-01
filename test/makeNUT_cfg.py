@@ -18,7 +18,7 @@ tauMaxEta	= 9
 tauMinPt	= 10
 baseTreeName = 'TTbarHTauTau'
 dataRange   = 'All'
-#dataRange   = '2012D_PR'
+runExtraBEANhelpers = True
 
 # collection postfix for running on PF2PAT
 postfix = ''
@@ -272,6 +272,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     TreeName							= cms.untracked.string(baseTreeName),
     UsePfLeptons                        = UsePfLeptons,
     DataRange                           = cms.string(dataRange),
+    RunExtraBEANhelpers                 = cms.bool(runExtraBEANhelpers),
 
 	# === HL Trigger === # (not in use)
     #HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),
