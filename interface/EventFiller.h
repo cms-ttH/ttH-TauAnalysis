@@ -12,7 +12,7 @@ class EventFiller : public NtupleFiller {
 	// ----- Functions ----- //
 	public:
 		explicit EventFiller(const ParameterSet&);
-		explicit EventFiller(const ParameterSet&, TTree*, BEANhelper*);
+		explicit EventFiller(const ParameterSet&, TTree*, map<string,BEANhelper*>);
 		~EventFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 
@@ -24,26 +24,35 @@ class EventFiller : public NtupleFiller {
 
 	// ----- Variables ----- //
 	private:
-		double				_runNumber;
-		double				_eventNumber;
-		double				_lumiBlock;
-		bool				_isTauTauLepton;
+		double                  _runNumber;
+		double                  _eventNumber;
+		double                  _lumiBlock;
+		bool                    _isTauTauLepton;
 
-		double				_MET;
-		double				_METphi;
+		double                  _MET;
+		double                  _METphi;
 
-		double				_PUweight;
-		double				_PUweightUp;
-		double				_PUweightDown;
-		
-        double				_topPtWeight;
-        double				_topPtWeightUp;
-        double				_topPtWeightDown;
+		double                  _PUweight;
+		double                  _PUweightUp;
+		double                  _PUweightDown;
+		double                  _PUweight2012A;
+		double                  _PUweight2012B;
+		double                  _PUweight2012C;
+		double                  _PUweight2012D;
+		double                  _PUweight2012AB;
+		double                  _PUweight2012BC;
+		double                  _PUweight2012CD;
+		double                  _PUweight2012ABC;
+		map<string,BEANhelper*> _beanHelpers;
+        
+		double                  _topPtWeight;
+		double                  _topPtWeightUp;
+		double                  _topPtWeightDown;
 
-        bool                _isTauEvent;
+		bool                    _isTauEvent;
 
-        double              _q2WeightUp;
-        double              _q2WeightDown;
+		double                  _q2WeightUp;
+		double                  _q2WeightDown;
 };
 
 #endif
