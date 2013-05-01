@@ -81,8 +81,10 @@ class Ntuplizer : public EDAnalyzer {
 		string _TreeName;
         bool _UsePfLeptons;
 		BEANhelper beanHelper;
+		map<string,BEANhelper*> beanHelpers;
         sysType::sysType _sysType;
         string _DataRange;
+        bool _RunExtraBEANhelpers;
 
         // required for TTL-event check
         InputTag _RecoJetSource;

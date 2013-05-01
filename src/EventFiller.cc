@@ -11,7 +11,8 @@ EventFiller::EventFiller(const ParameterSet& iConfig) : NtupleFiller(){
 	cerr << "Must not use default constructor of " << __FILE__ << endl; exit(1); 
 }
 
-EventFiller::EventFiller(const ParameterSet& iConfig, TTree* iTree, BEANhelper* iBEANhelper) : NtupleFiller(iConfig, iBEANhelper) {
+EventFiller::EventFiller(const ParameterSet& iConfig, TTree* iTree, map<string,BEANhelper*> iBEANhelper) : NtupleFiller(iConfig, iBEANhelper[string("2012ABCD")]) {
+    _beanHelpers = iBEANhelper;
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -42,6 +43,18 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_MET", &_MET);
 	_Tree->Branch("Ev_METphi", &_METphi);
 	_Tree->Branch("Ev_IsTauEvent", &_isTauEvent);
+
+    if(_beanHelpers.size() > 1) {
+        _Tree->Branch("Ev_puWeight2012A", &_PUweight2012A);
+        _Tree->Branch("Ev_puWeight2012B", &_PUweight2012B);
+        _Tree->Branch("Ev_puWeight2012C", &_PUweight2012C);
+        _Tree->Branch("Ev_puWeight2012D", &_PUweight2012D);
+        _Tree->Branch("Ev_puWeight2012AB", &_PUweight2012AB);
+        _Tree->Branch("Ev_puWeight2012BC", &_PUweight2012BC);
+        _Tree->Branch("Ev_puWeight2012CD", &_PUweight2012CD);
+        _Tree->Branch("Ev_puWeight2012ABC", &_PUweight2012ABC);
+    }
+
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -61,6 +74,17 @@ void EventFiller::ClearVectors(){
     _isTauEvent                 = false;
 	_MET						= 0;
 	_METphi						= 0;
+    
+    if(_beanHelpers.size() > 1) {
+        _PUweight2012A   = 1.0;
+        _PUweight2012B   = 1.0;
+        _PUweight2012C   = 1.0;
+        _PUweight2012D   = 1.0;
+        _PUweight2012AB  = 1.0;
+        _PUweight2012BC  = 1.0;
+        _PUweight2012CD  = 1.0;
+        _PUweight2012ABC = 1.0;
+    }
 
 }
 
@@ -79,6 +103,17 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
 	_PUweightUp				= beanHelper->GetPUweightUp(_BNevents.begin()->numTruePV);
 	_PUweightDown			= beanHelper->GetPUweightDown(_BNevents.begin()->numTruePV);
+
+    if(_beanHelpers.size() > 1) {
+        _PUweight2012A   = _beanHelpers["2012A"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012B   = _beanHelpers["2012B"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012C   = _beanHelpers["2012C"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012D   = _beanHelpers["2012D"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012AB  = _beanHelpers["2012AB"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012BC  = _beanHelpers["2012BC"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012CD  = _beanHelpers["2012CD"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012ABC = _beanHelpers["2012ABC"]->GetPUweight(_BNevents.begin()->numTruePV);
+    }
 
 	// MET
 	BNjetCollection correctedJets							= beanHelper->GetCorrectedJets(_BNjets, _sysType);

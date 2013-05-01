@@ -19,6 +19,7 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
 	_EraRelease						= iConfig.getParameter<string>("EraRelease");
     _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
     _DataRange                      = ( iConfig.exists("DataRange") ) ? iConfig.getParameter<string>("DataRange") : "All";
+    _RunExtraBEANhelpers            = ( iConfig.exists("RunExtraBEANhelpers") ) ? iConfig.getParameter<bool>("RunExtraBEANhelpers") : false;
 
 	// Name of the ntuple tree
 	_TreeName						= iConfig.getUntrackedParameter<std::string>("TreeName");
@@ -70,16 +71,100 @@ void  Ntuplizer::beginJob() {
 	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
 	beanHelper.SetUp(eraForBEANhelper, // 2011, 2012_52x, 2012_53x
             atoi(GetAnalysisTypeParameter(3).c_str()), // sample number
-            false, // is lepton+jets
+            false, // is lepton+jets (this is [mostly] correct; Nil is fixing it)
             SampleTypeContains("data"), // is data
             std::string("SingleMu"), // data set
             false, // do CSV reshaping
             _UsePfLeptons, 
             _DataRange // 2012A_13July,2012A_06Aug,2012B_13July,2012C_PR,2012C_24Aug,2012D_PR,All,all
     );
+    map<string,BEANhelper*> beanHelpers;
+    beanHelpers["2012ABCD"] = &beanHelper;
+    if(_RunExtraBEANhelpers) {
+        beanHelpers["2012A"] = new BEANhelper();
+        beanHelpers["2012A"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012A_13July,2012A_06Aug")
+        );
+        beanHelpers["2012AB"] = new BEANhelper();
+        beanHelpers["2012AB"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012A_13July,2012A_06Aug,2012B_13July")
+        );
+        beanHelpers["2012B"] = new BEANhelper();
+        beanHelpers["2012B"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012B_13July")
+        );
+        beanHelpers["2012C"] = new BEANhelper();
+        beanHelpers["2012C"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012C_PR,2012C_24Aug")
+        );
+        beanHelpers["2012ABC"] = new BEANhelper();
+        beanHelpers["2012ABC"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012A_13July,2012A_06Aug,2012B_13July,2012C_PR,2012C_24Aug")
+        );
+        beanHelpers["2012BC"] = new BEANhelper();
+        beanHelpers["2012BC"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012B_13July,2012C_PR,2012C_24Aug")
+        );
+        beanHelpers["2012D"] = new BEANhelper();
+        beanHelpers["2012D"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012D_PR")
+        );
+        beanHelpers["2012CD"] = new BEANhelper();
+        beanHelpers["2012CD"]->SetUp(eraForBEANhelper,
+            atoi(GetAnalysisTypeParameter(3).c_str()),
+            false, 
+            SampleTypeContains("data"),
+            std::string("SingleMu"), 
+            false, 
+            _UsePfLeptons, 
+            string("2012C_PR,2012C_24Aug,2012D_PR")
+        );
+    }
 
 	// Declare and store here NtupleFillers
-	if(IsFillerEnabled("Event")){				ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, &beanHelper));			}
+	if(IsFillerEnabled("Event")){				ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, beanHelpers));			}
 	if(IsFillerEnabled("Vertex")){				ntupleFillers.push_back(new VertexFiller(*jobConfig, _Tree, &beanHelper));			}
 	if(IsFillerEnabled("GenLevel")){			ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree, &beanHelper));		}
 	if(IsFillerEnabled("GenTau")){				ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree, &beanHelper));			}
@@ -99,7 +184,10 @@ void  Ntuplizer::beginJob() {
 
 // === Method called once each job just after ending the event loop === //
 void Ntuplizer::endJob(){
-	
+
+    // delete extra BEANhelpers
+    if( _RunExtraBEANhelpers ) 
+        for( map<string,BEANhelper*>::iterator it = beanHelpers.begin(); it != beanHelpers.end(); ++it) delete it->second;
 	// Delete NtupleFillers
 	for(unsigned int n=0; n<ntupleFillers.size(); n++){ delete ntupleFillers.at(n); ntupleFillers.at(n) = NULL; }
 
