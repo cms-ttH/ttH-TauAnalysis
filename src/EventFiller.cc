@@ -97,7 +97,6 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_runNumber			= iEvent.id().run();
 	_eventNumber		= iEvent.id().event();
 	_lumiBlock			= iEvent.id().luminosityBlock();
-	_isTauTauLepton		= beanHelper->IsTauTauLeptonEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
 	// Pileup weights
 	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
@@ -129,7 +128,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     _topPtWeightDown = beanHelper->GetTopPtweightDown(_BNmcparticles);
     
     // tau
-    _isTauEvent         = beanHelper->IsTauTauLeptonEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
+    _isTauEvent         = beanHelper->IsTauEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
     // Q^2 weights
     _q2WeightUp = beanHelper->GetQ2ScaleUp(*(_BNevents.begin()));

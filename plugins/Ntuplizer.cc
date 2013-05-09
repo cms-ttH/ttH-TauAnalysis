@@ -71,7 +71,7 @@ void  Ntuplizer::beginJob() {
 	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
 	beanHelper.SetUp(eraForBEANhelper, // 2011, 2012_52x, 2012_53x
             atoi(GetAnalysisTypeParameter(3).c_str()), // sample number
-            false, // is lepton+jets (this is [mostly] correct; Nil is fixing it)
+            analysisType::Tau,
             SampleTypeContains("data"), // is data
             std::string("SingleMu"), // data set
             false, // do CSV reshaping
@@ -84,7 +84,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012A"] = new BEANhelper();
         beanHelpers["2012A"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -94,7 +94,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012AB"] = new BEANhelper();
         beanHelpers["2012AB"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -104,7 +104,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012B"] = new BEANhelper();
         beanHelpers["2012B"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -114,7 +114,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012C"] = new BEANhelper();
         beanHelpers["2012C"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -124,7 +124,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012ABC"] = new BEANhelper();
         beanHelpers["2012ABC"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -134,7 +134,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012BC"] = new BEANhelper();
         beanHelpers["2012BC"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -144,7 +144,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012D"] = new BEANhelper();
         beanHelpers["2012D"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -154,7 +154,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012CD"] = new BEANhelper();
         beanHelpers["2012CD"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            false, 
+            analysisType::Tau,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -226,7 +226,7 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNjetCollection BNjets				= *(hBNjets.product());
 
     //if(!_FromBEAN){ return; }
-	//if(!beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ return; }
+	if(!beanHelper.IsTauEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ return; }
 
 	// See if event meets skim trigger requirements
 	if((!_FromBEAN) && _ApplySkimTriggerRequirements){
