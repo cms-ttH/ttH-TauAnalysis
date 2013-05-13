@@ -478,8 +478,8 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 
 
 			// Get the two leptons in question
-			BNlepton* Lepton1 = looseLeptons.at(0);
-			BNlepton* Lepton2 = looseLeptons.at(1);
+			BNlepton* Lepton1 = cleanLooseLeptons.at(0);
+			BNlepton* Lepton2 = cleanLooseLeptons.at(1);
 
 
 			// Jets and MET and related quantities
