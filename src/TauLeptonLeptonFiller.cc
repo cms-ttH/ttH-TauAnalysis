@@ -648,13 +648,13 @@ void TauLeptonLeptonFiller::FillLepton1(const BNlepton* iLepton){
 			_Lepton1RelIso.push_back(beanHelper->GetMuonRelIso(*Muon));
 			_Lepton1IsLoose.push_back(beanHelper->IsLooseMuon(*Muon));
 			_Lepton1IsTight.push_back(beanHelper->IsTightMuon(*Muon));
-			_Lepton1EventWeight.push_back(beanHelper->GetMuonSF(*Muon));
+			_Lepton1EventWeight.push_back(beanHelper->GetMuonSF(*Muon, (beanHelper->IsTightMuon(*Muon) ? muonID::muonTight : muonID::muonLoose)));
 		}else if(iLepton->isElectron){
 			BNelectron* Electron = (BNelectron*)iLepton;
 			_Lepton1RelIso.push_back(beanHelper->GetElectronRelIso(*Electron));
 			_Lepton1IsLoose.push_back(beanHelper->IsLooseElectron(*Electron));
 			_Lepton1IsTight.push_back(beanHelper->IsTightElectron(*Electron));
-			_Lepton1EventWeight.push_back(beanHelper->GetElectronSF(*Electron));
+			_Lepton1EventWeight.push_back(beanHelper->GetElectronSF(*Electron, (beanHelper->IsTightElectron(*Electron) ? electronID::electronTight : electronID::electronLoose)));
 		}
 
 		// Provenance
@@ -702,13 +702,13 @@ void TauLeptonLeptonFiller::FillLepton2(const BNlepton* iLepton){
 			_Lepton2RelIso.push_back(beanHelper->GetMuonRelIso(*Muon));
 			_Lepton2IsLoose.push_back(beanHelper->IsLooseMuon(*Muon));
 			_Lepton2IsTight.push_back(beanHelper->IsTightMuon(*Muon));
-			_Lepton2EventWeight.push_back(beanHelper->GetMuonSF(*Muon));
+			_Lepton2EventWeight.push_back(beanHelper->GetMuonSF(*Muon, (beanHelper->IsTightMuon(*Muon) ? muonID::muonTight : muonID::muonLoose)));
 		}else if(iLepton->isElectron){
 			BNelectron* Electron = (BNelectron*)iLepton;
 			_Lepton2RelIso.push_back(beanHelper->GetElectronRelIso(*Electron));
 			_Lepton2IsLoose.push_back(beanHelper->IsLooseElectron(*Electron));
 			_Lepton2IsTight.push_back(beanHelper->IsTightElectron(*Electron));
-			_Lepton2EventWeight.push_back(beanHelper->GetElectronSF(*Electron));
+			_Lepton2EventWeight.push_back(beanHelper->GetElectronSF(*Electron, (beanHelper->IsTightElectron(*Electron) ? electronID::electronTight : electronID::electronLoose)));
 		}
 
 		// Provenance
