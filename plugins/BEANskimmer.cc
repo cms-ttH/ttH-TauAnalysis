@@ -78,7 +78,7 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     int numTightTags = 0;
     int numJets = 0;
 
-    if( pfjets.size() < 3 ) return false;
+    if( pfjets.size() < 4 ) return false;
 
     for( int i=0; i<int(pfjets.size()); i++ ){
         if( pfjets.at(i).pt < 30 ) continue;
