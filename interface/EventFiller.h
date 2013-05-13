@@ -27,7 +27,6 @@ class EventFiller : public NtupleFiller {
 		double                  _runNumber;
 		double                  _eventNumber;
 		double                  _lumiBlock;
-		bool                    _isTauTauLepton;
 
 		double                  _MET;
 		double                  _METphi;
