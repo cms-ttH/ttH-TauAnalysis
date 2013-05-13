@@ -66,6 +66,8 @@ void  Ntuplizer::beginJob() {
 	_EventsRead	= fs->make<TH1I>("EventsRead", "EventsRead",1,0,1);
 	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
 
+    _numFailedTauEventCheck = 0;
+
 
 	// Instantiate and set up beanHelper
 	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
@@ -191,6 +193,8 @@ void Ntuplizer::endJob(){
 	// Delete NtupleFillers
 	for(unsigned int n=0; n<ntupleFillers.size(); n++){ delete ntupleFillers.at(n); ntupleFillers.at(n) = NULL; }
 
+    cout << endl <<_numFailedTauEventCheck << " events failed BEANhelper::IsTauEvent" << endl << endl;
+
 }
 
 
@@ -225,8 +229,7 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNtauCollection BNtaus				= *(hBNtaus.product());
     BNjetCollection BNjets				= *(hBNjets.product());
 
-    //if(!_FromBEAN){ return; }
-	if(!beanHelper.IsTauEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ return; }
+	if(!beanHelper.IsTauEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ _numFailedTauEventCheck++; return; }
 
 	// See if event meets skim trigger requirements
 	if((!_FromBEAN) && _ApplySkimTriggerRequirements){

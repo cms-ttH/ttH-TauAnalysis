@@ -91,6 +91,7 @@ class Ntuplizer : public EDAnalyzer {
         InputTag _RecoTauSource;
         InputTag _RecoMuonSource;
         InputTag _RecoElectronSource;
+        int _numFailedTauEventCheck;
 
 		// === Trigger Inputs === //
 		bool _ApplySkimTriggerRequirements;
