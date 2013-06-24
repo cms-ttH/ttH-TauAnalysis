@@ -205,6 +205,20 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		vector<unsigned int>	_NumCleanNonCSVLbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVMbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVTbtagJets;
+
+        vector<float>	        _CSVeventWeight;
+        vector<float>	        _CSVeventWeightLFup;
+        vector<float>	        _CSVeventWeightLFdown;
+        vector<float>	        _CSVeventWeightHFup;
+        vector<float>	        _CSVeventWeightHFdown;
+        vector<float>	        _CSVeventWeightLFStats1up;
+        vector<float>	        _CSVeventWeightLFStats1down;
+        vector<float>	        _CSVeventWeightHFStats1up;
+        vector<float>	        _CSVeventWeightHFStats1down;
+        vector<float>	        _CSVeventWeightLFStats2up;
+        vector<float>	        _CSVeventWeightLFStats2down;
+        vector<float>	        _CSVeventWeightHFStats2up;
+        vector<float>	        _CSVeventWeightHFStats2down;
 		
 };
 
