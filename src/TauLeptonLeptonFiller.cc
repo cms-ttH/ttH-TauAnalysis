@@ -208,6 +208,21 @@ void TauLeptonLeptonFiller::SetupBranches(){
 	_Tree->Branch("TLL_NumCleanNonCSVLbtagJets", &_NumCleanNonCSVLbtagJets);
 	_Tree->Branch("TLL_NumCleanNonCSVMbtagJets", &_NumCleanNonCSVMbtagJets);
 	_Tree->Branch("TLL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
+
+    // === Weights === //
+    _Tree->Branch("TLL_CSVeventWeight",&_CSVeventWeight);
+    _Tree->Branch("TLL_CSVeventWeightHFdown",&_CSVeventWeightHFdown);
+    _Tree->Branch("TLL_CSVeventWeightHFup",&_CSVeventWeightHFup);
+    _Tree->Branch("TLL_CSVeventWeightLFdown",&_CSVeventWeightLFdown);
+    _Tree->Branch("TLL_CSVeventWeightLFup",&_CSVeventWeightLFup);
+    _Tree->Branch("TLL_CSVeventWeightHFStats1down",&_CSVeventWeightHFStats1down);
+    _Tree->Branch("TLL_CSVeventWeightHFStats1up",&_CSVeventWeightHFStats1up);
+    _Tree->Branch("TLL_CSVeventWeightLFStats1down",&_CSVeventWeightLFStats1down);
+    _Tree->Branch("TLL_CSVeventWeightLFStats1up",&_CSVeventWeightLFStats1up);
+    _Tree->Branch("TLL_CSVeventWeightHFStats2down",&_CSVeventWeightHFStats2down);
+    _Tree->Branch("TLL_CSVeventWeightHFStats2up",&_CSVeventWeightHFStats2up);
+    _Tree->Branch("TLL_CSVeventWeightLFStats2down",&_CSVeventWeightLFStats2down);
+    _Tree->Branch("TLL_CSVeventWeightLFStats2up",&_CSVeventWeightLFStats2up);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -383,6 +398,23 @@ void TauLeptonLeptonFiller::ClearVectors(){
 	_NumCleanNonCSVLbtagJets						.clear();
 	_NumCleanNonCSVMbtagJets						.clear();
 	_NumCleanNonCSVTbtagJets						.clear();
+
+	// === Event weights === //
+	_CSVeventWeight                                     .clear();
+	_CSVeventWeightLFup                                 .clear();
+	_CSVeventWeightLFdown                               .clear();
+	_CSVeventWeightHFup                                 .clear();
+	_CSVeventWeightHFdown                               .clear();
+
+	_CSVeventWeightLFStats1up                           .clear();
+	_CSVeventWeightLFStats1down                         .clear();
+	_CSVeventWeightHFStats1up                           .clear();
+	_CSVeventWeightHFStats1down                         .clear();
+
+	_CSVeventWeightLFStats2up                           .clear();
+	_CSVeventWeightLFStats2down                         .clear();
+	_CSVeventWeightHFStats2up                           .clear();
+	_CSVeventWeightHFStats2down                         .clear();
 }
 
 // === Fill ntuple === //
@@ -513,6 +545,24 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 			_NumCleanNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
 			_NumCleanNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
 			_NumCleanNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+
+			// CSV weights for systematics
+			if( _sysType == sysType::NA ) {
+				_CSVeventWeightLFup.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFup));
+				_CSVeventWeightLFdown.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFdown));
+				_CSVeventWeightHFup.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFup));
+				_CSVeventWeightHFdown.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFdown));
+
+				_CSVeventWeightLFStats1up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFStats1up));
+				_CSVeventWeightLFStats1down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFStats1down));
+				_CSVeventWeightHFStats1up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFStats1up));
+				_CSVeventWeightHFStats1down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFStats1down));
+
+				_CSVeventWeightLFStats2up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFStats2up));
+				_CSVeventWeightLFStats2down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFStats2down));
+				_CSVeventWeightHFStats2up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFStats2up));
+				_CSVeventWeightHFStats2down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFStats2down));
+			}
 
 
 			// TLL stuff
