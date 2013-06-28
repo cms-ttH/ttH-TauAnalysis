@@ -1,3 +1,4 @@
+// vim: sta:et:sw=4:ts=4
 // Authors: Nil Valls
 
 #ifndef _DitauLeptonFiller_h
@@ -319,21 +320,24 @@ class DitauLeptonFiller : public NtupleFiller {
 		vector<unsigned int>	_NumCleanNonCSVMbtagJets;
 		vector<unsigned int>	_NumCleanNonCSVTbtagJets;
 		
-        vector<float>	        _LeptonEventWeight;
-        vector<float>	        _CSVeventWeight;
-        vector<float>	        _CSVeventWeightLFup;
-        vector<float>	        _CSVeventWeightLFdown;
-        vector<float>	        _CSVeventWeightHFup;
-        vector<float>	        _CSVeventWeightHFdown;
-        vector<float>	        _CSVeventWeightLFStats1up;
-        vector<float>	        _CSVeventWeightLFStats1down;
-        vector<float>	        _CSVeventWeightHFStats1up;
-        vector<float>	        _CSVeventWeightHFStats1down;
-        vector<float>	        _CSVeventWeightLFStats2up;
-        vector<float>	        _CSVeventWeightLFStats2down;
-        vector<float>	        _CSVeventWeightHFStats2up;
-        vector<float>	        _CSVeventWeightHFStats2down;
-		
+        vector<float> _LeptonEventWeight;
+        vector<float> _CSVeventWeight;
+        vector<float> _CSVeventWeightLFup;
+        vector<float> _CSVeventWeightLFdown;
+        vector<float> _CSVeventWeightHFup;
+        vector<float> _CSVeventWeightHFdown;
+        vector<float> _CSVeventWeightLFStats1up;
+        vector<float> _CSVeventWeightLFStats1down;
+        vector<float> _CSVeventWeightHFStats1up;
+        vector<float> _CSVeventWeightHFStats1down;
+        vector<float> _CSVeventWeightLFStats2up;
+        vector<float> _CSVeventWeightLFStats2down;
+        vector<float> _CSVeventWeightHFStats2up;
+        vector<float> _CSVeventWeightHFStats2down;
+        vector<float> _CSVeventWeightCErr1up;
+        vector<float> _CSVeventWeightCErr1down;
+        vector<float> _CSVeventWeightCErr2up;
+        vector<float> _CSVeventWeightCErr2down;
 };
 
 #endif
