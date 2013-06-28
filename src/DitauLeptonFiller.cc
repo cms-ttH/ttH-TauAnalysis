@@ -267,20 +267,24 @@ void DitauLeptonFiller::SetupBranches(){
 	_Tree->Branch("TTL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
 	
     // === Combo weights === //
-	_Tree->Branch("TTL_LeptonEventWeight",&_LeptonEventWeight);
-    _Tree->Branch("TTL_CSVeventWeight",&_CSVeventWeight);
-    _Tree->Branch("TTL_CSVeventWeightHFdown",&_CSVeventWeightHFdown);
-    _Tree->Branch("TTL_CSVeventWeightHFup",&_CSVeventWeightHFup);
-    _Tree->Branch("TTL_CSVeventWeightLFdown",&_CSVeventWeightLFdown);
-    _Tree->Branch("TTL_CSVeventWeightLFup",&_CSVeventWeightLFup);
-    _Tree->Branch("TTL_CSVeventWeightHFStats1down",&_CSVeventWeightHFStats1down);
-    _Tree->Branch("TTL_CSVeventWeightHFStats1up",&_CSVeventWeightHFStats1up);
-    _Tree->Branch("TTL_CSVeventWeightLFStats1down",&_CSVeventWeightLFStats1down);
-    _Tree->Branch("TTL_CSVeventWeightLFStats1up",&_CSVeventWeightLFStats1up);
-    _Tree->Branch("TTL_CSVeventWeightHFStats2down",&_CSVeventWeightHFStats2down);
-    _Tree->Branch("TTL_CSVeventWeightHFStats2up",&_CSVeventWeightHFStats2up);
-    _Tree->Branch("TTL_CSVeventWeightLFStats2down",&_CSVeventWeightLFStats2down);
-    _Tree->Branch("TTL_CSVeventWeightLFStats2up",&_CSVeventWeightLFStats2up);
+    _Tree->Branch("TTL_LeptonEventWeight", &_LeptonEventWeight);
+    _Tree->Branch("TTL_CSVeventWeight", &_CSVeventWeight);
+    _Tree->Branch("TTL_CSVeventWeightHFdown", &_CSVeventWeightHFdown);
+    _Tree->Branch("TTL_CSVeventWeightHFup", &_CSVeventWeightHFup);
+    _Tree->Branch("TTL_CSVeventWeightLFdown", &_CSVeventWeightLFdown);
+    _Tree->Branch("TTL_CSVeventWeightLFup", &_CSVeventWeightLFup);
+    _Tree->Branch("TTL_CSVeventWeightHFStats1down", &_CSVeventWeightHFStats1down);
+    _Tree->Branch("TTL_CSVeventWeightHFStats1up", &_CSVeventWeightHFStats1up);
+    _Tree->Branch("TTL_CSVeventWeightLFStats1down", &_CSVeventWeightLFStats1down);
+    _Tree->Branch("TTL_CSVeventWeightLFStats1up", &_CSVeventWeightLFStats1up);
+    _Tree->Branch("TTL_CSVeventWeightHFStats2down", &_CSVeventWeightHFStats2down);
+    _Tree->Branch("TTL_CSVeventWeightHFStats2up", &_CSVeventWeightHFStats2up);
+    _Tree->Branch("TTL_CSVeventWeightLFStats2down", &_CSVeventWeightLFStats2down);
+    _Tree->Branch("TTL_CSVeventWeightLFStats2up", &_CSVeventWeightLFStats2up);
+    _Tree->Branch("TTL_CSVeventWeightCErr1up", &_CSVeventWeightCErr1up);
+    _Tree->Branch("TTL_CSVeventWeightCErr1down", &_CSVeventWeightCErr1down);
+    _Tree->Branch("TTL_CSVeventWeightCErr2up", &_CSVeventWeightCErr2up);
+    _Tree->Branch("TTL_CSVeventWeightCErr2down", &_CSVeventWeightCErr2down);
 }
 
 // === Clear vectors that will be used to fill ntuple === //
@@ -514,24 +518,29 @@ void DitauLeptonFiller::ClearVectors(){
 	_NumCleanNonCSVLbtagJets                            .clear();
 	_NumCleanNonCSVMbtagJets                            .clear();
 	_NumCleanNonCSVTbtagJets                            .clear();
-    
-	// === Combo weights === //
-    _LeptonEventWeight                                  .clear();
-	_CSVeventWeight                                     .clear();
-	_CSVeventWeightLFup                                 .clear();
-	_CSVeventWeightLFdown                               .clear();
-	_CSVeventWeightHFup                                 .clear();
-	_CSVeventWeightHFdown                               .clear();
 
-	_CSVeventWeightLFStats1up                           .clear();
-	_CSVeventWeightLFStats1down                         .clear();
-	_CSVeventWeightHFStats1up                           .clear();
-	_CSVeventWeightHFStats1down                         .clear();
+    // === Combo weights === //
+    _LeptonEventWeight.clear();
+    _CSVeventWeight.clear();
+    _CSVeventWeightLFup.clear();
+    _CSVeventWeightLFdown.clear();
+    _CSVeventWeightHFup.clear();
+    _CSVeventWeightHFdown.clear();
 
-	_CSVeventWeightLFStats2up                           .clear();
-	_CSVeventWeightLFStats2down                         .clear();
-	_CSVeventWeightHFStats2up                           .clear();
-	_CSVeventWeightHFStats2down                         .clear();
+    _CSVeventWeightLFStats1up.clear();
+    _CSVeventWeightLFStats1down.clear();
+    _CSVeventWeightHFStats1up.clear();
+    _CSVeventWeightHFStats1down.clear();
+
+    _CSVeventWeightLFStats2up.clear();
+    _CSVeventWeightLFStats2down.clear();
+    _CSVeventWeightHFStats2up.clear();
+    _CSVeventWeightHFStats2down.clear();
+
+    _CSVeventWeightCErr1up.clear();
+    _CSVeventWeightCErr1down.clear();
+    _CSVeventWeightCErr2up.clear();
+    _CSVeventWeightCErr2down.clear();
 }
 
 // === Fill ntuple === //
@@ -698,7 +707,7 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
                 _CSVeventWeight.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, _sysType));
                
                 // CSV weights for systematics
-                if( _sysType == sysType::NA ) {
+                if (_sysType == sysType::NA) {
                     _CSVeventWeightLFup.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFup));
                     _CSVeventWeightLFdown.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFdown));
                     _CSVeventWeightHFup.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFup));
@@ -713,6 +722,11 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
                     _CSVeventWeightLFStats2down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFStats2down));
                     _CSVeventWeightHFStats2up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFStats2up));
                     _CSVeventWeightHFStats2down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVHFStats2down));
+
+                    _CSVeventWeightCErr1up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVCErr1up));
+                    _CSVeventWeightCErr1down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVCErr1down));
+                    _CSVeventWeightCErr2up.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVCErr2up));
+                    _CSVeventWeightCErr2down.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVCErr2down));
                 }
                 
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
