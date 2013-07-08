@@ -181,31 +181,32 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		vector<int>				_Lepton2GenMatchGrandmother10Status;
 		vector<int>				_Lepton2GenMatchGrandmother11Status;
 
-		// === Combo === //
-		vector<float>			_TauLepton1VisibleMass;
-		vector<float>			_TauLepton2VisibleMass;
-		vector<float>			_TauLepton1METMass;
-		vector<float>			_TauLepton2METMass;
-		vector<float>			_Lepton1Lepton2VisibleMass;
-		vector<float>			_TauLepton1CosDeltaPhi;
-		vector<float>			_TauLepton2CosDeltaPhi;
-		vector<float>			_Lepton1Lepton2CosDeltaPhi;
-		vector<float>			_TauLepton1DeltaR;
-		vector<float>			_TauLepton2DeltaR;
-		vector<float>			_Lepton1Lepton2DeltaR;
-		vector<float>			_HT;
-		vector<unsigned int>	_NumCSVLbtagJets;
-		vector<unsigned int>	_NumCSVMbtagJets;
-		vector<unsigned int>	_NumCSVTbtagJets;
-		vector<unsigned int>	_NumNonCSVLbtagJets;
-		vector<unsigned int>	_NumNonCSVMbtagJets;
-		vector<unsigned int>	_NumNonCSVTbtagJets;
-		vector<unsigned int>	_NumCleanCSVLbtagJets;
-		vector<unsigned int>	_NumCleanCSVMbtagJets;
-		vector<unsigned int>	_NumCleanCSVTbtagJets;
-		vector<unsigned int>	_NumCleanNonCSVLbtagJets;
-		vector<unsigned int>	_NumCleanNonCSVMbtagJets;
-		vector<unsigned int>	_NumCleanNonCSVTbtagJets;
+        // === Combo === //
+        vector<float> _TauLepton1VisibleMass;
+        vector<float> _TauLepton2VisibleMass;
+        vector<float> _TauLepton1METMass;
+        vector<float> _TauLepton2METMass;
+        vector<float> _Lepton1Lepton2VisibleMass;
+        vector<float> _TauLepton1CosDeltaPhi;
+        vector<float> _TauLepton2CosDeltaPhi;
+        vector<float> _Lepton1Lepton2CosDeltaPhi;
+        vector<float> _TauLepton1DeltaR;
+        vector<float> _TauLepton2DeltaR;
+        vector<float> _Lepton1Lepton2DeltaR;
+        vector<float> _HT;
+        vector<unsigned int> _NumCSVLbtagJets;
+        vector<unsigned int> _NumCSVMbtagJets;
+        vector<unsigned int> _NumCSVTbtagJets;
+        vector<unsigned int> _NumNonCSVLbtagJets;
+        vector<unsigned int> _NumNonCSVMbtagJets;
+        vector<unsigned int> _NumNonCSVTbtagJets;
+        vector<unsigned int> _NumCleanCSVLbtagJets;
+        vector<unsigned int> _NumCleanCSVMbtagJets;
+        vector<unsigned int> _NumCleanCSVTbtagJets;
+        vector<unsigned int> _NumCleanNonCSVLbtagJets;
+        vector<unsigned int> _NumCleanNonCSVMbtagJets;
+        vector<unsigned int> _NumCleanNonCSVTbtagJets;
+        vector<unsigned int> _CleanJetIndices;
 
         vector<float> _CSVeventWeight;
         vector<float> _CSVeventWeightLFup;

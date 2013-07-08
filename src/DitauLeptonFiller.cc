@@ -245,27 +245,28 @@ void DitauLeptonFiller::SetupBranches(){
 	_Tree->Branch("TTL_LeptonGenMatchGrandmother10Status", &_LeptonGenMatchGrandmother10Status);
 	_Tree->Branch("TTL_LeptonGenMatchGrandmother11Status", &_LeptonGenMatchGrandmother11Status);
 
-	// === Combo === //
-	_Tree->Branch("TTL_DitauVisibleMass", &_DitauVisibleMass);
-	_Tree->Branch("TTL_DitauMETMass", &_DitauMETMass);
-	_Tree->Branch("TTL_DitauCosDeltaPhi", &_DitauCosDeltaPhi);
-	_Tree->Branch("TTL_DitauDeltaR", 	&_DitauDeltaR);
-	_Tree->Branch("TTL_Tau1LeptonDeltaR", &_Tau1LeptonDeltaR);
-	_Tree->Branch("TTL_Tau2LeptonDeltaR", &_Tau2LeptonDeltaR);
-	_Tree->Branch("TTL_HT", &_HT);
-	_Tree->Branch("TTL_NumCSVLbtagJets", &_NumCSVLbtagJets);
-	_Tree->Branch("TTL_NumCSVMbtagJets", &_NumCSVMbtagJets);
-	_Tree->Branch("TTL_NumCSVTbtagJets", &_NumCSVTbtagJets);
-	_Tree->Branch("TTL_NumNonCSVLbtagJets", &_NumNonCSVLbtagJets);
-	_Tree->Branch("TTL_NumNonCSVMbtagJets", &_NumNonCSVMbtagJets);
-	_Tree->Branch("TTL_NumNonCSVTbtagJets", &_NumNonCSVTbtagJets);
-	_Tree->Branch("TTL_NumCleanCSVLbtagJets", &_NumCleanCSVLbtagJets);
-	_Tree->Branch("TTL_NumCleanCSVMbtagJets", &_NumCleanCSVMbtagJets);
-	_Tree->Branch("TTL_NumCleanCSVTbtagJets", &_NumCleanCSVTbtagJets);
-	_Tree->Branch("TTL_NumCleanNonCSVLbtagJets", &_NumCleanNonCSVLbtagJets);
-	_Tree->Branch("TTL_NumCleanNonCSVMbtagJets", &_NumCleanNonCSVMbtagJets);
-	_Tree->Branch("TTL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
-	
+    // === Combo === //
+    _Tree->Branch("TTL_DitauVisibleMass", &_DitauVisibleMass);
+    _Tree->Branch("TTL_DitauMETMass", &_DitauMETMass);
+    _Tree->Branch("TTL_DitauCosDeltaPhi", &_DitauCosDeltaPhi);
+    _Tree->Branch("TTL_DitauDeltaR", &_DitauDeltaR);
+    _Tree->Branch("TTL_Tau1LeptonDeltaR", &_Tau1LeptonDeltaR);
+    _Tree->Branch("TTL_Tau2LeptonDeltaR", &_Tau2LeptonDeltaR);
+    _Tree->Branch("TTL_HT", &_HT);
+    _Tree->Branch("TTL_NumCSVLbtagJets", &_NumCSVLbtagJets);
+    _Tree->Branch("TTL_NumCSVMbtagJets", &_NumCSVMbtagJets);
+    _Tree->Branch("TTL_NumCSVTbtagJets", &_NumCSVTbtagJets);
+    _Tree->Branch("TTL_NumNonCSVLbtagJets", &_NumNonCSVLbtagJets);
+    _Tree->Branch("TTL_NumNonCSVMbtagJets", &_NumNonCSVMbtagJets);
+    _Tree->Branch("TTL_NumNonCSVTbtagJets", &_NumNonCSVTbtagJets);
+    _Tree->Branch("TTL_NumCleanCSVLbtagJets", &_NumCleanCSVLbtagJets);
+    _Tree->Branch("TTL_NumCleanCSVMbtagJets", &_NumCleanCSVMbtagJets);
+    _Tree->Branch("TTL_NumCleanCSVTbtagJets", &_NumCleanCSVTbtagJets);
+    _Tree->Branch("TTL_NumCleanNonCSVLbtagJets", &_NumCleanNonCSVLbtagJets);
+    _Tree->Branch("TTL_NumCleanNonCSVMbtagJets", &_NumCleanNonCSVMbtagJets);
+    _Tree->Branch("TTL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
+    _Tree->Branch("TTL_CleanJetIndices", &_CleanJetIndices);
+
     // === Combo weights === //
     _Tree->Branch("TTL_LeptonEventWeight", &_LeptonEventWeight);
     _Tree->Branch("TTL_CSVeventWeight", &_CSVeventWeight);
@@ -498,26 +499,27 @@ void DitauLeptonFiller::ClearVectors(){
 	_LeptonGenMatchGrandmother10Status                  .clear();
 	_LeptonGenMatchGrandmother11Status                  .clear();
 
-	// === Combo === //
-	_DitauVisibleMass                                   .clear();
-	_DitauMETMass                                       .clear();
-	_DitauCosDeltaPhi                                   .clear();
-	_DitauDeltaR                                        .clear();
-	_Tau1LeptonDeltaR                                   .clear();
-	_Tau2LeptonDeltaR                                   .clear();
-	_HT                                                 .clear();
-	_NumCSVLbtagJets                                    .clear();
-	_NumCSVMbtagJets                                    .clear();
-	_NumCSVTbtagJets                                    .clear();
-	_NumNonCSVLbtagJets                                 .clear();
-	_NumNonCSVMbtagJets                                 .clear();
-	_NumNonCSVTbtagJets                                 .clear();
-	_NumCleanCSVLbtagJets                               .clear();
-	_NumCleanCSVMbtagJets                               .clear();
-	_NumCleanCSVTbtagJets                               .clear();
-	_NumCleanNonCSVLbtagJets                            .clear();
-	_NumCleanNonCSVMbtagJets                            .clear();
-	_NumCleanNonCSVTbtagJets                            .clear();
+    // === Combo === //
+    _DitauVisibleMass.clear();
+    _DitauMETMass.clear();
+    _DitauCosDeltaPhi.clear();
+    _DitauDeltaR.clear();
+    _Tau1LeptonDeltaR.clear();
+    _Tau2LeptonDeltaR.clear();
+    _HT.clear();
+    _NumCSVLbtagJets.clear();
+    _NumCSVMbtagJets.clear();
+    _NumCSVTbtagJets.clear();
+    _NumNonCSVLbtagJets.clear();
+    _NumNonCSVMbtagJets.clear();
+    _NumNonCSVTbtagJets.clear();
+    _NumCleanCSVLbtagJets.clear();
+    _NumCleanCSVMbtagJets.clear();
+    _NumCleanCSVTbtagJets.clear();
+    _NumCleanNonCSVLbtagJets.clear();
+    _NumCleanNonCSVMbtagJets.clear();
+    _NumCleanNonCSVTbtagJets.clear();
+    _CleanJetIndices.clear();
 
     // === Combo weights === //
     _LeptonEventWeight.clear();
@@ -695,7 +697,7 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 				
 				} // End of muon/electron if-statement
 
-				BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tausAndLepton, 0.25);
+				BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tausAndLepton, 0.25, &_CleanJetIndices);
 
 				// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
 				BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets), _sysType);
