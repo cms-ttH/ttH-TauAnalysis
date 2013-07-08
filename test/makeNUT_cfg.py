@@ -211,6 +211,7 @@ NtupleFillers = cms.untracked.vstring(
         'Muon',
         'Jet',
         'DitauLepton',
+        'TauLeptonLepton',
         #'DitauMuon',
         #'DitauElectron',
         #'Trigger', # not in use

@@ -299,27 +299,28 @@ class DitauLeptonFiller : public NtupleFiller {
 		vector<int>				_LeptonGenMatchGrandmother10Status;
 		vector<int>				_LeptonGenMatchGrandmother11Status;
 
-		// === Combo === //
-		vector<float>			_DitauVisibleMass;
-		vector<float>			_DitauMETMass;
-		vector<float>			_DitauCosDeltaPhi;
-		vector<float>			_DitauDeltaR;
-		vector<float>			_Tau1LeptonDeltaR;
-		vector<float>			_Tau2LeptonDeltaR;
-		vector<float>			_HT;
-		vector<unsigned int>	_NumCSVLbtagJets;
-		vector<unsigned int>	_NumCSVMbtagJets;
-		vector<unsigned int>	_NumCSVTbtagJets;
-		vector<unsigned int>	_NumNonCSVLbtagJets;
-		vector<unsigned int>	_NumNonCSVMbtagJets;
-		vector<unsigned int>	_NumNonCSVTbtagJets;
-		vector<unsigned int>	_NumCleanCSVLbtagJets;
-		vector<unsigned int>	_NumCleanCSVMbtagJets;
-		vector<unsigned int>	_NumCleanCSVTbtagJets;
-		vector<unsigned int>	_NumCleanNonCSVLbtagJets;
-		vector<unsigned int>	_NumCleanNonCSVMbtagJets;
-		vector<unsigned int>	_NumCleanNonCSVTbtagJets;
-		
+        // === Combo === //
+        vector<float> _DitauVisibleMass;
+        vector<float> _DitauMETMass;
+        vector<float> _DitauCosDeltaPhi;
+        vector<float> _DitauDeltaR;
+        vector<float> _Tau1LeptonDeltaR;
+        vector<float> _Tau2LeptonDeltaR;
+        vector<float> _HT;
+        vector<unsigned int> _NumCSVLbtagJets;
+        vector<unsigned int> _NumCSVMbtagJets;
+        vector<unsigned int> _NumCSVTbtagJets;
+        vector<unsigned int> _NumNonCSVLbtagJets;
+        vector<unsigned int> _NumNonCSVMbtagJets;
+        vector<unsigned int> _NumNonCSVTbtagJets;
+        vector<unsigned int> _NumCleanCSVLbtagJets;
+        vector<unsigned int> _NumCleanCSVMbtagJets;
+        vector<unsigned int> _NumCleanCSVTbtagJets;
+        vector<unsigned int> _NumCleanNonCSVLbtagJets;
+        vector<unsigned int> _NumCleanNonCSVMbtagJets;
+        vector<unsigned int> _NumCleanNonCSVTbtagJets;
+        vector<unsigned int> _CleanJetIndices;
+
         vector<float> _LeptonEventWeight;
         vector<float> _CSVeventWeight;
         vector<float> _CSVeventWeightLFup;
