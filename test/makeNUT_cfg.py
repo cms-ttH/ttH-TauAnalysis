@@ -3,12 +3,6 @@ import copy
 import sys
 import inspect
 
-
-# === Terminates execution === #
-def throwFatalError():
-    print "ERROR in line %d" % (inspect.currentframe().f_back.f_lineno); sys.exit(1);
-
-
 # === Give values to some basic parameters === #
 maxEvents	= -1
 reportEvery	= 100
