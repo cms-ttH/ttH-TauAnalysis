@@ -11,14 +11,14 @@ def throwFatalError():
 
 # === Give values to some basic parameters === #
 maxEvents	= -1
-reportEvery	= 10000
+reportEvery	= 100
 era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 10
 baseTreeName = 'TTbarHTauTau'
 dataRange   = 'All'
-runExtraBEANhelpers = True
+runExtraBEANhelpers = False
 
 # collection postfix for running on PF2PAT
 postfix = ''
