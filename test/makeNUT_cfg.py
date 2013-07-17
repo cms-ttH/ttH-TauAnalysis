@@ -47,32 +47,11 @@ options = VarParsing.VarParsing("analysis")
 # 2011_B_data-PR_0_JESup-JESdown
 # 2012_X_MC-bg_30101_NA
 # 2012_B_data-PR_0_NA
-options.register ('jobParams', # 
-                  #'2011_X_MC-sigFullSim_125_0_NA',	    # 125   tth->tautau
-                  #'2011_X_MC-bg_2500_0_NA',	# 2500	TTbar
-				  #'2011_A_data-PR_-1_0_NA',	    # -1	2012A collisions
-				  #'2012_X_MC-bg_-1_0_NA',	    # -1	2012A collisions
-				  #'2012_X_MC-bg_-11_0_NA',	    # -11	2012B collisions
-                  '2012_X_MC-bg_2500_0_NA',	# 2500	TTbar
-				  #'2012_X_MC-bg_2524_0_NA',	# 2524	TTbar + W
-				  #'2012_X_MC-bg_2523_0_NA',	# 2523	TTbar + Z
-				  #'2012_X_MC-bg_2400_0_NA',	# 2400	W+jets
-				  #'2012_X_MC-bg_2800_0_NA',	# 2800	Z+jets (50<M)
-				  #'2012_X_MC-bg_2850_0_NA',	# 2850	Z+jets (10<M<50)
-				  #'2012_X_MC-bg_2700_0_NA',	# 2700	WW	
-				  #'2012_X_MC-bg_2701_0_NA',	# 2701	WZ
-				  #'2012_X_MC-bg_2702_0_NA',	# 2702	ZZ
-				  #'2012_X_MC-bg_2504_0_NA',	# 2504	sT+W
-				  #'2012_X_MC-bg_2505_0_NA',	# 2505	sTbar+W	
-                  #'2012_X_MC-bg_2600_0_NA',	# 2600	sT-sCh
-				  #'2012_X_MC-bg_2501_0_NA',	# 2501	sTbar-sCh
-				  #'2012_X_MC-bg_2602_0_NA',	# 2602	sT-tCh
-				  #'2012_X_MC-bg_2503_0_NA',	# 2503	sTbar-tCh
-				  #'2012_X_MC-bg_9115_0_NA',	# 9115	TTH_115_Fast
-				  #'2012_X_MC-bg_9120_0_NA',	# 9120	TTH_120_Fast
-				  #'2012_X_MC-bg_9125_0_NA',	# 9125	TTH_125_Fast
-                  VarParsing.VarParsing.multiplicity.singleton,
-                  VarParsing.VarParsing.varType.string )
+options.register(
+        'jobParams',
+        '2012_X_MC-bg_2563_111021_JESup-JESdown-TESup-TESdown',
+        VarParsing.VarParsing.multiplicity.singleton,
+        VarParsing.VarParsing.varType.string )
 
 options.maxEvents = maxEvents
 options.outputFile = 'NUT.root'
