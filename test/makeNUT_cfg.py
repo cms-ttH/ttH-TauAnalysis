@@ -348,12 +348,7 @@ print '		Report every.....%d' % reportEvery
 print '		Global tag.......%s' % globalTag
 #print '		Triggers.........%s' % triggerConditions
 print '		Skim parameters..%s' % skimParams
-sysString = ''
-for sys in sysTypes:
-  sysString += sys
-  sysString += ','
-sysString = sysString.rstrip(',')
-print '		Systematics......%s' % sysString
+print '		Systematics......%s' % ', '.join(sysTypes)
 print ''
 print '	===================================================='
 print ''
