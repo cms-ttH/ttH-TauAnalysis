@@ -1,3 +1,4 @@
+# vim: sta:et:sw=4:ts=4
 import FWCore.ParameterSet.Config as cms
 import copy
 import sys
