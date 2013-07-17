@@ -63,52 +63,61 @@ options.inputFiles = '/store/user/awoodard/TTJets_SemiLeptMGDecays_8TeV-madgraph
 options.parseArguments() # get and parse the command line arguments 
 
 # === Parse Job Params === #
-import shlex;
-my_splitter = shlex.shlex(options.jobParams, posix=True);
-my_splitter.whitespace = '_'; 
-my_splitter.whitespace_split = True;
-jobParams       = list(my_splitter);
+import shlex
+my_splitter = shlex.shlex(options.jobParams, posix=True)
+my_splitter.whitespace = '_'
+my_splitter.whitespace_split = True
+jobParams       = list(my_splitter)
 
 # === Job params error checking === #
 if len(jobParams) != 6:
-    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 6 arguments (check config file for details). Terminating."; sys.exit(1);
+    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 6 arguments (check config file for details). Terminating."
+    sys.exit(1)
 
 if (jobParams[0] != "2011") and (jobParams[0] != "2012"):
-    print "ERROR: era set to '" + jobParams[0] + "' but it must be '2011' or '2012'"; sys.exit(1);
+    print "ERROR: era set to '" + jobParams[0] + "' but it must be '2011' or '2012'"
+    sys.exit(1)
 else:
-	era = int(jobParams[0]);
+	era = int(jobParams[0])
 
-runOnMC         = ((jobParams[2]).find('MC') != -1); 
-runOnSignal		= ((jobParams[2]).find('MC-sig') != -1); 
-runOnFastSim    = ((jobParams[2]).find('MC-sigFastSim') != -1); 
+runOnMC         = ((jobParams[2]).find('MC') != -1)
+runOnSignal		= ((jobParams[2]).find('MC-sig') != -1)
+runOnFastSim    = ((jobParams[2]).find('MC-sigFastSim') != -1)
 if (not runOnMC) and ((jobParams[1] != 'A') and (jobParams[1] != 'B') and (jobParams[1] != 'C') and (jobParams[1] != 'D')):
-    print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', 'C', or 'D'."; sys.exit(1);
+    print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', 'C', or 'D'."
+    sys.exit(1)
 
 if (era == 2011):
 	era_release = 'NA'
 if (era == 2012) and ((era_release != '52x') and (era_release != '53x')):
-    print "ERROR: era set to 2012 and era release set to '" + era_release + "' but it must be '52x' (2012 ICHEP) or '53x' (full 2012)."; sys.exit(1);
+    print "ERROR: era set to 2012 and era release set to '" + era_release + "' but it must be '52x' (2012 ICHEP) or '53x' (full 2012)."
+    sys.exit(1)
 
 if (jobParams[2] != "data-PR") and (jobParams[2] != "data-RR") and (jobParams[2] != "data-RRr")and (jobParams[2] != "MC-bg") and (jobParams[2] != "MC-sigFullSim") and (jobParams[2] != "MC-sigFastSim"):
-    print "ERROR: sample type set to '" + jobParams[2] + "' but it can only be 'data-PR', 'data-RR', 'data-RRr', 'MC-bg', 'MC-sigFullSim', or 'MC-sigFastSim'."; sys.exit(1); 
+    print "ERROR: sample type set to '" + jobParams[2] + "' but it can only be 'data-PR', 'data-RR', 'data-RRr', 'MC-bg', 'MC-sigFullSim', or 'MC-sigFastSim'."
+    sys.exit(1)
 
-sampleNumber    = int(jobParams[3]);
+sampleNumber    = int(jobParams[3])
 if (runOnMC and sampleNumber < 0):
-    print "ERROR: job set to run on MC but sample number set to '" + sampleNumber + "' when it must be positive."; sys.exit(1);
+    print "ERROR: job set to run on MC but sample number set to '" + sampleNumber + "' when it must be positive."
+    sys.exit(1)
 
 if (not runOnMC and sampleNumber >= 0):
-    print "ERROR: job set to run on collision data but sample number set to '" + sampleNumber + "' when it must be negative."; sys.exit(1);
+    print "ERROR: job set to run on collision data but sample number set to '" + sampleNumber + "' when it must be negative."
+    sys.exit(1)
 
 skimParams = jobParams[4]
 if len(skimParams) is 0:
-    print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams); sys.exit(1)
+    print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams)
+    sys.exit(1)
 if len(skimParams) > 6:
-    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 6 characters are not supported'.format(skimParams); sys.exit(1)
+    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 6 characters are not supported'.format(skimParams)
+    sys.exit(1)
 
-sys_splitter = shlex.shlex(jobParams[5], posix=True);
-sys_splitter.whitespace = '-'; 
-sys_splitter.whitespace_split = True;
-sysTypes= list(sys_splitter);
+sys_splitter = shlex.shlex(jobParams[5], posix=True)
+sys_splitter.whitespace = '-'
+sys_splitter.whitespace_split = True
+sysTypes= list(sys_splitter)
 
 # === Set up triggers and GEN collections based on analysis type === # 
 if runOnMC:
