@@ -11,8 +11,8 @@ crab_status() {
       cmd="|grep '>>>'"
    fi
    for i in $*; do
-      echo $do
       do="crab -status -getoutput -c $i $cmd"
+      echo $do
       $SHELL -c "$do"
    done
 }
