@@ -318,23 +318,34 @@ else:
 
 
 # === Print some basic info about the job setup === #
-print ''
-print '	===================================================='
-print '		Ntuple Making Job'
-print '	===================================================='
-print ''
-print '		Analysis type....%s' % options.jobParams
-print '		Running on PAT?..%s' % (era == 2011)
-print '		Era Release......%s' % era_release
-print '		Max events.......%d' % options.maxEvents
-print '		Report every.....%d' % reportEvery
-print '		Global tag.......%s' % globalTag
-#print '		Triggers.........%s' % triggerConditions
-print '		Skim parameters..%s' % skimParams
-print '		Systematics......%s' % ', '.join(sysTypes)
-print ''
-print '	===================================================='
-print ''
+print """
+        ====================================================
+            Ntuple Making Job
+        ====================================================
+
+            Analysis type....{0}
+            Running on PAT?..{1}
+            Era Release......{2}
+            Max events.......{3}
+            Report every.....{4}
+            Global tag.......{5}
+            Triggers.........{6}
+            Skim parameters..{7}
+            Systematics......{8}
+            Fillers..........{9}
+
+        ====================================================
+""".format(
+        options.jobParams,
+        era == 2011,
+        era_release,
+        options.maxEvents,
+        reportEvery,
+        globalTag,
+        ', '.join(triggerConditions),
+        skimParams,
+        ', '.join(sysTypes),
+        ', '.join(NtupleFillers))
 
 # === Write-out all python configuration parameter information === #
 #pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
