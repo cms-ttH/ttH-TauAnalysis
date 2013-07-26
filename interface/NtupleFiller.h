@@ -1,9 +1,12 @@
+// vim: et:sta:sw=4:ts=4
 // Authors: Andres Florez, Alfredo Gurrola, Eduardo Luiggi, Chi Nhan Nguyen, Nitish Dhingra, Nil Valls
 
 #ifndef _NtupleFiller_h
 #define _NtupleFiller_h
 
 #include <algorithm>
+
+#include "boost/lexical_cast.hpp"
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -80,6 +83,7 @@ class NtupleFiller : public EDAnalyzer {
 		unsigned int GetEra();
 		const char GetSubera();
 		string GetSampleType();
+        inline int GetSampleNumber() { return boost::lexical_cast<int>(GetAnalysisTypeParameter(4)); };
 		string GetLeptonFlavor();
 		bool EraIs(unsigned int);
 		bool SuberaIs(const char);

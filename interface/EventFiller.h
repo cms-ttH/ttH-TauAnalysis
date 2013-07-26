@@ -1,3 +1,4 @@
+// vim: et:sta:sw=4:ts=4
 // Authors: Andres Florez, Alfredo Gurrola, Eduardo Luiggi, Chi Nhan Nguyen, Nitish Dhingra, Nil Valls
 
 #ifndef _EventFiller_h
@@ -27,6 +28,10 @@ class EventFiller : public NtupleFiller {
 		double                  _runNumber;
 		double                  _eventNumber;
 		double                  _lumiBlock;
+
+        int _higgsDecayMode;
+        int _bQuarkCount;
+        int _cQuarkCount;
 
 		double                  _MET;
 		double                  _METphi;

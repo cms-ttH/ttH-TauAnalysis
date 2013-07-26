@@ -8,6 +8,7 @@
 <use   name="CondFormats/JetMETObjects"/>
 <use   name="JetMETCorrections/Objects"/>
 <use   name="HLTrigger/HLTcore"/>
+<use name="boost"/>
 <use   name="root"/>
 <use   name="clhep"/>
 <export>

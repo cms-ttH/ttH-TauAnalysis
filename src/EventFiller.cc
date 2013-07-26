@@ -1,3 +1,4 @@
+// vim: et:sta:sw=4:ts=4
 // Author: Nil Valls <nvallsve@nd.edu>
 
 #include "../interface/EventFiller.h"
@@ -32,6 +33,11 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_runNumber", &_runNumber);
 	_Tree->Branch("Ev_eventNumber", &_eventNumber);
 	_Tree->Branch("Ev_lumiBlock", &_lumiBlock);
+
+    _Tree->Branch("Ev_higgsDecayMode", &_higgsDecayMode);
+    _Tree->Branch("Ev_bQuarkCount", &_bQuarkCount);
+    _Tree->Branch("Ev_cQuarkCount", &_cQuarkCount);
+
 	_Tree->Branch("Ev_puWeight", &_PUweight);
 	_Tree->Branch("Ev_puWeightUp", &_PUweightUp);
 	_Tree->Branch("Ev_puWeightDown", &_PUweightDown);
@@ -63,6 +69,11 @@ void EventFiller::ClearVectors(){
 	_runNumber					= 0;
 	_eventNumber				= 0;
 	_lumiBlock					= 0;
+
+    _higgsDecayMode = 0;
+    _bQuarkCount = 0;
+    _cQuarkCount = 0;
+
 	_PUweight					= 1.0;
 	_PUweightUp					= 1.0;
 	_PUweightDown   			= 1.0;
@@ -97,6 +108,47 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	_runNumber			= iEvent.id().run();
 	_eventNumber		= iEvent.id().event();
 	_lumiBlock			= iEvent.id().luminosityBlock();
+
+    // Flavor and Higgs decay mode splitting info
+    // To be used with the inclusive ttH sample and/or ttbar samples
+    int sample = GetSampleNumber();
+
+    // The inclusive ttH sample numbers are 9000 + mass in GeV
+    if (sample >= 9000) {
+        hdecayType::hdecayType t = beanHelper->GetHdecayType(_BNmcparticles);
+        if (t == hdecayType::hbb) {
+            _higgsDecayMode = 0;
+        } else if (t == hdecayType::hww) {
+            _higgsDecayMode = 1;
+        } else if (t == hdecayType::hzz) {
+            _higgsDecayMode = 2;
+        } else if (t == hdecayType::htt) {
+            _higgsDecayMode = 3;
+        } else if (t == hdecayType::hgg) {
+            _higgsDecayMode = 4;
+        } else if (t == hdecayType::hvv) {
+            _higgsDecayMode = 5;
+        } else {
+            _higgsDecayMode = -1;
+        }
+    } else {
+        _higgsDecayMode = -1;
+    }
+
+    // The ttbar samples are 2533, 2563, 2566
+    if (sample == 2533 || sample == 2563 || sample == 2566) {
+        int bs = beanHelper->ttPlusBBClassifyEvent(_BNmcparticles, _BNjets);
+        if (bs == 1 || bs == 2) {
+            _bQuarkCount = 1;
+        } else if (bs > 2) {
+            _bQuarkCount = 2;
+        } else {
+            _bQuarkCount = 0;
+        }
+    } else {
+        _bQuarkCount = 0;
+        _cQuarkCount = 0;
+    }
 
 	// Pileup weights
 	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);

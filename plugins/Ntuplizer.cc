@@ -1,3 +1,4 @@
+// vim: et:sta:sw=4:ts=4
 // Author: Nil Valls <nvallsve@nd.edu>
 
 #include "..//interface/Ntuplizer.h"
