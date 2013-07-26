@@ -65,6 +65,12 @@ void  Ntuplizer::beginJob() {
 	Service<TFileService> fs;
 	_EventsRead	= fs->make<TH1I>("EventsRead", "EventsRead",1,0,1);
 	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
+    // FIXME Set the flushing threshold to a lower level.  With the default
+    // setting of ROOT 5.32 (CMSSW 5_3_8), the basket size of the tree
+    // grows significantly after a while and does not decrease.  This
+    // causes jobs to fail, as they exceed 2.3 GB RSS memory and get killed
+    // by the crab watchdog.
+    _Tree->SetAutoFlush(-5000000);
 
     _numFailedTauEventCheck = 0;
 
