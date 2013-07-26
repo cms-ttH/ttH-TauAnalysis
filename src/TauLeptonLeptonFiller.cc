@@ -404,6 +404,8 @@ void TauLeptonLeptonFiller::ClearVectors(){
     _NumCleanNonCSVLbtagJets.clear();
     _NumCleanNonCSVMbtagJets.clear();
     _NumCleanNonCSVTbtagJets.clear();
+    for (auto& v: _CleanJetIndices)
+        v.clear();
     _CleanJetIndices.clear();
 
     // === Event weights === //
@@ -537,7 +539,9 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 			tauAndLeptons.push_back(TLorentzVector(Lepton2->px, Lepton2->py, Lepton2->pz, Lepton2->energy));
 			
 			// Clean jets
-			BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tauAndLeptons, 0.25, &_CleanJetIndices);
+            std::vector<unsigned int> jet_indices;
+            BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tauAndLeptons, 0.25, &jet_indices);
+            _CleanJetIndices.push_back(jet_indices);
 
 			// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
 			BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets), _sysType);
