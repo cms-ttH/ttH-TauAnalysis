@@ -44,7 +44,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-bg_2563_111021_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_111021_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -60,7 +60,13 @@ options.outputFile = 'NUT.root'
 # 2012B SingleMu - Spring 2013 BEAN
 #options.inputFiles = '/store/user/awoodard/SingleMu/BEAN_GTV7G_V01_CV03/2b5bf57d4ab2a303a22b86a50ccffab2/ttH_pat2bean_53x_3185_1_BJl.root'
 # ttbar semi-leptonic - Spring2013 BEAN
-options.inputFiles = '/store/user/awoodard/TTJets_SemiLeptMGDecays_8TeV-madgraph/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02/d0a71c5bb6f6754a25e53f49b1990e4b/ttH_pat2bean_53x_2222_1_nqg.root'
+options.inputFiles = [
+        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_10_1_cDq.root',
+        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_11_1_d1B.root',
+        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_12_1_tvt.root',
+        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_13_1_pGV.root',
+        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_14_1_ZLL.root'
+        ]
 options.parseArguments() # get and parse the command line arguments 
 
 # === Parse Job Params === #
