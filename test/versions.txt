@@ -45,7 +45,7 @@ v45 -- 8TeV-Spring13BEANs: s1 - 111021; added TT, TLL fillers
 v46 -- 8TeV-Spring13BEANs: s1 - 111021; added extra CSV weights for charm
 v46 -- 8TeV-Spring13BEANs: s1 - 111021; increased CSV weight uncertainty for charm
 v47 -- 8TeV-Spring13BEANs: s1 - 111021; increased CSV weight uncertainty for charm
-v48 -- 8TeV-Spring13BEANs: s1 - 111021; add double lepton datasets
+v48 -- 8TeV-Spring13BEANs: s1 - 111021; add double lepton datasets, add sample splitting bits, clean jet indices
 
 BEAN skims:
 s1 -- 8TeV-Spring13BEANs: 111011
