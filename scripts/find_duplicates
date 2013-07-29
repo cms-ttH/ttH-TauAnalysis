@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+"""Find duplicate crab output files
+
+Usage: find_duplicates crab_directory...
+
+This scripts takes a list of crab working directories and prints filenames
+within the output directories that are not listed as valid job output
+filenames.
+"""
+
+from glob import glob
+import os
+import sys
+import xml.etree.ElementTree as ET
+
+for crabdir in sys.argv[1:]:
+    reports = glob(crabdir + "/res/crab_fjr_*.xml")
+    if len(reports) == 0:
+        continue
+
+    print "=> Processing", crabdir
+    outfiles = []
+    outdir = None
+
+    for report in reports:
+        tree = ET.parse(report)
+        root = tree.getroot()
+        outfiles.append(root.find("AnalysisFile").find("LFN").get("Value"))
+        outdir = os.path.dirname(outfiles[-1])
+
+    if not outdir:
+        continue
+
+    allfiles = glob(outdir + "/*.root")
+    unwanted = list(set(allfiles) - set(outfiles))
+
+    if len(unwanted) == 0:
+        continue
+
+    for file in unwanted:
+        print file
