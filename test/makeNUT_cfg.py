@@ -26,13 +26,19 @@ options = VarParsing.VarParsing("analysis")
 # 
 # <era>_<subera>_<era release>_<type>_<sample number>_<skim selection>_<systematic type>
 #
-# <era>						= 2011, 2012
-# <subera> [N/A for MC]		= A, B, C...
-# <type>					= MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
-# <sample number>			= See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
-# <skim selection>          = up to six numbers; 1st is min. num. of total jets, 2nd is min. num. loose Btags, 
-#                             3rd is min. num. med. Btags, 4th is min. num. tight Btags, 
-#                             5th/6th are min num. "base"/iso taus, as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
+# <era>                     = 2011, 2012
+# <subera> [N/A for MC]     = A, B, C...
+# <type>                    = MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
+# <sample number>           = See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
+# <skim selection>          = up to six numbers;
+#                             - 1st is min. num. of total jets
+#                             - 2nd is min. num. loose Btags
+#                             - 3rd is min. num. med. Btags
+#                             - 4th is min. num. tight Btags
+#                             - 5th/6th are min num. "base"/iso taus, as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
+#                             - 7th is a bitmap for num. of leptons - used to switch the trigger path
+#                               - 0b01 is 1 lepton
+#                               - 0b10 is 2 leptons
 # <systematic type>         = dash-separated systematic uncertainty shift type(s). 
 #                             Options are defined in NtupleMaker/BEANmaker/interface/BEANhelper.h
 #                             Must include 'NA'
@@ -44,7 +50,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_111021_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_1110212_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -117,9 +123,11 @@ skimParams = jobParams[4]
 if len(skimParams) is 0:
     print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams)
     sys.exit(1)
-if len(skimParams) > 6:
+if len(skimParams) > 7:
     print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 6 characters are not supported'.format(skimParams)
     sys.exit(1)
+
+leptons = int(skimParams[6])
 
 sys_splitter = shlex.shlex(jobParams[5], posix=True)
 sys_splitter.whitespace = '-'
@@ -130,33 +138,28 @@ sysTypes= list(sys_splitter)
 if runOnMC:
     inputForGenParticles = 'genParticles'
     inputForGenJets     = 'selectedPatJets:genJets:'
-    triggerConditions = (
-        'HLT_IsoMu24_eta2p1',
-        'HLT_Ele27_WP80'
-    )
-    if era == 2011:
-      triggerConditions = (
-          'HLT_IsoMu24_v*',
-          'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
-          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
-          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-    )
-
-if (not runOnMC):
+else:
     inputForGenParticles = ''
     inputForGenJets = ''
-    triggerConditions = (
-        'HLT_IsoMu24_eta2p1',
-        'HLT_Ele27_WP80'
-    )
-    if era == 2011:
-      triggerConditions = (
-          'HLT_IsoMu24_v*',
-          'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
-          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
-          'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-    )
 
+triggerConditions = []
+if era == 2011:
+    triggerConditions += [
+            'HLT_IsoMu24_v*',
+            'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
+            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
+            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
+            ]
+else:
+    if leptons & 0b01:
+        triggerConditions += ['HLT_IsoMu24_eta2p1', 'HLT_Ele27_WP80']
+    if leptons & 0b10:
+        triggerConditions += [
+                'HLT_Mu17_Mu8',
+                'HLT_Mu17_Mu8',
+                'HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
+                'HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
+                'HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL']
 
 # === Define Ntuplizer input collections === # 
 ## For 7TeV/2011 datasets, where we read PATuples
@@ -199,13 +202,16 @@ NtupleFillers = cms.untracked.vstring(
         'Electron',
         'Muon',
         'Jet',
-        'DitauLepton',
-        'TauLeptonLepton',
         #'DitauMuon',
         #'DitauElectron',
         #'Trigger', # not in use
-		'Test',
+        'Test',
 )
+
+if leptons & 0b01:
+    NtupleFillers.append('DitauLepton')
+if leptons & 0b10:
+    NtupleFillers.append('TauLeptonLepton')
 
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
