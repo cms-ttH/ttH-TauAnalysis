@@ -118,16 +118,20 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         hdecayType::hdecayType t = beanHelper->GetHdecayType(_BNmcparticles);
         if (t == hdecayType::hbb) {
             _higgsDecayMode = 0;
-        } else if (t == hdecayType::hww) {
+        } else if (t == hdecayType::hcc) {
             _higgsDecayMode = 1;
-        } else if (t == hdecayType::hzz) {
+        } else if (t == hdecayType::hww) {
             _higgsDecayMode = 2;
-        } else if (t == hdecayType::htt) {
+        } else if (t == hdecayType::hzz) {
             _higgsDecayMode = 3;
-        } else if (t == hdecayType::hgg) {
+        } else if (t == hdecayType::htt) {
             _higgsDecayMode = 4;
-        } else if (t == hdecayType::hvv) {
+        } else if (t == hdecayType::hgg) {
             _higgsDecayMode = 5;
+        } else if (t == hdecayType::hjj) {
+            _higgsDecayMode = 6;
+        } else if (t == hdecayType::hzg) {
+            _higgsDecayMode = 7;
         } else {
             _higgsDecayMode = -1;
         }
