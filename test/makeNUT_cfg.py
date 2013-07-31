@@ -124,7 +124,7 @@ if len(skimParams) is 0:
     print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams)
     sys.exit(1)
 if len(skimParams) > 7:
-    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 6 characters are not supported'.format(skimParams)
+    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 7 characters are not supported'.format(skimParams)
     sys.exit(1)
 
 leptons = int(skimParams[6])
