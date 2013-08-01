@@ -5,7 +5,7 @@
 // 
 
 // user include files
-#include "TTHTauTau/Analysis/plugins/BEANskimmer.h"
+#include "ttH/TauAnalysis/plugins/BEANskimmer.h"
 
 //
 // constructors and destructor

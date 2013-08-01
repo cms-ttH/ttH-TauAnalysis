@@ -10,7 +10,7 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Tau.h"
 
-#include "ProductArea/BNcollections/interface/BNmuon.h"
+#include "BEAN/Collections/interface/BNmuon.h"
 
 using namespace std;
 

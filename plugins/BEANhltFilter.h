@@ -17,7 +17,7 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-#include "ProductArea/BNcollections/interface/BNtrigger.h"
+#include "BEAN/Collections/interface/BNtrigger.h"
 //
 // class declaration
 //

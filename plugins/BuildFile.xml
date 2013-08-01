@@ -1,12 +1,12 @@
 <export>
 </export>
-<library name="TTHTauTauAnalysis_plugins" file="*.cc">
-    <use   name="FWCore/Framework"/>
-    <use   name="FWCore/ParameterSet"/>
-    <use   name="FWCore/Common"/>
-    <use   name="DataFormats/Common"/>
-    <use   name="CommonTools/UtilAlgos"/>
-    <use   name="TTHTauTau/Analysis"/>
-	<use   name="root"/>
-	<use   name="clhep"/>
+<library name="ttHTauAnalysis_plugins" file="*.cc">
+    <use name="FWCore/Framework"/>
+    <use name="FWCore/ParameterSet"/>
+    <use name="FWCore/Common"/>
+    <use name="DataFormats/Common"/>
+    <use name="CommonTools/UtilAlgos"/>
+    <use name="ttH/TauAnalysis"/>
+    <use name="root"/>
+    <use name="clhep"/>
 </library>

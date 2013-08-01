@@ -5,7 +5,7 @@
 // 
 
 // user include files
-#include "TTHTauTau/Analysis/plugins/BEANhltFilter.h"
+#include "ttH/TauAnalysis/plugins/BEANhltFilter.h"
 
 //
 // constructors and destructor

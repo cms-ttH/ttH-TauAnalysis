@@ -13,7 +13,7 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
-#include "NtupleMaker/BEANmaker/interface/BEANhelper.h"
+#include "BEAN/BEANmaker/interface/BEANhelper.h"
 
 #include "NtupleFiller.h"
 #include "EventFiller.h"

@@ -40,7 +40,7 @@ options = VarParsing.VarParsing("analysis")
 #                               - 0b01 is 1 lepton
 #                               - 0b10 is 2 leptons
 # <systematic type>         = dash-separated systematic uncertainty shift type(s). 
-#                             Options are defined in NtupleMaker/BEANmaker/interface/BEANhelper.h
+#                             Options are defined in BEAN/BEANmaker/interface/BEANhelper.h
 #                             Must include 'NA'
 #
 # Examples:
@@ -232,7 +232,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
-from TTHTauTau.Analysis.globalTagMap_cfi import get_tag
+from ttH.TauAnalysis.globalTagMap_cfi import get_tag
 globalTag = get_tag(options.jobParams.rsplit('_',3)[0]) + '::All'
 process.GlobalTag.globaltag = cms.string(globalTag)
 

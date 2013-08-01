@@ -17,8 +17,8 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-#include "ProductArea/BNcollections/interface/BNjet.h"
-#include "ProductArea/BNcollections/interface/BNtau.h"
+#include "BEAN/Collections/interface/BNjet.h"
+#include "BEAN/Collections/interface/BNtau.h"
 #include <string>
 //
 // class declaration

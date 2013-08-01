@@ -4,5 +4,6 @@
 
 In your CMSSW area, use
 
-    mkdir -p TTHTauTau
-    git clone https://github.com/matz-e/TTHTauTau-Analysis.git TTHTauTau/Analysis
+    cd $CMSSW_BASE/src
+    mkdir -p ttH
+    git clone https://github.com/matz-e/TTHTauTau-Analysis.git ttH/TauAnalysis

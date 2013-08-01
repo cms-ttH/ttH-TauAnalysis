@@ -81,7 +81,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 
 # === Conditions === #
 #process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
-#from TTHTauTau.Analysis.globalTagMap_cfi import globalTagMap
+#from ttH.TauAnalysis.globalTagMap_cfi import globalTagMap
 #globalTag = globalTagMap[options.jobParams.rsplit('_',3)[0]] + '::All'
 #process.GlobalTag.globaltag = cms.string(globalTag)
 
