@@ -71,7 +71,7 @@ void  Ntuplizer::beginJob() {
     // grows significantly after a while and does not decrease.  This
     // causes jobs to fail, as they exceed 2.3 GB RSS memory and get killed
     // by the crab watchdog.
-    _Tree->SetAutoFlush(-5000000);
+    _Tree->SetAutoFlush(-50000000);
 
     _numFailedTauEventCheck = 0;
 
