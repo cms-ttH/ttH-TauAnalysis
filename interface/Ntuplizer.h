@@ -1,3 +1,4 @@
+// vim: et:sta:sw=4:ts=4
 // Authors: Nil Valls
 
 #ifndef _Ntuplizer_h
@@ -85,6 +86,7 @@ class Ntuplizer : public EDAnalyzer {
         sysType::sysType _sysType;
         string _DataRange;
         bool _RunExtraBEANhelpers;
+        int _num_leptons;
 
         // required for TTL-event check
         InputTag _RecoJetSource;

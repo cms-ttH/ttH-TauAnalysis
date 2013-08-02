@@ -1,6 +1,8 @@
 // vim: et:sta:sw=4:ts=4
 // Author: Nil Valls <nvallsve@nd.edu>
 
+#include "boost/lexical_cast.hpp"
+
 #include "..//interface/Ntuplizer.h"
 
 using namespace std;
@@ -40,6 +42,8 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
     _RecoJetSource                  = iConfig.getParameter<InputTag>("RecoJetSource");
 
     // required for TTL event check
+    _num_leptons = boost::lexical_cast<int>(GetAnalysisTypeParameter(4)[6]);
+
     std::string sysTypeString       = iConfig.getUntrackedParameter<std::string>("SysType");
     _sysType = sysType::NA;
     if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
@@ -236,7 +240,13 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNtauCollection BNtaus				= *(hBNtaus.product());
     BNjetCollection BNjets				= *(hBNjets.product());
 
-	if(!beanHelper.IsTauEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)){ _numFailedTauEventCheck++; return; }
+    if (((_num_leptons & 1) && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
+        ((_num_leptons & 2) && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
+        _numFailedTauEventCheck++;
+        return;
+    } else if (!(_num_leptons & 3)) {
+        throw;
+    }
 
 	// See if event meets skim trigger requirements
 	if((!_FromBEAN) && _ApplySkimTriggerRequirements){
