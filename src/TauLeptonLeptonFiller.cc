@@ -95,6 +95,8 @@ void TauLeptonLeptonFiller::SetupBranches(){
 	
     _Tree->Branch("TLL_TauLTPt", &_TauLTPt);
 	_Tree->Branch("TLL_TauCharge", &_TauCharge);
+	_Tree->Branch("TLL_Lepton1Charge", &_Lepton1Charge);
+	_Tree->Branch("TLL_Lepton2Charge", &_Lepton2Charge);
 	_Tree->Branch("TLL_TauLTvalid", &_TauLTvalid);
 	_Tree->Branch("TLL_TauLTIpVtdxy", &_TauLTIpVtdxy);
 	_Tree->Branch("TLL_TauLTIpVtdz", &_TauLTIpVtdz);
@@ -292,6 +294,8 @@ void TauLeptonLeptonFiller::ClearVectors(){
 	_TauHPSbyIsolationMVAraw                            .clear();
 	_TauLTPt										.clear();
 	_TauCharge										.clear();
+    _Lepton1Charge.clear();
+    _Lepton2Charge.clear();
 	_TauLTvalid									.clear();
 	_TauLTIpVtdxy									.clear();
 	_TauLTIpVtdz									.clear();
@@ -562,6 +566,9 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 			_NumCleanNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
 			_NumCleanNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
+            // fill total jet weight with clean jets
+            _CSVeventWeight.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, _sysType));
+
             // CSV weights for systematics
             if (_sysType == sysType::NA) {
                 _CSVeventWeightLFup.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, sysType::CSVLFup));
@@ -706,8 +713,9 @@ void TauLeptonLeptonFiller::FillTau(const BNtau& Tau){
 }
 
 
-void TauLeptonLeptonFiller::FillLepton1(const BNlepton* iLepton){
-
+void TauLeptonLeptonFiller::FillLepton1(const BNlepton* iLepton)
+{
+    _Lepton1Charge.push_back(iLepton->charge);
 		_Lepton1IsMuon.push_back(iLepton->isMuon);
 		_Lepton1IsElectron.push_back(iLepton->isElectron);
 		_Lepton1Pt.push_back(iLepton->pt);
@@ -761,7 +769,9 @@ void TauLeptonLeptonFiller::FillLepton1(const BNlepton* iLepton){
 		_Lepton1GenMatchGrandmother11Status	.push_back(leptonGenMatch.grandMother11Status);
 }
 
-void TauLeptonLeptonFiller::FillLepton2(const BNlepton* iLepton){
+void TauLeptonLeptonFiller::FillLepton2(const BNlepton* iLepton)
+{
+    _Lepton2Charge.push_back(iLepton->charge);
 		_Lepton2IsMuon.push_back(iLepton->isMuon);
 		_Lepton2IsElectron.push_back(iLepton->isElectron);
 		_Lepton2Pt.push_back(iLepton->pt);

@@ -125,6 +125,7 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		vector<unsigned int>	_NumLooseElectrons;
 		vector<unsigned int>	_NumExLooseElectrons;
 		vector<unsigned int>	_NumTightElectrons;
+        vector<float> _Lepton1Charge;
 		vector<float>			_Lepton1IsMuon;
 		vector<float>			_Lepton1IsElectron;
 		vector<float>			_Lepton1Pt;
@@ -153,6 +154,7 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		vector<int>				_Lepton1GenMatchGrandmother10Status;
 		vector<int>				_Lepton1GenMatchGrandmother11Status;
 
+        vector<float> _Lepton2Charge;
 		vector<float>			_Lepton2IsMuon;
 		vector<float>			_Lepton2IsElectron;
 		vector<float>			_Lepton2Pt;
