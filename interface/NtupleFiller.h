@@ -103,12 +103,6 @@ class NtupleFiller : public EDAnalyzer {
 		template <typename PatObject1, typename PatObject2, typename MetObject> double GetPZeta(const PatObject1&, const PatObject2&, const MetObject&);
 		template <typename PatObject1, typename PatObject2> double GetPZetaVis(const PatObject1&, const PatObject2&);
 		bool IsInTheCracks(float);
-/*		template <typename PatObject> pair<bool, reco::Candidate::LorentzVector> matchToGen(const PatObject&, int);
-		pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&);
-		double matchToGenParentMass(const pat::Tau&);
-		virtual pair<bool, reco::Candidate::LorentzVector> MatchesGenHadronicTau(const pat::Tau&, double);
-		template <typename PatObject> std::pair<unsigned int, unsigned int> getMatchedPdgId(const PatObject&);
-		virtual pair<bool, reco::Candidate::LorentzVector> matchToGen(const pat::Tau&, double, int, int iMotherPdgId=0, int iGrandMotherPdgId=0, bool iCheckNeutrinos=true);//*/
 		
 	protected:
 		unsigned int _DebugLevel;
@@ -174,31 +168,6 @@ class NtupleFiller : public EDAnalyzer {
 		BNmetCollection					_BNmets;
 		BNprimaryvertexCollection		_BNvertices;
 		BNtriggerCollection				_BNtrigger;
-		// === Handles to collections === //
-/*		Handle<BNeventCollection>				_BNevent;
-		Handle<BNelectronCollection>			_BNelectrons;
-		Handle<BNmuonCollection>				_BNmuons;
-		Handle<BNtauCollection>					_BNtaus;
-		Handle<BNjetCollection>					_BNjets;
-		Handle<BNmetCollection>					_BNmets;
-		Handle<BNprimaryvertexCollection>		_BNvertices;
-		Handle<BNtriggerCollection>				_BNtrigger;
-
-		Handle< reco::GenParticleCollection >				_genParticles;
-		Handle< reco::GenJetCollection >					_genJets;
-		Handle< pat::TauCollection >						_patTaus;
-		Handle< pat::ElectronCollection >					_patElectrons;
-		Handle< pat::MuonCollection >						_patMuons;
-		Handle< pat::JetCollection >						_patJets;
-		Handle< pat::METCollection >						_patMETs;
-		Handle< edm::View<pat::MET> >						_pfMETs;
-		Handle< reco::VertexCollection >					_vertices;
-		Handle< std::vector< PileupSummaryInfo > >			_puInfo;
-        Handle< edm::TriggerResults >                       _triggerResults;
-//*/
-
-	
-
 };
 
 
@@ -299,57 +268,5 @@ template <typename PatObject1, typename PatObject2> double NtupleFiller::GetPZet
 	double pZetaVis = visPx*zetaX + visPy*zetaY;
 	return pZetaVis;
 }
-
-
-/*
-template <typename PatObject>
-pair<unsigned int, unsigned int> Ntuplizer::getMatchedPdgId(const PatObject& patObject){
-	pair<unsigned int, unsigned int> theTrackAndMotherPdgId;
-	float minDeltaPt = 1000.;
-	float minDeltaR = 0.2;
-	unsigned int thePdgId = 0;
-	unsigned int theMotherPdgId = 0;
-
-	for(reco::GenParticleCollection::const_iterator genParticle = _genParticles->begin();genParticle != _genParticles->end();++genParticle){
-		if(patObject.charge() != genParticle->charge() || genParticle->status() != 1)continue;  // match only to final states...
-		if(reco::deltaR(patObject.eta(), patObject.phi(), genParticle->eta(), genParticle->phi()) > minDeltaR) continue ;
-		float theDeltaPt = fabs(patObject.pt() - genParticle->pt());
-		if(theDeltaPt < minDeltaPt){
-			minDeltaPt = theDeltaPt;
-			thePdgId = abs(genParticle->pdgId());
-			theMotherPdgId = abs(genParticle->mother()->pdgId());
-		}
-	}
-	theTrackAndMotherPdgId = make_pair<unsigned int, unsigned int>(thePdgId, theMotherPdgId);
-	return theTrackAndMotherPdgId;
-}
-
-template <typename PatObject1, typename PatObject2>
-double Ntuplizer::GetVisMass(const PatObject1& patObject1, const PatObject2& patObject2){
-	reco::Candidate::LorentzVector The_LorentzVect = patObject1.p4() + patObject2.p4();
-	return The_LorentzVect.M();
-}
-
-template <typename PatObject1, typename PatObject2>
-double Ntuplizer::GetVisPlusMETMass(const PatObject1& patObject1, const PatObject2& patObject2){
-	double px = patObject1.px() + patObject2.px() + (*(_patMETs->begin())).px();
-	double py = patObject1.py() + patObject2.py() + (*(_patMETs->begin())).py();
-	double pz = patObject1.pz() + patObject2.pz();
-	double e = patObject1.energy() + patObject2.energy() + TMath::Sqrt(((*(_patMETs->begin())).px() * (*(_patMETs->begin())).px()) + ((*(_patMETs->begin())).py() * (*(_patMETs->begin())).py()));
-	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e);
-	return The_LorentzVect.M();
-}
-
-template <typename PatObject1, typename PatObject2, typename MetObject>
-double Ntuplizer::GetVisPlusMETMass(const PatObject1& patObject1, const PatObject2& patObject2, const MetObject& metObject){
-	double px = patObject1.px() + patObject2.px() + metObject.px();
-	double py = patObject1.py() + patObject2.py() + metObject.py();
-	double pz = patObject1.pz() + patObject2.pz();
-	double e = patObject1.energy() + patObject2.energy() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
-	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e);
-	return The_LorentzVect.M();
-}
-
-//*/
 
 #endif
