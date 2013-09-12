@@ -351,7 +351,7 @@ void TauLeptonLeptonFiller::FillTauLeptonLepton(const BNtau& iTau, const BNlepto
 	_TauLepton1CosDeltaPhi.push_back(cos(TMath::Abs(normalizedPhi(iTau.phi - iLepton1->phi))));
 	_TauLepton2CosDeltaPhi.push_back(cos(TMath::Abs(normalizedPhi(iTau.phi - iLepton2->phi))));
 	_Lepton1Lepton2CosDeltaPhi.push_back(cos(TMath::Abs(normalizedPhi(iLepton1->phi - iLepton2->phi))));
-	_TauLepton1DeltaR.push_back(deltaR(iTau.eta, iTau.phi, iLepton1->eta, iLepton2->phi));
+	_TauLepton1DeltaR.push_back(deltaR(iTau.eta, iTau.phi, iLepton1->eta, iLepton1->phi));
 	_TauLepton2DeltaR.push_back(deltaR(iTau.eta, iTau.phi, iLepton2->eta, iLepton2->phi));
 	_Lepton1Lepton2DeltaR.push_back(deltaR(iLepton1->eta, iLepton1->phi, iLepton2->eta, iLepton2->phi));
 
