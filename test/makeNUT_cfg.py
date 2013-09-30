@@ -156,6 +156,7 @@ else:
     if leptons & 0b10:
         triggerConditions += [
                 'HLT_Mu17_Mu8',
+                'HLT_Mu17_TkMu8',
                 'HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
                 'HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
                 'HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL']
@@ -208,8 +209,10 @@ NtupleFillers = cms.untracked.vstring(
 )
 
 if leptons & 0b01:
+    is_dil = True
     NtupleFillers.append('DitauLepton')
 if leptons & 0b10:
+    is_dil = False
     NtupleFillers.append('TauLeptonLepton')
 
 # === Python process === #
@@ -267,6 +270,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     UsePfLeptons                        = UsePfLeptons,
     DataRange                           = cms.string(dataRange),
     RunExtraBEANhelpers                 = cms.bool(runExtraBEANhelpers),
+    isDilepton = cms.bool(is_dil),
 
 	# === HL Trigger === # (not in use)
     #HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),

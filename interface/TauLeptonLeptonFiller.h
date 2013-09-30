@@ -26,7 +26,7 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		void ClearVectors();
 
 		// === Helper functions === //
-		void FillTauLeptonLepton(const BNtau&, const BNlepton*, const BNlepton*, const BNmet&);
+		void FillTauLeptonLepton(BEANhelper*, const BNtau&, const BNlepton*, const BNlepton*, const BNmet&);
 
 	// ----- Variables ----- //
 	private:
@@ -49,6 +49,8 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		vector<unsigned int>	_NumTightElectrons;
 
         // === Combo === //
+        vector<float> _TriggerEventWeight;
+
         vector<float> _TauLepton1VisibleMass;
         vector<float> _TauLepton2VisibleMass;
         vector<float> _TauLepton1METMass;

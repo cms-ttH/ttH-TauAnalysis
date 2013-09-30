@@ -44,6 +44,8 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
     // required for TTL event check
     _num_leptons = boost::lexical_cast<int>(GetAnalysisTypeParameter(4)[6]);
 
+    _an_type = iConfig.getParameter<bool>("isDilepton") ? analysisType::TauDIL : analysisType::TauLJ;
+
     std::string sysTypeString       = iConfig.getUntrackedParameter<std::string>("SysType");
     _sysType = sysType::NA;
     if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
@@ -75,7 +77,7 @@ void  Ntuplizer::beginJob() {
     // grows significantly after a while and does not decrease.  This
     // causes jobs to fail, as they exceed 2.3 GB RSS memory and get killed
     // by the crab watchdog.
-    _Tree->SetAutoFlush(-50000000);
+    _Tree->SetAutoFlush(15000);
 
     _numFailedTauEventCheck = 0;
 
@@ -84,7 +86,7 @@ void  Ntuplizer::beginJob() {
 	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
 	beanHelper.SetUp(eraForBEANhelper, // 2011, 2012_52x, 2012_53x
             atoi(GetAnalysisTypeParameter(3).c_str()), // sample number
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"), // is data
             std::string("SingleMu"), // data set
             false, // do CSV reshaping
@@ -97,7 +99,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012A"] = new BEANhelper();
         beanHelpers["2012A"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -107,7 +109,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012AB"] = new BEANhelper();
         beanHelpers["2012AB"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -117,7 +119,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012B"] = new BEANhelper();
         beanHelpers["2012B"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -127,7 +129,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012C"] = new BEANhelper();
         beanHelpers["2012C"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -137,7 +139,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012ABC"] = new BEANhelper();
         beanHelpers["2012ABC"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -147,7 +149,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012BC"] = new BEANhelper();
         beanHelpers["2012BC"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -157,7 +159,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012D"] = new BEANhelper();
         beanHelpers["2012D"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 
@@ -167,7 +169,7 @@ void  Ntuplizer::beginJob() {
         beanHelpers["2012CD"] = new BEANhelper();
         beanHelpers["2012CD"]->SetUp(eraForBEANhelper,
             atoi(GetAnalysisTypeParameter(3).c_str()),
-            analysisType::Tau,
+            _an_type,
             SampleTypeContains("data"),
             std::string("SingleMu"), 
             false, 

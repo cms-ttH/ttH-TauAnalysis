@@ -87,6 +87,7 @@ class Ntuplizer : public EDAnalyzer {
         string _DataRange;
         bool _RunExtraBEANhelpers;
         int _num_leptons;
+        analysisType::analysisType _an_type;
 
         // required for TTL-event check
         InputTag _RecoJetSource;

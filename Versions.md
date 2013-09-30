@@ -294,6 +294,14 @@
 * fix DeltaR(lepton, tau)
 * now with μ + eγ dataset
 
+## v52
+
+* 8TeV-Spring13BEANS
+* s1 - 111021
+* TLL only
+* Include trigger scale factors
+* Match electron and muon combinations to triggers
+
 # Skim Versions
 
 ## s1
