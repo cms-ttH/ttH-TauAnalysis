@@ -50,7 +50,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_1110211_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_1110112_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
