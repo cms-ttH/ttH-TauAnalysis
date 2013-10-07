@@ -22,8 +22,9 @@ crab_status() {
 crab_resubmit() {
    for i in $*; do
       [ ! -d "$i" ] && continue
-      crab -status -getoutput -c $i|grep -A 1 '>>>.*Code : [^0]'|awk '/List/ {print "crab -resubmit", $4, "-c '$i'"}';
+      crab -status -getoutput -c $i|egrep -A 2 '>>>.*(Code : [^0]|Aborted)'|awk '/List of jobs:/ {print "crab -resubmit", $4, "-c '$i'"}';
    done | while read cmd; do
+      # echo $cmd
       $cmd
    done
 }
