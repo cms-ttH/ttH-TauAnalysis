@@ -314,14 +314,14 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 process.makeNtupleSeq = cms.Sequence(process.makeNtuple)
 
 # add modules for systematic shifts
-for sys in sysTypes:
-  if sys == 'NA': 
+for unc in sysTypes:
+  if unc == 'NA': 
     continue
   mod = copy.deepcopy(process.makeNtuple)
-  mod.SysType = sys
-  mod.TreeName = baseTreeName + '_' + sys
-  setattr(process,'makeNtuple_'+sys,mod)
-  process.makeNtupleSeq += getattr(process,'makeNtuple_'+sys)
+  mod.SysType = unc
+  mod.TreeName = baseTreeName + '_' + unc
+  setattr(process,'makeNtuple_'+unc,mod)
+  process.makeNtupleSeq += getattr(process,'makeNtuple_'+unc)
 
 
 # === Run sequence === # 
