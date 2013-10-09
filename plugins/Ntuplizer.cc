@@ -10,43 +10,43 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
-
-	// Necessary to propagate iConfig 
-	jobConfig						= new ParameterSet(iConfig);
+Ntuplizer::Ntuplizer(const ParameterSet& config)
+{
+	// Necessary to propagate config 
+	jobConfig						= new ParameterSet(config);
 
 	// Analysis type
-	_DebugLevel						= iConfig.getParameter<unsigned int>("DebugLevel");
-	_FromBEAN						= iConfig.getParameter<bool>("FromBEAN");
-	_AnalysisType					= iConfig.getParameter<string>("AnalysisType");
-	_EraRelease						= iConfig.getParameter<string>("EraRelease");
-    _UsePfLeptons                   = ( iConfig.exists("UsePfLeptons") ) ? iConfig.getParameter<bool>("UsePfLeptons") : true;
-    _DataRange                      = ( iConfig.exists("DataRange") ) ? iConfig.getParameter<string>("DataRange") : "All";
-    _RunExtraBEANhelpers            = ( iConfig.exists("RunExtraBEANhelpers") ) ? iConfig.getParameter<bool>("RunExtraBEANhelpers") : false;
+	_DebugLevel						= config.getParameter<unsigned int>("DebugLevel");
+	_FromBEAN						= config.getParameter<bool>("FromBEAN");
+	_AnalysisType					= config.getParameter<string>("AnalysisType");
+	_EraRelease						= config.getParameter<string>("EraRelease");
+    _UsePfLeptons                   = ( config.exists("UsePfLeptons") ) ? config.getParameter<bool>("UsePfLeptons") : true;
+    _DataRange                      = ( config.exists("DataRange") ) ? config.getParameter<string>("DataRange") : "All";
+    _RunExtraBEANhelpers            = ( config.exists("RunExtraBEANhelpers") ) ? config.getParameter<bool>("RunExtraBEANhelpers") : false;
 
 	// Name of the ntuple tree
-	_TreeName						= iConfig.getUntrackedParameter<std::string>("TreeName");
+	_TreeName						= config.getUntrackedParameter<std::string>("TreeName");
 
 	// Fillers to use
-	_enabledFillers					= iConfig.getUntrackedParameter<std::vector<std::string> >("NtupleFillers");
+	_enabledFillers					= config.getUntrackedParameter<std::vector<std::string> >("NtupleFillers");
 
 	// Skim trigger
-	_ApplySkimTriggerRequirements	= iConfig.getParameter<bool>("ApplySkimTriggerRequirements");
-	_SkimTriggerSource				= iConfig.getParameter<InputTag>("SkimTriggerSource");
-	_SkimTriggerRequirements		= iConfig.getParameter<vector<string> >("SkimTriggerRequirements");
+	_ApplySkimTriggerRequirements	= config.getParameter<bool>("ApplySkimTriggerRequirements");
+	_SkimTriggerSource				= config.getParameter<InputTag>("SkimTriggerSource");
+	_SkimTriggerRequirements		= config.getParameter<vector<string> >("SkimTriggerRequirements");
     
     // required for TTL event check
-    _RecoTauSource                  = iConfig.getParameter<InputTag>("RecoTauSource");
-    _RecoMuonSource                 = iConfig.getParameter<InputTag>("RecoMuonSource");
-    _RecoElectronSource             = iConfig.getParameter<InputTag>("RecoElectronSource");
-    _RecoJetSource                  = iConfig.getParameter<InputTag>("RecoJetSource");
+    _RecoTauSource                  = config.getParameter<InputTag>("RecoTauSource");
+    _RecoMuonSource                 = config.getParameter<InputTag>("RecoMuonSource");
+    _RecoElectronSource             = config.getParameter<InputTag>("RecoElectronSource");
+    _RecoJetSource                  = config.getParameter<InputTag>("RecoJetSource");
 
     // required for TTL event check
     _num_leptons = boost::lexical_cast<int>(GetAnalysisTypeParameter(4)[6]);
 
-    _an_type = iConfig.getParameter<bool>("isDilepton") ? analysisType::TauDIL : analysisType::TauLJ;
+    _an_type = config.getParameter<bool>("isDilepton") ? analysisType::TauDIL : analysisType::TauLJ;
 
-    std::string sysTypeString       = iConfig.getUntrackedParameter<std::string>("SysType");
+    std::string sysTypeString       = config.getUntrackedParameter<std::string>("SysType");
     _sysType = sysType::NA;
     if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
     if( sysTypeString.compare("JERup") == 0 ) _sysType = sysType::JERup;
@@ -55,7 +55,6 @@ Ntuplizer::Ntuplizer(const ParameterSet& iConfig) {
     if( sysTypeString.compare("JESdown") == 0 ) _sysType = sysType::JESdown;
     if( sysTypeString.compare("TESup") == 0 ) _sysType = sysType::TESup;
     if( sysTypeString.compare("TESdown") == 0 ) _sysType = sysType::TESdown;
-    
 }
 
 // === Destructor === //
