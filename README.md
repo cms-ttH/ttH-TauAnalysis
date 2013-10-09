@@ -28,3 +28,7 @@ To pre-process files prior to moving them to, e.g., hadoop, do
 The most current ntuples are found in
 
     /store/user/matze/ttH/
+
+or
+
+    /hadoop/users/matze/ttH/
