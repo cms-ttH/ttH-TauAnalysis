@@ -10,7 +10,11 @@ In your CMSSW area, use
 
 ## Producing ntuples
 
-See the `test` directory for `crab` configurations.
+See the `test` directory for `crab` example configurations.
+Current state-of-the-art uses
+[grid-control](https://ekptrac.physik.uni-karlsruhe.de/trac/grid-control/wiki)
+to produce ntuples.
+A current configuration is provided in the `test` directory.
 
 ## Postproduction
 
