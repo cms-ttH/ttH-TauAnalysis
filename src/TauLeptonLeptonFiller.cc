@@ -390,8 +390,8 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
         _TauMomentumRank.push_back(theNumberOfTaus-1);
 
         tau->Fill(*Tau, beanHelper, _BNmcparticles);
-        lep1->Fill(Lepton1, beanHelper, _BNmcparticles);
-        lep2->Fill(Lepton2, beanHelper, _BNmcparticles);
+        lep1->Fill(Lepton1, beanHelper, _BNmcparticles, correctedMET);
+        lep2->Fill(Lepton2, beanHelper, _BNmcparticles, correctedMET);
         FillTauLeptonLepton(beanHelper, *Tau, Lepton1, Lepton2, correctedMET);
 
 	} // End of tau loop

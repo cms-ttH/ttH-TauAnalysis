@@ -18,7 +18,7 @@ class AnalysisLepton {
         AnalysisLepton(const std::string&, TTree*);
 
         void ClearVectors();
-        void Fill(const BNlepton*, BEANhelper*, const BNmcparticleCollection&);
+        void Fill(const BNlepton*, BEANhelper*, const BNmcparticleCollection&, const BNmet&);
 
     protected:
         vector<float> _IsMuon;
@@ -27,6 +27,7 @@ class AnalysisLepton {
         vector<float> _Pt;
         vector<float> _Eta;
         vector<float> _Phi;
+        vector<float> _mt;
         vector<float> _RelIso;
         vector<float> _CorrectedD0;
         vector<float> _CorrectedDZ;

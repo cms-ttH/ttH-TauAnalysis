@@ -1,6 +1,9 @@
 // vim: sta:et:sw=4:ts=4
 // Authors: Matthias Wolf <matthias.wolf@cern.ch>
 
+// use the same lorentz vector everywhere
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+
 #include "../interface/AnalysisLepton.h"
 
 AnalysisLepton::AnalysisLepton(const std::string& p, TTree* t)
@@ -11,6 +14,7 @@ AnalysisLepton::AnalysisLepton(const std::string& p, TTree* t)
     t->Branch((p + "Pt").c_str(), &_Pt);
     t->Branch((p + "Eta").c_str(), &_Eta);
     t->Branch((p + "Phi").c_str(), &_Phi);
+    t->Branch((p + "Mt").c_str(), &_mt);
     t->Branch((p + "RelIso").c_str(), &_RelIso);
     t->Branch((p + "CorrectedD0").c_str(), &_CorrectedD0);
     t->Branch((p + "CorrectedDZ").c_str(), &_CorrectedDZ);
@@ -45,6 +49,7 @@ AnalysisLepton::ClearVectors()
     _Pt.clear();
     _Eta.clear();
     _Phi.clear();
+    _mt.clear();
     _RelIso.clear();
 
     _CorrectedD0.clear();
@@ -77,7 +82,7 @@ AnalysisLepton::ClearVectors()
 }
 
 void
-AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCollection& mc_particles)
+AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCollection& mc_particles, const BNmet& met)
 {
     if (l->isMuon) {
         const BNmuon *m = (const BNmuon*) l;
@@ -105,6 +110,11 @@ AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCo
     _Pt.push_back(l->pt);
     _Eta.push_back(l->eta);
     _Phi.push_back(l->phi);
+
+    // this follows as in http://arxiv.org/pdf/hep-ex/9712029v1.pdf
+    float mt = sqrt(l->pt * met.pt * (1 - cos(l->phi - met.phi)));
+    // reco::Candidate::LorentzVector v(l->px + met.px, l->py + met.py, 0, l->pt + met.pt);
+    _mt.push_back(mt);
 
     _CorrectedD0.push_back(l->correctedD0);
     _CorrectedDZ.push_back(l->correctedDZ);

@@ -285,13 +285,21 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 					if(deltaR(Tau1->eta, Tau1->phi, Electron->eta, Electron->phi) < 0.15){ ++Electron; continue; }
 					if(deltaR(Tau2->eta, Tau2->phi, Electron->eta, Electron->phi) < 0.15){ ++Electron; continue; }
 				}
-				
-				// Jets and MET and related quantities
 
-				vector<TLorentzVector> tausAndLepton; // Clean jets from taus and muon
-				tausAndLepton.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
-				tausAndLepton.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
-                
+                const BNlepton *lepton = useMuon ? static_cast<const BNlepton*>(&*Muon) : static_cast<const BNlepton*>(&*Electron);
+
+                // Jets and MET and related quantities
+                vector<TLorentzVector> non_jets;
+                non_jets.push_back(TLorentzVector(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy));
+                non_jets.push_back(TLorentzVector(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy));
+                non_jets.push_back(TLorentzVector(lepton->px, lepton->py, lepton->pz, lepton->energy));
+
+                std::vector<unsigned int> jet_indices;
+                BNjetCollection cleanSelCorrJets = beanHelper->GetCleanJets(selCorrJets, non_jets, 0.25, &jet_indices);
+                BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets), _sysType);
+
+                _CleanJetIndices.push_back(jet_indices);
+
 				_MomentumRank.push_back(_MomentumRank.size());
 				_NumCombos++;
 				theNumberOfLeptons++;
@@ -304,13 +312,12 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 				_NumExLooseElectrons	.push_back(numExLooseElectrons);
 				_NumTightElectrons		.push_back(numTightElectrons);
 
-				// Fill leading tau
-				_Tau1MomentumRank.push_back(theNumberOfTaus1-1);
-                tau1->Fill(*Tau1, beanHelper, _BNmcparticles);
+                _Tau1MomentumRank.push_back(theNumberOfTaus1-1);
+                _Tau2MomentumRank.push_back(theNumberOfTaus2-1);
 
-				// Fill subleading tau
-				_Tau2MomentumRank.push_back(theNumberOfTaus2-1);
+                tau1->Fill(*Tau1, beanHelper, _BNmcparticles);
                 tau2->Fill(*Tau2, beanHelper, _BNmcparticles);
+                lep->Fill(lepton, beanHelper, _BNmcparticles, correctedMET);
 
 				// Fill lepton
 				_LeptonMomentumRank.push_back(theNumberOfLeptons-1);
@@ -318,26 +325,13 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 					theNumberOfMuons++;	
 					_MuonMomentumRank.push_back(theNumberOfMuons-1);
 					_ElectronMomentumRank.push_back(-1);
-                    lep->Fill(&*Muon, beanHelper, _BNmcparticles);
 					FillDitauLepton(*Tau1, *Tau2, *Muon);
-					tausAndLepton.push_back(TLorentzVector(Muon->px, Muon->py, Muon->pz, Muon->energy));
-					
 				}else{	// Lepton is an electron: fill for electron
 					theNumberOfElectrons++;
 					_MuonMomentumRank.push_back(-1);
 					_ElectronMomentumRank.push_back(theNumberOfElectrons-1);
-                    lep->Fill(&*Electron, beanHelper, _BNmcparticles);
 					FillDitauLepton(*Tau1, *Tau2, *Electron);
-					tausAndLepton.push_back(TLorentzVector(Electron->px, Electron->py, Electron->pz, Electron->energy));
-				
 				} // End of muon/electron if-statement
-
-                std::vector<unsigned int> jet_indices;
-				BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tausAndLepton, 0.25, &jet_indices);
-                _CleanJetIndices.push_back(jet_indices);
-
-				// Derive quantities based on the corrected MET based on the clean, corrected, kinematically-selected jets
-				BNmet correctedMET  = beanHelper->GetCorrectedMET(*(_BNmets.begin()), beanHelper->GetUncorrectedJets(cleanSelCorrJets, _BNjets), _sysType);
 
 				if(useMuon){	_HT.push_back(Tau1->pt + Tau2->pt + Muon->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets)); }
 				else{			_HT.push_back(Tau1->pt + Tau2->pt + Electron->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets)); }
