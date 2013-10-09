@@ -13,7 +13,6 @@ class QuickFiller : public NtupleFiller {
 	public:
 		explicit QuickFiller(const ParameterSet&);
 		explicit QuickFiller(const ParameterSet&, TTree*, BEANhelper*);
-		explicit QuickFiller(const ParameterSet&, TTree*, Service<TFileService>*, BEANhelper*);
 		~QuickFiller();
 		virtual void FillNtuple(const Event&, const EventSetup&);
 
