@@ -10,7 +10,8 @@ using namespace edm;
 using namespace reco;
 
 // constructors and destructor
-Ntuplizer::Ntuplizer(const ParameterSet& config)
+Ntuplizer::Ntuplizer(const ParameterSet& config) :
+    _filename(config.getParameter<string>("outputFileName"))
 {
 	// Necessary to propagate config 
 	jobConfig						= new ParameterSet(config);
@@ -23,9 +24,6 @@ Ntuplizer::Ntuplizer(const ParameterSet& config)
     _UsePfLeptons                   = ( config.exists("UsePfLeptons") ) ? config.getParameter<bool>("UsePfLeptons") : true;
     _DataRange                      = ( config.exists("DataRange") ) ? config.getParameter<string>("DataRange") : "All";
     _RunExtraBEANhelpers            = ( config.exists("RunExtraBEANhelpers") ) ? config.getParameter<bool>("RunExtraBEANhelpers") : false;
-
-	// Name of the ntuple tree
-	_TreeName						= config.getUntrackedParameter<std::string>("TreeName");
 
 	// Fillers to use
 	_enabledFillers					= config.getUntrackedParameter<std::vector<std::string> >("NtupleFillers");
@@ -63,14 +61,18 @@ Ntuplizer::~Ntuplizer(){
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void  Ntuplizer::beginJob() {
+void
+Ntuplizer::beginJob()
+{
+    _file = new TFile(_filename.c_str(), "RECREATE");
+    if (!_file->IsOpen()) {
+        edm::LogError("Ntuplizer") << "Can't open file '" << _filename << "' for writing!" << std::endl;
+        throw;
+    }
+    _file->cd();
 
-    //std::cout << "<Ntuplizer::beginJob>: enter function" << std::endl;
-
-	// Initialize TFileService
-	Service<TFileService> fs;
-	_EventsRead	= fs->make<TH1I>("EventsRead", "EventsRead",1,0,1);
-	_Tree		= fs->make<TTree>(_TreeName.c_str(), _TreeName.c_str());
+    _EventsRead = new TH1I(("EventsRead" + _filename).c_str(), "EventsRead",1,0,1);
+    _Tree = new TTree(("TTbarHTauTau" + _filename).c_str(), "TTbarHTauTau");
     // FIXME Set the flushing threshold to a lower level.  With the default
     // setting of ROOT 5.32 (CMSSW 5_3_8), the basket size of the tree
     // grows significantly after a while and does not decrease.  This
@@ -197,16 +199,28 @@ void  Ntuplizer::beginJob() {
 }
 
 // === Method called once each job just after ending the event loop === //
-void Ntuplizer::endJob(){
-
-    // delete extra BEANhelpers
-    if( _RunExtraBEANhelpers ) 
-        for( map<string,BEANhelper*>::iterator it = beanHelpers.begin(); it != beanHelpers.end(); ++it) delete it->second;
-	// Delete NtupleFillers
-	for(unsigned int n=0; n<ntupleFillers.size(); n++){ delete ntupleFillers.at(n); ntupleFillers.at(n) = NULL; }
+void
+Ntuplizer::endJob()
+{
+    std::cout << "TEARDOWN" << std::endl;
+    if( _RunExtraBEANhelpers )
+        for (auto& pair: beanHelpers)
+            delete pair.second;
+    for (auto& filler: ntupleFillers)
+       delete filler;
 
     cout << endl <<_numFailedTauEventCheck << " events failed BEANhelper::IsTauEvent" << endl << endl;
 
+    std::cout << "WRITING" << std::endl;
+
+    _file->WriteObject(_Tree, "TTbarHTauTau");
+    _file->WriteObject(_EventsRead, "EventsRead");
+    _file->Close();
+
+    std::cout << "DONE WRITING" << std::endl;
+
+    delete _file;
+    std::cout << "TEARDOWN DONE" << std::endl;
 }
 
 
@@ -299,7 +313,8 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 
 bool Ntuplizer::IsFillerEnabled(const string iName){
 	for(unsigned int f=0; f<_enabledFillers.size(); f++){
-		if(_enabledFillers.at(f).compare(iName)==0){ std::cout << " " << _TreeName << " ---> found " << iName << std::endl; return true; }	
+        if (_enabledFillers.at(f).compare(iName) == 0)
+            std::cout << "---> found " << iName << std::endl; return true;
 	}
 
 	return false;

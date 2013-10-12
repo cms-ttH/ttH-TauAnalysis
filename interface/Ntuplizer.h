@@ -11,9 +11,6 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 
-#include "FWCore/ServiceRegistry/interface/Service.h"
-#include "CommonTools/UtilAlgos/interface/TFileService.h"
-
 #include "BEAN/BEANmaker/interface/BEANhelper.h"
 
 #include "NtupleFiller.h"
@@ -69,6 +66,7 @@ class Ntuplizer : public EDAnalyzer {
 
 	// ----- Variables ----- //
 	private:
+        std::string _filename;
 		// === Misc variables === //
 		unsigned int _DebugLevel;
 		vector<NtupleFiller*> ntupleFillers;
@@ -78,8 +76,8 @@ class Ntuplizer : public EDAnalyzer {
 		string _EraRelease;
 		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
+        TFile* _file;
 		TTree* _Tree;
-		string _TreeName;
         bool _UsePfLeptons;
 		BEANhelper beanHelper;
 		map<string,BEANhelper*> beanHelpers;

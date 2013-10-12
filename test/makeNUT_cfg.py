@@ -13,7 +13,7 @@ tauMaxEta	= 9
 tauMinPt	= 10
 baseTreeName = 'TTbarHTauTau'
 dataRange   = 'All'
-runExtraBEANhelpers = False
+runExtraBEANhelpers = True
 
 # collection postfix for running on PF2PAT
 postfix = ''
@@ -55,7 +55,7 @@ options.register(
         VarParsing.VarParsing.varType.string )
 
 options.maxEvents = maxEvents
-options.outputFile = 'NUT.root'
+options.outputFile = 'ntuple{s}.root'
 
 ## 7TeV/2011 sample
 #options.inputFiles = '/store/user/jkolb/TTH_HtoTauTau_M_125_7TeV_FullSim_Pythia6_v2/skimTTHiggsToDiTau_428_v8_TTH_125_FullSim/25a6c8a18b2b0964299388fc37b7979d/ttHiggsToDiTauSkim_100_1_NwK.root'
@@ -229,8 +229,6 @@ process.source = cms.Source("PoolSource",
     skipEvents = cms.untracked.uint32(0),
     fileNames = cms.untracked.vstring(options.inputFiles)
 )
-process.TFileService = cms.Service("TFileService", fileName = cms.string(options.outputFile) )
-
 
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
@@ -310,21 +308,26 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Systematics stuff === #
     SysType                             = cms.untracked.string('NA'),
+
+    # output file: name depends on systematics used
+    outputFileName = cms.string(options.outputFile.format(s="")),
 )
 process.makeNtupleSeq = cms.Sequence(process.makeNtuple)
 
 # add modules for systematic shifts
 for unc in sysTypes:
-  if unc == 'NA': 
-    continue
-  mod = copy.deepcopy(process.makeNtuple)
-  mod.SysType = unc
-  mod.TreeName = baseTreeName + '_' + unc
-  setattr(process,'makeNtuple_'+unc,mod)
-  process.makeNtupleSeq += getattr(process,'makeNtuple_'+unc)
+    if unc == 'NA':
+        continue
+    mod = copy.deepcopy(process.makeNtuple)
+    mod.SysType = unc
+    # For historical reasons, case is inconsistent.  This removes some code
+    # downstream dealing with inconsistent case.
+    unc = unc.replace("up", "Up").replace("down", "Down")
+    mod.outputFileName = cms.string(options.outputFile.format(s="_" + unc))
+    setattr(process,'makeNtuple_'+unc,mod)
+    process.makeNtupleSeq += mod
 
-
-# === Run sequence === # 
+# === Run sequence === #
 if not runOnMC:
     process.p = cms.Path( process.beanSkimmer + process.hltFilter + process.makeNtupleSeq )
 else:
