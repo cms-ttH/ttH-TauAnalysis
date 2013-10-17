@@ -32,7 +32,6 @@ class JetFiller : public NtupleFiller {
 		vector<float>		_JetPhi;
         vector<double> _JetCSV;
         vector<float> _JetCharge;
-        vector<float> _JetChargePtWeighed;
         vector<int> _JetPartonId;
         vector<int> _JetPartonMother0Id;
         vector<int> _JetPartonMother1Id;

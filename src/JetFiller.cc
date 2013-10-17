@@ -36,7 +36,6 @@ void JetFiller::SetupBranches(){
 	_Tree->Branch("J_Phi", &_JetPhi);
     _Tree->Branch("J_CSV", &_JetCSV);
     _Tree->Branch("J_Charge", &_JetCharge);
-    _Tree->Branch("J_ChargePtWeighed", &_JetChargePtWeighed);
     _Tree->Branch("J_PartonId", &_JetPartonId);
     _Tree->Branch("J_PartonMother0Id", &_JetPartonMother0Id);
     _Tree->Branch("J_PartonMother1Id", &_JetPartonMother1Id);
@@ -67,7 +66,6 @@ void JetFiller::ClearVectors(){
 	_JetPhi					.clear();
     _JetCSV.clear();
     _JetCharge.clear();
-    _JetChargePtWeighed.clear();
     _JetPartonId.clear();
     _JetPartonMother0Id.clear();
     _JetPartonMother1Id.clear();
@@ -112,7 +110,6 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_JetEta.push_back(Jet->eta);
 		_JetPhi.push_back(Jet->phi);
         _JetCharge.push_back(Jet->charge);
-        _JetChargePtWeighed.push_back(Jet->jetChargeRelativePtWeighted);
 
 		_combSecVtxBTag			.push_back(Jet->btagCombinedSecVertex);
 		_combSecVtxLooseBTag	.push_back(beanHelper->PassesCSV(*Jet, 'L'));
