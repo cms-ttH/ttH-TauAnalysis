@@ -112,7 +112,7 @@ AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCo
     _Phi.push_back(l->phi);
 
     // this follows as in http://arxiv.org/pdf/hep-ex/9712029v1.pdf
-    float mt = sqrt(l->pt * met.pt * (1 - cos(l->phi - met.phi)));
+    float mt = sqrt(2 * l->pt * met.pt * (1 - cos(l->phi - met.phi)));
     // reco::Candidate::LorentzVector v(l->px + met.px, l->py + met.py, 0, l->pt + met.pt);
     _mt.push_back(mt);
 
