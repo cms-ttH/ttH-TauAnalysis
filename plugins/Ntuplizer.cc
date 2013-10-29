@@ -72,13 +72,13 @@ Ntuplizer::beginJob()
     _file->cd();
 
     _EventsRead = new TH1I(("EventsRead" + _filename).c_str(), "EventsRead",1,0,1);
-    _Tree = new TTree(("TTbarHTauTau" + _filename).c_str(), "TTbarHTauTau");
+    _Tree = new TTree("TTbarHTauTau", "TTbarHTauTau");
     // FIXME Set the flushing threshold to a lower level.  With the default
     // setting of ROOT 5.32 (CMSSW 5_3_8), the basket size of the tree
     // grows significantly after a while and does not decrease.  This
     // causes jobs to fail, as they exceed 2.3 GB RSS memory and get killed
     // by the crab watchdog.
-    _Tree->SetAutoFlush(15000);
+    _Tree->SetAutoFlush(1000);
 
     _numFailedTauEventCheck = 0;
 
@@ -202,25 +202,20 @@ Ntuplizer::beginJob()
 void
 Ntuplizer::endJob()
 {
-    std::cout << "TEARDOWN" << std::endl;
     if( _RunExtraBEANhelpers )
         for (auto& pair: beanHelpers)
             delete pair.second;
     for (auto& filler: ntupleFillers)
        delete filler;
 
-    cout << endl <<_numFailedTauEventCheck << " events failed BEANhelper::IsTauEvent" << endl << endl;
-
-    std::cout << "WRITING" << std::endl;
+    LogWarning("TauNtuplizer") << _numFailedTauEventCheck << " events failed BEANhelper::IsTauEvent" << endl;
 
     _file->WriteObject(_Tree, "TTbarHTauTau");
+    delete _Tree;
     _file->WriteObject(_EventsRead, "EventsRead");
     _file->Close();
 
-    std::cout << "DONE WRITING" << std::endl;
-
     delete _file;
-    std::cout << "TEARDOWN DONE" << std::endl;
 }
 
 
@@ -313,8 +308,10 @@ bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerS
 
 bool Ntuplizer::IsFillerEnabled(const string iName){
 	for(unsigned int f=0; f<_enabledFillers.size(); f++){
-        if (_enabledFillers.at(f).compare(iName) == 0)
-            std::cout << "---> found " << iName << std::endl; return true;
+        if (_enabledFillers.at(f).compare(iName) == 0) {
+            std::cout << "---> found " << iName << std::endl;
+            return true;
+        }
 	}
 
 	return false;
