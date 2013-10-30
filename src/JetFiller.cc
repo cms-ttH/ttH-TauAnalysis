@@ -92,19 +92,13 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
-	unsigned int theNumberOfJets = 0;
-
 	BNjetCollection correctedJets	= beanHelper->GetCorrectedJets(_BNjets, _sysType);
 	BNjetCollection selCorrJets		= beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose,'-');
 
     _JetCSV = beanHelper->GetCSVweights(selCorrJets, _sysType);
 
 	_NumJets = selCorrJets.size();
-	theNumberOfJets = 0;
 	for ( BNjetCollection::const_iterator Jet = selCorrJets.begin(); Jet != selCorrJets.end(); ++Jet ) {
-		theNumberOfJets++;
-
-		_NumJets++;
 		_MomentumRank.push_back(_MomentumRank.size());
 		_JetPt.push_back(Jet->pt);
 		_JetEta.push_back(Jet->eta);
