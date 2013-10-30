@@ -82,12 +82,8 @@ void DitauLeptonFiller::SetupBranches()
     _Tree->Branch("TTL_NumCleanNonCSVMbtagJets", &_NumCleanNonCSVMbtagJets);
     _Tree->Branch("TTL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
     _Tree->Branch("TTL_CleanJetIndices", &_CleanJetIndices);
-    _Tree->Branch("TTL_CleanJetCSVLIndices", &_CleanJetCSVLIndices);
     _Tree->Branch("TTL_CleanJetCSVMIndices", &_CleanJetCSVMIndices);
-    _Tree->Branch("TTL_CleanJetCSVTIndices", &_CleanJetCSVTIndices);
-    _Tree->Branch("TTL_CleanJetNonCSVLIndices", &_CleanJetNonCSVLIndices);
     _Tree->Branch("TTL_CleanJetNonCSVMIndices", &_CleanJetNonCSVMIndices);
-    _Tree->Branch("TTL_CleanJetNonCSVTIndices", &_CleanJetNonCSVTIndices);
 
     // === Combo weights === //
     _Tree->Branch("TTL_CSVeventWeight", &_CSVeventWeight);
@@ -162,18 +158,10 @@ void DitauLeptonFiller::ClearVectors(){
     // swap these vectors with empty ones to really release memory
     _CleanJetIndices.clear();
     std::vector< std::vector<unsigned int> >().swap(_CleanJetIndices);
-    _CleanJetCSVLIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetCSVLIndices);
     _CleanJetCSVMIndices.clear();
     std::vector< std::vector<unsigned int> >().swap(_CleanJetCSVMIndices);
-    _CleanJetCSVTIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetCSVTIndices);
-    _CleanJetNonCSVLIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetNonCSVLIndices);
     _CleanJetNonCSVMIndices.clear();
     std::vector< std::vector<unsigned int> >().swap(_CleanJetNonCSVMIndices);
-    _CleanJetNonCSVTIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetNonCSVTIndices);
 
     // === Combo weights === //
     _CSVeventWeight.clear();
@@ -382,6 +370,9 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
                 
 				_DitauMETMass		.push_back(GetComboMassBN(*Tau1, *Tau2, correctedMET));
 
+                std::vector<unsigned int> tag_indices;
+                std::vector<unsigned int> notag_indices;
+
 				_NumCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'L'));
 				_NumCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'M'));
 				_NumCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'T'));
@@ -390,38 +381,19 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 				_NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'T'));
 
 				_NumCleanCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
-				_NumCleanCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCleanCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M', &tag_indices));
 				_NumCleanCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
 				_NumCleanNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
-				_NumCleanNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
+				_NumCleanNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M', &notag_indices));
 				_NumCleanNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
-                _CleanJetCSVLIndices.push_back(std::vector<unsigned int>());
-                _CleanJetCSVMIndices.push_back(std::vector<unsigned int>());
-                _CleanJetCSVTIndices.push_back(std::vector<unsigned int>());
-                _CleanJetNonCSVLIndices.push_back(std::vector<unsigned int>());
-                _CleanJetNonCSVMIndices.push_back(std::vector<unsigned int>());
-                _CleanJetNonCSVTIndices.push_back(std::vector<unsigned int>());
+                for (auto& idx: tag_indices)
+                    idx = jet_indices[idx];
+                for (auto& idx: notag_indices)
+                    idx = jet_indices[idx];
 
-                for (const auto& i: _CleanJetIndices.back()) {
-                    if (beanHelper->PassesCSV(cleanSelCorrJets[i], 'L')) {
-                        _CleanJetCSVLIndices.back().push_back(i);
-                    } else {
-                        _CleanJetNonCSVLIndices.back().push_back(i);
-                    }
-
-                    if (beanHelper->PassesCSV(cleanSelCorrJets[i], 'M')) {
-                        _CleanJetCSVMIndices.back().push_back(i);
-                    } else {
-                        _CleanJetNonCSVMIndices.back().push_back(i);
-                    }
-
-                    if (beanHelper->PassesCSV(cleanSelCorrJets[i], 'T')) {
-                        _CleanJetCSVTIndices.back().push_back(i);
-                    } else {
-                        _CleanJetNonCSVTIndices.back().push_back(i);
-                    }
-                }
+                _CleanJetCSVMIndices.push_back(tag_indices);
+                _CleanJetNonCSVMIndices.push_back(notag_indices);
 
 				// Move to the next lepton
 				if(useMuon){ ++Muon; }

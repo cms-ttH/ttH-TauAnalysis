@@ -78,12 +78,8 @@ void TauLeptonLeptonFiller::SetupBranches()
     _Tree->Branch("TLL_NumCleanNonCSVTbtagJets", &_NumCleanNonCSVTbtagJets);
     _Tree->Branch("TLL_CleanJetIndices", &_CleanJetIndices);
     _Tree->Branch("TLL_CleanJetIndices", &_CleanJetIndices);
-    _Tree->Branch("TLL_CleanJetCSVLIndices", &_CleanJetCSVLIndices);
     _Tree->Branch("TLL_CleanJetCSVMIndices", &_CleanJetCSVMIndices);
-    _Tree->Branch("TLL_CleanJetCSVTIndices", &_CleanJetCSVTIndices);
-    _Tree->Branch("TLL_CleanJetNonCSVLIndices", &_CleanJetNonCSVLIndices);
     _Tree->Branch("TLL_CleanJetNonCSVMIndices", &_CleanJetNonCSVMIndices);
-    _Tree->Branch("TLL_CleanJetNonCSVTIndices", &_CleanJetNonCSVTIndices);
 
     // === Weights === //
     _Tree->Branch("TLL_CSVeventWeight", &_CSVeventWeight);
@@ -155,18 +151,10 @@ void TauLeptonLeptonFiller::ClearVectors()
     // swap these vectors with empty ones to really release memory
     _CleanJetIndices.clear();
     std::vector< std::vector<unsigned int> >().swap(_CleanJetIndices);
-    _CleanJetCSVLIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetCSVLIndices);
     _CleanJetCSVMIndices.clear();
     std::vector< std::vector<unsigned int> >().swap(_CleanJetCSVMIndices);
-    _CleanJetCSVTIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetCSVTIndices);
-    _CleanJetNonCSVLIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetNonCSVLIndices);
     _CleanJetNonCSVMIndices.clear();
     std::vector< std::vector<unsigned int> >().swap(_CleanJetNonCSVMIndices);
-    _CleanJetNonCSVTIndices.clear();
-    std::vector< std::vector<unsigned int> >().swap(_CleanJetNonCSVTIndices);
 
     // === Event weights === //
     _CSVeventWeight.clear();
@@ -361,46 +349,30 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 
         _HT.push_back(Tau->pt + Lepton1->pt + Lepton2->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets));
 
-        _NumCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'L'));
-        _NumCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'M'));
-        _NumCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'T'));
-        _NumNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'L'));
-        _NumNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'M'));
-        _NumNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'T'));
+        std::vector<unsigned int> tag_indices;
+        std::vector<unsigned int> notag_indices;
 
-        _NumCleanCSVLbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
-        _NumCleanCSVMbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M'));
-        _NumCleanCSVTbtagJets	.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
-        _NumCleanNonCSVLbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
-        _NumCleanNonCSVMbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M'));
-        _NumCleanNonCSVTbtagJets .push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
+        _NumCSVLbtagJets.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'L'));
+        _NumCSVMbtagJets.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'M'));
+        _NumCSVTbtagJets.push_back(beanHelper->GetNumCSVbtags(selCorrJets, 'T'));
+        _NumNonCSVLbtagJets.push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'L'));
+        _NumNonCSVMbtagJets.push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'M'));
+        _NumNonCSVTbtagJets.push_back(beanHelper->GetNumNonCSVbtags(selCorrJets, 'T'));
 
-        _CleanJetCSVLIndices.push_back(std::vector<unsigned int>());
-        _CleanJetCSVMIndices.push_back(std::vector<unsigned int>());
-        _CleanJetCSVTIndices.push_back(std::vector<unsigned int>());
-        _CleanJetNonCSVLIndices.push_back(std::vector<unsigned int>());
-        _CleanJetNonCSVMIndices.push_back(std::vector<unsigned int>());
-        _CleanJetNonCSVTIndices.push_back(std::vector<unsigned int>());
+        _NumCleanCSVLbtagJets.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'L'));
+        _NumCleanCSVMbtagJets.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'M', &tag_indices));
+        _NumCleanCSVTbtagJets.push_back(beanHelper->GetNumCSVbtags(cleanSelCorrJets, 'T'));
+        _NumCleanNonCSVLbtagJets.push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'L'));
+        _NumCleanNonCSVMbtagJets.push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'M', &notag_indices));
+        _NumCleanNonCSVTbtagJets.push_back(beanHelper->GetNumNonCSVbtags(cleanSelCorrJets, 'T'));
 
-        for (const auto& i: _CleanJetIndices.back()) {
-            if (beanHelper->PassesCSV(cleanSelCorrJets[i], 'L')) {
-                _CleanJetCSVLIndices.back().push_back(i);
-            } else {
-                _CleanJetNonCSVLIndices.back().push_back(i);
-            }
+        for (auto& idx: tag_indices)
+            idx = jet_indices[idx];
+        for (auto& idx: notag_indices)
+            idx = jet_indices[idx];
 
-            if (beanHelper->PassesCSV(cleanSelCorrJets[i], 'M')) {
-                _CleanJetCSVMIndices.back().push_back(i);
-            } else {
-                _CleanJetNonCSVMIndices.back().push_back(i);
-            }
-
-            if (beanHelper->PassesCSV(cleanSelCorrJets[i], 'T')) {
-                _CleanJetCSVTIndices.back().push_back(i);
-            } else {
-                _CleanJetNonCSVTIndices.back().push_back(i);
-            }
-        }
+        _CleanJetCSVMIndices.push_back(tag_indices);
+        _CleanJetNonCSVMIndices.push_back(notag_indices);
 
         // fill total jet weight with clean jets
         _CSVeventWeight.push_back(beanHelper->GetCSVweight(cleanSelCorrJets, _sysType));

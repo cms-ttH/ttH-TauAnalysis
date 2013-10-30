@@ -33,8 +33,10 @@ class JetFiller : public NtupleFiller {
         vector<double> _JetCSV;
         vector<float> _JetCharge;
         vector<int> _JetPartonId;
+        vector<int> _JetPartonParentId;
         vector<int> _JetPartonMother0Id;
         vector<int> _JetPartonMother1Id;
+        vector<int> _JetPartonGrandParentId;
         vector<int> _JetPartonGrandmother00Id;
         vector<int> _JetPartonGrandmother01Id;
         vector<int> _JetPartonGrandmother10Id;

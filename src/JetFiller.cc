@@ -37,8 +37,10 @@ void JetFiller::SetupBranches(){
     _Tree->Branch("J_CSV", &_JetCSV);
     _Tree->Branch("J_Charge", &_JetCharge);
     _Tree->Branch("J_PartonId", &_JetPartonId);
+    _Tree->Branch("J_PartonParentId", &_JetPartonParentId);
     _Tree->Branch("J_PartonMother0Id", &_JetPartonMother0Id);
     _Tree->Branch("J_PartonMother1Id", &_JetPartonMother1Id);
+    _Tree->Branch("J_PartonGrandParentId", &_JetPartonGrandParentId);
     _Tree->Branch("J_PartonGrandmother00Id", &_JetPartonGrandmother00Id);
     _Tree->Branch("J_PartonGrandmother01Id", &_JetPartonGrandmother01Id);
     _Tree->Branch("J_PartonGrandmother10Id", &_JetPartonGrandmother10Id);
@@ -67,8 +69,10 @@ void JetFiller::ClearVectors(){
     _JetCSV.clear();
     _JetCharge.clear();
     _JetPartonId.clear();
+    _JetPartonParentId.clear();
     _JetPartonMother0Id.clear();
     _JetPartonMother1Id.clear();
+    _JetPartonGrandParentId.clear();
     _JetPartonGrandmother00Id.clear();
     _JetPartonGrandmother01Id.clear();
     _JetPartonGrandmother10Id.clear();
@@ -125,5 +129,19 @@ void JetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         _JetPartonGrandmother01Status.push_back(gen_match.grandMother01Status);
         _JetPartonGrandmother10Status.push_back(gen_match.grandMother10Status);
         _JetPartonGrandmother11Status.push_back(gen_match.grandMother11Status);
+
+        auto parent = gen_match.mother0Id;
+        if (parent == -99)
+            parent = gen_match.mother1Id;
+        _JetPartonParentId.push_back(parent);
+
+        auto grandparent = gen_match.grandMother00Id;
+        if (grandparent == -99)
+            grandparent = gen_match.grandMother01Id;
+        if (grandparent == -99)
+            grandparent = gen_match.grandMother10Id;
+        if (grandparent == -99)
+            grandparent = gen_match.grandMother11Id;
+        _JetPartonGrandParentId.push_back(grandparent);
 	}
 }
