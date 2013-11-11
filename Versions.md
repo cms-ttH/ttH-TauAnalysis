@@ -320,6 +320,10 @@
 
 * Bugfix of previous
 
+## v55
+
+* Reproduction of dilepton channel with loose tau requirements
+
 # Skim Versions
 
 ## s1
