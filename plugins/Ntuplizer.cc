@@ -250,13 +250,13 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNtauCollection BNtaus				= *(hBNtaus.product());
     BNjetCollection BNjets				= *(hBNjets.product());
 
-    if (((_num_leptons & 1) && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
-        ((_num_leptons & 2) && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
-        _numFailedTauEventCheck++;
-        return;
-    } else if (!(_num_leptons & 3)) {
-        throw;
-    }
+    // if (((_num_leptons & 1) && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
+        // ((_num_leptons & 2) && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
+        // _numFailedTauEventCheck++;
+        // return;
+    // } else if (!(_num_leptons & 3)) {
+        // throw;
+    // }
 
 	// See if event meets skim trigger requirements
 	if((!_FromBEAN) && _ApplySkimTriggerRequirements){

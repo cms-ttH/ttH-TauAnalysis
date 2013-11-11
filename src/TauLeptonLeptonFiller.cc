@@ -216,7 +216,8 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 
     // Taus  (corrected taus currently just account for systematic shifts)
     BNtauCollection correctedTaus =  beanHelper->GetCorrectedTaus(_BNtaus, _sysType);
-	BNtauCollection selectedTaus = beanHelper->GetSelectedTaus(correctedTaus, tauID::tauNonIso);
+    auto selectedTaus = correctedTaus;
+    // BNtauCollection selectedTaus = beanHelper->GetSelectedTaus(correctedTaus, tauID::tauNonIso);
 
 	// Make sure we can at least make one TLL combo
 	if(correctedTaus.size() < 1){ return; } // At least one tau
@@ -335,7 +336,7 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
         // Apply kinematic requirements on corrected jets
         BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
         vector<TLorentzVector> tauAndLeptons; // Clean jets from taus and leptons
-        tauAndLeptons.push_back(TLorentzVector(Tau->px, Tau->py, Tau->pz, Tau->energy));
+        // tauAndLeptons.push_back(TLorentzVector(Tau->px, Tau->py, Tau->pz, Tau->energy));
         tauAndLeptons.push_back(TLorentzVector(Lepton1->px, Lepton1->py, Lepton1->pz, Lepton1->energy));
         tauAndLeptons.push_back(TLorentzVector(Lepton2->px, Lepton2->py, Lepton2->pz, Lepton2->energy));
 
