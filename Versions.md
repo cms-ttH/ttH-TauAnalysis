@@ -324,6 +324,10 @@
 
 * Reproduction of dilepton channel with loose tau requirements
 
+## v56
+
+* Reproduction of dilepton channel with tighter tau requirements
+
 # Skim Versions
 
 ## s1
