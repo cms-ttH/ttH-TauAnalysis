@@ -9,11 +9,11 @@ maxEvents	= -1
 reportEvery	= 100
 era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
-tauMaxEta	= 2.4
-tauMinPt	= 30
+tauMaxEta	= 9
+tauMinPt	= 0
 baseTreeName = 'TTbarHTauTau'
 dataRange   = 'All'
-runExtraBEANhelpers = False
+runExtraBEANhelpers = True
 
 # collection postfix for running on PF2PAT
 postfix = ''
