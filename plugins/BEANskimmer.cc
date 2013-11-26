@@ -31,6 +31,10 @@ BEANskimmer::BEANskimmer(const edm::ParameterSet& iConfig)
     minNumBaseTaus_ = 0;
     minNumIsoTaus_ = 0;
 
+    int sample = iConfig.getUntrackedParameter<int>("sample");
+    auto type = iConfig.getUntrackedParameter<bool>("dilepton") ? analysisType::TauDIL : analysisType::TauLJ;
+    helper_.SetUp("2012_53x", sample, type, (sample < 0), "SingleMu", false, true, "All");
+
     if( cfg_.size() > 0 ) minNumJets_ = atoi(cfg_.substr(0,1).c_str());
     if( cfg_.size() > 1 ) minNumLooseBtags_ = atoi(cfg_.substr(1,1).c_str());
     if( cfg_.size() > 2 ) minNumMediumBtags_ = atoi(cfg_.substr(2,1).c_str());
@@ -71,14 +75,13 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     edm::Handle<BNjetCollection> jetsHandle;
     iEvent.getByLabel(jetSrc_, jetsHandle);
-    BNjetCollection const &pfjets = *jetsHandle;
+    const BNjetCollection &raw_pfjets = *jetsHandle;
+    BNjetCollection pfjets = helper_.GetCorrectedJets(raw_pfjets, sysType::NA);
 
     int numLooseTags = 0;
     int numMediumTags = 0;
     int numTightTags = 0;
     int numJets = 0;
-
-    if( pfjets.size() < 4 ) return false;
 
     for( int i=0; i<int(pfjets.size()); i++ ){
         if( pfjets.at(i).pt < 30 ) continue;

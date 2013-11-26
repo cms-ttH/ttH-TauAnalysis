@@ -299,7 +299,9 @@ if era == 2012:
 process.beanSkimmer = cms.EDFilter("BEANskimmer",
     config = cms.untracked.string(skimParams),
     tauSrc = RecoTauSource,
-    jetSrc = RecoJetSource
+    jetSrc = RecoJetSource,
+    sample = cms.untracked.int32(sampleNumber),
+    dilepton = cms.untracked.bool(is_dil)
 )
 
 # === Define and setup main module === #
