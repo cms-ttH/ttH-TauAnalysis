@@ -17,6 +17,7 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "BEAN/BEANmaker/interface/BEANhelper.h"
 #include "BEAN/Collections/interface/BNjet.h"
 #include "BEAN/Collections/interface/BNtau.h"
 #include <string>
@@ -42,6 +43,7 @@ class BEANskimmer : public edm::EDFilter {
       virtual bool endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&);
 
       // ----------member data ---------------------------
+    BEANhelper helper_;
 
     int minNumJets_;
     int minNumLooseBtags_;
