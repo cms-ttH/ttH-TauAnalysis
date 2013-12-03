@@ -48,6 +48,8 @@ void TauLeptonLeptonFiller::SetupBranches()
 	_Tree->Branch("TLL_MomentumRank",&_MomentumRank);
 
     _Tree->Branch("TLL_TauMomentumRank", &_TauMomentumRank);
+    _Tree->Branch("TLL_PassZMask", &_zmask);
+    _Tree->Branch("TLL_PassZMask2", &_zmask2);
 
     // === Combo === //
     _Tree->Branch("TLL_TriggerEventWeight", &_TriggerEventWeight);
@@ -64,6 +66,7 @@ void TauLeptonLeptonFiller::SetupBranches()
     _Tree->Branch("TLL_TauLepton2DeltaR", &_TauLepton2DeltaR);
     _Tree->Branch("TLL_Lepton1Lepton2DeltaR", &_Lepton1Lepton2DeltaR);
     _Tree->Branch("TLL_HT", &_HT);
+    _Tree->Branch("TLL_MHT", &_MHT);
     _Tree->Branch("TLL_NumCSVLbtagJets", &_NumCSVLbtagJets);
     _Tree->Branch("TLL_NumCSVMbtagJets", &_NumCSVMbtagJets);
     _Tree->Branch("TLL_NumCSVTbtagJets", &_NumCSVTbtagJets);
@@ -112,6 +115,8 @@ void TauLeptonLeptonFiller::ClearVectors()
 	_NumCombos										= 0;	
 	_MomentumRank									.clear();
 	_TauMomentumRank								.clear();
+    _zmask.clear();
+    _zmask2.clear();
 
 	// === Lepton === //
 	_NumLooseMuons									.clear();
@@ -136,6 +141,7 @@ void TauLeptonLeptonFiller::ClearVectors()
     _TauLepton2DeltaR.clear();
     _Lepton1Lepton2DeltaR.clear();
     _HT.clear();
+    _MHT.clear();
     _NumCSVLbtagJets.clear();
     _NumCSVMbtagJets.clear();
     _NumCSVTbtagJets.clear();
@@ -329,6 +335,16 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 
     _HT.push_back(Lepton1->pt + Lepton2->pt + correctedMET.pt + beanHelper->GetHT(cleanSelCorrJets));
 
+    TLorentzVector vlep1(Lepton1->px, Lepton1->py, Lepton1->pz, Lepton1->energy);
+    TLorentzVector vlep2(Lepton2->px, Lepton2->py, Lepton2->pz, Lepton2->energy);
+    TLorentzVector vsum = vlep1 + vlep2;
+
+    for (const auto& j: selCorrJets)
+        vsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
+
+    double mht = vsum.Pt();
+    _MHT.push_back(mht);
+
     std::vector<unsigned int> tag_indices;
     std::vector<unsigned int> notag_indices;
 
@@ -383,11 +399,11 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
     // TLL stuff
     lep1->Fill(Lepton1, beanHelper, _BNmcparticles, correctedMET);
     lep2->Fill(Lepton2, beanHelper, _BNmcparticles, correctedMET);
-    FillTauLeptonLepton(beanHelper, Lepton1, Lepton2, correctedMET);
+    FillTauLeptonLepton(beanHelper, Lepton1, Lepton2, correctedMET, mht);
 }
 
 void
-TauLeptonLeptonFiller::FillTauLeptonLepton(BEANhelper *helper, const BNlepton* lepton1, const BNlepton* lepton2, const BNmet& met)
+TauLeptonLeptonFiller::FillTauLeptonLepton(BEANhelper *helper, const BNlepton* lepton1, const BNlepton* lepton2, const BNmet& met, double mht)
 {
     if (lepton1->isMuon && lepton2->isMuon) {
         _TriggerEventWeight.push_back(helper->GetDoubleMuonTriggerSF(*static_cast<const BNmuon*>(lepton1), *static_cast<const BNmuon*>(lepton2)));
@@ -400,8 +416,22 @@ TauLeptonLeptonFiller::FillTauLeptonLepton(BEANhelper *helper, const BNlepton* l
             _TriggerEventWeight.push_back(helper->GetMuonEleTriggerSF(*static_cast<const BNmuon*>(lepton2), *static_cast<const BNelectron*>(lepton1)));
     }
 
-	_Lepton1Lepton2VisibleMass.push_back(GetComboMassBN(*lepton1, *lepton2));
-	_Lepton1Lepton2CosDeltaPhi.push_back(cos(TMath::Abs(normalizedPhi(lepton1->phi - lepton2->phi))));
-	_Lepton1Lepton2DeltaR.push_back(deltaR(lepton1->eta, lepton1->phi, lepton2->eta, lepton2->phi));
+    double dil_vismass = GetComboMassBN(*lepton1, *lepton2);
+    bool pass_zmask = \
+                      (dil_vismass < (65.5 + 3 * mht / 8)) ||
+                      (dil_vismass > (108 - mht / 4)) ||
+                      (dil_vismass < (79 - 3 * mht / 4)) ||
+                      (dil_vismass > (99 + mht / 2));
+    _zmask.push_back(pass_zmask);
 
+    bool pass_zmask2 = \
+                      (dil_vismass < (65.5 + 3 * met.pt / 8)) ||
+                      (dil_vismass > (108 - met.pt / 4)) ||
+                      (dil_vismass < (79 - 3 * met.pt / 4)) ||
+                      (dil_vismass > (99 + met.pt / 2));
+    _zmask2.push_back(pass_zmask2);
+
+    _Lepton1Lepton2VisibleMass.push_back(dil_vismass);
+    _Lepton1Lepton2CosDeltaPhi.push_back(cos(TMath::Abs(normalizedPhi(lepton1->phi - lepton2->phi))));
+    _Lepton1Lepton2DeltaR.push_back(deltaR(lepton1->eta, lepton1->phi, lepton2->eta, lepton2->phi));
 }
