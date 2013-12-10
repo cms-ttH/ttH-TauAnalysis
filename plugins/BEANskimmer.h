@@ -51,11 +51,13 @@ class BEANskimmer : public edm::EDFilter {
     int minNumTightBtags_;
     int minNumBaseTaus_;
     int minNumIsoTaus_;
+    int numPartons_;
     double CSV_WP_L_;
     double CSV_WP_M_;
     double CSV_WP_T_;
     std::string cfg_;
     edm::InputTag tauSrc_;
     edm::InputTag jetSrc_;
+    edm::InputTag genSrc_;
 };
 

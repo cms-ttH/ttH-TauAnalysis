@@ -5,12 +5,16 @@
 // 
 
 // user include files
+#include "BEAN/Collections/interface/BNmcparticle.h"
+
 #include "ttH/TauAnalysis/plugins/BEANskimmer.h"
 
 //
 // constructors and destructor
 //
-BEANskimmer::BEANskimmer(const edm::ParameterSet& iConfig)
+BEANskimmer::BEANskimmer(const edm::ParameterSet& iConfig) :
+   numPartons_(iConfig.getUntrackedParameter<int>("partons", -1)),
+   genSrc_(iConfig.getUntrackedParameter<edm::InputTag>("genSrc"))
 {
     //now do what ever initialization is needed
     if( iConfig.exists("config") ) 
@@ -72,6 +76,16 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     using namespace std;
     using namespace edm;
+
+    if (numPartons_ > -1) {
+       unsigned int test = numPartons_;
+
+       edm::Handle<BNmcparticleCollection> gen;
+       iEvent.getByLabel(genSrc_, gen);
+
+       if (helper_.GetNumExtraPartons(*gen) != test)
+          return false;
+    }
 
     edm::Handle<BNjetCollection> jetsHandle;
     iEvent.getByLabel(jetSrc_, jetsHandle);
