@@ -39,6 +39,7 @@ options = VarParsing.VarParsing("analysis")
 #                             - 7th is a bitmap for num. of leptons - used to switch the trigger path
 #                               - 0b01 is 1 lepton
 #                               - 0b10 is 2 leptons
+#                             - 8th (optional) is the number of extra partons
 # <systematic type>         = dash-separated systematic uncertainty shift type(s). 
 #                             Options are defined in BEAN/BEANmaker/interface/BEANhelper.h
 #                             Must include 'NA'
@@ -169,11 +170,12 @@ skimParams = jobParams[4]
 if len(skimParams) is 0:
     print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams)
     sys.exit(1)
-if len(skimParams) > 7:
+if len(skimParams) > 8:
     print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 7 characters are not supported'.format(skimParams)
     sys.exit(1)
 
 leptons = int(skimParams[6])
+partons = int(skimParams[7]) if len(skimParams) > 7 else -1
 
 sys_splitter = shlex.shlex(jobParams[5], posix=True)
 sys_splitter.whitespace = '-'
@@ -300,8 +302,10 @@ process.beanSkimmer = cms.EDFilter("BEANskimmer",
     config = cms.untracked.string(skimParams),
     tauSrc = RecoTauSource,
     jetSrc = RecoJetSource,
+    genSrc = GenParticleSource,
     sample = cms.untracked.int32(sampleNumber),
-    dilepton = cms.untracked.bool(is_dil)
+    dilepton = cms.untracked.bool(is_dil),
+    partons = cms.untracked.int32(partons)
 )
 
 # === Define and setup main module === #
