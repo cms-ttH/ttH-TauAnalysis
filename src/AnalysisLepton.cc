@@ -91,6 +91,7 @@ AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCo
         _RelIso.push_back(helper->GetMuonRelIso(*m));
         _IsLoose.push_back(helper->IsLooseMuon(*m));
         _IsTight.push_back(helper->IsTightMuon(*m));
+        _Charge.push_back(m->tkCharge);
 
         auto id = helper->IsTightMuon(*m) ? muonID::muonTight : muonID::muonLoose;
         _EventWeight.push_back(helper->GetMuonSF(*m, id));
@@ -101,12 +102,12 @@ AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCo
         _RelIso.push_back(helper->GetElectronRelIso(*e));
         _IsLoose.push_back(helper->IsLooseElectron(*e));
         _IsTight.push_back(helper->IsTightElectron(*e));
+        _Charge.push_back(e->tkCharge);
 
         auto id = helper->IsTightElectron(*e) ? electronID::electronTight : electronID::electronLoose;
         _EventWeight.push_back(helper->GetElectronSF(*e, id));
     }
 
-    _Charge.push_back(l->charge);
     _Pt.push_back(l->pt);
     _Eta.push_back(l->eta);
     _Phi.push_back(l->phi);
