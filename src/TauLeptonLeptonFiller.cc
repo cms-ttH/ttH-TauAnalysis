@@ -425,16 +425,16 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
         _TauMomentumRank.push_back(theNumberOfTaus-1);
 
         tau->Fill(*Tau, beanHelper, _BNmcparticles);
-        lep1->Fill(Lepton1, beanHelper, _BNmcparticles, correctedMET);
-        lep2->Fill(Lepton2, beanHelper, _BNmcparticles, correctedMET);
-        FillTauLeptonLepton(beanHelper, *Tau, Lepton1, Lepton2, correctedMET, mht);
+        lep1->Fill(Lepton1, beanHelper, _BNmcparticles, correctedMET, -vsum);
+        lep2->Fill(Lepton2, beanHelper, _BNmcparticles, correctedMET, -vsum);
+        FillTauLeptonLepton(beanHelper, *Tau, Lepton1, Lepton2, correctedMET, -vsum);
 
 	} // End of tau loop
 
 }
 
 void
-TauLeptonLeptonFiller::FillTauLeptonLepton(BEANhelper *helper, const BNtau& tau, const BNlepton* lepton1, const BNlepton* lepton2, const BNmet& met, double mht)
+TauLeptonLeptonFiller::FillTauLeptonLepton(BEANhelper *helper, const BNtau& tau, const BNlepton* lepton1, const BNlepton* lepton2, const BNmet& met, const TLorentzVector& mht)
 {
     if (lepton1->isMuon && lepton2->isMuon) {
         _TriggerEventWeight.push_back(helper->GetDoubleMuonTriggerSF(*static_cast<const BNmuon*>(lepton1), *static_cast<const BNmuon*>(lepton2)));
@@ -461,10 +461,10 @@ TauLeptonLeptonFiller::FillTauLeptonLepton(BEANhelper *helper, const BNtau& tau,
 
     double dil_vismass = GetComboMassBN(*lepton1, *lepton2);
     bool pass_zmask = \
-                      (dil_vismass < (65.5 + 3 * mht / 8)) ||
-                      (dil_vismass > (108 - mht / 4)) ||
-                      (dil_vismass < (79 - 3 * mht / 4)) ||
-                      (dil_vismass > (99 + mht / 2));
+                      (dil_vismass < (65.5 + 3 * mht.Pt() / 8)) ||
+                      (dil_vismass > (108 - mht.Pt() / 4)) ||
+                      (dil_vismass < (79 - 3 * mht.Pt() / 4)) ||
+                      (dil_vismass > (99 + mht.Pt() / 2));
     _zmask.push_back(pass_zmask);
 
     bool pass_zmask2 = \

@@ -306,6 +306,15 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 
                 _CleanJetIndices.push_back(jet_indices);
 
+                TLorentzVector vlep = useMuon ? TLorentzVector(Muon->px, Muon->py, Muon->pz, Muon->energy) :
+                    TLorentzVector(Electron->px, Electron->py, Electron->pz, Electron->energy);
+                TLorentzVector vtau1(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy);
+                TLorentzVector vtau2(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy);
+                TLorentzVector vsum = vlep + vtau1 + vtau2;
+
+                for (const auto& j: selCorrJets)
+                    vsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
+
 				_MomentumRank.push_back(_MomentumRank.size());
 				_NumCombos++;
 				theNumberOfLeptons++;
@@ -323,7 +332,7 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
 
                 tau1->Fill(*Tau1, beanHelper, _BNmcparticles);
                 tau2->Fill(*Tau2, beanHelper, _BNmcparticles);
-                lep->Fill(lepton, beanHelper, _BNmcparticles, correctedMET);
+                lep->Fill(lepton, beanHelper, _BNmcparticles, correctedMET, -vsum);
 
 				// Fill lepton
 				_LeptonMomentumRank.push_back(theNumberOfLeptons-1);

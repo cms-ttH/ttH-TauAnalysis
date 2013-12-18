@@ -26,7 +26,7 @@ class TauLeptonLeptonFiller : public NtupleFiller {
 		void ClearVectors();
 
 		// === Helper functions === //
-		void FillTauLeptonLepton(BEANhelper*, const BNtau&, const BNlepton*, const BNlepton*, const BNmet&, double);
+		void FillTauLeptonLepton(BEANhelper*, const BNtau&, const BNlepton*, const BNlepton*, const BNmet&, const TLorentzVector&);
 
 	// ----- Variables ----- //
 	private:
