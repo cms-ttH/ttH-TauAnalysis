@@ -328,6 +328,28 @@
 
 * Reproduction of dilepton channel with tighter tau requirements
 
+## v57
+
+* Reproduction of dilepton channel with very loose tau
+* Tigther jet requirements
+
+## v58
+
+* Reproduction of dilepton channel with non-existant tau
+
+### v58.1
+
+* Fixed skimmer to correct jets
+
+### v58.2
+
+* Introduce Z-peak mask based on MET and dilepton visible mass
+
+### v58.3
+
+* Add Z-peak mask with MET derived from all components used in the analysis
+* Also add pt of the vector sum of all components used in the analysis
+
 # Skim Versions
 
 ## s1
