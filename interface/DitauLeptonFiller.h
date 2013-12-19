@@ -69,6 +69,7 @@ class DitauLeptonFiller : public NtupleFiller {
         vector<float> _Tau1LeptonDeltaR;
         vector<float> _Tau2LeptonDeltaR;
         vector<float> _HT;
+        vector<float> _mht;
         vector<unsigned int> _NumCSVLbtagJets;
         vector<unsigned int> _NumCSVMbtagJets;
         vector<unsigned int> _NumCSVTbtagJets;

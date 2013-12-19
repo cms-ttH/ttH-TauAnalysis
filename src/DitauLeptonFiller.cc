@@ -69,6 +69,7 @@ void DitauLeptonFiller::SetupBranches()
     _Tree->Branch("TTL_Tau1LeptonDeltaR", &_Tau1LeptonDeltaR);
     _Tree->Branch("TTL_Tau2LeptonDeltaR", &_Tau2LeptonDeltaR);
     _Tree->Branch("TTL_HT", &_HT);
+    _Tree->Branch("TTL_MHT", &_mht);
     _Tree->Branch("TTL_NumCSVLbtagJets", &_NumCSVLbtagJets);
     _Tree->Branch("TTL_NumCSVMbtagJets", &_NumCSVMbtagJets);
     _Tree->Branch("TTL_NumCSVTbtagJets", &_NumCSVTbtagJets);
@@ -143,6 +144,7 @@ void DitauLeptonFiller::ClearVectors(){
     _Tau1LeptonDeltaR.clear();
     _Tau2LeptonDeltaR.clear();
     _HT.clear();
+    _mht.clear();
     _NumCSVLbtagJets.clear();
     _NumCSVMbtagJets.clear();
     _NumCSVTbtagJets.clear();
@@ -311,6 +313,8 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
                 TLorentzVector vtau1(Tau1->px, Tau1->py, Tau1->pz, Tau1->energy);
                 TLorentzVector vtau2(Tau2->px, Tau2->py, Tau2->pz, Tau2->energy);
                 TLorentzVector vsum = vlep + vtau1 + vtau2;
+
+                _mht.push_back(vsum.Pt());
 
                 for (const auto& j: selCorrJets)
                     vsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
