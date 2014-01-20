@@ -51,7 +51,7 @@ AnalysisLepton::ClearVectors()
     _Eta.clear();
     _Phi.clear();
     _mt.clear();
-    _mt.clear();
+    _mt2.clear();
     _RelIso.clear();
 
     _CorrectedD0.clear();
