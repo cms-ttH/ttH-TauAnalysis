@@ -44,6 +44,12 @@ Ntuplizer::Ntuplizer(const ParameterSet& config) :
 
     _an_type = config.getParameter<bool>("isDilepton") ? analysisType::TauDIL : analysisType::TauLJ;
 
+    if (_an_type == analysisType::TauDIL) {
+        std::cout << ">> Running in dilepton mode <<" << std::endl;
+    } else {
+        std::cout << ">> Running in single lepton mode <<" << std::endl;
+    }
+
     std::string sysTypeString       = config.getUntrackedParameter<std::string>("SysType");
     _sysType = sysType::NA;
     if( sysTypeString.compare("NA") == 0 ) _sysType = sysType::NA;
