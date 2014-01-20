@@ -256,12 +256,14 @@ NtupleFillers = cms.untracked.vstring(
         'Test',
 )
 
-if leptons & 0b01:
-    is_dil = True
-    NtupleFillers.append('DitauLepton')
-if leptons & 0b10:
+if leptons == 1:
     is_dil = False
+    NtupleFillers.append('DitauLepton')
+elif leptons == 2:
+    is_dil = True
     NtupleFillers.append('TauLeptonLepton')
+else:
+    raise
 
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
