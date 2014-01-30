@@ -291,6 +291,10 @@
 
 * Use track charge
 
+### v59.4
+
+* Fix scale factors for leptons
+
 ## v59
 
 * Apply changes from dilepton sync to taus Fix skimming of events Introduce
@@ -300,6 +304,10 @@
 ## v59.1
 
 * Fix analysis type flags to get correct scale factors
+
+## v59.2
+
+* Add jet, lepton/tau ΔR variables
 
 # Skim Versions
 
