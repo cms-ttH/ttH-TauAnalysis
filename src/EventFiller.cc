@@ -34,6 +34,8 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_eventNumber", &_eventNumber);
 	_Tree->Branch("Ev_lumiBlock", &_lumiBlock);
 
+    _Tree->Branch("Ev_NTruePV", &_numTruePV);
+
     _Tree->Branch("Ev_higgsDecayMode", &_higgsDecayMode);
     _Tree->Branch("Ev_bQuarkCount", &_bQuarkCount);
     _Tree->Branch("Ev_cQuarkCount", &_cQuarkCount);
@@ -73,6 +75,8 @@ void EventFiller::ClearVectors(){
     _higgsDecayMode = 0;
     _bQuarkCount = 0;
     _cQuarkCount = 0;
+
+    _numTruePV = 0;
 
 	_PUweight					= 1.0;
 	_PUweightUp					= 1.0;
@@ -153,6 +157,8 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         _bQuarkCount = 0;
         _cQuarkCount = 0;
     }
+
+    _numTruePV = _BNevents.begin()->numTruePV;
 
 	// Pileup weights
 	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);

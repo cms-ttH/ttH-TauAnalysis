@@ -29,6 +29,8 @@ class EventFiller : public NtupleFiller {
 		double                  _eventNumber;
 		double                  _lumiBlock;
 
+        int _numTruePV;
+
         int _higgsDecayMode;
         int _bQuarkCount;
         int _cQuarkCount;

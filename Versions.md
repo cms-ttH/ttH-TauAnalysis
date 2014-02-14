@@ -309,6 +309,10 @@
 
 * Add jet, lepton/tau ΔR variables
 
+## v59.3
+
+* Add true vertex count
+
 # Skim Versions
 
 ## s1
