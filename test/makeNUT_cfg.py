@@ -37,8 +37,6 @@ options = VarParsing.VarParsing("analysis")
 #                             - 4th is min. num. tight Btags
 #                             - 5th/6th are min num. "base"/iso taus, as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
 #                             - 7th is a bitmap for num. of leptons - used to switch the trigger path
-#                               - 0b01 is 1 lepton
-#                               - 0b10 is 2 leptons
 #                             - 8th (optional) is the number of extra partons
 # <systematic type>         = dash-separated systematic uncertainty shift type(s). 
 #                             Options are defined in BEAN/BEANmaker/interface/BEANhelper.h
@@ -51,7 +49,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_1110112_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_0000101_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -174,6 +172,7 @@ if len(skimParams) > 8:
     print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 7 characters are not supported'.format(skimParams)
     sys.exit(1)
 
+taus = int(skimParams[4])
 leptons = int(skimParams[6])
 partons = int(skimParams[7]) if len(skimParams) > 7 else -1
 
@@ -199,15 +198,17 @@ if era == 2011:
             'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
             ]
 else:
-    if leptons & 0b01:
+    if leptons == 1:
         triggerConditions += ['HLT_IsoMu24_eta2p1', 'HLT_Ele27_WP80']
-    if leptons & 0b10:
+    elif leptons == 2:
         triggerConditions += [
                 'HLT_Mu17_Mu8',
                 'HLT_Mu17_TkMu8',
                 'HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
                 'HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
                 'HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL']
+    else:
+        raise "Wrong lepton count!"
 
 # === Define Ntuplizer input collections === # 
 ## For 7TeV/2011 datasets, where we read PATuples
@@ -258,7 +259,12 @@ NtupleFillers = cms.untracked.vstring(
 
 if leptons == 1:
     is_dil = False
-    NtupleFillers.append('DitauLepton')
+    if taus == 2:
+        NtupleFillers.append('DitauLepton')
+    elif taus == 1:
+        NtupleFillers.append('TauLepton')
+    else:
+        raise
 elif leptons == 2:
     is_dil = True
     NtupleFillers.append('TauLeptonLepton')

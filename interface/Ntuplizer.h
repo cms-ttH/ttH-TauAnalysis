@@ -28,6 +28,7 @@
 #include "DitauElectronFiller.h"
 #include "TriggerFiller.h"
 #include "QuickFiller.h"
+#include "TauLeptonFiller.h"
 #include "TauLeptonLeptonFiller.h"
 #include "VertexFiller.h"
 
