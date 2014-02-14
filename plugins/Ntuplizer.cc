@@ -258,11 +258,11 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNjetCollection BNjets				= *(hBNjets.product());
 
     if (_use_event_veto) {
-        if (((_num_leptons & 1) && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
-            ((_num_leptons & 2) && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
+        if ((_num_leptons == 1 && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
+            (_num_leptons == 2 && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
             _numFailedTauEventCheck++;
             return;
-        } else if (!(_num_leptons & 3)) {
+        } else if (!_num_leptons > 2) {
             throw;
         }
     }
