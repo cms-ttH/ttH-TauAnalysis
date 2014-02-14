@@ -323,6 +323,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     DataRange                           = cms.string(dataRange),
     RunExtraBEANhelpers                 = cms.bool(runExtraBEANhelpers),
     isDilepton = cms.bool(is_dil),
+    useEventVeto = cms.bool(True),
 
 	# === HL Trigger === # (not in use)
     #HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),

@@ -84,6 +84,7 @@ class Ntuplizer : public EDAnalyzer {
         sysType::sysType _sysType;
         string _DataRange;
         bool _RunExtraBEANhelpers;
+        bool _use_event_veto;
         int _num_leptons;
         analysisType::analysisType _an_type;
 

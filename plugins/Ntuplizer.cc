@@ -11,7 +11,8 @@ using namespace reco;
 
 // constructors and destructor
 Ntuplizer::Ntuplizer(const ParameterSet& config) :
-    _filename(config.getParameter<string>("outputFileName"))
+    _filename(config.getParameter<string>("outputFileName")),
+    _use_event_veto(config.getParameter<bool>("useEventVeto"))
 {
 	// Necessary to propagate config 
 	jobConfig						= new ParameterSet(config);
@@ -256,12 +257,14 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNtauCollection BNtaus				= *(hBNtaus.product());
     BNjetCollection BNjets				= *(hBNjets.product());
 
-    if (((_num_leptons & 1) && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
-        ((_num_leptons & 2) && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
-        _numFailedTauEventCheck++;
-        return;
-    } else if (!(_num_leptons & 3)) {
-        throw;
+    if (_use_event_veto) {
+        if (((_num_leptons & 1) && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
+            ((_num_leptons & 2) && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
+            _numFailedTauEventCheck++;
+            return;
+        } else if (!(_num_leptons & 3)) {
+            throw;
+        }
     }
 
 	// See if event meets skim trigger requirements
