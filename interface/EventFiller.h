@@ -37,6 +37,7 @@ class EventFiller : public NtupleFiller {
 
 		double                  _MET;
 		double                  _METphi;
+        std::vector<double> _METcov;
 
 		double                  _PUweight;
 		double                  _PUweightUp;

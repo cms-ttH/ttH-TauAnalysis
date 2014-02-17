@@ -50,6 +50,7 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_q2WeightDown", &_q2WeightDown);
 	_Tree->Branch("Ev_MET", &_MET);
 	_Tree->Branch("Ev_METphi", &_METphi);
+	_Tree->Branch("Ev_METcov", &_METcov);
 	_Tree->Branch("Ev_IsTauEvent", &_isTauEvent);
 
     if(_beanHelpers.size() > 1) {
@@ -89,6 +90,7 @@ void EventFiller::ClearVectors(){
     _isTauEvent                 = false;
 	_MET						= 0;
 	_METphi						= 0;
+    _METcov.clear();
     
     if(_beanHelpers.size() > 1) {
         _PUweight2012A   = 1.0;
@@ -183,6 +185,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	BNmet correctedMET	= beanHelper->GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection, _sysType);
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
+    _METcov = {correctedMET.sigmaX2, correctedMET.sigmaXY, correctedMET.sigmaYX, correctedMET.sigmaY2};
 
     // top PT
     _topPtWeight = beanHelper->GetTopPtweight(_BNmcparticles);
