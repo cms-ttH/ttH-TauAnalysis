@@ -11,6 +11,7 @@ AnalysisLepton::AnalysisLepton(const std::string& p, TTree* t)
     t->Branch((p + "IsMuon").c_str(), &_IsMuon);
     t->Branch((p + "IsElectron").c_str(), &_IsElectron);
     t->Branch((p + "Charge").c_str(), &_Charge);
+    t->Branch((p + "P").c_str(), &_p);
     t->Branch((p + "Pt").c_str(), &_Pt);
     t->Branch((p + "Eta").c_str(), &_Eta);
     t->Branch((p + "Phi").c_str(), &_Phi);
@@ -47,6 +48,7 @@ void
 AnalysisLepton::ClearVectors()
 {
     _Charge.clear();
+    _p.clear();
     _Pt.clear();
     _Eta.clear();
     _Phi.clear();
@@ -110,6 +112,7 @@ AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCo
         _EventWeight.push_back(helper->GetElectronSF(*e, id));
     }
 
+    _p.push_back(LorentzVector(l->px, l->py, l->pz, l->energy));
     _Pt.push_back(l->pt);
     _Eta.push_back(l->eta);
     _Phi.push_back(l->phi);

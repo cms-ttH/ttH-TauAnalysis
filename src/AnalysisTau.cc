@@ -6,6 +6,7 @@
 AnalysisTau::AnalysisTau(const std::string& p, TTree* t)
 {
     t->Branch((p + "MomentumRank").c_str(), &_MomentumRank);
+    t->Branch((p + "P").c_str(), &_p);
     t->Branch((p + "Pt").c_str(), &_Pt);
     t->Branch((p + "Eta").c_str(), &_Eta);
     t->Branch((p + "Phi").c_str(), &_Phi);
@@ -95,6 +96,7 @@ void
 AnalysisTau::ClearVectors()
 {
     _MomentumRank.clear();
+    _p.clear();
     _Pt.clear();
     _Eta.clear();
     _Phi.clear();
@@ -180,6 +182,7 @@ AnalysisTau::ClearVectors()
 void
 AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNmcparticleCollection& mc_particles)
 {
+    _p.push_back(LorentzVector(t.px, t.py, t.pz, t.energy));
     _Pt.push_back(t.pt);
     _Eta.push_back(t.eta);
     _Phi.push_back(t.phi);

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "Math/LorentzVector.h"
 #include "TTree.h"
 
 #include "BEAN/BEANmaker/interface/BEANhelper.h"
@@ -15,6 +16,8 @@
 
 class AnalysisTau {
     public:
+        typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVector;
+
         AnalysisTau(const std::string&, TTree*);
 
         void ClearVectors();
@@ -22,6 +25,7 @@ class AnalysisTau {
 
     protected:
         std::vector<int> _MomentumRank;
+        std::vector<LorentzVector> _p;
         std::vector<float> _Pt;
         std::vector<float> _Eta;
         std::vector<float> _Phi;

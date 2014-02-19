@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "Math/LorentzVector.h"
 #include "TTree.h"
 
 #include "BEAN/BEANmaker/interface/BEANhelper.h"
@@ -15,6 +16,8 @@
 
 class AnalysisLepton {
     public:
+        typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVector;
+
         AnalysisLepton(const std::string&, TTree*);
 
         void ClearVectors();
@@ -24,6 +27,7 @@ class AnalysisLepton {
         vector<float> _IsMuon;
         vector<float> _IsElectron;
         vector<float> _Charge;
+        std::vector<LorentzVector> _p;
         vector<float> _Pt;
         vector<float> _Eta;
         vector<float> _Phi;
