@@ -257,12 +257,14 @@ NtupleFillers = cms.untracked.vstring(
         'Test',
 )
 
+use_veto = True
 if leptons == 1:
     is_dil = False
     if taus == 2:
         NtupleFillers.append('DitauLepton')
     elif taus == 1:
         NtupleFillers.append('TauLepton')
+        use_veto = False
     else:
         raise
 elif leptons == 2:
@@ -329,7 +331,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     DataRange                           = cms.string(dataRange),
     RunExtraBEANhelpers                 = cms.bool(runExtraBEANhelpers),
     isDilepton = cms.bool(is_dil),
-    useEventVeto = cms.bool(True),
+    useEventVeto = cms.bool(use_veto),
 
 	# === HL Trigger === # (not in use)
     #HLTriggerSource		    			= cms.InputTag("TriggerResults::HLT"),
@@ -407,6 +409,7 @@ print """
             Max events.......{3}
             Report every.....{4}
             Global tag.......{5}
+            Tau event veto...{10}
             Triggers.........{6}
             Skim parameters..{7}
             Systematics......{8}
@@ -423,7 +426,8 @@ print """
         ', '.join(triggerConditions),
         skimParams,
         ', '.join(sysTypes),
-        ', '.join(NtupleFillers))
+        ', '.join(NtupleFillers),
+        use_veto)
 
 # === Write-out all python configuration parameter information === #
 #pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()
