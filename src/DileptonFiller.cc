@@ -328,8 +328,6 @@ void DileptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     // Apply kinematic requirements on corrected jets
     BNjetCollection selCorrJets                             = beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
     vector<TLorentzVector> tauAndLeptons; // Clean jets from taus and leptons
-    tauAndLeptons.push_back(TLorentzVector(Lepton1->px, Lepton1->py, Lepton1->pz, Lepton1->energy));
-    tauAndLeptons.push_back(TLorentzVector(Lepton2->px, Lepton2->py, Lepton2->pz, Lepton2->energy));
 
     // Clean jets
     std::vector<unsigned int> jet_indices;
