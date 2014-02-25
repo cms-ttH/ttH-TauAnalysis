@@ -49,7 +49,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_0000101_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_0000002_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -269,7 +269,13 @@ if leptons == 1:
         raise
 elif leptons == 2:
     is_dil = True
-    NtupleFillers.append('TauLeptonLepton')
+    if taus == 1:
+        NtupleFillers.append('TauLeptonLepton')
+    elif taus == 0:
+        NtupleFillers.append("Dilepton")
+        use_veto = False
+    else:
+        raise
 else:
     raise
 

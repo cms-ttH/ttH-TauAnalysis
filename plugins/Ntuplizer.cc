@@ -3,6 +3,8 @@
 
 #include "boost/lexical_cast.hpp"
 
+#include "../interface/DileptonFiller.h"
+
 #include "..//interface/Ntuplizer.h"
 
 using namespace std;
@@ -205,6 +207,8 @@ Ntuplizer::beginJob()
         ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree, &beanHelper));
     if(IsFillerEnabled("Jet"))
         ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree, &beanHelper));
+    if(IsFillerEnabled("Dilepton"))
+        ntupleFillers.push_back(new DileptonFiller(*jobConfig, _Tree, &beanHelper));
     if(IsFillerEnabled("Ditau"))
         ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));
     if(IsFillerEnabled("DitauLepton"))
