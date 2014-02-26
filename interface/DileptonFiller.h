@@ -5,7 +5,6 @@
 #define _DileptonFiller_h
 
 #include "AnalysisLepton.h"
-#include "AnalysisTau.h"
 #include "NtupleFiller.h"
 
 using namespace std;
@@ -29,13 +28,10 @@ class DileptonFiller : public NtupleFiller {
 	private:
         AnalysisLepton* lep1;
         AnalysisLepton* lep2;
-        AnalysisTau* tau;
 
-		unsigned int			_NumTaus;
 		unsigned int			_NumCombos;
 		vector<int>				_MomentumRank;
 
-        vector<int> _TauMomentumRank;
         vector<bool> _zmask;
         vector<bool> _zmask2;
 
@@ -53,16 +49,8 @@ class DileptonFiller : public NtupleFiller {
         vector<float> _jet_deltaR_lepton1;
         vector<float> _jet_deltaR_lepton2;
 
-        vector<float> _TauLepton1VisibleMass;
-        vector<float> _TauLepton2VisibleMass;
-        vector<float> _TauLepton1METMass;
-        vector<float> _TauLepton2METMass;
         vector<float> _Lepton1Lepton2VisibleMass;
-        vector<float> _TauLepton1CosDeltaPhi;
-        vector<float> _TauLepton2CosDeltaPhi;
         vector<float> _Lepton1Lepton2CosDeltaPhi;
-        vector<float> _TauLepton1DeltaR;
-        vector<float> _TauLepton2DeltaR;
         vector<float> _Lepton1Lepton2DeltaR;
         vector<float> _HT;
         vector<float> _MHT;

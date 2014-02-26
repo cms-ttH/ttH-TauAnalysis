@@ -19,7 +19,6 @@ DileptonFiller::DileptonFiller(const ParameterSet& iConfig, TTree* iTree, BEANhe
 
     lep1 = new AnalysisLepton("LL_Lepton1", _Tree);
     lep2 = new AnalysisLepton("LL_Lepton2", _Tree);
-    tau = new AnalysisTau("LL_Tau", _Tree);
 }
 
 // === Destructor === //
@@ -27,7 +26,6 @@ DileptonFiller::~DileptonFiller()
 {
     delete lep1;
     delete lep2;
-    delete tau;
 }
 
 // ------------ method called to for each event  ------------
@@ -37,7 +35,6 @@ void DileptonFiller::analyze(const Event& iEvent, const EventSetup& iSetup){}
 void DileptonFiller::SetupBranches()
 {
 	// Set up tree branches
-	_Tree->Branch("LL_NumTaus",&_NumTaus);
 	_Tree->Branch("LL_NumLooseMuons",&_NumLooseMuons);
 	_Tree->Branch("LL_NumExLooseMuons",&_NumExLooseMuons);
 	_Tree->Branch("LL_NumTightMuons",&_NumTightMuons);
@@ -47,7 +44,6 @@ void DileptonFiller::SetupBranches()
 	_Tree->Branch("LL_NumCombos",&_NumCombos);
 	_Tree->Branch("LL_MomentumRank",&_MomentumRank);
 
-    _Tree->Branch("LL_TauMomentumRank", &_TauMomentumRank);
     _Tree->Branch("LL_PassZMask", &_zmask);
     _Tree->Branch("LL_PassZMask2", &_zmask2);
 
@@ -57,16 +53,8 @@ void DileptonFiller::SetupBranches()
     _Tree->Branch("J_Lepton1DeltaR", &_jet_deltaR_lepton1);
     _Tree->Branch("J_Lepton2DeltaR", &_jet_deltaR_lepton2);
 
-    _Tree->Branch("LL_TauLepton1VisibleMass", &_TauLepton1VisibleMass);
-    _Tree->Branch("LL_TauLepton2VisibleMass", &_TauLepton2VisibleMass);
-    _Tree->Branch("LL_TauLepton1METMass", &_TauLepton1METMass);
-    _Tree->Branch("LL_TauLepton2METMass", &_TauLepton2METMass);
     _Tree->Branch("LL_Lepton1Lepton2VisibleMass", &_Lepton1Lepton2VisibleMass);
-    _Tree->Branch("LL_TauLepton1CosDeltaPhi", &_TauLepton1CosDeltaPhi);
-    _Tree->Branch("LL_TauLepton2CosDeltaPhi", &_TauLepton2CosDeltaPhi);
     _Tree->Branch("LL_Lepton1Lepton2CosDeltaPhi", &_Lepton1Lepton2CosDeltaPhi);
-    _Tree->Branch("LL_TauLepton1DeltaR", &_TauLepton1DeltaR);
-    _Tree->Branch("LL_TauLepton2DeltaR", &_TauLepton2DeltaR);
     _Tree->Branch("LL_Lepton1Lepton2DeltaR", &_Lepton1Lepton2DeltaR);
     _Tree->Branch("LL_HT", &_HT);
     _Tree->Branch("LL_MHT", &_MHT);
@@ -112,15 +100,12 @@ void DileptonFiller::ClearVectors()
 {
     lep1->ClearVectors();
     lep2->ClearVectors();
-    tau->ClearVectors();
 
     _jet_deltaR_lepton1.clear();
     _jet_deltaR_lepton2.clear();
 
-	_NumTaus										= 0;
 	_NumCombos										= 0;	
 	_MomentumRank									.clear();
-	_TauMomentumRank								.clear();
     _zmask.clear();
     _zmask2.clear();
 
@@ -135,16 +120,8 @@ void DileptonFiller::ClearVectors()
     // === Combo === //
     _TriggerEventWeight.clear();
 
-    _TauLepton1VisibleMass.clear();
-    _TauLepton2VisibleMass.clear();
-    _TauLepton1METMass.clear();
-    _TauLepton2METMass.clear();
     _Lepton1Lepton2VisibleMass.clear();
-    _TauLepton1CosDeltaPhi.clear();
-    _TauLepton2CosDeltaPhi.clear();
     _Lepton1Lepton2CosDeltaPhi.clear();
-    _TauLepton1DeltaR.clear();
-    _TauLepton2DeltaR.clear();
     _Lepton1Lepton2DeltaR.clear();
     _HT.clear();
     _MHT.clear();
