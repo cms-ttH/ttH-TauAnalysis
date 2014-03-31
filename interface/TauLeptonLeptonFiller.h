@@ -55,6 +55,8 @@ class TauLeptonLeptonFiller : public NtupleFiller {
         vector<vector<float>> _jet_deltaR_lepton1;
         vector<vector<float>> _jet_deltaR_lepton2;
 
+        vector<float> _JetsVisibleMass;
+        vector<float> _LeptonJetsVisibleMass;
         vector<float> _TauLepton1VisibleMass;
         vector<float> _TauLepton2VisibleMass;
         vector<float> _TauLepton1METMass;

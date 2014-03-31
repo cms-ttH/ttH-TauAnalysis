@@ -59,6 +59,8 @@ void TauLeptonLeptonFiller::SetupBranches()
     _Tree->Branch("J_Lepton1DeltaR", &_jet_deltaR_lepton1);
     _Tree->Branch("J_Lepton2DeltaR", &_jet_deltaR_lepton2);
 
+    _Tree->Branch("TLL_JetsVisibleMass", &_JetsVisibleMass);
+    _Tree->Branch("TLL_LeptonJetsVisibleMass", &_LeptonJetsVisibleMass);
     _Tree->Branch("TLL_TauLepton1VisibleMass", &_TauLepton1VisibleMass);
     _Tree->Branch("TLL_TauLepton2VisibleMass", &_TauLepton2VisibleMass);
     _Tree->Branch("TLL_TauLepton1METMass", &_TauLepton1METMass);
@@ -138,6 +140,8 @@ void TauLeptonLeptonFiller::ClearVectors()
     // === Combo === //
     _TriggerEventWeight.clear();
 
+    _JetsVisibleMass.clear();
+    _LeptonJetsVisibleMass.clear();
     _TauLepton1VisibleMass.clear();
     _TauLepton2VisibleMass.clear();
     _TauLepton1METMass.clear();
@@ -374,8 +378,19 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
         TLorentzVector vtau(Tau->px, Tau->py, Tau->pz, Tau->energy);
         TLorentzVector vsum = vlep1 + vlep2 + vtau;
 
-        for (const auto& j: cleanSelCorrJets)
+        TLorentzVector jsum;
+        TLorentzVector jlsum;
+
+        if (Tau->charge * Lepton1->charge > 0)
+            jlsum += vlep1;
+        else
+            jlsum += vlep2;
+
+        for (const auto& j: cleanSelCorrJets) {
             vsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
+            jsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
+            jlsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
+        }
 
         auto mht = -vsum;
         _MHT.push_back(vsum.Pt());
@@ -458,6 +473,8 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
                 _TriggerEventWeight.push_back(helper->GetMuonEleTriggerSF(*static_cast<const BNmuon*>(lepton2), *static_cast<const BNelectron*>(lepton1)));
         }
 
+        _JetsVisibleMass.push_back(jsum.M());
+        _LeptonJetsVisibleMass.push_back(jlsum.M());
         _TauLepton1VisibleMass.push_back(GetComboMassBN(*Tau, *lepton1));
         _TauLepton2VisibleMass.push_back(GetComboMassBN(*Tau, *lepton2));
         _TauLepton1METMass.push_back(GetComboMassBN(*Tau, *lepton1, met));
