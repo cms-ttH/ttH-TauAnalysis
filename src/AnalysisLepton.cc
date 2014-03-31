@@ -21,6 +21,7 @@ AnalysisLepton::AnalysisLepton(const std::string& p, TTree* t)
     t->Branch((p + "CorrectedD0").c_str(), &_CorrectedD0);
     t->Branch((p + "CorrectedDZ").c_str(), &_CorrectedDZ);
     t->Branch((p + "ImpactParameter").c_str(), &_ImpactParameter);
+    t->Branch((p + "METCosDeltaPhi").c_str(), &_METCosDeltaPhi);
     t->Branch((p + "IsLoose").c_str(), &_IsLoose);
     t->Branch((p + "IsTight").c_str(), &_IsTight);
     t->Branch((p + "GenMatchDaughter0Id").c_str(), &_GenMatchDaughter0Id);
@@ -59,6 +60,7 @@ AnalysisLepton::ClearVectors()
     _CorrectedD0.clear();
     _CorrectedDZ.clear();
     _ImpactParameter.clear();
+    _METCosDeltaPhi.clear();
 
     _IsTight.clear();
     _IsLoose.clear();
@@ -130,6 +132,7 @@ AnalysisLepton::Fill(const BNlepton* l, BEANhelper *helper, const BNmcparticleCo
     _CorrectedD0.push_back(l->correctedD0);
     _CorrectedDZ.push_back(l->correctedDZ);
     _ImpactParameter.push_back(l->IP);
+    _METCosDeltaPhi.push_back(cos(l->phi - met.phi));
 
     // Provenance
     std::vector<int> undesiredIDs = {6, -6, 12, -12, 14, -14, 16, -16, 25};

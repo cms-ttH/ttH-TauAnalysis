@@ -382,7 +382,7 @@ void TauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
         _TauMomentumRank.push_back(theNumberOfTaus-1);
 
-        tau->Fill(*Tau, beanHelper, _BNmcparticles);
+        tau->Fill(*Tau, beanHelper, _BNmcparticles, correctedMET);
         lep->Fill(Lepton, beanHelper, _BNmcparticles, correctedMET, -vsum);
 
         auto lepton = Lepton;

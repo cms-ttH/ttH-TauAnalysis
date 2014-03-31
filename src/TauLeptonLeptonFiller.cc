@@ -54,6 +54,7 @@ void TauLeptonLeptonFiller::SetupBranches()
     // === Combo === //
     _Tree->Branch("TLL_TriggerEventWeight", &_TriggerEventWeight);
 
+    _Tree->Branch("J_METCosDeltaPhi", &_jet_cosDeltaPhi_met);
     _Tree->Branch("J_TauDeltaR", &_jet_deltaR_tau);
     _Tree->Branch("J_Lepton1DeltaR", &_jet_deltaR_lepton1);
     _Tree->Branch("J_Lepton2DeltaR", &_jet_deltaR_lepton2);
@@ -114,6 +115,7 @@ void TauLeptonLeptonFiller::ClearVectors()
     lep2->ClearVectors();
     tau->ClearVectors();
 
+    _jet_cosDeltaPhi_met.clear();
     _jet_deltaR_tau.clear();
     _jet_deltaR_lepton1.clear();
     _jet_deltaR_lepton2.clear();
@@ -357,6 +359,7 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
         BNjetCollection cleanSelCorrJets						= beanHelper->GetCleanJets(selCorrJets, tauAndLeptons, 0.25, &jet_indices);
         _CleanJetIndices.push_back(jet_indices);
 
+        _jet_cosDeltaPhi_met.push_back({});
         _jet_deltaR_tau.push_back({});
         _jet_deltaR_lepton1.push_back({});
         _jet_deltaR_lepton2.push_back({});
@@ -435,7 +438,7 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
 
         _TauMomentumRank.push_back(theNumberOfTaus-1);
 
-        tau->Fill(*Tau, beanHelper, _BNmcparticles);
+        tau->Fill(*Tau, beanHelper, _BNmcparticles, correctedMET);
         lep1->Fill(Lepton1, beanHelper, _BNmcparticles, correctedMET, -vsum);
         lep2->Fill(Lepton2, beanHelper, _BNmcparticles, correctedMET, -vsum);
 
@@ -467,6 +470,7 @@ void TauLeptonLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iS
         _TauLepton2DeltaR.push_back(deltaR(Tau->eta, Tau->phi, lepton2->eta, lepton2->phi));
         _Lepton1Lepton2DeltaR.push_back(deltaR(lepton1->eta, lepton1->phi, lepton2->eta, lepton2->phi));
         for (const auto& jet: selCorrJets) {
+            _jet_cosDeltaPhi_met.back().push_back(cos(jet.phi - met.phi));
             _jet_deltaR_tau.back().push_back(deltaR(jet.eta, jet.phi, Tau->eta, Tau->phi));
             _jet_deltaR_lepton1.back().push_back(deltaR(jet.eta, jet.phi, lepton1->eta, lepton1->phi));
             _jet_deltaR_lepton2.back().push_back(deltaR(jet.eta, jet.phi, lepton2->eta, lepton2->phi));

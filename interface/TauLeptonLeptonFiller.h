@@ -50,6 +50,7 @@ class TauLeptonLeptonFiller : public NtupleFiller {
         // === Combo === //
         vector<float> _TriggerEventWeight;
 
+        vector<vector<float>> _jet_cosDeltaPhi_met;
         vector<vector<float>> _jet_deltaR_tau;
         vector<vector<float>> _jet_deltaR_lepton1;
         vector<vector<float>> _jet_deltaR_lepton2;

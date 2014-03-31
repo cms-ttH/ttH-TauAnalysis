@@ -37,6 +37,7 @@ class AnalysisLepton {
         vector<float> _CorrectedD0;
         vector<float> _CorrectedDZ;
         vector<float> _ImpactParameter;
+        vector<float> _METCosDeltaPhi;
         vector<bool> _IsLoose;
         vector<bool> _IsTight;
         vector<int> _GenMatchDaughter0Id;

@@ -71,6 +71,7 @@ AnalysisTau::AnalysisTau(const std::string& p, TTree* t)
     t->Branch((p + "LTvz").c_str(), &_LTvz);
     t->Branch((p + "LTValidHits").c_str(), &_LTValidHits);
     t->Branch((p + "LTNormChiSqrd").c_str(), &_LTNormChiSqrd);
+    t->Branch((p + "METCosDeltaPhi").c_str(), &_METCosDeltaPhi);
 
     t->Branch((p + "GenMatchDaughter0Id").c_str(), &_GenMatchDaughter0Id);
     t->Branch((p + "GenMatchDaughter1Id").c_str(), &_GenMatchDaughter1Id);
@@ -159,6 +160,7 @@ AnalysisTau::ClearVectors()
     _LTvz.clear();
     _LTValidHits.clear();
     _LTNormChiSqrd.clear();
+    _METCosDeltaPhi.clear();
     _GenMatchDaughter0Id.clear();
     _GenMatchDaughter1Id.clear();
     _GenMatchId.clear();
@@ -180,7 +182,7 @@ AnalysisTau::ClearVectors()
 }
 
 void
-AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNmcparticleCollection& mc_particles)
+AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNmcparticleCollection& mc_particles, const BNmet& met)
 {
     _p.push_back(LorentzVector(t.px, t.py, t.pz, t.energy));
     _Pt.push_back(t.pt);
@@ -249,6 +251,7 @@ AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNmcparticleCo
     _LTvz.push_back(t.leadingTrackVz);
     _LTValidHits.push_back(t.leadingTrackValidHits);
     _LTNormChiSqrd.push_back(t.leadingTrackNormChiSqrd);
+    _METCosDeltaPhi.push_back(cos(t.phi - met.phi));
 
     // Provenance
     std::vector<int> undesiredIDs = {6, -6, 12, -12, 14, -14, 16, -16, 25};

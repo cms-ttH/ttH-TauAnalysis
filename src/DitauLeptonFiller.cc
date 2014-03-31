@@ -334,8 +334,8 @@ void DitauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup
                 _Tau1MomentumRank.push_back(theNumberOfTaus1-1);
                 _Tau2MomentumRank.push_back(theNumberOfTaus2-1);
 
-                tau1->Fill(*Tau1, beanHelper, _BNmcparticles);
-                tau2->Fill(*Tau2, beanHelper, _BNmcparticles);
+                tau1->Fill(*Tau1, beanHelper, _BNmcparticles, correctedMET);
+                tau2->Fill(*Tau2, beanHelper, _BNmcparticles, correctedMET);
                 lep->Fill(lepton, beanHelper, _BNmcparticles, correctedMET, -vsum);
 
 				// Fill lepton

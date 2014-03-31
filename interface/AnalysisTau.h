@@ -21,7 +21,7 @@ class AnalysisTau {
         AnalysisTau(const std::string&, TTree*);
 
         void ClearVectors();
-        void Fill(const BNtau&, const BEANhelper*, const BNmcparticleCollection&);
+        void Fill(const BNtau&, const BEANhelper*, const BNmcparticleCollection&, const BNmet&);
 
     protected:
         std::vector<int> _MomentumRank;
@@ -88,6 +88,7 @@ class AnalysisTau {
         std::vector<float> _LTvz;
         std::vector<unsigned int> _LTValidHits;
         std::vector<float> _LTNormChiSqrd;
+        std::vector<float> _METCosDeltaPhi;
         std::vector<int> _GenMatchDaughter0Id;
         std::vector<int> _GenMatchDaughter1Id;
         std::vector<int> _GenMatchId;
