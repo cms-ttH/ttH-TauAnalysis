@@ -43,7 +43,7 @@ Ntuplizer::Ntuplizer(const ParameterSet& config) :
     _RecoJetSource                  = config.getParameter<InputTag>("RecoJetSource");
 
     // required for TTL event check
-    _num_leptons = boost::lexical_cast<int>(GetAnalysisTypeParameter(4)[6]);
+    _num_leptons = boost::lexical_cast<int>(GetAnalysisTypeParameter(5)[2]);
 
     _an_type = config.getParameter<bool>("isDilepton") ? analysisType::TauDIL : analysisType::TauLJ;
 

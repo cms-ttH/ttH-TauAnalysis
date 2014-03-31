@@ -30,14 +30,15 @@ options = VarParsing.VarParsing("analysis")
 # <subera> [N/A for MC]     = A, B, C...
 # <type>                    = MC-sigFullSim, MC-sigFastSim, MC-sig, MC-bg, data-PR, data-RR, data-RRr
 # <sample number>           = See https://twiki.cern.ch/twiki/bin/view/CMS/TTbarHiggsTauTau#Process_info
-# <skim selection>          = up to six numbers;
+# <skim jet selection>      = Sets of four numbers, separated by a "/", and ORed
 #                             - 1st is min. num. of total jets
 #                             - 2nd is min. num. loose Btags
 #                             - 3rd is min. num. med. Btags
 #                             - 4th is min. num. tight Btags
-#                             - 5th/6th are min num. "base"/iso taus, as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
-#                             - 7th is a bitmap for num. of leptons - used to switch the trigger path
-#                             - 8th (optional) is the number of extra partons
+# <skim lep selecton>      = Set of four numbers:
+#                             - 1st/2nd are min num. "base"/iso taus, as defined in TTHTauTau/Skimming/pluginsBEANskimmer.cc
+#                             - 3th is a bitmap for num. of leptons - used to switch the trigger path
+#                             - 4th (optional) is the number of extra partons
 # <systematic type>         = dash-separated systematic uncertainty shift type(s). 
 #                             Options are defined in BEAN/BEANmaker/interface/BEANhelper.h
 #                             Must include 'NA'
@@ -49,7 +50,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_0000002_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_0000_002_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -128,8 +129,8 @@ my_splitter.whitespace_split = True
 jobParams       = list(my_splitter)
 
 # === Job params error checking === #
-if len(jobParams) != 6:
-    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 6 arguments (check config file for details). Terminating."
+if len(jobParams) != 7:
+    print "ERROR: jobParams set to '" + options.jobParams + "' must have exactly 7 arguments (check config file for details). Terminating."
     sys.exit(1)
 
 if (jobParams[0] != "2011") and (jobParams[0] != "2012"):
@@ -164,19 +165,24 @@ if (not runOnMC and sampleNumber >= 0):
     print "ERROR: job set to run on collision data but sample number set to '" + sampleNumber + "' when it must be negative."
     sys.exit(1)
 
-skimParams = jobParams[4]
+jet_skim_params = jobParams[4].split("/")
+if len(filter(lambda s: len(s) != 4, jet_skim_params)) > 0:
+    print "ERROR: all jet skimming parameters must have a lenght of 4!"
+    sys.exit(1)
+
+skimParams = jobParams[5]
 if len(skimParams) is 0:
     print 'ERROR: unable to determine skim conditions; options.jobParams is set to {0}'.format(options.jobParams)
     sys.exit(1)
-if len(skimParams) > 8:
-    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 7 characters are not supported'.format(skimParams)
+if len(skimParams) > 4:
+    print 'ERROR: skimParams is set to {0}, but requests for skimParams longer than 4 characters are not supported'.format(skimParams)
     sys.exit(1)
 
-taus = int(skimParams[4])
-leptons = int(skimParams[6])
-partons = int(skimParams[7]) if len(skimParams) > 7 else -1
+taus = int(skimParams[0])
+leptons = int(skimParams[2])
+partons = int(skimParams[3]) if len(skimParams) > 3 else -1
 
-sys_splitter = shlex.shlex(jobParams[5], posix=True)
+sys_splitter = shlex.shlex(jobParams[6], posix=True)
 sys_splitter.whitespace = '-'
 sys_splitter.whitespace_split = True
 sysTypes= list(sys_splitter)
@@ -297,7 +303,7 @@ process.source = cms.Source("PoolSource",
 # === Conditions === #
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 from ttH.TauAnalysis.globalTagMap_cfi import get_tag
-globalTag = get_tag(options.jobParams.rsplit('_',3)[0]) + '::All'
+globalTag = get_tag(options.jobParams.rsplit('_', 4)[0]) + '::All'
 process.GlobalTag.globaltag = cms.string(globalTag)
 
 # === Collision data trigger requirements === #
@@ -315,7 +321,8 @@ if era == 2012:
 
 # === Skim === #
 process.beanSkimmer = cms.EDFilter("BEANskimmer",
-    config = cms.untracked.string(skimParams),
+    jetConfig = cms.untracked.vstring(jet_skim_params),
+    lepConfig = cms.untracked.string(skimParams),
     tauSrc = RecoTauSource,
     jetSrc = RecoJetSource,
     genSrc = GenParticleSource,
@@ -418,6 +425,7 @@ print """
             Tau event veto...{10}
             Triggers.........{6}
             Skim parameters..{7}
+            Jet parameters...{11}
             Systematics......{8}
             Fillers..........{9}
 
@@ -433,7 +441,8 @@ print """
         skimParams,
         ', '.join(sysTypes),
         ', '.join(NtupleFillers),
-        use_veto)
+        use_veto,
+        jet_skim_params)
 
 # === Write-out all python configuration parameter information === #
 #pythonDump = open("dumpedPython.py", "write"); print >> pythonDump,  process.dumpPython()

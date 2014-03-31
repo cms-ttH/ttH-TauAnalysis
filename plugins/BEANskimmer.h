@@ -20,7 +20,9 @@
 #include "BEAN/BEANmaker/interface/BEANhelper.h"
 #include "BEAN/Collections/interface/BNjet.h"
 #include "BEAN/Collections/interface/BNtau.h"
+
 #include <string>
+#include <vector>
 //
 // class declaration
 //
@@ -45,17 +47,13 @@ class BEANskimmer : public edm::EDFilter {
       // ----------member data ---------------------------
     BEANhelper helper_;
 
-    int minNumJets_;
-    int minNumLooseBtags_;
-    int minNumMediumBtags_;
-    int minNumTightBtags_;
+    std::vector<std::vector<int>> jet_reqs_;
     int minNumBaseTaus_;
     int minNumIsoTaus_;
     int numPartons_;
     double CSV_WP_L_;
     double CSV_WP_M_;
     double CSV_WP_T_;
-    std::string cfg_;
     edm::InputTag tauSrc_;
     edm::InputTag jetSrc_;
     edm::InputTag genSrc_;

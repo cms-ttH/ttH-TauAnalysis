@@ -4,6 +4,8 @@
 // Class:      BEANskimmer
 // 
 
+#include <string>
+
 // user include files
 #include "BEAN/Collections/interface/BNmcparticle.h"
 
@@ -12,39 +14,32 @@
 //
 // constructors and destructor
 //
-BEANskimmer::BEANskimmer(const edm::ParameterSet& iConfig) :
-   numPartons_(iConfig.getUntrackedParameter<int>("partons", -1)),
-   genSrc_(iConfig.getUntrackedParameter<edm::InputTag>("genSrc"))
+BEANskimmer::BEANskimmer(const edm::ParameterSet& config) :
+   numPartons_(config.getUntrackedParameter<int>("partons", -1)),
+   genSrc_(config.getUntrackedParameter<edm::InputTag>("genSrc"))
 {
     //now do what ever initialization is needed
-    if( iConfig.exists("config") ) 
-        cfg_ = iConfig.getUntrackedParameter<std::string>("config");
-    else
-        edm::LogError ("BEANskimmer::BEANskimmer") << " parameter 'config' must be configured! Exiting...";
+    std::vector<std::string> jet_cfg = config.getUntrackedParameter<std::vector<std::string>>("jetConfig");
+    std::string lep_cfg = config.getUntrackedParameter<std::string>("lepConfig");
 
-    tauSrc_ = iConfig.exists("tauSrc") ? iConfig.getParameter<edm::InputTag>("tauSrc") : edm::InputTag("BNproducer::selectedPatTaus");
-    jetSrc_ = iConfig.exists("jetSrc") ? iConfig.getParameter<edm::InputTag>("jetSrc") : edm::InputTag("BNproducer::selectedPatJets");
+    for (const auto& s: jet_cfg)
+        jet_reqs_.push_back({std::stoi(s.substr(0, 1)), std::stoi(s.substr(1, 1)), std::stoi(s.substr(2, 1)), std::stoi(s.substr(3, 1))});
+
+    tauSrc_ = config.exists("tauSrc") ? config.getParameter<edm::InputTag>("tauSrc") : edm::InputTag("BNproducer::selectedPatTaus");
+    jetSrc_ = config.exists("jetSrc") ? config.getParameter<edm::InputTag>("jetSrc") : edm::InputTag("BNproducer::selectedPatJets");
 
     CSV_WP_L_ = 0.244;
     CSV_WP_M_ = 0.679;
     CSV_WP_T_ = 0.898;
-    minNumLooseBtags_ = 0;
-    minNumMediumBtags_ = 0;
-    minNumTightBtags_ = 0;
-    minNumJets_ = 0;
     minNumBaseTaus_ = 0;
     minNumIsoTaus_ = 0;
 
-    int sample = iConfig.getUntrackedParameter<int>("sample");
-    auto type = iConfig.getUntrackedParameter<bool>("dilepton") ? analysisType::TauDIL : analysisType::TauLJ;
+    int sample = config.getUntrackedParameter<int>("sample");
+    auto type = config.getUntrackedParameter<bool>("dilepton") ? analysisType::TauDIL : analysisType::TauLJ;
     helper_.SetUp("2012_53x", sample, type, (sample < 0), "SingleMu", false, true, "All");
 
-    if( cfg_.size() > 0 ) minNumJets_ = atoi(cfg_.substr(0,1).c_str());
-    if( cfg_.size() > 1 ) minNumLooseBtags_ = atoi(cfg_.substr(1,1).c_str());
-    if( cfg_.size() > 2 ) minNumMediumBtags_ = atoi(cfg_.substr(2,1).c_str());
-    if( cfg_.size() > 3 ) minNumTightBtags_ = atoi(cfg_.substr(3,1).c_str());
-    if( cfg_.size() > 4 ) minNumBaseTaus_ = atoi(cfg_.substr(4,1).c_str());
-    if( cfg_.size() > 5 ) minNumIsoTaus_ = atoi(cfg_.substr(5,1).c_str());
+    if( lep_cfg.size() > 0 ) minNumBaseTaus_ = std::stoi(lep_cfg.substr(0, 1));
+    if( lep_cfg.size() > 1 ) minNumIsoTaus_ = std::stoi(lep_cfg.substr(1, 1));
 
     //std::cout << "Configuration: " << std::endl
     //  << "minNumJets_ = " << minNumJets_ << std::endl
@@ -106,13 +101,17 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
         if( csv > CSV_WP_L_ ) numLooseTags++;
     }
 
-    if( numLooseTags < minNumLooseBtags_ )
-        return false;
-    if( numMediumTags < minNumMediumBtags_ )
-        return false;
-    if( numTightTags < minNumTightBtags_ )
-        return false;
-    if( numJets < minNumJets_ )
+    bool res = false;
+    for (const auto& req: jet_reqs_) {
+        if (numJets >= req[0] &&
+                numLooseTags >= req[1] &&
+                numMediumTags >= req[2] &&
+                numTightTags >= req[3]) {
+            res = true;
+            break;
+        }
+    }
+    if (!res)
         return false;
 
     int numBaseTaus = 0;
