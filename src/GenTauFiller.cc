@@ -76,7 +76,8 @@ void GenTauFiller::ClearVectors(){
 void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	// Only run this on MC
-	if(SampleTypeContains("data")){ return; }
+	if (params_.is_data())
+        return;
 
 	GetCollections(iEvent, iSetup);
 	ClearVectors();

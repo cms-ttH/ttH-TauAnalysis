@@ -117,7 +117,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
     // Flavor and Higgs decay mode splitting info
     // To be used with the inclusive ttH sample and/or ttbar samples
-    int sample = GetSampleNumber();
+    int sample = params_.get_sample_number();
 
     // The inclusive ttH sample numbers are 9000 + mass in GeV
     if (sample >= 9000) {

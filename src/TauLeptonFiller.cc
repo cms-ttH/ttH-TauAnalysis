@@ -386,7 +386,6 @@ void TauLeptonFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         lep->Fill(Lepton, beanHelper, _BNmcparticles, correctedMET, -vsum);
 
         auto lepton = Lepton;
-        auto helper = beanHelper;
         auto met = correctedMET;
 
         _TauLeptonVisibleMass.push_back(GetComboMassBN(*Tau, *lepton));

@@ -321,6 +321,15 @@
 
 * Add Lorentz vectors to leptons, taus
 
+## v60.2
+
+* Add...?
+
+## v61
+
+* Add Δφ between MET and leptons, taus, and jets
+* Add the mass of jets, jets + same-sign lepton to tll
+
 # Skim Versions
 
 ## s1

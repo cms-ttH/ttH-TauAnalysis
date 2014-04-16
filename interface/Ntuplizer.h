@@ -32,6 +32,8 @@
 #include "TauLeptonLeptonFiller.h"
 #include "VertexFiller.h"
 
+#include "Parameters.h"
+
 using namespace std;
 using namespace edm;
 
@@ -54,28 +56,17 @@ class Ntuplizer : public EDAnalyzer {
 	private:
 		bool MeetsTriggerRequirements(const Event&, InputTag, vector<string>);
 		bool IsFillerEnabled(const string);
-		string GetAnalysisTypeParameter(unsigned int);
-		unsigned int GetEra();
-		const char GetSubera();
-		string GetSampleType();
-		string GetLeptonFlavor();
-		bool EraIs(unsigned int);
-		bool SuberaIs(const char);
-		bool SampleTypeIs(const string);
-		bool SampleTypeContains(const string);
-		bool LeptonFlavorIs(const string);
 
 	// ----- Variables ----- //
 	private:
+        Parameters params_;
         std::string _filename;
 		// === Misc variables === //
 		unsigned int _DebugLevel;
 		vector<NtupleFiller*> ntupleFillers;
 		vector<string> _enabledFillers;
 		ParameterSet* jobConfig;
-		string _AnalysisType;
 		string _EraRelease;
-		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
         TFile* _file;
 		TTree* _Tree;

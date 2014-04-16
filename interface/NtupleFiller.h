@@ -56,8 +56,9 @@
 #include "BEAN/Collections/interface/BNtrigobj.h"
 #include "BEAN/Collections/interface/BNprimaryvertex.h"
 
-
 #include <TTree.h>
+
+#include "Parameters.h"
 
 using namespace std;
 using namespace edm;
@@ -79,17 +80,6 @@ class NtupleFiller : public EDAnalyzer {
 		virtual void analyze(const Event&, const EventSetup&);
 		virtual void SetupBranches();
 		virtual void GetCollections(const Event&, const EventSetup&);
-		string GetAnalysisTypeParameter(unsigned int);
-		unsigned int GetEra();
-		const char GetSubera();
-		string GetSampleType();
-        inline int GetSampleNumber() { return boost::lexical_cast<int>(GetAnalysisTypeParameter(4)); };
-		string GetLeptonFlavor();
-		bool EraIs(unsigned int);
-		bool SuberaIs(const char);
-		bool SampleTypeIs(const string);
-		bool SampleTypeContains(const string);
-		bool LeptonFlavorIs(const string);
 
 		// === Helper functions === //
 		template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject1&, const BNObject2&, const BNCollection&, const double);
@@ -105,6 +95,7 @@ class NtupleFiller : public EDAnalyzer {
 		bool IsInTheCracks(float);
 		
 	protected:
+        Parameters params_;
 		unsigned int _DebugLevel;
 		string _FillerName;
 		TTree* _Tree;
@@ -113,8 +104,6 @@ class NtupleFiller : public EDAnalyzer {
 		PATupleToBEANtranslator patTupleToBEANtranslator;
 
 		string _AnalysisType;
-		string _EraRelease;
-		vector<string> _AnalysisTypeVector;
 		bool _FromBEAN;
 		string _Era;
 		sysType::sysType _sysType;

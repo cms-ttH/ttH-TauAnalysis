@@ -24,7 +24,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing("analysis")
 # 'jobParams' parameter form: 
 # 
-# <era>_<subera>_<era release>_<type>_<sample number>_<skim selection>_<systematic type>
+# <era>_<subera>_<era release>_<type>_<sample number>_<jet selection>_<lep selection>_<systematic type>
 #
 # <era>                     = 2011, 2012
 # <subera> [N/A for MC]     = A, B, C...
@@ -50,7 +50,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_0000_002_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-sigFullSim_7125_2110/2200_112_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -336,7 +336,7 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
 
 	# === Analysis setup === #
 	DebugLevel							= cms.uint32(debugLevel),
-	AnalysisType						= cms.string(options.jobParams),				
+    AnalysisParameters = cms.vstring(jobParams),
 	EraRelease							= cms.string(era_release),				
 	FromBEAN							= cms.bool(era == 2012),
     TreeName							= cms.untracked.string(baseTreeName),

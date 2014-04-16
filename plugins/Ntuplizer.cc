@@ -13,16 +13,15 @@ using namespace reco;
 
 // constructors and destructor
 Ntuplizer::Ntuplizer(const ParameterSet& config) :
+    params_(config),
     _filename(config.getParameter<string>("outputFileName")),
     _use_event_veto(config.getParameter<bool>("useEventVeto"))
 {
 	// Necessary to propagate config 
 	jobConfig						= new ParameterSet(config);
 
-	// Analysis type
 	_DebugLevel						= config.getParameter<unsigned int>("DebugLevel");
 	_FromBEAN						= config.getParameter<bool>("FromBEAN");
-	_AnalysisType					= config.getParameter<string>("AnalysisType");
 	_EraRelease						= config.getParameter<string>("EraRelease");
     _UsePfLeptons                   = ( config.exists("UsePfLeptons") ) ? config.getParameter<bool>("UsePfLeptons") : true;
     _DataRange                      = ( config.exists("DataRange") ) ? config.getParameter<string>("DataRange") : "All";
@@ -41,9 +40,6 @@ Ntuplizer::Ntuplizer(const ParameterSet& config) :
     _RecoMuonSource                 = config.getParameter<InputTag>("RecoMuonSource");
     _RecoElectronSource             = config.getParameter<InputTag>("RecoElectronSource");
     _RecoJetSource                  = config.getParameter<InputTag>("RecoJetSource");
-
-    // required for TTL event check
-    _num_leptons = boost::lexical_cast<int>(GetAnalysisTypeParameter(5)[2]);
 
     _an_type = config.getParameter<bool>("isDilepton") ? analysisType::TauDIL : analysisType::TauLJ;
 
@@ -93,11 +89,11 @@ Ntuplizer::beginJob()
 
 
 	// Instantiate and set up beanHelper
-	string eraForBEANhelper = (GetAnalysisTypeParameter(0) == "2011") ? GetAnalysisTypeParameter(0) : (GetAnalysisTypeParameter(0) + "_" + _EraRelease);
+	string eraForBEANhelper = (params_.get_era() == "2011") ? params_.get_era() : (params_.get_era() + "_" + _EraRelease);
 	beanHelper.SetUp(eraForBEANhelper, // 2011, 2012_52x, 2012_53x
-            atoi(GetAnalysisTypeParameter(3).c_str()), // sample number
+            params_.get_sample_number(), // sample number
             _an_type,
-            SampleTypeContains("data"), // is data
+            params_.is_data(), // is data
             std::string("SingleMu"), // data set
             false, // do CSV reshaping
             _UsePfLeptons, 
@@ -108,9 +104,9 @@ Ntuplizer::beginJob()
     if(_RunExtraBEANhelpers) {
         beanHelpers["2012A"] = new BEANhelper();
         beanHelpers["2012A"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -118,9 +114,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012AB"] = new BEANhelper();
         beanHelpers["2012AB"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -128,9 +124,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012B"] = new BEANhelper();
         beanHelpers["2012B"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -138,9 +134,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012C"] = new BEANhelper();
         beanHelpers["2012C"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -148,9 +144,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012ABC"] = new BEANhelper();
         beanHelpers["2012ABC"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -158,9 +154,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012BC"] = new BEANhelper();
         beanHelpers["2012BC"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -168,9 +164,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012D"] = new BEANhelper();
         beanHelpers["2012D"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -178,9 +174,9 @@ Ntuplizer::beginJob()
         );
         beanHelpers["2012CD"] = new BEANhelper();
         beanHelpers["2012CD"]->SetUp(eraForBEANhelper,
-            atoi(GetAnalysisTypeParameter(3).c_str()),
+            params_.get_sample_number(),
             _an_type,
-            SampleTypeContains("data"),
+            params_.is_data(),
             std::string("SingleMu"), 
             false, 
             _UsePfLeptons, 
@@ -278,11 +274,11 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
     BNjetCollection BNjets				= *(hBNjets.product());
 
     if (_use_event_veto) {
-        if ((_num_leptons == 1 && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
-            (_num_leptons == 2 && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
+        if ((params_.get_lepton_count() == 1 && !beanHelper.IsTauTauLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType)) ||
+            (params_.get_lepton_count() == 2 && !beanHelper.IsTauLeptonLeptonEvent(BNtaus, BNjets, BNelectrons, BNmuons, _sysType))) {
             _numFailedTauEventCheck++;
             return;
-        } else if (!_num_leptons > 2) {
+        } else if (!params_.get_lepton_count() > 2) {
             throw;
         }
     }
@@ -345,42 +341,6 @@ bool Ntuplizer::IsFillerEnabled(const string iName){
 
 	return false;
 }
-
-// === Check whether an analysis type is how we want === //
-string Ntuplizer::GetAnalysisTypeParameter(unsigned int iParam){
-
-	// Parse analysisType and store parts in the vector
-	if(_AnalysisTypeVector.size() == 0){	
-		if(_AnalysisType.length()==0){ cerr << "ERROR: 'AnalysisType' is empty." << endl; exit(1); }
-		char separator = '_';
-		string remainder = _AnalysisType;
-		while(remainder.length() > 0){
-			unsigned int pos = remainder.find(separator);
-			if(pos < remainder.size()){
-				_AnalysisTypeVector.push_back(remainder.substr(0, pos));
-				remainder = remainder.substr(pos+1);
-			}else{
-				_AnalysisTypeVector.push_back(remainder);
-				remainder = "";
-			}	
-		}
-	}
-
-	// Return the requested piece if it's there 
-	if(iParam >= _AnalysisTypeVector.size()){ cerr << "ERROR: Requesting AnalysisType parameter " << iParam << " but vector only has " << _AnalysisTypeVector.size() << " elements." << endl; exit(1); }
-	return _AnalysisTypeVector.at(iParam);
-}
-
-unsigned int Ntuplizer::GetEra(){ return abs(atoi(GetAnalysisTypeParameter(0).c_str())); }
-const char Ntuplizer::GetSubera(){ return *(GetAnalysisTypeParameter(1).c_str()); }
-string Ntuplizer::GetSampleType(){ return GetAnalysisTypeParameter(2); }
-string Ntuplizer::GetLeptonFlavor(){ return GetAnalysisTypeParameter(3); }
-bool Ntuplizer::EraIs(unsigned int iEra){ return (iEra==GetEra()); }
-bool Ntuplizer::SuberaIs(const char iSubera){ return (iSubera==GetSubera()); }
-bool Ntuplizer::SampleTypeIs(const string iSampleType){ return (iSampleType.compare(GetSampleType())==0); }
-bool Ntuplizer::SampleTypeContains(const string iSampleType){ string sampleType = GetSampleType(); return (sampleType.find(iSampleType) < sampleType.length()); }
-bool Ntuplizer::LeptonFlavorIs(const string iLeptonFlavor){ return (iLeptonFlavor.compare(GetLeptonFlavor())==0); }
-
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(Ntuplizer);
