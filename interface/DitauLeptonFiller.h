@@ -25,10 +25,6 @@ class DitauLeptonFiller : public NtupleFiller {
 		void ClearVectors();
 
 		// === Helper functions === //
-		void FillTau1(const BNtau&);
-		void FillTau2(const BNtau&);
-		void FillMuon(const BNmuon&);
-		void FillElectron(const BNelectron&);
 		void FillDitauLepton(const BNtau&, const BNtau&, const BNmuon&);
 		void FillDitauLepton(const BNtau&, const BNtau&, const BNelectron&);
 
