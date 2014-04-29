@@ -116,26 +116,18 @@ BEANskimmer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     int numBaseTaus = 0;
     int numIsoTaus = 0;
+
     edm::Handle<BNtauCollection> tausHandle;
     iEvent.getByLabel(tauSrc_, tausHandle);
-    BNtauCollection const &taus = *tausHandle;
+    const BNtauCollection &taus = *tausHandle;
 
-    for( int i=0; i<int(taus.size()); i++ ) {
-        BNtau tau = taus.at(i);
-        if( tau.pt > 20 &&
-                tau.HPSdecayModeFinding > 0 &&
-                tau.leadingTrackPt > 5 &&
-                tau.leadingTrackValid > 0 &&
-                tau.HPSagainstElectronLoose > 0 &&
-                tau.HPSagainstMuonLoose > 0 &&
-                tau.HPSbyVLooseCombinedIsolationDeltaBetaCorr > 0) numIsoTaus++;
-        if( tau.pt > 20 &&
-                tau.HPSdecayModeFinding > 0 &&
-                tau.leadingTrackPt > 5 &&
-                tau.leadingTrackValid > 0 &&
-                tau.HPSagainstElectronLoose > 0 &&
-                tau.HPSagainstMuonLoose > 0 ) numBaseTaus++;
+    for (const auto& tau: taus) {
+        if (helper_.IsNonIsoTau(tau))
+           numBaseTaus++;
+        if (helper_.IsLooseTau(tau))
+           numIsoTaus++;
     }
+
     if( numBaseTaus < minNumBaseTaus_ )
         return false;
     if( numIsoTaus < minNumIsoTaus_ )
