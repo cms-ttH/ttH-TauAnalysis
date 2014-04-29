@@ -1,0 +1,197 @@
+id: v62_tll
+type: cmssw
+workdir: /tmpscratch/users/matze/v62_tll.work
+#  recycle sandbox: /tmp/v62_tll.work/sandbox.tar.bz2
+
+stageout location: /hadoop/users/matze/ttH/v62/2012
+
+check proxy: false
+
+task defaults:
+    cmssw config: makeNUT_cfg.py
+    dbs instance: phys01
+    events per job: 250000
+    outputs: [ntuple.root, ntuple_JESDown.root, ntuple_JESUp.root, ntuple_TESDown.root, ntuple_TESUp.root]
+
+    matching:
+      - label: data
+        outputs: [ntuple.root]
+
+tasks:
+  - label: tll_TTHTauTau_110
+    dataset: /TTH_HToTauTau_M-110_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-d5bfac10e6ba7e0210c5bdbd5741411b/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7110_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTHTauTau_115
+    dataset: /TTH_HToTauTau_M-115_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-17e629c87dce2e6e324597c01e88dfa4/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7115_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTHTauTau_120
+    dataset: /TTH_HToTauTau_M-120_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-acd8cd2398b57dde28d01aa89b1134ba/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7120_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTHTauTau_125
+    dataset: /TTH_HToTauTau_M-125_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-6ae750fad5bc32b011391928e19fd1d4/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7125_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTHTauTau_130
+    dataset: /TTH_HToTauTau_M-130_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-b8ebc3e59c4872d777a627344c80b438/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7130_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTHTauTau_135
+    dataset: /TTH_HToTauTau_M-135_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-a2339f0d29d4f7de3e03ebe3644b0f3d/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7135_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTHTauTau_140
+    dataset: /TTH_HToTauTau_M-140_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-d5763139aa02e3af0623b855319600b7/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_7140_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_110
+    dataset: /TTH_Inclusive_M-110_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-d61a92a763bfb082d8ab7bf79f4ce271/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9110_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_115
+    dataset: /TTH_Inclusive_M-115_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-bb7701ff655f4a364c1eb7ee1064bd9b/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9115_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_120
+    dataset: /TTH_Inclusive_M-120_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-57a994293cebe5a0fdb541d38740b0a7/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9120_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_122p5
+    dataset: /TTH_Inclusive_M-122_5_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-3705a5726f2be49ccd0791f1f863875e/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9122_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_125
+    dataset: /TTH_Inclusive_M-125_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV01-411302ae24b059b12fe5d86298d5421d/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9125_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_127p5
+    dataset: /TTH_Inclusive_M-127_5_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-54f0b3787cebfdb7a19ef903eecf1bfb/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9127_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_130
+    dataset: /TTH_Inclusive_M-130_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-374b0f20e3d3df48a84e0f788843ffe0/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9130_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_135
+    dataset: /TTH_Inclusive_M-135_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV03-208f426eca381dbcba15d6cbbbc124ac/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9135_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTH_140
+    dataset: /TTH_Inclusive_M-140_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV02-68616f184ad5e094c80148757bc565cd/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9140_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTbar_FullLept_Summer12
+    dataset: /TTJets_FullLeptMGDecays_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV01-411302ae24b059b12fe5d86298d5421d/USER
+    parameters: [jobParams=2012_X_MC-bg_2533_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTbar_Hadronic_Summer12
+    dataset: /TTJets_HadronicMGDecays_8TeV-madgraph/awoodard-TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02-fcbd5a250169c7a2d034f2fa5e2e12c1/USER
+    parameters: [jobParams=2012_X_MC-bg_2566_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTbar_SemiLept_Summer12
+    dataset: /TTJets_SemiLeptMGDecays_8TeV-madgraph/awoodard-TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02-d0a71c5bb6f6754a25e53f49b1990e4b/USER
+    parameters: [jobParams=2012_X_MC-bg_2563_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_WW_Summer12
+    dataset: /WW_TuneZ2star_8TeV_pythia6_tauola/awoodard-BEAN_GTV7G_V01_CV02-e3ad99dd778f8fb9d68e83fbb9a55ce4/USER
+    parameters: [jobParams=2012_X_MC-bg_2700_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_WZ_Summer12
+    dataset: /WZ_TuneZ2star_8TeV_pythia6_tauola/awoodard-BEAN_GTV7G_V01_CV02-102254ec177aec6e529083547d9bc940/USER 
+    parameters: [jobParams=2012_X_MC-bg_2701_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_WplusJets_Summer12
+    dataset: /WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/awoodard-BEAN_GTV7G_V01_CV01-411302ae24b059b12fe5d86298d5421d/USER
+    parameters: [jobParams=2012_X_MC-bg_2400_2110/2200_1120_JESup-JESdown-TESup-TESdown]
+  - label: tll_WplusFourJets_Summer12
+    dataset: /W4JetsToLNu_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-8dab2e5c718c7905a1d6f1125ed05124/USER
+    parameters: [jobParams=2012_X_MC-bg_2404_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_WplusOneJet_Summer12
+    dataset: /W1JetsToLNu_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-704430df6261616ba54ee0d42dc353a0/USER
+    parameters: [jobParams=2012_X_MC-bg_2401_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_WplusThreeJets_Summer12
+    dataset: /W3JetsToLNu_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-d0c0a0829e3b7c4e6367cfe16bfe61c6/USER
+    parameters: [jobParams=2012_X_MC-bg_2403_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_WplusTwoJets_Summer12
+    dataset: /W2JetsToLNu_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-70c1c0380b0681d971a08fe339032683/USER
+    parameters: [jobParams=2012_X_MC-bg_2402_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZZ_Summer12
+    dataset: /ZZ_TuneZ2star_8TeV_pythia6_tauola/awoodard-BEAN_GTV7G_V01_CV02-e4136b5eeaa5d203902786d105335a91/USER
+    parameters: [jobParams=2012_X_MC-bg_2702_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZplusFourJets_Summer12
+    dataset: /DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph/awoodard-DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-737891b93ef89969ffdb61d58f6b52fb/USER
+    parameters: [jobParams=2012_X_MC-bg_2804_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZplusJets_LowMass_Summer12
+    dataset: /DYJetsToLL_M-10To50_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-957408fcb92903661da4bfbf4ffcdf97/USER
+    parameters: [jobParams=2012_X_MC-bg_2850_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZplusJets_HighMass_Summer12
+    dataset: /DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball/awoodard-BEAN_GTV7G_V01_CV02-d97fbf7ea2d660b46f1e9f3d464f2320/USER
+    parameters: [jobParams=2012_X_MC-bg_2800_2110/2200_1120_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZplusOneJet_Summer12
+    dataset: /DY1JetsToLL_M-50_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-a646046210ead8c37901c0f81ebe13b3/USER
+    parameters: [jobParams=2012_X_MC-bg_2801_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZplusThreeJets_Summer12
+    dataset: /DY3JetsToLL_M-50_TuneZ2Star_8TeV-madgraph/awoodard-BEAN_GTV7G_V01_CV02-f8b8895feac0d934311063b7a5aca4eb/USER
+    parameters: [jobParams=2012_X_MC-bg_2803_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ZplusTwoJets_Summer12
+    dataset: /DY2JetsToLL_M-50_TuneZ2Star_8TeV-madgraph/awoodard-DY2JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-a50929125b92738b9d220724806acb11/USER
+    parameters: [jobParams=2012_X_MC-bg_2802_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_data_DoubleElectron_2012A_06Aug
+    dataset: /DoubleElectron/awoodard-BEAN_GTV7G_V01_CV03-37d58563e674c0e50b0bfc3d548deaa1/USER
+    parameters: [jobParams=2012_A_data-RR_-77_2110/2200_112_NA]
+  - label: tll_data_DoubleElectron_2012A_12Jul
+    dataset: /DoubleElectron/awoodard-BEAN_GTV7G_V01_CV03-8959f2b1b08109ff7e03ca44eee9947c/USER
+    parameters: [jobParams=2012_A_data-RR_-7_2110/2200_112_NA]
+  - label: tll_data_DoubleElectron_2012B_13Jul
+    dataset: /DoubleElectron/awoodard-BEAN_GTV7G_V01_CV03-e73c873a1b2a391ee04eb5aaa0d99ab1/USER
+    parameters: [jobParams=2012_B_data-RR_-777_2110/2200_112_NA]
+  - label: tll_data_DoubleElectron_2012C_24Aug
+    dataset: /DoubleElectron/awoodard-BEAN_GTV7G_V01_CV03-3f3c075921efb2b1bdbcbf48af2f77f3/USER
+    parameters: [jobParams=2012_C_data-RR_-77777_2110/2200_112_NA]
+  - label: tll_data_DoubleElectron_2012C_PR
+    dataset: /DoubleElectron/awoodard-BEAN_GTV7G_V01_CV03-ed3dc8a89c57c99b1d6d0473098e4580/USER
+    parameters: [jobParams=2012_C_data-PR_-7777_2110/2200_112_NA]
+  - label: tll_data_DoubleElectron_2012D_PR
+    dataset: /DoubleElectron/awoodard-BEAN_GTV7G_V01_CV03-dd7c50188f77c1ee8b47e3d3d3402dc3/USER
+    parameters: [jobParams=2012_D_data-PR_-777777_2110/2200_112_NA]
+  - label: tll_data_DoubleMu_2012A_06Aug
+    dataset: /DoubleMu/awoodard-BEAN_GTV7G_V01_CV03-394a698e71fe54627d6dfd1ed61b445a/USER
+    parameters: [jobParams=2012_A_data-RR_-66_2110/2200_112_NA]
+  - label: tll_data_DoubleMu_2012A_13Jul
+    dataset: /DoubleMu/awoodard-BEAN_GTV7G_V01_CV03-7a191c6247996f7fd500b4daf4f4d1c1/USER
+    parameters: [jobParams=2012_A_data-RR_-6_2110/2200_112_NA]
+  - label: tll_data_DoubleMu_2012B_PR
+    dataset: /DoubleMu/awoodard-BEAN_GTV7G_V01_CV03-4b158137b49bbeef22e1141a9675737c/USER
+    parameters: [jobParams=2012_B_data-PR_-666_2110/2200_112_NA]
+  - label: tll_data_DoubleMu_2012C_24Aug
+    dataset: /DoubleMu/awoodard-BEAN_GTV7G_V01_CV03-af102705436e0b2819d9006188329621/USER
+    parameters: [jobParams=2012_C_data-RR_-66666_2110/2200_112_NA]
+  - label: tll_data_DoubleMu_2012C_PR
+    dataset: /DoubleMu/awoodard-BEAN_GTV7G_V01_CV03-0b45fd3b0a08eb0cceb1f5fe10f66736/USER
+    parameters: [jobParams=2012_C_data-PR_-6666_2110/2200_112_NA]
+  - label: tll_data_DoubleMu_2012D_PR
+    dataset: /DoubleMu/awoodard-BEAN_GTV7G_V01_CV03-9d4088e6fe9027ef5f279d98f891816d/USER
+    parameters: [jobParams=2012_D_data-PR_-666666_2110/2200_112_NA]
+  - label: tll_data_MuEG_2012A_06Aug
+    dataset: /MuEG/awoodard-BEAN_GTV7G_V01_CV03-b79ce594299685804792c705b7a754ef/USER
+    parameters: [jobParams=2012_A_data-RR_-88_2110/2200_112_NA]
+  - label: tll_data_MuEG_2012A_13Jul
+    dataset: /MuEG/awoodard-BEAN_GTV7G_V01_CV03-51097212e4b259502e73106cb26e4a9d/USER
+    parameters: [jobParams=2012_A_data-RR_-8_2110/2200_112_NA]
+  - label: tll_data_MuEG_2012B_13Jul
+    dataset: /MuEG/awoodard-BEAN_GTV7G_V01_CV03-4b70e85a8d9633cce32215f1eadbcd4c/USER
+    parameters: [jobParams=2012_B_data-RR_-888_2110/2200_112_NA]
+  - label: tll_data_MuEG_2012C_24Aug
+    dataset: /MuEG/awoodard-BEAN_GTV7G_V01_CV03-a7cbdc4362d060a56aa63c99d096e98d/USER
+    parameters: [jobParams=2012_C_data-RR_-88888_2110/2200_112_NA]
+  - label: tll_data_MuEG_2012C_PR
+    dataset: /MuEG/awoodard-BEAN_GTV7G_V01_CV03-e56d43dc0433b16a8ad5f17d6cf2bd79/USER
+    parameters: [jobParams=2012_C_data-PR_-8888_2110/2200_112_NA]
+  - label: tll_data_MuEG_2012D_PR
+    dataset: /MuEG/awoodard-BEAN_GTV7G_V01_CV03-8a8f6f154a34324db02210fe918afa9f/USER
+    parameters: [jobParams=2012_D_data-PR_-888888_2110/2200_112_NA]
+  - label: tll_singleTopBarPlusW_Summer12
+    dataset: /Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/awoodard-Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-41d39a1aeaac4c8dbdd786085144f542/USER
+    parameters: [jobParams=2012_X_MC-bg_2605_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_singleTopBarSch_Summer12
+    dataset: /Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola/awoodard-BEAN_GTV7G_V01_CV02-b1550ee3f791917a9cb124b01c03abbf/USER
+    parameters: [jobParams=2012_X_MC-bg_2601_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_singleTopBarTch_Summer12
+    dataset: /Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola/awoodard-BEAN_GTV7G_V01_CV02-ec2b8aa035371ca0b6b1e1d0f6f5a590/USER
+    parameters: [jobParams=2012_X_MC-bg_2603_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_singleTopPlusW_Summer12
+    dataset: /T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/awoodard-T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-86a880aa72bbb7aa24e5db25eeb551d1/USER
+    parameters: [jobParams=2012_X_MC-bg_2604_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_singleTopSch_Summer12
+    dataset: /T_s-channel_TuneZ2star_8TeV-powheg-tauola/awoodard-BEAN_GTV7G_V01_CV02-7d3612e22e25f5aebdd55305738114ee/USER
+    parameters: [jobParams=2012_X_MC-bg_2600_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_singleTopTch_Summer12
+    dataset: /T_t-channel_TuneZ2star_8TeV-powheg-tauola/awoodard-T_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-35215d5719da8a511470f571bbfce58c/USER
+    parameters: [jobParams=2012_X_MC-bg_2602_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ttPlusW_Summer12
+    dataset: /TTWJets_8TeV-madgraph/awoodard-TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-098db0779af11ee0c3dbbfa2b8022fc8/USER
+    parameters: [jobParams=2012_X_MC-bg_2524_2110/2200_112_JESup-JESdown-TESup-TESdown]
+  - label: tll_ttPlusZ_Summer12
+    dataset: /TTZJets_8TeV-madgraph_v2/awoodard-TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1_BEAN_GTV7G_V01_CV01-19b9bdceafb47d2368e6466a66457d10/USER
+    parameters: [jobParams=2012_X_MC-bg_2523_2110/2200_112_JESup-JESdown-TESup-TESdown]
