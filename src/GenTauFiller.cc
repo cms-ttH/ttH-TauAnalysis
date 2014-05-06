@@ -28,7 +28,7 @@ void GenTauFiller::SetupBranches(){
 	ClearVectors();
 
 	// Set up tree branches
-	_Tree->Branch("GT_NumGenTaus",&_NumGenTaus);
+	_Tree->Branch("NumGenTaus",&_NumGenTaus);
 	_Tree->Branch("GT_MomentumRank", &_MomentumRank);
 	_Tree->Branch("GT_Pt", &_Pt);
 	_Tree->Branch("GT_Eta", &_Eta);

@@ -27,10 +27,10 @@ void VertexFiller::SetupBranches(){
 	ClearVectors();
 
 	// Set up tree branches
-	_Tree->Branch("V_NumVertices",&_numVertices);
-	_Tree->Branch("V_NumInteractionsBXm1",&_numInteractionsBXm1);
-	_Tree->Branch("V_NumInteractionsBX0",&_numInteractionsBX0);
-	_Tree->Branch("V_NumInteractionsBXp1",&_numInteractionsBXp1);
+	_Tree->Branch("NumVertices",&_numVertices);
+	_Tree->Branch("NumInteractionsBXm1",&_numInteractionsBXm1);
+	_Tree->Branch("NumInteractionsBX0",&_numInteractionsBX0);
+	_Tree->Branch("NumInteractionsBXp1",&_numInteractionsBXp1);
 	_Tree->Branch("V_Xcoord",&_xCoord);
 	_Tree->Branch("V_XcoordErr",&_xCoordErr);
 	_Tree->Branch("V_Ycoord",&_yCoord);

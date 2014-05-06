@@ -31,7 +31,7 @@ void GenJetFiller::SetupBranches(){
     ClearVectors();
 
 	// Set up tree branches
-	_Tree->Branch("GJ_NumGenJets",&_NumGenJets);
+	_Tree->Branch("NumGenJets",&_NumGenJets);
 	_Tree->Branch("GJ_MomentumRank", &_MomentumRank);
 	_Tree->Branch("GJ_Pt", &_Pt);
 	_Tree->Branch("GJ_Eta", &_Eta);

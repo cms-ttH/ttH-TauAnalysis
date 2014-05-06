@@ -30,38 +30,38 @@ void EventFiller::SetupBranches(){
 	ClearVectors();
 
 	// Set up tree branches
-	_Tree->Branch("Ev_runNumber", &_runNumber);
-	_Tree->Branch("Ev_eventNumber", &_eventNumber);
-	_Tree->Branch("Ev_lumiBlock", &_lumiBlock);
+	_Tree->Branch("run", &_runNumber);
+	_Tree->Branch("event", &_eventNumber);
+	_Tree->Branch("lumi", &_lumiBlock);
 
-    _Tree->Branch("Ev_NTruePV", &_numTruePV);
+    _Tree->Branch("NTruePV", &_numTruePV);
 
-    _Tree->Branch("Ev_higgsDecayMode", &_higgsDecayMode);
-    _Tree->Branch("Ev_bQuarkCount", &_bQuarkCount);
-    _Tree->Branch("Ev_cQuarkCount", &_cQuarkCount);
+    _Tree->Branch("higgsDecayMode", &_higgsDecayMode);
+    _Tree->Branch("bQuarkCount", &_bQuarkCount);
+    _Tree->Branch("cQuarkCount", &_cQuarkCount);
 
-	_Tree->Branch("Ev_puWeight", &_PUweight);
-	_Tree->Branch("Ev_puWeightUp", &_PUweightUp);
-	_Tree->Branch("Ev_puWeightDown", &_PUweightDown);
-    _Tree->Branch("Ev_topPtWeight", &_topPtWeight);
-	_Tree->Branch("Ev_topPtWeightUp", &_topPtWeightUp);
-	_Tree->Branch("Ev_topPtWeightDown", &_topPtWeightDown);
-	_Tree->Branch("Ev_q2WeightUp", &_q2WeightUp);
-	_Tree->Branch("Ev_q2WeightDown", &_q2WeightDown);
-	_Tree->Branch("Ev_MET", &_MET);
-	_Tree->Branch("Ev_METphi", &_METphi);
-	_Tree->Branch("Ev_METcov", &_METcov);
-	_Tree->Branch("Ev_IsTauEvent", &_isTauEvent);
+	_Tree->Branch("puWeight", &_PUweight);
+	_Tree->Branch("puWeightUp", &_PUweightUp);
+	_Tree->Branch("puWeightDown", &_PUweightDown);
+    _Tree->Branch("topPtWeight", &_topPtWeight);
+	_Tree->Branch("topPtWeightUp", &_topPtWeightUp);
+	_Tree->Branch("topPtWeightDown", &_topPtWeightDown);
+	_Tree->Branch("q2WeightUp", &_q2WeightUp);
+	_Tree->Branch("q2WeightDown", &_q2WeightDown);
+        // _Tree->Branch("MET", &_MET);
+        // _Tree->Branch("METphi", &_METphi);
+        // _Tree->Branch("METcov", &_METcov);
+	_Tree->Branch("IsTauEvent", &_isTauEvent);
 
     if(_helpers.size() > 1) {
-        _Tree->Branch("Ev_puWeight2012A", &_PUweight2012A);
-        _Tree->Branch("Ev_puWeight2012B", &_PUweight2012B);
-        _Tree->Branch("Ev_puWeight2012C", &_PUweight2012C);
-        _Tree->Branch("Ev_puWeight2012D", &_PUweight2012D);
-        _Tree->Branch("Ev_puWeight2012AB", &_PUweight2012AB);
-        _Tree->Branch("Ev_puWeight2012BC", &_PUweight2012BC);
-        _Tree->Branch("Ev_puWeight2012CD", &_PUweight2012CD);
-        _Tree->Branch("Ev_puWeight2012ABC", &_PUweight2012ABC);
+        _Tree->Branch("puWeight2012A", &_PUweight2012A);
+        _Tree->Branch("puWeight2012B", &_PUweight2012B);
+        _Tree->Branch("puWeight2012C", &_PUweight2012C);
+        _Tree->Branch("puWeight2012D", &_PUweight2012D);
+        _Tree->Branch("puWeight2012AB", &_PUweight2012AB);
+        _Tree->Branch("puWeight2012BC", &_PUweight2012BC);
+        _Tree->Branch("puWeight2012CD", &_PUweight2012CD);
+        _Tree->Branch("puWeight2012ABC", &_PUweight2012ABC);
     }
 
 }
