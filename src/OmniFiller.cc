@@ -10,7 +10,7 @@ using namespace reco;
 inline std::string
 suffix(unsigned int idx, unsigned int max)
 {
-    return (max <= 1) ? "" : std::to_string(max);
+    return (max <= 1) ? "" : std::to_string(idx);
 }
 
 std::vector<BNtauCollection>
@@ -73,9 +73,9 @@ OmniFiller::OmniFiller(const ParameterSet& iConfig, TTree* t, BEANhelper* iBEANh
     SetupBranches();
 
     for (unsigned int i = 0; i < required_leptons; ++i)
-        tree_leptons.push_back(new AnalysisLepton("L" + suffix(i, required_leptons), _Tree));
+        tree_leptons.push_back(new AnalysisLepton("L" + suffix(i + 1, required_leptons) + "_", _Tree));
     for (unsigned int i = 0; i < required_taus; ++i)
-        tree_taus.push_back(new AnalysisTau("T" + suffix(i, required_taus), _Tree));
+        tree_taus.push_back(new AnalysisTau("T" + suffix(i + 1, required_taus) + "_", _Tree));
 
     required_triggers[0][2] = {"HLT_Mu17_Mu8", "HLT_Mu17_TkMu8"};
     required_triggers[0][1] = {"HLT_IsoMu24_eta2p1"};
@@ -444,7 +444,7 @@ bool OmniFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         for (unsigned int i = 0; i < required_leptons; ++i)
             tree_leptons[i]->Fill(cleanLooseLeptons[i], helper, _BNmcparticles);
         for (unsigned int i = 0; i < required_taus; ++i)
-            tree_taus[i]->Fill(selectedTaus[i], helper, _BNmcparticles);
+            tree_taus[i]->Fill(taus[i], helper, _BNmcparticles);
 
         if (cleanLooseLeptons.size() == 2) {
             auto lepton1 = cleanLooseLeptons[0];
