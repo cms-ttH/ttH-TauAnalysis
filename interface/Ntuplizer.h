@@ -24,8 +24,6 @@
 #include "JetFiller.h"
 #include "DitauFiller.h"
 #include "DitauLeptonFiller.h"
-#include "DitauMuonFiller.h"
-#include "DitauElectronFiller.h"
 #include "TriggerFiller.h"
 #include "QuickFiller.h"
 #include "TauLeptonFiller.h"

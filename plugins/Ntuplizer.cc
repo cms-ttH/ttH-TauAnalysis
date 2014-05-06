@@ -209,10 +209,6 @@ Ntuplizer::beginJob()
         ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));
     if(IsFillerEnabled("DitauLepton"))
         ntupleFillers.push_back(new DitauLeptonFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("DitauMuon"))
-        ntupleFillers.push_back(new DitauMuonFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("DitauElectron"))
-        ntupleFillers.push_back(new DitauElectronFiller(*jobConfig, _Tree, &beanHelper));
     if(IsFillerEnabled("TauLepton"))
         ntupleFillers.push_back(new TauLeptonFiller(*jobConfig, _Tree, &beanHelper));
     if(IsFillerEnabled("TauLeptonLepton"))
