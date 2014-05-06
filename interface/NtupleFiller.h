@@ -16,11 +16,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
-#include "DataFormats/PatCandidates/interface/Tau.h"
-#include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/PatCandidates/interface/Electron.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
-#include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
@@ -33,9 +28,7 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 
-#include "../src/fillerAuxFunctions.cc"
 #include "BEAN/BEANmaker/interface/BEANhelper.h"
-#include "PATupleToBEANtranslator.h"
 
 // Headers for the BEAN data items
 #include "BEAN/Collections/interface/BNevent.h"
@@ -72,7 +65,7 @@ class NtupleFiller : public EDAnalyzer {
 		explicit NtupleFiller(const ParameterSet&, BEANhelper*);
 		~NtupleFiller();
 		string GetName();
-		virtual void FillNtuple(const Event&, const EventSetup&);
+		virtual bool FillNtuple(const Event&, const EventSetup&);
 		virtual void ClearVectors();
 
 	protected:
@@ -85,13 +78,8 @@ class NtupleFiller : public EDAnalyzer {
 		template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject1&, const BNObject2&, const BNCollection&, const double);
 		template <typename BNObject, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject&, const BNCollection&, const double);
 		template <typename BNObject, typename BNCollection> BNCollection GetUnmatchedLeptons(const BNObject&, const BNCollection&, const double);
-		template <typename PatObject1, typename PatObject2> double GetComboMass(const PatObject1&, const PatObject2&);
 		template <typename BNObject1, typename BNObject2> double GetComboMassBN(const BNObject1&, const BNObject2&);
-		template <typename PatObject1, typename PatObject2, typename MetObject> double GetComboMass(const PatObject1&, const PatObject2&, const MetObject&);
 		template <typename BNObject1, typename BNObject2, typename MetObject> double GetComboMassBN(const BNObject1&, const BNObject2&, const MetObject&);
-		template <typename PatObject, typename MetObject> double GetTransverseMass(const PatObject&, const MetObject&);
-		template <typename PatObject1, typename PatObject2, typename MetObject> double GetPZeta(const PatObject1&, const PatObject2&, const MetObject&);
-		template <typename PatObject1, typename PatObject2> double GetPZetaVis(const PatObject1&, const PatObject2&);
 		bool IsInTheCracks(float);
 		
 	protected:
@@ -100,11 +88,9 @@ class NtupleFiller : public EDAnalyzer {
 		string _FillerName;
 		TTree* _Tree;
 
-		BEANhelper* beanHelper;
-		PATupleToBEANtranslator patTupleToBEANtranslator;
+		BEANhelper* helper;
 
 		string _AnalysisType;
-		bool _FromBEAN;
 		string _Era;
 		sysType::sysType _sysType;
 
@@ -185,29 +171,6 @@ template <typename BNObject, typename BNCollection> BNCollection NtupleFiller::G
 	return result;
 }
 
-
-// === Visible mass === //
-template <typename PatObject1, typename PatObject2> double NtupleFiller::GetComboMass(const PatObject1& patObject1, const PatObject2& patObject2){
-	reco::Candidate::LorentzVector The_LorentzVect = patObject1.p4() + patObject2.p4();
-	return The_LorentzVect.M();
-}
-template <typename BNObject1, typename BNObject2> double NtupleFiller::GetComboMassBN(const BNObject1& bnObject1, const BNObject2& bnObject2){
-	reco::Candidate::LorentzVector object1p4(bnObject1.px, bnObject1.py, bnObject1.pz, bnObject1.energy);
-	reco::Candidate::LorentzVector object2p4(bnObject2.px, bnObject2.py, bnObject2.pz, bnObject2.energy);
-	reco::Candidate::LorentzVector The_LorentzVect = object1p4 + object2p4;
-	return The_LorentzVect.M();
-}
-
-// === Visible + MET mass === //
-template <typename PatObject1, typename PatObject2, typename MetObject> double NtupleFiller::GetComboMass(const PatObject1& patObject1, const PatObject2& patObject2, const MetObject& metObject){
-	double px = patObject1.px() + patObject2.px() + metObject.px();
-	double py = patObject1.py() + patObject2.py() + metObject.py();
-	double pz = patObject1.pz() + patObject2.pz();
-	double e = patObject1.energy() + patObject2.energy() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
-	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
-	return The_LorentzVect.M();
-}
-
 template <typename BNObject1, typename BNObject2, typename MetObject> double NtupleFiller::GetComboMassBN(const BNObject1& bnObject1, const BNObject2& bnObject2, const MetObject& metObject){
 	reco::Candidate::LorentzVector object1p4(bnObject1.px, bnObject1.py, bnObject1.pz, bnObject1.energy);
 	reco::Candidate::LorentzVector object2p4(bnObject2.px, bnObject2.py, bnObject2.pz, bnObject2.energy);
@@ -220,42 +183,6 @@ template <typename BNObject1, typename BNObject2, typename MetObject> double Ntu
 //	double e = bnObject1.energy + bnObject2.energy + TMath::Sqrt((metObject.px * metObject.px) + (metObject.py * metObject.py));
 	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
 	return The_LorentzVect.M();
-}
-
-// === Lepton + MET mass === //
-template <typename PatObject, typename MetObject> double NtupleFiller::GetTransverseMass(const PatObject& patObject, const MetObject& metObject){
-	double px = patObject.px() + metObject.px();
-	double py = patObject.py() + metObject.py();
-	double et = patObject.et() + TMath::Sqrt((metObject.px() * metObject.px()) + (metObject.py() * metObject.py()));
-	double mt2 = et*et - (px*px + py*py);
-	if ( mt2 < 0 ) { return -1.; }
-	else { return sqrt(mt2); }
-}
-
-// === p zeta === //
-template <typename PatObject1, typename PatObject2, typename MetObject> double NtupleFiller::GetPZeta(const PatObject1& patObject1, const PatObject2& patObject2, const MetObject& metObject){
-	double zetaX = cos(patObject1.phi()) + cos(patObject2.phi());
-	double zetaY = sin(patObject1.phi()) + sin(patObject2.phi());
-	double zetaR = TMath::Sqrt(zetaX*zetaX + zetaY*zetaY);
-	if ( zetaR > 0. ) { zetaX /= zetaR; zetaY /= zetaR; }
-	double visPx = patObject1.px() + patObject2.px();
-	double visPy = patObject1.py() + patObject2.py();
-	double px = visPx + metObject.px();
-	double py = visPy + metObject.py();
-	double pZeta = px*zetaX + py*zetaY;
-	return pZeta;
-}
-
-// === p zeta vis === //
-template <typename PatObject1, typename PatObject2> double NtupleFiller::GetPZetaVis(const PatObject1& patObject1, const PatObject2& patObject2){
-	double zetaX = cos(patObject1.phi()) + cos(patObject2.phi());
-	double zetaY = sin(patObject1.phi()) + sin(patObject2.phi());
-	double zetaR = TMath::Sqrt(zetaX*zetaX + zetaY*zetaY);
-	if ( zetaR > 0. ) { zetaX /= zetaR; zetaY /= zetaR; }
-	double visPx = patObject1.px() + patObject2.px();
-	double visPy = patObject1.py() + patObject2.py();
-	double pZetaVis = visPx*zetaX + visPy*zetaY;
-	return pZetaVis;
 }
 
 #endif

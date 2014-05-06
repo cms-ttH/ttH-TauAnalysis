@@ -14,7 +14,7 @@ class GenJetFiller : public NtupleFiller {
 		explicit GenJetFiller(const ParameterSet&);
 		explicit GenJetFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~GenJetFiller();
-		virtual void FillNtuple(const Event&, const EventSetup&);
+		virtual bool FillNtuple(const Event&, const EventSetup&);
 
 	private:
 		// === Core functions === //

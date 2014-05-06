@@ -3,9 +3,12 @@
 
 #include "boost/lexical_cast.hpp"
 
-#include "../interface/DileptonFiller.h"
-
-#include "..//interface/Ntuplizer.h"
+#include "../interface/Ntuplizer.h"
+#include "../interface/OmniFiller.h"
+#include "../interface/EventFiller.h"
+#include "../interface/GenTauFiller.h"
+#include "../interface/GenJetFiller.h"
+#include "../interface/VertexFiller.h"
 
 using namespace std;
 using namespace edm;
@@ -21,14 +24,10 @@ Ntuplizer::Ntuplizer(const ParameterSet& config) :
 	jobConfig						= new ParameterSet(config);
 
 	_DebugLevel						= config.getParameter<unsigned int>("DebugLevel");
-	_FromBEAN						= config.getParameter<bool>("FromBEAN");
 	_EraRelease						= config.getParameter<string>("EraRelease");
     _UsePfLeptons                   = ( config.exists("UsePfLeptons") ) ? config.getParameter<bool>("UsePfLeptons") : true;
     _DataRange                      = ( config.exists("DataRange") ) ? config.getParameter<string>("DataRange") : "All";
     _RunExtraBEANhelpers            = ( config.exists("RunExtraBEANhelpers") ) ? config.getParameter<bool>("RunExtraBEANhelpers") : false;
-
-	// Fillers to use
-	_enabledFillers					= config.getUntrackedParameter<std::vector<std::string> >("NtupleFillers");
 
 	// Skim trigger
 	_ApplySkimTriggerRequirements	= config.getParameter<bool>("ApplySkimTriggerRequirements");
@@ -185,36 +184,15 @@ Ntuplizer::beginJob()
     }
 
     // Declare and store here NtupleFillers
-    if(IsFillerEnabled("Event"))
-        ntupleFillers.push_back(new EventFiller(*jobConfig, _Tree, beanHelpers));
-    if(IsFillerEnabled("Vertex"))
-        ntupleFillers.push_back(new VertexFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("GenLevel"))
-        ntupleFillers.push_back(new GenLevelFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("GenTau"))
-        ntupleFillers.push_back(new GenTauFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("GenJet"))
-        ntupleFillers.push_back(new GenJetFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("Tau"))
-        ntupleFillers.push_back(new TauFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("Electron"))
-        ntupleFillers.push_back(new ElectronFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("Muon"))
-        ntupleFillers.push_back(new MuonFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("Jet"))
-        ntupleFillers.push_back(new JetFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("Dilepton"))
-        ntupleFillers.push_back(new DileptonFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("Ditau"))
-        ntupleFillers.push_back(new DitauFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("DitauLepton"))
-        ntupleFillers.push_back(new DitauLeptonFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("TauLepton"))
-        ntupleFillers.push_back(new TauLeptonFiller(*jobConfig, _Tree, &beanHelper));
-    if(IsFillerEnabled("TauLeptonLepton"))
-        ntupleFillers.push_back(new TauLeptonLeptonFiller(*jobConfig, _Tree, &beanHelper));
-    // if(IsFillerEnabled("Quick"))
-        // ntupleFillers.push_back(new QuickFiller(*jobConfig, _Tree, &fs, &beanHelper));
+    ntupleFillers = {
+        new EventFiller(*jobConfig, _Tree, beanHelpers),
+        new VertexFiller(*jobConfig, _Tree, &beanHelper),
+        new EventFiller(*jobConfig, _Tree, beanHelpers),
+        new VertexFiller(*jobConfig, _Tree, &beanHelper),
+        new GenTauFiller(*jobConfig, _Tree, &beanHelper),
+        new GenJetFiller(*jobConfig, _Tree, &beanHelper),
+        new OmniFiller(*jobConfig, _Tree, &beanHelper)
+    };
 }
 
 // === Method called once each job just after ending the event loop === //
@@ -279,63 +257,14 @@ void Ntuplizer::analyze(const Event& iEvent, const EventSetup& iSetup) {
         }
     }
 
-	// See if event meets skim trigger requirements
-	if((!_FromBEAN) && _ApplySkimTriggerRequirements){
-		if(!MeetsTriggerRequirements(iEvent, _SkimTriggerSource, _SkimTriggerRequirements)){ return; }
-	}
-
 	// Analyze and fill ntuple
 	for(unsigned int n=0; n<ntupleFillers.size(); n++){
 		if(_DebugLevel>0){ cout << "[DEBUG]\t" << ntupleFillers.at(n)->GetName() << "->FillNtuple" << endl; }
-		ntupleFillers.at(n)->FillNtuple(iEvent, iSetup);
+        ntupleFillers.at(n)->FillNtuple(iEvent, iSetup);
 	}
 
 	// Write to tree
 	_Tree->Fill();
-
-}
-
-// -------------Apply Trigger Requirements
-bool Ntuplizer::MeetsTriggerRequirements(const Event& iEvent, InputTag iTriggerSource, vector<string> iTriggerRequirements){
-
-	// Get a relevant collections
-	Handle< edm::TriggerResults > _triggerResults;
-	iEvent.getByLabel(iTriggerSource, _triggerResults);
-
-	const edm::TriggerNames & TheTriggerNames = iEvent.triggerNames(*_triggerResults);
-	for(vector<string>::const_iterator TheTriggerPath = iTriggerRequirements.begin(); TheTriggerPath != iTriggerRequirements.end(); ++TheTriggerPath ) {
-
-		unsigned int index = TheTriggerNames.triggerIndex(*TheTriggerPath);
-
-		if(index < TheTriggerNames.size()){
-			if(_triggerResults->accept(index)){ return true; }
-		}else{
-			cerr << "\nERROR: Specified trigger '" << (*TheTriggerPath) << "' not found." << endl;
-			cerr << "Please use one of the following triggers:" << endl;
-
-			for(TriggerNames::Strings::const_iterator triggerName = TheTriggerNames.triggerNames().begin(); triggerName != TheTriggerNames.triggerNames().end(); ++triggerName ){
-					unsigned int index	= TheTriggerNames.triggerIndex(*triggerName);
-					string name			= (*triggerName);
-					//string decision		= (_triggerResults->accept(index)) ? "passed" : "failed";
-					//cerr 	<< "\t" << index << "\t'" << name << "'" << string((50-name.length()),'.') << decision << endl;
-					cerr 	<< " " << index << "\t" << name << endl;
-			}
-			cerr << "\n" << endl;
-			exit(1);
-		}
-	}
-	return false;
-}
-
-bool Ntuplizer::IsFillerEnabled(const string iName){
-	for(unsigned int f=0; f<_enabledFillers.size(); f++){
-        if (_enabledFillers.at(f).compare(iName) == 0) {
-            std::cout << "---> found " << iName << std::endl;
-            return true;
-        }
-	}
-
-	return false;
 }
 
 //define this as a plug-in

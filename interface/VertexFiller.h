@@ -13,7 +13,7 @@ class VertexFiller : public NtupleFiller {
 		explicit VertexFiller(const ParameterSet&);
 		explicit VertexFiller(const ParameterSet&, TTree*, BEANhelper*);
 		~VertexFiller();
-		virtual void FillNtuple(const Event&, const EventSetup&);
+		virtual bool FillNtuple(const Event&, const EventSetup&);
 
 	private:
 		// === Core functions === //

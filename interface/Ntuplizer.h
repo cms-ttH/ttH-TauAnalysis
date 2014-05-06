@@ -10,26 +10,11 @@
 
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
 #include "BEAN/BEANmaker/interface/BEANhelper.h"
 
 #include "NtupleFiller.h"
-#include "EventFiller.h"
-#include "GenLevelFiller.h"
-#include "GenTauFiller.h"
-#include "GenJetFiller.h"
-#include "TauFiller.h"
-#include "ElectronFiller.h"
-#include "MuonFiller.h"
-#include "JetFiller.h"
-#include "DitauFiller.h"
-#include "DitauLeptonFiller.h"
-#include "TriggerFiller.h"
-#include "QuickFiller.h"
-#include "TauLeptonFiller.h"
-#include "TauLeptonLeptonFiller.h"
-#include "VertexFiller.h"
-
 #include "Parameters.h"
 
 using namespace std;
@@ -53,7 +38,6 @@ class Ntuplizer : public EDAnalyzer {
 
 	private:
 		bool MeetsTriggerRequirements(const Event&, InputTag, vector<string>);
-		bool IsFillerEnabled(const string);
 
 	// ----- Variables ----- //
 	private:
@@ -65,7 +49,6 @@ class Ntuplizer : public EDAnalyzer {
 		vector<string> _enabledFillers;
 		ParameterSet* jobConfig;
 		string _EraRelease;
-		bool _FromBEAN;
         TFile* _file;
 		TTree* _Tree;
         bool _UsePfLeptons;

@@ -1,59 +1,50 @@
 // vim: sta:et:sw=4:ts=4
-// Authors: Nil Valls, Matthias Wolf
+// Authors: Nil Valls
 
-#ifndef _TauLeptonFiller_h
-#define _TauLeptonFiller_h
+#ifndef _OmniFiller_h
+#define _OmniFiller_h
 
-#include "AnalysisLepton.h"
-#include "AnalysisTau.h"
+#include "AnalysisObjects.h"
 #include "NtupleFiller.h"
 
-using namespace std;
+class OmniFiller : public NtupleFiller {
+    // ----- Functions ----- //
+    public:
+        explicit OmniFiller(const ParameterSet&, TTree*, BEANhelper*);
+        ~OmniFiller();
+        virtual bool FillNtuple(const Event&, const EventSetup&);
 
-class TauLeptonFiller : public NtupleFiller {
+    private:
+        // === Core functions === //
+        void analyze(const Event&, const EventSetup&);
+        void SetupBranches();
+        void ClearVectors();
 
-	// ----- Functions ----- //
-	public:
-		explicit TauLeptonFiller(const ParameterSet&);
-		explicit TauLeptonFiller(const ParameterSet&, TTree*, BEANhelper*);
-		~TauLeptonFiller();
-		virtual void FillNtuple(const Event&, const EventSetup&);
+        // ----- Variables ----- //
+        unsigned int required_leptons;
+        unsigned int required_taus;
 
-	private:
-		// === Core functions === //
-		void analyze(const Event&, const EventSetup&);
-		void SetupBranches();
-		void ClearVectors();
+        std::vector<AnalysisLepton*> tree_leptons;
+        std::vector<AnalysisTau*> tree_taus;
+        AnalysisJets tree_jets;
+        AnalysisObject tree_met;
 
-	// ----- Variables ----- //
-	private:
-        AnalysisLepton* lep;
-        AnalysisTau* tau;
+        std::map<int, std::map<int, std::vector<std::string>>> required_triggers;
 
-		unsigned int			_NumTaus;
-		unsigned int			_NumCombos;
-		vector<int>				_MomentumRank;
+        unsigned int _NumTaus;
+        unsigned int _NumCombos;
+        vector<int> _MomentumRank;
 
-        vector<int> _TauMomentumRank;
-
-		// === Lepton === //
-		vector<unsigned int>	_NumLooseMuons;
-		vector<unsigned int>	_NumExLooseMuons;
-		vector<unsigned int>	_NumTightMuons;
-		vector<unsigned int>	_NumLooseElectrons;
-		vector<unsigned int>	_NumExLooseElectrons;
-		vector<unsigned int>	_NumTightElectrons;
+        // === Lepton === //
+        vector<unsigned int> _NumLooseMuons;
+        vector<unsigned int> _NumExLooseMuons;
+        vector<unsigned int> _NumTightMuons;
+        vector<unsigned int> _NumLooseElectrons;
+        vector<unsigned int> _NumExLooseElectrons;
+        vector<unsigned int> _NumTightElectrons;
 
         // === Combo === //
         vector<float> _TriggerEventWeight;
-
-        vector<vector<float>> _jet_deltaR_tau;
-        vector<vector<float>> _jet_deltaR_lepton;
-
-        vector<float> _TauLeptonVisibleMass;
-        vector<float> _TauLeptonMETMass;
-        vector<float> _TauLeptonCosDeltaPhi;
-        vector<float> _TauLeptonDeltaR;
         vector<float> _HT;
         vector<float> _MHT;
         vector<unsigned int> _NumCSVLbtagJets;
@@ -68,9 +59,6 @@ class TauLeptonFiller : public NtupleFiller {
         vector<unsigned int> _NumCleanNonCSVLbtagJets;
         vector<unsigned int> _NumCleanNonCSVMbtagJets;
         vector<unsigned int> _NumCleanNonCSVTbtagJets;
-        vector< vector<unsigned int> > _CleanJetIndices;
-        vector< vector<unsigned int> > _CleanJetCSVMIndices;
-        vector< vector<unsigned int> > _CleanJetNonCSVMIndices;
 
         vector<float> _CSVeventWeight;
         vector<float> _CSVeventWeightLFup;
@@ -92,3 +80,4 @@ class TauLeptonFiller : public NtupleFiller {
 };
 
 #endif
+

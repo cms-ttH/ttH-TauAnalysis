@@ -13,7 +13,7 @@ EventFiller::EventFiller(const ParameterSet& iConfig) : NtupleFiller(){
 }
 
 EventFiller::EventFiller(const ParameterSet& iConfig, TTree* iTree, map<string,BEANhelper*> iBEANhelper) : NtupleFiller(iConfig, iBEANhelper[string("2012ABCD")]) {
-    _beanHelpers = iBEANhelper;
+    _helpers = iBEANhelper;
 	_FillerName	= __FILE__;
 	_Tree = iTree;
 	SetupBranches();
@@ -53,7 +53,7 @@ void EventFiller::SetupBranches(){
 	_Tree->Branch("Ev_METcov", &_METcov);
 	_Tree->Branch("Ev_IsTauEvent", &_isTauEvent);
 
-    if(_beanHelpers.size() > 1) {
+    if(_helpers.size() > 1) {
         _Tree->Branch("Ev_puWeight2012A", &_PUweight2012A);
         _Tree->Branch("Ev_puWeight2012B", &_PUweight2012B);
         _Tree->Branch("Ev_puWeight2012C", &_PUweight2012C);
@@ -92,7 +92,7 @@ void EventFiller::ClearVectors(){
 	_METphi						= 0;
     _METcov.clear();
     
-    if(_beanHelpers.size() > 1) {
+    if(_helpers.size() > 1) {
         _PUweight2012A   = 1.0;
         _PUweight2012B   = 1.0;
         _PUweight2012C   = 1.0;
@@ -106,7 +106,9 @@ void EventFiller::ClearVectors(){
 }
 
 // === Fill ntuple === //
-void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
+bool
+EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup)
+{
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
@@ -121,7 +123,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
     // The inclusive ttH sample numbers are 9000 + mass in GeV
     if (sample >= 9000) {
-        hdecayType::hdecayType t = beanHelper->GetHdecayType(_BNmcparticles);
+        hdecayType::hdecayType t = helper->GetHdecayType(_BNmcparticles);
         if (t == hdecayType::hbb) {
             _higgsDecayMode = 0;
         } else if (t == hdecayType::hcc) {
@@ -147,7 +149,7 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
     // The ttbar samples are 2533, 2563, 2566
     if (sample == 2533 || sample == 2563 || sample == 2566) {
-        int bs = beanHelper->ttPlusBBClassifyEvent(_BNmcparticles, _BNjets);
+        int bs = helper->ttPlusBBClassifyEvent(_BNmcparticles, _BNjets);
         if (bs == 1 || bs == 2) {
             _bQuarkCount = 1;
         } else if (bs > 2) {
@@ -163,40 +165,43 @@ void EventFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
     _numTruePV = _BNevents.begin()->numTruePV;
 
 	// Pileup weights
-	_PUweight				= beanHelper->GetPUweight(_BNevents.begin()->numTruePV);
-	_PUweightUp				= beanHelper->GetPUweightUp(_BNevents.begin()->numTruePV);
-	_PUweightDown			= beanHelper->GetPUweightDown(_BNevents.begin()->numTruePV);
+	_PUweight				= helper->GetPUweight(_BNevents.begin()->numTruePV);
+	_PUweightUp				= helper->GetPUweightUp(_BNevents.begin()->numTruePV);
+	_PUweightDown			= helper->GetPUweightDown(_BNevents.begin()->numTruePV);
 
-    if(_beanHelpers.size() > 1) {
-        _PUweight2012A   = _beanHelpers["2012A"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012B   = _beanHelpers["2012B"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012C   = _beanHelpers["2012C"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012D   = _beanHelpers["2012D"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012AB  = _beanHelpers["2012AB"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012BC  = _beanHelpers["2012BC"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012CD  = _beanHelpers["2012CD"]->GetPUweight(_BNevents.begin()->numTruePV);
-        _PUweight2012ABC = _beanHelpers["2012ABC"]->GetPUweight(_BNevents.begin()->numTruePV);
+    if(_helpers.size() > 1) {
+        _PUweight2012A   = _helpers["2012A"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012B   = _helpers["2012B"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012C   = _helpers["2012C"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012D   = _helpers["2012D"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012AB  = _helpers["2012AB"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012BC  = _helpers["2012BC"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012CD  = _helpers["2012CD"]->GetPUweight(_BNevents.begin()->numTruePV);
+        _PUweight2012ABC = _helpers["2012ABC"]->GetPUweight(_BNevents.begin()->numTruePV);
     }
 
 	// MET
-	BNjetCollection correctedJets							= beanHelper->GetCorrectedJets(_BNjets, _sysType);
-	BNjetCollection selCorrJets								= beanHelper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
-	BNjetCollection uncorrectedJetsFromCorrectedSelection	= beanHelper->GetUncorrectedJets(selCorrJets, _BNjets);
-	BNmet correctedMET	= beanHelper->GetCorrectedMET(*(_BNmets.begin()), uncorrectedJetsFromCorrectedSelection, _sysType);
+	BNjetCollection correctedJets							= helper->GetCorrectedJets(_BNjets, _sysType);
+	BNjetCollection selCorrJets								= helper->GetSelectedJets(correctedJets, 30, 2.4, jetID::jetLoose, '-');
+    BNjetCollection selUncorrJets;
+    // for (const auto& j: selCorrJets)
+        // selUncorrJets.push_back(*j.uncorrected);
+	BNmet correctedMET	= helper->GetCorrectedMET(*(_BNmets.begin()), selUncorrJets, _sysType);
 	_MET				= correctedMET.pt;
 	_METphi				= correctedMET.phi;
     _METcov = {correctedMET.sigmaX2, correctedMET.sigmaXY, correctedMET.sigmaYX, correctedMET.sigmaY2};
 
     // top PT
-    _topPtWeight = beanHelper->GetTopPtweight(_BNmcparticles);
-    _topPtWeightUp = beanHelper->GetTopPtweightUp(_BNmcparticles);
-    _topPtWeightDown = beanHelper->GetTopPtweightDown(_BNmcparticles);
+    _topPtWeight = helper->GetTopPtweight(_BNmcparticles);
+    _topPtWeightUp = helper->GetTopPtweightUp(_BNmcparticles);
+    _topPtWeightDown = helper->GetTopPtweightDown(_BNmcparticles);
     
     // tau
-    _isTauEvent         = beanHelper->IsTauEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
+    _isTauEvent         = helper->IsTauEvent(_BNtaus, _BNjets, _BNelectrons, _BNmuons, _sysType);
 
     // Q^2 weights
-    _q2WeightUp = beanHelper->GetQ2ScaleUp(*(_BNevents.begin()));
-    _q2WeightDown = beanHelper->GetQ2ScaleDown(*(_BNevents.begin()));
+    _q2WeightUp = helper->GetQ2ScaleUp(*(_BNevents.begin()));
+    _q2WeightDown = helper->GetQ2ScaleDown(*(_BNevents.begin()));
 
+    return true;
 }

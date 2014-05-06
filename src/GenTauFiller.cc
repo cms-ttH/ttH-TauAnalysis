@@ -73,19 +73,20 @@ void GenTauFiller::ClearVectors(){
 }
 
 // === Fill ntuple === //
-void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
-
+bool
+GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup)
+{
 	// Only run this on MC
 	if (params_.is_data())
-        return;
+        return true;
 
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
 
 
 	vector<int> tauIDs; tauIDs.push_back(15); tauIDs.push_back(-15);
-	BNmcparticleCollection mcTaus		= beanHelper->GetSelectedMCparticlesByPDGid(_BNmcparticles, tauIDs);
-	BNmcparticleCollection status2taus	= beanHelper->GetSelectedMCparticlesByStatus(mcTaus, false, true,  false); 
+	BNmcparticleCollection mcTaus		= helper->GetSelectedMCparticlesByPDGid(_BNmcparticles, tauIDs);
+	BNmcparticleCollection status2taus	= helper->GetSelectedMCparticlesByStatus(mcTaus, false, true,  false); 
 
 	for(BNmcparticleCollection::const_iterator status2tau = status2taus.begin(); status2tau != status2taus.end(); ++status2tau){
 
@@ -98,13 +99,13 @@ void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		_Phi	.push_back(status2tau->phi);
 
 		// Fill visGenTau info
-		BNmcparticle visGenTau = beanHelper->GetVisGenTau(*status2tau, _BNmcparticles);
+		BNmcparticle visGenTau = helper->GetVisGenTau(*status2tau, _BNmcparticles);
 		_VisPt	.push_back(visGenTau.pt);
 		_VisEta	.push_back(visGenTau.eta);
 		_VisPhi	.push_back(visGenTau.phi);
 
 		// Info about parent
-		BNmcparticleCollection tauParents = beanHelper->GetParents(*status2tau,_BNmcparticles);
+		BNmcparticleCollection tauParents = helper->GetParents(*status2tau,_BNmcparticles);
 		if(tauParents.size() > 0){
 			_ParentId.push_back(tauParents.begin()->id);
 			_ParentP.push_back(sqrt(pow(tauParents.begin()->px,2) + pow(tauParents.begin()->py,2) + pow(tauParents.begin()->pz,2)));
@@ -135,5 +136,5 @@ void GenTauFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 		}
 
 	}
-
+    return true;
 }

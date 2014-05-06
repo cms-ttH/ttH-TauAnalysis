@@ -64,7 +64,8 @@ void VertexFiller::ClearVectors(){
 }
 
 // === Fill ntuple === //
-void VertexFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
+bool
+VertexFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 	
     GetCollections(iEvent, iSetup);
 	ClearVectors();
@@ -87,6 +88,5 @@ void VertexFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         _rho.push_back(VertexIt->rho);
         _ndof.push_back(VertexIt->ndof);
 	}
-
-
+    return true;
 }

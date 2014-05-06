@@ -15,7 +15,7 @@ class EventFiller : public NtupleFiller {
 		explicit EventFiller(const ParameterSet&);
 		explicit EventFiller(const ParameterSet&, TTree*, map<string,BEANhelper*>);
 		~EventFiller();
-		virtual void FillNtuple(const Event&, const EventSetup&);
+		virtual bool FillNtuple(const Event&, const EventSetup&);
 
 	private:
 		// === Core functions === //
@@ -50,7 +50,7 @@ class EventFiller : public NtupleFiller {
 		double                  _PUweight2012BC;
 		double                  _PUweight2012CD;
 		double                  _PUweight2012ABC;
-		map<string,BEANhelper*> _beanHelpers;
+		map<string,BEANhelper*> _helpers;
         
 		double                  _topPtWeight;
 		double                  _topPtWeightUp;

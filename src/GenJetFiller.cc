@@ -54,11 +54,12 @@ void GenJetFiller::ClearVectors(){
 }
 
 // === Fill ntuple === //
-void GenJetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
-
+bool
+GenJetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup)
+{
 	// Only run this on MC
     if (params_.is_data())
-        return;
+        return true;
 
 	GetCollections(iEvent, iSetup);
 	ClearVectors();
@@ -92,4 +93,5 @@ void GenJetFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
 
 	}
 
+    return true;
 }

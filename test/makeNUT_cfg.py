@@ -7,17 +7,12 @@ import inspect
 # === Give values to some basic parameters === #
 maxEvents	= -1
 reportEvery	= 100
-era_release	= '53x' # '52x' (2012 ICHEP), '53x' (2012 full), 'NA' (2011 *)
 debugLevel	= 0
 tauMaxEta	= 9
 tauMinPt	= 10
 baseTreeName = 'TTbarHTauTau'
 dataRange   = 'All'
-runExtraBEANhelpers = True
-
-# collection postfix for running on PF2PAT
-postfix = ''
-#postfix = 'PFlow'
+runExtraBEANhelpers = False
 
 # === Parse external arguments === #
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -50,7 +45,7 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-sigFullSim_7125_2110/2200_112_JESup-JESdown-TESup-TESdown',
+        '2012_X_MC-bg_2523_2110/2200_112_NA',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -67,57 +62,7 @@ options.outputFile = 'ntuple{s}.root'
 #options.inputFiles = '/store/user/awoodard/SingleMu/BEAN_GTV7G_V01_CV03/2b5bf57d4ab2a303a22b86a50ccffab2/ttH_pat2bean_53x_3185_1_BJl.root'
 # ttbar semi-leptonic - Spring2013 BEAN
 options.inputFiles = [
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_10_1_cDq.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_11_1_d1B.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_1_1_wbT.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_12_1_tvt.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_13_1_pGV.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_14_1_ZLL.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_15_1_gfw.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_16_1_Nrh.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_17_1_kDm.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_18_1_iq6.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_19_1_du0.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_20_1_ucc.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_21_1_eAB.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_2_1_yyk.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_22_1_VmK.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_23_1_qYx.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_24_1_FI1.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_25_1_fxB.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_26_1_8R9.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_27_1_oiT.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_28_1_H2O.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_29_1_F0P.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_30_1_sGc.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_31_1_PpF.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_3_1_afc.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_32_1_POe.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_33_1_ZZ9.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_34_1_Fxl.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_35_1_bcD.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_36_1_Xw4.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_37_1_n3k.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_38_1_Zq3.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_39_1_nng.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_40_1_QTp.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_41_1_aBY.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_4_1_rKk.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_42_1_XWF.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_43_1_D6A.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_44_1_1Ev.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_45_1_8OZ.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_46_1_Cue.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_47_1_1gM.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_48_1_cEu.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_49_1_tt9.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_50_1_4jC.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_51_1_fBK.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_5_1_hDn.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_6_1_sKU.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_7_1_kcC.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_8_1_Q6V.root',
-        '/store/user/jkolb/TTH_HToTauTau_M-125_8TeV_pythia6/skimBEAN_Spring13_GTV7G_538_s1/4782b5a765d5e36ded22d6cd134b70b4/BEAN_9_1_vwH.root',
+        '/store/user/muell149/TTZJets_8TeV-madgraph_v2/chPrj_bean_ca4dc66a977e4c96a421596b5b795aeb/merged_bean_1853.root',
         ]
 options.parseArguments() # get and parse the command line arguments 
 
@@ -144,12 +89,6 @@ runOnSignal		= ((jobParams[2]).find('MC-sig') != -1)
 runOnFastSim    = ((jobParams[2]).find('MC-sigFastSim') != -1)
 if (not runOnMC) and ((jobParams[1] != 'A') and (jobParams[1] != 'B') and (jobParams[1] != 'C') and (jobParams[1] != 'D')):
     print "ERROR: job set to run on collision data from subera '" + jobParams[1] + "' but it must be 'A', 'B', 'C', or 'D'."
-    sys.exit(1)
-
-if (era == 2011):
-	era_release = 'NA'
-if (era == 2012) and ((era_release != '52x') and (era_release != '53x')):
-    print "ERROR: era set to 2012 and era release set to '" + era_release + "' but it must be '52x' (2012 ICHEP) or '53x' (full 2012)."
     sys.exit(1)
 
 if (jobParams[2] != "data-PR") and (jobParams[2] != "data-RR") and (jobParams[2] != "data-RRr")and (jobParams[2] != "MC-bg") and (jobParams[2] != "MC-sigFullSim") and (jobParams[2] != "MC-sigFastSim"):
@@ -188,106 +127,55 @@ sys_splitter.whitespace_split = True
 sysTypes= list(sys_splitter)
 
 # === Set up triggers and GEN collections based on analysis type === # 
-if runOnMC:
-    inputForGenParticles = 'genParticles'
-    inputForGenJets     = 'selectedPatJets:genJets:'
-else:
-    inputForGenParticles = ''
-    inputForGenJets = ''
 
-triggerConditions = []
-if era == 2011:
-    triggerConditions += [
-            'HLT_IsoMu24_v*',
-            'HLT_Ele25_CaloIdVT_TrkIdT_TriCentralJet30_v*',
-            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralJet30_v*',
-            'HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_TriCentralPFJet30_v*'
-            ]
+if leptons == 1:
+    triggerConditions = ['HLT_IsoMu24_eta2p1', 'HLT_Ele27_WP80']
+elif leptons == 2:
+    triggerConditions = [
+            'HLT_Mu17_Mu8',
+            'HLT_Mu17_TkMu8',
+            'HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
+            'HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
+            'HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL']
 else:
-    if leptons == 1:
-        triggerConditions += ['HLT_IsoMu24_eta2p1', 'HLT_Ele27_WP80']
-    elif leptons == 2:
-        triggerConditions += [
-                'HLT_Mu17_Mu8',
-                'HLT_Mu17_TkMu8',
-                'HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
-                'HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL',
-                'HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL']
-    else:
-        raise "Wrong lepton count!"
+    raise "Wrong lepton count!"
 
-# === Define Ntuplizer input collections === # 
-## For 7TeV/2011 datasets, where we read PATuples
-GenParticleSource                   = cms.untracked.InputTag((inputForGenParticles))
-GenJetSource                        = cms.untracked.InputTag((inputForGenJets))
-TriggerSource						= cms.InputTag('TriggerResults::HLT')
-RecoVertexSource                    = cms.InputTag('offlinePrimaryVertices')
-RecoPATMetSource                    = cms.InputTag('patMETs'+postfix)
-RecoPFMetSource                     = cms.InputTag('patMETs'+postfix)
-RecoElectronSource                  = cms.InputTag('selectedPatElectrons'+postfix)
-RecoMuonSource                      = cms.InputTag('selectedPatMuons'+postfix)
-RecoTauSource                       = cms.InputTag('selectedPatTaus'+postfix)
-RecoJetSource                       = cms.InputTag('selectedPatJets'+postfix+'::skimTTHiggsToDiTau')
-UsePfLeptons                        = cms.bool(False)
 ### For 8TeV/2012 datasets, where we read BEANs
 if( era == 2012 ):
     UsePfLeptons                        = cms.bool(True)
     GenParticleSource                   = cms.untracked.InputTag('BNproducer:MCstatus3')
     GenJetSource                        = cms.untracked.InputTag('BNproducer:ak5GenJets')
+    GenJetSource                        = cms.untracked.InputTag('')
     TriggerSource						= cms.InputTag('BNproducer:HLT')
     RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices')
-    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectronsPFlow')
-    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuonsPFlow')
-    RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus'+postfix)
-    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJetsPFlow')
-    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETsPFlow')
+    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectrons')
+    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuons')
+    RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus')
+    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJets')
+    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETs')
 
 
 # === make analysis-specific selections for skims, fillers, etc. === #
 SkimTriggerRequirements	= cms.vstring()
 
-
-NtupleFillers = cms.untracked.vstring(
-        'Event',
-        'Vertex',
-        #'GenLevel',
-        'GenTau',
-        'GenJet',
-        'Tau',
-        'Electron',
-        'Muon',
-        'Jet',
-        #'DitauMuon',
-        #'DitauElectron',
-        #'Trigger', # not in use
-        'Test',
-)
-
 use_veto = True
 if leptons == 1:
     is_dil = False
-    if taus == 2:
-        NtupleFillers.append('DitauLepton')
-    elif taus == 1:
-        NtupleFillers.append('TauLepton')
+    if taus == 1:
         use_veto = False
-    else:
+    elif taus != 2:
         raise
 elif leptons == 2:
     is_dil = True
-    if taus == 1:
-        NtupleFillers.append('TauLeptonLepton')
-    elif taus == 0:
-        NtupleFillers.append("Dilepton")
+    if taus == 0:
         use_veto = False
-    else:
+    elif taus != 1:
         raise
 else:
     raise
 
 # === Python process === #
 process = cms.Process('TTbarHTauTau')
-
 
 # === Load and set up basic services === #
 process.load('Configuration.StandardSequences.Services_cff')
@@ -333,12 +221,13 @@ process.beanSkimmer = cms.EDFilter("BEANskimmer",
 
 # === Define and setup main module === #
 process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
+    requiredLeptons = cms.uint32(leptons),
+    requiredTaus = cms.uint32(taus),
 
 	# === Analysis setup === #
 	DebugLevel							= cms.uint32(debugLevel),
     AnalysisParameters = cms.vstring(jobParams),
-	EraRelease							= cms.string(era_release),				
-	FromBEAN							= cms.bool(era == 2012),
+	EraRelease							= cms.string('53x'),				
     TreeName							= cms.untracked.string(baseTreeName),
     UsePfLeptons                        = UsePfLeptons,
     DataRange                           = cms.string(dataRange),
@@ -355,14 +244,10 @@ process.makeNtuple = cms.EDAnalyzer('Ntuplizer',
     SkimTriggerSource					= cms.InputTag("TriggerResults::"),
     SkimTriggerRequirements				= SkimTriggerRequirements,
 
-	# === Which branches to fill? === #
-	NtupleFillers						= NtupleFillers,
-
     # === Input collections === #
     GenParticleSource                   = GenParticleSource,
     GenJetSource                        = GenJetSource,
     RecoVertexSource                    = RecoVertexSource,
-    RecoPATMetSource                    = RecoPATMetSource,
     RecoPFMetSource                     = RecoPFMetSource,
     RecoElectronSource                  = RecoElectronSource,
     RecoMuonSource                      = RecoMuonSource,
@@ -418,29 +303,25 @@ print """
 
             Analysis type....{0}
             Running on PAT?..{1}
-            Era Release......{2}
-            Max events.......{3}
-            Report every.....{4}
-            Global tag.......{5}
-            Tau event veto...{10}
-            Triggers.........{6}
-            Skim parameters..{7}
-            Jet parameters...{11}
-            Systematics......{8}
-            Fillers..........{9}
+            Max events.......{2}
+            Report every.....{3}
+            Global tag.......{4}
+            Tau event veto...{8}
+            Triggers.........{5}
+            Skim parameters..{6}
+            Jet parameters...{9}
+            Systematics......{7}
 
         ====================================================
 """.format(
         options.jobParams,
         era == 2011,
-        era_release,
         options.maxEvents,
         reportEvery,
         globalTag,
         ', '.join(triggerConditions),
         skimParams,
         ', '.join(sysTypes),
-        ', '.join(NtupleFillers),
         use_veto,
         jet_skim_params)
 
