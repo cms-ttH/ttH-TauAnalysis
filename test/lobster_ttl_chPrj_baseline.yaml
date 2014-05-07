@@ -1,0 +1,27 @@
+id: v63_baseline
+type: cmssw
+workdir: /tmpscratch/users/matze/v63_ttl_baseline.work
+#  recycle sandbox: /tmp/v62_tll.work/sandbox.tar.bz2
+
+stageout location: /hadoop/users/matze/ttH/v63/2012
+
+check proxy: false
+
+task defaults:
+    cmssw config: makeNUT_cfg.py
+    dbs instance: phys01
+    events per job: 250000
+    outputs: [ntuple.root, ntuple_JESDown.root, ntuple_JESUp.root, ntuple_TESDown.root, ntuple_TESUp.root]
+    output format: "j{id}_{base}.{ext}"
+
+    matching:
+      - label: data
+        outputs: [ntuple.root]
+
+tasks:
+  - label: tll_TTH_125
+    dataset: /TTH_Inclusive_M-125_8TeV_pythia6/awoodard-BEAN_GTV7G_V01_CV01-411302ae24b059b12fe5d86298d5421d/USER
+    parameters: [jobParams=2012_X_MC-sigFullSim_9125_2110/2200_211_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTbar_SemiLept_Summer12
+    dataset: /TTJets_SemiLeptMGDecays_8TeV-madgraph/awoodard-TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02-d0a71c5bb6f6754a25e53f49b1990e4b/USER
+    parameters: [jobParams=2012_X_MC-bg_2563_2110/2200_211_JESup-JESdown-TESup-TESdown]

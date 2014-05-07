@@ -62,9 +62,7 @@ options.outputFile = 'ntuple{s}.root'
 #options.inputFiles = '/store/user/awoodard/SingleMu/BEAN_GTV7G_V01_CV03/2b5bf57d4ab2a303a22b86a50ccffab2/ttH_pat2bean_53x_3185_1_BJl.root'
 # ttbar semi-leptonic - Spring2013 BEAN
 options.inputFiles = [
-        # '/store/user/muell149/TTZJets_8TeV-madgraph_v2/chPrj_bean_ca4dc66a977e4c96a421596b5b795aeb/merged_bean_1853.root',
-        # '/store/user/muell149/lobster_beans_v1/TTJets_semilep/merged_bean_9999..root',
-        '/store/user/awoodard/TTJets_SemiLeptMGDecays_8TeV-madgraph/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02/d0a71c5bb6f6754a25e53f49b1990e4b/ttH_pat2bean_53x_1000_1_8Ao.root'
+        '/store/user/muell149/TTZJets_8TeV-madgraph_v2/chPrj_bean_ca4dc66a977e4c96a421596b5b795aeb/merged_bean_1853.root',
         ]
 options.parseArguments() # get and parse the command line arguments 
 
@@ -143,17 +141,18 @@ else:
     raise "Wrong lepton count!"
 
 ### For 8TeV/2012 datasets, where we read BEANs
-UsePfLeptons       = cms.bool(True)
-GenParticleSource  = cms.untracked.InputTag('BNproducer:MCstatus3')
-GenJetSource       = cms.untracked.InputTag('BNproducer:ak5GenJets')
-GenJetSource       = cms.untracked.InputTag('')
-TriggerSource      = cms.InputTag('BNproducer:HLT')
-RecoVertexSource   = cms.InputTag('BNproducer:offlinePrimaryVertices')
-RecoElectronSource = cms.InputTag('BNproducer:selectedPatElectronsPFlow')
-RecoMuonSource     = cms.InputTag('BNproducer:selectedPatMuonsPFlow')
-RecoTauSource      = cms.InputTag('BNproducer:selectedPatTaus')
-RecoJetSource      = cms.InputTag('BNproducer:selectedPatJetsPFlow')
-RecoPFMetSource    = cms.InputTag('BNproducer:patMETsPFlow')
+if( era == 2012 ):
+    UsePfLeptons                        = cms.bool(True)
+    GenParticleSource                   = cms.untracked.InputTag('BNproducer:MCstatus3')
+    GenJetSource                        = cms.untracked.InputTag('BNproducer:ak5GenJets')
+    GenJetSource                        = cms.untracked.InputTag('')
+    TriggerSource						= cms.InputTag('BNproducer:HLT')
+    RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices')
+    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectrons')
+    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuons')
+    RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus')
+    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJets')
+    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETs')
 
 
 # === make analysis-specific selections for skims, fillers, etc. === #

@@ -1,0 +1,27 @@
+id: v63_chPrj
+type: cmssw
+workdir: /tmpscratch/users/matze/v63_ttl_chPrj.work
+#  recycle sandbox: /tmp/v62_tll.work/sandbox.tar.bz2
+
+stageout location: /hadoop/users/matze/ttH/v63/2012
+
+check proxy: false
+
+task defaults:
+    cmssw config: makeNUT_chPrj_cfg.py
+    dbs instance: phys01
+    files per job: 1000
+    outputs: [ntuple.root, ntuple_JESDown.root, ntuple_JESUp.root, ntuple_TESDown.root, ntuple_TESUp.root]
+    output format: "j{id}_{base}.{ext}"
+
+    matching:
+      - label: data
+        outputs: [ntuple.root]
+
+tasks:
+  - label: tll_TTH_125_chPrj
+    files: /store/user/muell149/lobster_beans_v1/TTH_125
+    parameters: [jobParams=2012_X_MC-sigFullSim_9125_2110/2200_211_JESup-JESdown-TESup-TESdown]
+  - label: tll_TTbar_SemiLept_Summer12_chPrj
+    files: /store/user/muell149/lobster_beans_v1/TTJets_semilep
+    parameters: [jobParams=2012_X_MC-bg_2563_2110/2200_211_JESup-JESdown-TESup-TESdown]
