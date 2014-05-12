@@ -16,8 +16,10 @@ suffix(unsigned int idx, unsigned int max)
 std::vector<BNtauCollection>
 build_permutations(const BNtauCollection& taus, const unsigned int num)
 {
-    if (num == 0 or num > taus.size())
+    if (num == 0)
         return {BNtauCollection()};
+    if (num > taus.size())
+        return {};
 
     std::vector<BNtauCollection> res;
     std::vector<unsigned int> indices;
