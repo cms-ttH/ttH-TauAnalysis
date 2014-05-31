@@ -369,29 +369,22 @@ bool OmniFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         BNmet met = helper->GetCorrectedMET(*(_BNmets.begin()), cleanSelUncorrJets, _sysType);
         tree_met.Fill(met);
 
-        // _HT.push_back(Tau->pt + Lepton1->pt + Lepton2->pt + correctedMET.pt + helper->GetHT(clean_jets));
-
-        // TLorentzVector vlep1(Lepton1->px, Lepton1->py, Lepton1->pz, Lepton1->energy);
-        // TLorentzVector vlep2(Lepton2->px, Lepton2->py, Lepton2->pz, Lepton2->energy);
-        // TLorentzVector vtau(Tau->px, Tau->py, Tau->pz, Tau->energy);
-        // TLorentzVector vsum = vlep1 + vlep2 + vtau;
-
-        // TLorentzVector jsum;
-        // TLorentzVector jlsum;
-
-        // if (Tau->charge * Lepton1->charge > 0)
-            // jlsum += vlep1;
-        // else
-            // jlsum += vlep2;
-
-        // for (const auto& j: clean_jets) {
-            // vsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
-            // jsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
-            // jlsum += TLorentzVector(j.px, j.py, j.pz, j.energy);
-        // }
-
-        // auto mht = -vsum;
-        // _MHT.push_back(vsum.Pt());
+        double ht = met.pt;
+        LorentzVector ht4;
+        for (const auto& j: clean_jets) {
+            ht += j.pt;
+            ht4 += p4(j);
+        }
+        for (const auto& t: taus) {
+            ht += t.pt;
+            ht4 += p4(t);
+        }
+        for (const auto& l: cleanLooseLeptons) {
+            ht += l->pt;
+            ht4 += p4(*l);
+        }
+        _HT.push_back(ht);
+        _MHT.push_back((-ht4).Pt());
 
         _NumCSVLbtagJets.push_back(helper->GetNumCSVbtags(unclean_jets, 'L'));
         _NumCSVMbtagJets.push_back(helper->GetNumCSVbtags(unclean_jets, 'M'));
@@ -406,11 +399,6 @@ bool OmniFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         _NumCleanNonCSVLbtagJets.push_back(helper->GetNumNonCSVbtags(clean_jets, 'L'));
         _NumCleanNonCSVMbtagJets.push_back(helper->GetNumNonCSVbtags(clean_jets, 'M'));
         _NumCleanNonCSVTbtagJets.push_back(helper->GetNumNonCSVbtags(clean_jets, 'T'));
-
-        // for (auto& idx: tag_indices)
-            // idx = jet_indices[idx];
-        // for (auto& idx: notag_indices)
-            // idx = jet_indices[idx];
 
         // fill total jet weight with clean jets
         _CSVeventWeight.push_back(helper->GetCSVweight(clean_jets, _sysType));
@@ -464,20 +452,6 @@ bool OmniFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
             }
         }
 
-        // double dil_vismass = GetComboMassBN(*lepton1, *lepton2);
-        // bool pass_zmask =
-                          // (dil_vismass < (65.5 + 3 * mht.Pt() / 8)) ||
-                          // (dil_vismass > (108 - mht.Pt() / 4)) ||
-                          // (dil_vismass < (79 - 3 * mht.Pt() / 4)) ||
-                          // (dil_vismass > (99 + mht.Pt() / 2));
-        // _zmask.push_back(pass_zmask);
-
-        // bool pass_zmask2 =
-                           // (dil_vismass < (65.5 + 3 * met.pt / 8)) ||
-                           // (dil_vismass > (108 - met.pt / 4)) ||
-                           // (dil_vismass < (79 - 3 * met.pt / 4)) ||
-                           // (dil_vismass > (99 + met.pt / 2));
-        // _zmask2.push_back(pass_zmask2);
         ++filled;
     } // End of tau loop
 
