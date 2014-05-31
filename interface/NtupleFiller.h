@@ -74,12 +74,6 @@ class NtupleFiller : public EDAnalyzer {
 		virtual void SetupBranches();
 		virtual void GetCollections(const Event&, const EventSetup&);
 
-		// === Helper functions === //
-		template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject1&, const BNObject2&, const BNCollection&, const double);
-		template <typename BNObject, typename BNCollection> unsigned int GetNumberOfUnmatchedLeptons(const BNObject&, const BNCollection&, const double);
-		template <typename BNObject, typename BNCollection> BNCollection GetUnmatchedLeptons(const BNObject&, const BNCollection&, const double);
-		template <typename BNObject1, typename BNObject2> double GetComboMassBN(const BNObject1&, const BNObject2&);
-		template <typename BNObject1, typename BNObject2, typename MetObject> double GetComboMassBN(const BNObject1&, const BNObject2&, const MetObject&);
 		bool IsInTheCracks(float);
 		
 	protected:
@@ -144,45 +138,5 @@ class NtupleFiller : public EDAnalyzer {
 		BNprimaryvertexCollection		_BNvertices;
 		BNtriggerCollection				_BNtrigger;
 };
-
-
-template <typename BNObject1, typename BNObject2, typename BNCollection> unsigned int NtupleFiller::GetNumberOfUnmatchedLeptons(const BNObject1& iObject1, const BNObject2& iObject2, const BNCollection& iCollection, const double iMinDeltaR){
-	unsigned int result = 0;
-	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
-		if(	deltaR(It->eta, It->phi, iObject1.eta, iObject1.phi) > iMinDeltaR &&
-			deltaR(It->eta, It->phi, iObject2.eta, iObject2.phi) > iMinDeltaR ){ result++; }
-	}
-	return result;
-}
-
-template <typename BNObject, typename BNCollection> unsigned int NtupleFiller::GetNumberOfUnmatchedLeptons(const BNObject& iObject, const BNCollection& iCollection, const double iMinDeltaR){
-	unsigned int result = 0;
-	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
-		if(	deltaR(It->eta, It->phi, iObject.eta, iObject.phi) > iMinDeltaR ){ result++; }
-	}
-	return result;
-}
-
-template <typename BNObject, typename BNCollection> BNCollection NtupleFiller::GetUnmatchedLeptons(const BNObject& iObject, const BNCollection& iCollection, const double iMinDeltaR){
-	BNCollection result;
-	for(typename BNCollection::const_iterator It = iCollection.begin(); It != iCollection.end(); ++It){
-		if(	deltaR((*It)->eta, (*It)->phi, iObject.eta, iObject.phi) > iMinDeltaR ){ result.push_back((*It)); }
-	}
-	return result;
-}
-
-template <typename BNObject1, typename BNObject2, typename MetObject> double NtupleFiller::GetComboMassBN(const BNObject1& bnObject1, const BNObject2& bnObject2, const MetObject& metObject){
-	reco::Candidate::LorentzVector object1p4(bnObject1.px, bnObject1.py, bnObject1.pz, bnObject1.energy);
-	reco::Candidate::LorentzVector object2p4(bnObject2.px, bnObject2.py, bnObject2.pz, bnObject2.energy);
-	//reco::Candidate::LorentzVector object1p4(0,0,0,0);
-	//reco::Candidate::LorentzVector object2p4(0,0,0,0);
-	double px = object1p4.px() + object2p4.px() + metObject.px;
-	double py = object1p4.py() + object2p4.py() + metObject.py;
-	double pz = object1p4.pz() + object2p4.pz();
-	double e = 0;
-//	double e = bnObject1.energy + bnObject2.energy + TMath::Sqrt((metObject.px * metObject.px) + (metObject.py * metObject.py));
-	reco::Candidate::LorentzVector The_LorentzVect(px, py, pz, e); 
-	return The_LorentzVect.M();
-}
 
 #endif
