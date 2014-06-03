@@ -45,7 +45,8 @@ options = VarParsing.VarParsing("analysis")
 # 2012_B_data-PR_0_NA
 options.register(
         'jobParams',
-        '2012_X_MC-bg_2523_2110/2200_112_NA',
+        # '2012_X_MC-bg_2523_2110/2200_111_NA',
+        '2012_X_MC-sigFullSim_9125_2110/2200_111_JESup-JESdown-TESup-TESdown',
         VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.string )
 
@@ -64,7 +65,8 @@ options.outputFile = 'ntuple{s}.root'
 options.inputFiles = [
         # '/store/user/muell149/TTZJets_8TeV-madgraph_v2/chPrj_bean_ca4dc66a977e4c96a421596b5b795aeb/merged_bean_1853.root',
         # '/store/user/muell149/lobster_beans_v1/TTJets_semilep/merged_bean_9999..root',
-        '/store/user/awoodard/TTJets_SemiLeptMGDecays_8TeV-madgraph/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02/d0a71c5bb6f6754a25e53f49b1990e4b/ttH_pat2bean_53x_1000_1_8Ao.root'
+        # '/store/user/awoodard/TTJets_SemiLeptMGDecays_8TeV-madgraph/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_BEAN_GTV7G_V01_CV02/d0a71c5bb6f6754a25e53f49b1990e4b/ttH_pat2bean_53x_1000_1_8Ao.root'
+        '/store/user/awoodard/TTH_Inclusive_M-125_8TeV_pythia6/BEAN_GTV7G_V01_CV01/411302ae24b059b12fe5d86298d5421d/ttH_pat2bean_53x_68_2_ip4.root'
         ]
 options.parseArguments() # get and parse the command line arguments 
 
@@ -142,11 +144,9 @@ elif leptons == 2:
 else:
     raise "Wrong lepton count!"
 
-### For 8TeV/2012 datasets, where we read BEANs
 UsePfLeptons       = cms.bool(True)
 GenParticleSource  = cms.untracked.InputTag('BNproducer:MCstatus3')
 GenJetSource       = cms.untracked.InputTag('BNproducer:ak5GenJets')
-GenJetSource       = cms.untracked.InputTag('')
 TriggerSource      = cms.InputTag('BNproducer:HLT')
 RecoVertexSource   = cms.InputTag('BNproducer:offlinePrimaryVertices')
 RecoElectronSource = cms.InputTag('BNproducer:selectedPatElectronsPFlow')

@@ -80,13 +80,13 @@ void NtupleFiller::GetCollections(const Event& iEvent, const EventSetup& iSetup)
     _BNevents			= *(hBNevents.product());
 
     if (!params_.is_data()) {
-        //             Handle<BNmcparticleCollection>			hBNmcparticles;
-        //             iEvent.getByLabel(_GenParticleSource,	hBNmcparticles);
-        //             _BNmcparticles		= *(hBNmcparticles.product());
+        Handle<BNmcparticleCollection> hBNmcparticles;
+        iEvent.getByLabel(_GenParticleSource, hBNmcparticles);
+        _BNmcparticles = *(hBNmcparticles.product());
 
-        //             Handle<BNgenjetCollection>				hBNgenjets;
-        //             iEvent.getByLabel(_GenJetSource, 	hBNgenjets);
-        //            _BNgenjets			= *(hBNgenjets.product());
+        Handle<BNgenjetCollection> hBNgenjets;
+        iEvent.getByLabel(_GenJetSource,  hBNgenjets);
+        _BNgenjets = *(hBNgenjets.product());
     }
 
     Handle<BNelectronCollection>			hBNelectrons;

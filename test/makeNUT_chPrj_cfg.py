@@ -140,20 +140,16 @@ elif leptons == 2:
 else:
     raise "Wrong lepton count!"
 
-### For 8TeV/2012 datasets, where we read BEANs
-if( era == 2012 ):
-    UsePfLeptons                        = cms.bool(True)
-    GenParticleSource                   = cms.untracked.InputTag('BNproducer:MCstatus3')
-    GenJetSource                        = cms.untracked.InputTag('BNproducer:ak5GenJets')
-    GenJetSource                        = cms.untracked.InputTag('')
-    TriggerSource						= cms.InputTag('BNproducer:HLT')
-    RecoVertexSource                    = cms.InputTag('BNproducer:offlinePrimaryVertices')
-    RecoElectronSource                  = cms.InputTag('BNproducer:selectedPatElectrons')
-    RecoMuonSource                      = cms.InputTag('BNproducer:selectedPatMuons')
-    RecoTauSource                       = cms.InputTag('BNproducer:selectedPatTaus')
-    RecoJetSource                       = cms.InputTag('BNproducer:selectedPatJets')
-    RecoPFMetSource                     = cms.InputTag('BNproducer:patMETs')
-
+UsePfLeptons       = cms.bool(True)
+GenParticleSource  = cms.untracked.InputTag('BNproducer:MCstatus3')
+GenJetSource       = cms.untracked.InputTag('BNproducer:ak5GenJets')
+TriggerSource      = cms.InputTag('BNproducer:HLT')
+RecoVertexSource   = cms.InputTag('BNproducer:offlinePrimaryVertices')
+RecoElectronSource = cms.InputTag('BNproducer:selectedPatElectrons')
+RecoMuonSource     = cms.InputTag('BNproducer:selectedPatMuons')
+RecoTauSource      = cms.InputTag('BNproducer:selectedPatTaus')
+RecoJetSource      = cms.InputTag('BNproducer:selectedPatJets')
+RecoPFMetSource    = cms.InputTag('BNproducer:patMETs')
 
 # === make analysis-specific selections for skims, fillers, etc. === #
 SkimTriggerRequirements	= cms.vstring()
