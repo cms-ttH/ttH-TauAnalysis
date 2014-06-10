@@ -10,8 +10,9 @@ check proxy: false
 task defaults:
     cmssw config: makeNUT_cfg.py
     dbs instance: phys01
-    events per job: 125000
+    events per job: 1250000
     outputs: [ntuple.root, ntuple_JESDown.root, ntuple_JESUp.root, ntuple_TESDown.root, ntuple_TESUp.root]
+    output format: "j{id}_{base}.{ext}"
 
     matching:
       - label: data
