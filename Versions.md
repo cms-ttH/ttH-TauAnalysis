@@ -342,6 +342,10 @@
 
 * Full run with new ntuple structure and lobster
 
+## v64.1
+
+* Save the CSV value of jets matched to Taus
+
 # Skim Versions
 
 ## s1

@@ -301,6 +301,8 @@ AnalysisTau::AnalysisTau(const std::string& p, TTree* t) :
     t->Branch((p + "EmFraction").c_str(), &_EmFraction);
     t->Branch((p + "IsInTheCracks").c_str(), &_IsInTheCracks);
 
+    t->Branch((p + "JetCSV").c_str(), &_jet_csv);
+
     t->Branch((p + "HPSagainstElectronDeadECAL").c_str(), &_HPSagainstElectronDeadECAL);
     t->Branch((p + "HPSagainstElectronLoose").c_str(), &_HPSagainstElectronLoose);
     t->Branch((p + "HPSagainstElectronLooseMVA2").c_str(), &_HPSagainstElectronLooseMVA2);
@@ -388,6 +390,9 @@ AnalysisTau::ClearVectors()
     _DecayMode.clear();
     _EmFraction.clear();
     _IsInTheCracks.clear();
+
+    _jet_csv.clear();
+
     _HPSagainstElectronDeadECAL.clear();
     _HPSagainstElectronLoose.clear();
     _HPSagainstElectronLooseMVA2.clear();
@@ -462,7 +467,7 @@ AnalysisTau::ClearVectors()
 }
 
 void
-AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNmcparticleCollection& mc_particles)
+AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNjetCollection& jets, const BNmcparticleCollection& mc_particles)
 {
     AnalysisObject::Fill(t);
 
@@ -472,6 +477,9 @@ AnalysisTau::Fill(const BNtau& t, const BEANhelper *helper, const BNmcparticleCo
     _DecayMode.push_back(t.decayMode);
     _EmFraction.push_back(t.emFraction);
     _IsInTheCracks.push_back(t.inTheCracks);
+
+    auto jet = helper->GetClosestJet(jets, t, 1.);
+    _jet_csv.push_back(jet.btagCombinedSecVertex);
 
     // HPS discriminants
     _HPSagainstElectronDeadECAL.push_back(t.HPSagainstElectronDeadECAL);

@@ -109,7 +109,7 @@ class AnalysisTau : AnalysisObject{
         AnalysisTau(const std::string&, TTree*);
 
         void ClearVectors();
-        void Fill(const BNtau&, const BEANhelper*, const BNmcparticleCollection&);
+        void Fill(const BNtau&, const BEANhelper*, const BNjetCollection&, const BNmcparticleCollection&);
 
     protected:
         std::vector<int> _MomentumRank;
@@ -119,6 +119,9 @@ class AnalysisTau : AnalysisObject{
         std::vector<unsigned int> _DecayMode;
         std::vector<float> _EmFraction;
         std::vector<bool> _IsInTheCracks;
+
+        std::vector<float> _jet_csv;
+
         std::vector<bool> _HPSagainstElectronDeadECAL;
         std::vector<bool> _HPSagainstElectronLoose;
         std::vector<bool> _HPSagainstElectronLooseMVA2;

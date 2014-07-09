@@ -434,7 +434,7 @@ bool OmniFiller::FillNtuple(const Event& iEvent, const EventSetup& iSetup){
         for (unsigned int i = 0; i < required_leptons; ++i)
             tree_leptons[i]->Fill(cleanLooseLeptons[i], helper, _BNmcparticles);
         for (unsigned int i = 0; i < required_taus; ++i)
-            tree_taus[i]->Fill(taus[i], helper, _BNmcparticles);
+            tree_taus[i]->Fill(taus[i], helper, _BNjets, _BNmcparticles);
 
         if (cleanLooseLeptons.size() == 2) {
             auto lepton1 = cleanLooseLeptons[0];
